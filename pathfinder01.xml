@@ -36,33 +36,61 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
 		</Group>
-		<Group id="skills" userEditable="true" type="Int" startingValue="0" minValue="0">
-			<Attribute name="maxValue" getFromId="Level" attribute="modifier" />
+		<Datum id="Level" title="Level" startingValue="1" minValue="1" />
+		<Datum id="Init" title="Initiative" startingValue="8" minValue="-99">
+			<Attribute name="modifier_text" formula="convert_value_to_string" />
+		</Datum>
+		<Group id="skills" userEditable="true" type="Int" startingValue="0" minValue="0" background="false">
+			<Attribute name="maxValue" getFromId="Level" attribute="value" />
 			<Group id="strength_skill">
-				<Attribute name="score_mod" minValue="-99">
-					<Get fromId="STR" attribute="modifier" />
-				</Attribute>
+				<Datum id="Climb" title="Climb" />
+				<Datum id="Swim" title="Swim" />
+				<Attribute name="score_mod" minValue="-99" getFromId="STR" attribute="modifier" />
 			</Group>
 			<Group id="dexterity_skill">
-				<Attribute name="score_mod" minValue="-99">
-					<Get fromId="DEX" attribute="modifier" />
-				</Attribute>
+				<Datum id="Acrobatics" title="Acrobatics" />
+				<Datum id="Disable Device" title="Disable Device" />
+				<Datum id="Escape Artist" title="Escape Artist" />
+				<Datum id="Fly" title="Fly" />
+				<Datum id="Ride" title="Ride" />
+				<Datum id="Sleight of Hand" title="Sleight of Hand" background="true" />
+				<Datum id="Stealth" title="Stealth" />
+				<Attribute name="score_mod" minValue="-99" getFromId="DEX" attribute="modifier" />
 			</Group>
 			<Group id="intelligence_skill">
-				<Attribute name="score_mod" minValue="-99">
-					<Get fromId="INT" attribute="modifier" />
-				</Attribute>
+				<Datum id="Appraise" title="Appraise" background="true" />
+				<Datum id="Knowledge (arcana)" title="Knowledge (arcana)" />
+				<Datum id="Knowledge (dungeoneering)" title="Knowledge (dungeoneering)" />
+				<Datum id="Knowledge (engineering)" title="Knowledge (engineering)" background="true" />
+				<Datum id="Knowledge (geography)" title="Knowledge (geography)" background="true" />
+				<Datum id="Knowledge (history)" title="Knowledge (history)" background="true" />
+				<Datum id="Knowledge (local)" title="Knowledge (local)" />
+				<Datum id="Knowledge (nature)" title="Knowledge (nature)" />
+				<Datum id="Knowledge (nobility)" title="Knowledge (nobility)" background="true" />
+				<Datum id="Knowledge (planes)" title="Knowledge (planes)" />
+				<Datum id="Knowledge (religion)" title="Knowledge (religion)" />
+				<Datum id="Linguistics" title="Linguistics" background="true" />
+				<Datum id="Spellcraft" title="Spellcraft" />
+				<MultiDatum id="craft_skills" idPre="SkillCraft" titlePre="Craft (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="INT" attribute="modifier" />
 			</Group>
 			<Group id="wisdom_skill">
-				<Attribute name="score_mod" minValue="-99">
-					<Get fromId="WIS" attribute="modifier" />
-				</Attribute>
+				<Datum id="Heal" title="Heal" />
+				<Datum id="Perception" title="Perception" />
+				<Datum id="Sense Motive" title="Sense Motive" />
+				<Datum id="Survival" title="Survival" />
+				<MultiDatum id="profession_skills" idPre="SkillProfession" titlePre="Profession (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="WIS" attribute="modifier" />
 			</Group>
 			<Group id="charisma_skill">
-				<MultiDatum id="perform_skills" idPre="SkillPerform" titlePre="Perform (" titlePost=")" />
-				<Attribute name="score_mod" minValue="-99">
-					<Get fromId="CHA" attribute="modifier" />
-				</Attribute>
+				<Datum id="Bluff" title="Bluff" />
+				<Datum id="Diplomacy" title="Diplomacy" />
+				<Datum id="Disguise" title="Disguise" />
+				<Datum id="Handle Animal" title="Handle Animal" background="true" />
+				<Datum id="Intimidate" title="Intimidate" />
+				<Datum id="Use Magic Device" title="Use Magic Device" />
+				<MultiDatum id="perform_skills" idPre="SkillPerform" titlePre="Perform (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="CHA" attribute="modifier" />
 			</Group>
 			<Attribute name="modifier" minValue="-99">
 				<Math>
@@ -72,37 +100,33 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
 		</Group>
-		<Datum id="Level" title="Level" startingValue="1" minValue="1" />
-		<Datum id="Init" title="Initiative" startingValue="8" minValue="-99">
-			<Attribute name="modifier_text" formula="convert_value_to_string" />
-		</Datum>
 		<Group id="saving_throws" type="Int" minValue="-99" maxValue="99" startingValue="0">
 			<Datum id="FortSave" title="Fortitude">
-				<Attribute name="startingValue">
-					<Get fromId="CON" attribute="modifier" />
-				</Attribute>
+				<Attribute name="score_mod" getFromId="CON" attribute="modifier" />
 			</Datum>
 			<Datum id="ReflSave" title="Reflex">
-				<Attribute name="startingValue">
-					<Get fromId="DEX" attribute="modifier" />
-				</Attribute>
+				<Attribute name="score_mod" getFromId="DEX" attribute="modifier" />
 			</Datum>
 			<Datum id="WillSave" title="Will">
-				<Attribute name="startingValue">
-					<Get fromId="WIS" attribute="modifier" />
-				</Attribute>
+				<Attribute name="score_mod" getFromId="WIS" attribute="modifier" />
 			</Datum>
-			<Attribute name="modifier_text" type="Str" formula="convert_value_to_string" />
+			<Attribute name="modifier" minValue="-99">
+				<Math>
+					<Add fromId="this" attribute="value" />
+					<Add fromId="this" attribute="score_mod" />
+				</Math>
+			</Attribute>
+			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
 		</Group>
 		<Datum id="SkillPoints" type="Int" title="Skill Points" minValue="0" />
-		<Datum id="BAB" type="Int" title="Base Attack Bonus">
+		<Datum id="BAB" type="Int" title="Base Attack Bonus" startingValue="0">
 			<Attribute name="full_attack_text">
 				<While inType="Int" outType="Str">
 					<Until operation="AND">
 						<GreaterThan value="5" />
 					</Until>
-					<Input fromID="this" attribute="value" />
-					<Output fromID="this" attribute="modifier_text" />
+					<Input fromId="this" attribute="value" />
+					<Output fromId="this" attribute="modifier_text" />
 					<ModifyInput add="-5" />
 					<ModifyOutput add="/+" useInput="add" />
 				</While>
