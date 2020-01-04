@@ -41,13 +41,14 @@ class BasicStatObject {
 			a.set(prop[0], prop[1]);
 		});
 		this.atts = a;
+		this.defaultContext = this;
 		//if(parent instanceof BasicStatObject) {
 			//console.log(parent);
 			//parent.registerChild(id, this);
 		//}
 		record.push([this, this.constructor]);
 	}
-	get(prop, context = this) {
+	get(prop, context = this.defaultContext) {
 		var found = this.atts.get(prop),
 			parent = this.parent, c = 1;
 		// if found is undefined, check parents
@@ -104,6 +105,7 @@ class Attribute extends BasicStatObject {
 	constructor(parent, node, atts, name) {
 		super(parent, node, atts);
 		this.name = name;
+		this.defaultContext = parent;
 	}
 	//get(prop, context = this.parent) {
 	//	var found = this.atts.get(prop);
@@ -132,9 +134,10 @@ class Datum extends BasicIdObject {
 Datum.converter = function(input) { return input; }
 
 
-class Formula extends Attribute {
+class Formula extends BasicStatObject {
 	constructor(node, name, atts) {
 		super(undefined, node, atts, name);
+		this.name = name;
 		this.node = node;
 		Formula.formulae.set(name, this);
 	}
@@ -279,7 +282,7 @@ class Int extends Num {
 			case "value":
 				min = this.get("minValue");
 				max = this.get("maxValue");
-				num = Math.round(Number(v));
+				num = Int.converter(v);
 				if(min === min && num < min) {
 					num = min;
 				} else if (max === max && num > max) {
@@ -290,13 +293,13 @@ class Int extends Num {
 			case "minValue":
 			case "maxValue":
 			case "startingValue":
-				v = Math.round(Number(v));
+				v = Int.converter(v);
 				break;
 		}
 		return this.atts.set(prop, v);
 	}
 }
-Int.converter = parseInt;
+Int.converter = function(x) { return Math.round(Number(x)) };
 
 class Str extends Datum {
 	constructor(id, parent, node, atts) {
@@ -352,13 +355,10 @@ Datum.DataTagHandlers = {
 	MultiDatum: parseMultiDatum,
 	Math: parseMath,
 	If: parseIf,
-	Get: parseGet,
 	While: parseWhile
 };
 
-BasicIdObject.preprocessTags = {
-	Clone: parseClone
-};
+BasicIdObject.preprocessTags = {};
 
 BasicIdObject.TagHandlers = {
 	Attribute: parseAttribute,
@@ -689,29 +689,304 @@ class If extends SpecialGrabber {
 
 
 
-class Calculator {
-	constructor() {
-		// nada
+
+class While extends SpecialGrabber {
+	constructor(parent, node, atts, intype, outtype, input, output) {
+		super(parent, node, atts);
+		this.inType = intype;
+		this.outType = outtype;
+		this.input = intype.converter("");
+		this.output = outtype.converter("");
+		this.modInput = [];
+		this.modOutput = [];
+		this.operation = "AND";
+		this.until = [];
 	}
-	static get(id, property) {
-		var o = BasicIdObject.getById(id), v;
-		//console.log(o);
-		if(o === undefined) {
-			return o;
+	static constructWhile(parent, node) {
+		var atts = parseAttributesToObject(node),
+			intype = atts.inType,
+			outtype = Datum.type[atts.outType || parent.get("outType") || parent.get("type") || "Str"],
+			input = atts.input,
+			output = atts.output,
+			modIn = node.querySelectorAll("ModifyInput"),
+			modOut = node.querySelectorAll("ModifyOutput"),
+			until = node.querySelector("Until"),
+			inconv, outconv, tag, temp;
+		if(modIn === null) {
+			return logError(node, "WHILE: Missing required ModifyInput tag");
+		} else if(modOut === null) {
+			return logError(node, "WHILE: Missing required ModifyOutput tag");
+		} else if(until === null) {
+			return logError(node, "WHILE: Missing required ModifyOutput tag");
 		}
-		v = o.get(property);
-		if(v === undefined) {
-			return v;
-		} else if (v instanceof SpecialGrabber) {
-			return v.grabValue(o);
+		// Find intype
+		if(intype === undefined) {
+			intype = Datum.type[parent.get("inType") || "Num"] || Num;
+		} else {
+			intype = Datum.type[intype] || Num;
+			delete atts.inType;
 		}
-		return v;
+		inconv = intype.converter;
+		// Find outtype
+		if(outtype === undefined) {
+			outtype = Datum.type[parent.get("inType") || parent.get("type") || "Str"] || Str;
+		} else {
+			outtype = Datum.type[outtype] || Str;
+			delete atts.outType;
+		}
+		outconv = outtype.converter;
+		// Create While tag
+		tag = atts;
+		atts = [];
+		Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
+		tag = new While(parent, node, atts, intype, outtype);
+		// Check Input
+		if(input !== undefined) {
+			input = intype.converter(input);
+			delete atts.input;
+		} else {
+			let i = node.querySelector("Input");
+			if(i === null) {
+				input = inconv("");
+			} else {
+				let a = parseAttributesToObject(i);
+				if(a.value !== undefined) {
+					input = inconv(a.value);
+				} else if (a.fromId !== undefined) {
+					let property = a.attribute || "value",
+						target = a.fromId;
+					if(target === "this") {
+						input = SelfReference.getReference(property, tag, i, []);
+					} else {
+						input = DatumReference.getReference(target, property, tag, node, atts);
+					}
+				} else {
+					input = inconv(i.textContent);
+				}
+			}
+		}
+		tag.input = input;
+		// Check Output
+		if(output !== undefined) {
+			output = outtype.converter(output);
+			delete atts.output;
+		} else {
+			let i = node.querySelector("Output");
+			if(i === null) {
+				output = outconv("");
+			} else {
+				let a = parseAttributesToObject(i);
+				if(a.value !== undefined) {
+					output = outconv(a.value);
+				} else if (a.fromId !== undefined) {
+					let property = a.attribute || "value",
+						target = a.fromId;
+					if(target === "this") {
+						output = SelfReference.getReference(property, tag, i, []);
+					} else {
+						output = DatumReference.getReference(target, property, tag, node, atts);
+					}
+				} else {
+					output = outconv(i.textContent);
+				}
+			}
+		}
+		tag.output = output;
+		// Check ModifyInput
+		temp = [];
+		modIn.forEach(function(mi) {
+			var a = parseAttributesToObject(mi);
+			if(a.mult) {
+				temp.push([Equation.Multiply, inconv(a.mult)]);
+			}
+			if(a.div) {
+				temp.push([Equation.Divide, inconv(a.div)]);
+			}
+			if(a.rem) {
+				temp.push([Equation.Remainder, inconv(a.rem)]);
+			}
+			if(a.add) {
+				temp.push([Equation.Add, inconv(a.add)]);
+			}
+			if(a.floor) {
+				temp.push([Equation.Floor, null]);
+			}
+			if(a.ceil) {
+				temp.push([Equation.Ceil, null]);
+			}
+			if(a.round) {
+				temp.push([Equation.Round, null]);
+			}
+		});
+		tag.modifyInput = temp;
+		// Check ModifyOutput
+		temp = [];
+		modOut.forEach(function(mo) {
+			var a = parseAttributesToObject(mo);
+			if(a.mult) {
+				temp.push([Equation.Multiply, outconv(a.mult)]);
+			}
+			if(a.div) {
+				temp.push([Equation.Divide, outconv(a.div)]);
+			}
+			if(a.rem) {
+				temp.push([Equation.Remainder, outconv(a.rem)]);
+			}
+			if(a.add) {
+				temp.push([Equation.Add, outconv(a.add)]);
+			}
+			if(a.floor) {
+				temp.push([Equation.Floor, null]);
+			}
+			if(a.ceil) {
+				temp.push([Equation.Ceil, null]);
+			}
+			if(a.round) {
+				temp.push([Equation.Round, null]);
+			}
+			if(a.useInput) {
+				temp.push([While.ModOutWithIn, a.useInput]);
+			}
+		});
+		tag.modifyOutput = temp;
+		temp = parseAttributesToObject(until);
+		if(temp.operation) {
+			let op = "AND";
+			if (temp.operation === "OR") {
+				op = "OR";
+			} else if (temp.operation === "XOR") {
+				op = "XOR";
+			}
+			tag.operation = op;
+		} else {
+			tag.operation = "AND";
+		}
+		if(![...until.children].every(function(item) {
+			var name = item.nodeName,
+				amount = null,
+				grabValueFlag = false;
+			if(If[name] === undefined) {
+				temp = name;
+				return false;
+			}
+			if(node.hasAttribute("value")) {
+				// Element has value attribute
+				amount = inconv(node.getAttribute("value"));
+			} else if (node.hasAttribute("fromId")) {
+				// Element is referring to another element
+				let property = node.getAttribute("attribute") || "value";
+				amount = node.getAttribute("fromId");
+				if(amount === "this") {
+					amount = SelfReference.getReference(property, this, node, []);
+				} else {
+					amount = new DatumReference(amount, property);
+				}
+				grabValueFlag = true;
+			} else {
+				// Set the amount to the text content of the element
+				amount = inconv(node.textContent);
+			}
+			tag.until.push([name, grabValueFlag, amount]);
+			return true;
+		})) {
+			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its Until tag.");
+		} else if (tag.until.length === 0) {
+			return logError(node, "WHILE: tag has no valid comparison tags inside its Until tag.");
+		}
+		return tag;
 	}
-	static calculate(object, context) {
-		
+	grabValue(context) {
+		var inconv = this.inType.converter,
+			input = this.input,
+			output = this.output,
+			modIn = this.modifyInput,
+			modOut = this.modifyOutput,
+			until = this.until,
+			operation = this.operation,
+			mi = [],
+			mo = [],
+			check;
+		// Get initial input and output
+		if(input instanceof SpecialGrabber) {
+			input = inconv(input.grabValue(context));
+		}
+		if(output instanceof SpecialGrabber) {
+			output = this.outType.converter(output.grabValue(context));
+		}
+		modIn.forEach(function(mod) {
+			var [func, value] = mod;
+			if(value instanceof SpecialGrabber) {
+				value = value.grabValue(context);
+			}
+			mi.push([func, value]);
+		});
+		modIn = mi;
+		modOut.forEach(function(mod) {
+			var [func, value] = mod;
+			if(value instanceof SpecialGrabber) {
+				value = value.grabValue(context);
+			}
+			mo.push([func, value]);
+		});
+		modOut = mo;
+		check = While.doUntil(input, inconv, until, operation, context);
+		while(check) {
+			modIn.forEach(function(mod) {
+				var [func, value] = mod;
+				input = func(input, value);
+			});
+			check = While.doUntil(input, inconv, until, operation, context);
+			if(check) {
+				modOut.forEach(function(mod) {
+					var [func, value] = mod;
+					output = func(output, value, input);
+				});
+			}
+		}
+		return output;
+	}
+	static doUntil(input, inconv, until, operation, context) {
+		var results = [], retVal = false;
+		until.forEach(function(condition) {
+			var [name, flag, value] = condition;
+			if(flag) {
+				value = inconv(value.grabValue(context));
+			}
+			results.push(If[name](input, value));
+		});
+		switch (operation) {
+			case "AND":
+				retVal = results.every(v => v);
+				break;
+			case "OR":
+				retVal = !results.every(v => !v);
+				break;
+			case "XOR":
+				retVal = results.filter(v => v).length === 1;
+		}
+		return retVal;
+	}
+	static ModOutWithIn(value, action, input) {
+		switch (action) {
+			case "add":
+			case "append":
+				return value + input;
+			case "prepend":
+				return input + value;
+			case "multiply":
+				return value * input;
+			case "divideWith":
+				return value / input;
+			case "remainderWith":
+				return value % input;
+			case "divide":
+				return input / value;
+			case "remainder":
+				return input % value;
+		}
+		return value;
 	}
 }
-
 
 
 function getValue(value, context) {
@@ -979,12 +1254,6 @@ function parseMath(node, parentNode, parentTag) {
 	parentTag.set("value", eq);
 }
 
-//<If inType="Int" outType="Str">
-//	<Compare><modifier /></Compare>
-//	<GreaterThan amount="-1" />
-//	<Then>+<modifier /></Then>
-//	<Else><modifier /></Else>
-//</If>
 
 function parseIf(node, parentNode, parentTag) {
 	var ifthen = If.constructIfThenElse(parentTag, node);
@@ -993,59 +1262,6 @@ function parseIf(node, parentNode, parentTag) {
 //intype, outtype, compareTag, style
 //parseDataNodes(currentNode, currentTag, ancestry, ancestorAtts)
 
-function parseGet(node, parentNode, parentTag, ancestors) {
-	var tag;
-
-}
-
-
-// Should attempt to clone a node into this parent
-function parseClone(node, parentNode, parentTag) {
-	var atts = findNodeIdAndAtts(node), from = null, target = null, newatts = [], parent, toClone;
-	atts.forEach(function(pair) {
-		var [n, v] = pair;
-		if(n === "From") {
-			from = v;
-		} else if (n === "Target") {
-			target = v;
-		} else {
-			newatts.push(pair);
-		}
-	});
-	if(from === null || target === null) {
-		logError(node, "CLONE: missing From and/or Target parameter, cannot parse");
-		return null;;
-	}
-	parent = BasicIdObject.findTagByName(from);
-	toClone = parent.findChild(target);
-	if(parent === null) {
-		logError(node, "CLONE: could not find a BasicIdObject named \"" + from + "\"");
-		return null;;
-	} else if(toClone === null) {
-		logError(node, "CLONE: could not find a BasicIdObject named \"" + target + "\" from within the given BasicIdObject named \"" + from + "\"");
-		return null;
-	}
-	// Clone the target node
-	target = toClone.node.cloneNode(true);
-	// Add remaining attributes to the clone
-	newatts.forEach( pair => target.setAttribute(pair[0], pair[1]) );
-	// Insert the clone just before the current node
-	node.parentNode.insertBefore(target, node);
-	// Delete the current node
-	node.remove();
-	// Return the now-current cloned node
-	return target;
-}
-
-//<While inType="Int" outType="Str">
-//	<InitialInputValue fromID="this" attribute="value" />
-//	<InitialOutputValue formula="convert_value_to_string" />
-//	<GreaterThan value="5" />
-//	<Then>
-//		<ModifyInputValue><Add value="-5" /></ModifyInputValue>
-//		<ModifyOutputValue><OutputValue />/+<InputValue /></ModifyOutputValue>
-//	</Then>
-//</While>
 
 function parseWhile(node, parentNode, parentTag) {
 	var awhile = While.constructWhile(parentTag, node);
@@ -1167,285 +1383,3 @@ function parseFormulae(node) {
 	tag = new Formula(node, name, atts);
 	parseDataNodes(node, tag);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-class While extends SpecialGrabber {
-	constructor(parent, node, atts, intype, outtype, input, output) {
-		super(parent, node, atts);
-		this.inType = intype;
-		this.outType = outtype;
-		this.until = [];
-	}
-	static constructWhile(parent, node) {
-		var atts = parseAttributesToObject(node),
-			intype = atts.inType,
-			outtype = Datum.type[atts.outType || parent.get("outType") || parent.get("type") || "Str"],
-			input = atts.input,
-			output = atts.output,
-			modIn = node.querySelectorAll("ModifyInput"),
-			modOut = node.querySelectorAll("ModifyOutput"),
-			until = node.querySelector("Until"),
-			inconv, outconv, tag, temp;
-		if(modIn === null) {
-			return logError(node, "WHILE: Missing required ModifyInput tag");
-		} else if(modOut === null) {
-			return logError(node, "WHILE: Missing required ModifyOutput tag");
-		} else if(until === null) {
-			return logError(node, "WHILE: Missing required ModifyOutput tag");
-		}
-		// Find intype
-		if(intype === undefined) {
-			intype = Datum.type[parent.get("inType") || "Num"] || Num;
-		} else {
-			intype = Datum.type[intype] || Num;
-			delete atts.inType;
-		}
-		inconv = intype.converter;
-		// Find outtype
-		if(outtype === undefined) {
-			outtype = Datum.type[parent.get("inType") || parent.get("type") || "Str"] || Str;
-		} else {
-			outtype = Datum.type[outtype] || Str;
-			delete atts.outType;
-		}
-		outconv = outtype.converter;
-		// Create While tag
-		tag = atts;
-		atts = [];
-		Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
-		tag = new While(parent, node, atts, intype, outtype);
-		// Check Input
-		if(input !== undefined) {
-			input = intype.converter(input);
-			delete atts.input;
-		} else {
-			let i = node.querySelector("Input");
-			if(i === null) {
-				input = inconv("");
-			} else {
-				let a = parseAttributesToObject(i);
-				if(a.value !== undefined) {
-					input = inconv(a.value);
-				} else if (a.fromId !== undefined) {
-					let property = a.attribute || "value",
-						target = a.fromId;
-					if(target === "this") {
-						input = SelfReference.getReference(property, tag, i, []);
-					} else {
-						input = DatumReference.getReference(target, property, tag, node, atts);
-					}
-				} else {
-					input = inconv(i.textContent);
-				}
-			}
-		}
-		tag.set("input", input);
-		// Check Output
-		if(output !== undefined) {
-			output = outtype.converter(output);
-			delete atts.output;
-		} else {
-			let i = node.querySelector("Output");
-			if(i === null) {
-				output = outconv("");
-			} else {
-				let a = parseAttributesToObject(i);
-				if(a.value !== undefined) {
-					output = outconv(a.value);
-				} else if (a.fromId !== undefined) {
-					let property = a.attribute || "value",
-						target = a.fromId;
-					if(target === "this") {
-						output = SelfReference.getReference(property, tag, i, []);
-					} else {
-						output = DatumReference.getReference(target, property, tag, node, atts);
-					}
-				} else {
-					output = outconv(i.textContent);
-				}
-			}
-		}
-		tag.set("output", output);
-		// Check ModifyInput
-		temp = [];
-		modIn.forEach(function(mi) {
-			var a = parseAttributesToObject(mi);
-			if(a.mult) {
-				temp.push([Equation.Multiply, inconv(a.mult)]);
-			}
-			if(a.div) {
-				temp.push([Equation.Divide, inconv(a.div)]);
-			}
-			if(a.rem) {
-				temp.push([Equation.Remainder, inconv(a.rem)]);
-			}
-			if(a.add) {
-				temp.push([Equation.Add, inconv(a.add)]);
-			}
-			if(a.floor) {
-				temp.push([Equation.Floor, null]);
-			}
-			if(a.ceil) {
-				temp.push([Equation.Ceil, null]);
-			}
-			if(a.round) {
-				temp.push([Equation.Round, null]);
-			}
-		});
-		tag.set("modifyInput", temp);
-		// Check ModifyOutput
-		temp = [];
-		modOut.forEach(function(mo) {
-			var a = parseAttributesToObject(mo);
-			if(a.mult) {
-				temp.push([Equation.Multiply, outconv(a.mult)]);
-			}
-			if(a.div) {
-				temp.push([Equation.Divide, outconv(a.div)]);
-			}
-			if(a.rem) {
-				temp.push([Equation.Remainder, outconv(a.rem)]);
-			}
-			if(a.add) {
-				temp.push([Equation.Add, outconv(a.add)]);
-			}
-			if(a.floor) {
-				temp.push([Equation.Floor, null]);
-			}
-			if(a.ceil) {
-				temp.push([Equation.Ceil, null]);
-			}
-			if(a.round) {
-				temp.push([Equation.Round, null]);
-			}
-			if(a.useInput) {
-				temp.push([While.ModOutWithIn, a.useInput]);
-			}
-		});
-		tag.set("modifyOutput", temp);
-		// Need to handle UNTIL, then GRABVALUE
-		// Check Until
-		temp = parseAttributesToObject(until);
-		if(temp.operation) {
-			let op = "AND";
-			if (temp.operation === "OR") {
-				op = "OR";
-			} else if (temp.operation === "XOR") {
-				op = "XOR";
-			}
-			tag.set("operation", op);
-		} else {
-			tag.set("operation", "AND");
-		}
-		if(![...until.children].every(function(item) {
-			var name = item.nodeName,
-				amount = null,
-				literalFlag = true;
-			if(If[name] === undefined) {
-				temp = name;
-				return false;
-			}
-			if(node.hasAttribute("value")) {
-				// Element has value attribute
-				amount = inconv(node.getAttribute("value"));
-			} else if (node.hasAttribute("fromId")) {
-				// Element is referring to another element
-				let property = node.getAttribute("attribute") || "value";
-				amount = node.getAttribute("fromId");
-				if(amount === "this") {
-					amount = SelfReference.getReference(property, this, node, []);
-				} else {
-					amount = new DatumReference(amount, property);
-				}
-				literalFlag = false;
-			} else {
-				// Set the amount to the text content of the element
-				amount = inconv(node.textContent);
-			}
-			this.until.push([name, literalFlag, amount]);
-			return true;
-		})) {
-			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its Until tag.");
-		} else if (this.until.length === 0) {
-			return logError(node, "WHILE: tag has no valid comparison tags inside its Until tag.");
-		}
-		return tag;
-	}
-//<While inType="Int" outType="Str">
-//	<Until>
-//		<GreaterThan value="5" />
-//	</Until>
-//	<Input fromID="this" attribute="value" />
-//	<Output formula="convert_value_to_string" />
-//	<ModifyInput add="-5" />
-//	<ModifyOutput add="/+" useInput="add" />
-//</While>
-	grabValue(context) {
-		var value = this.startingAmount, results = [], operation = this.operation, converter = this.inType.converter;
-//		console.log(["IF", this.type, this.outType, value]);
-		if(value instanceof SpecialGrabber) {
-			value = converter(value.grabValue(context));
-		}
-		this.comparison.forEach(function(unit) {
-			var test, [name, literalFlag, amount] = unit, refObj = If;
-			if(refObj[name] === undefined) {
-				refObj = Equation;
-			}
-			if(literalFlag) {
-				// A literal value
-				test = refObj[name](value, converter(amount));
-			} else {
-				// A Reference as value
-				test = refObj[name](value, converter(amount.grabValue(context)));
-			}
-			results.push(test);
-		});
-		switch (operation) {
-			case "AND":
-				value = results.every(v => v);
-				break;
-			case "OR":
-				value = !results.every(v => !v);
-				break;
-			case "XOR":
-				value = results.filter(v => v).length === 1;
-		}
-		if(value) {
-			value = this.then;
-		} else {
-			value = this.else;
-		}
-		converter = this.outType.converter;
-		if(value.length === 0) {
-			value = converter("");
-		} else {
-			let v = [];
-			value.forEach(function(item) {
-				if(item instanceof SpecialGrabber) {
-					v.push(converter(item.grabValue(context)));
-				} else if (item instanceof BasicStatObject) {
-					v.push(converter(item.get("value")));
-				} else {
-					v.push(item)
-				}
-			});
-			value = converter("");
-			v.forEach(x => value += x);
-		}
-		return value;
-	}
-	static ModOutWithIn(value, test) {
-		return value > test;
-	}
-}
-
