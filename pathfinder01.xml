@@ -99,7 +99,7 @@
 					<Add fromId="this" attribute="score_mod" />
 				</Math>
 			</Attribute>
-			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
+			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
 		</Group>
 		<Group id="saving_throws" type="IntBonusable" minValue="-99" maxValue="99" startingValue="0">
 			<Stat id="FortSave" title="Fortitude">

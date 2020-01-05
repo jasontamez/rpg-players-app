@@ -179,7 +179,7 @@ class StatReference extends SelfReference {
 		return reference.get(this.property);
 	}
 	static getReference(statStr, property, parent, node, atts) {
-		var test = StatReference.refs.get(statStr + "->" + property);
+		var test = SelfReference.refs.get(statStr + "->" + property);
 		if(test !== undefined) {
 			return test;
 		}
