@@ -102,9 +102,9 @@ class SpecialGrabber extends BasicStatObject {
 
 
 class Attribute extends BasicStatObject {
-	constructor(parent, node, atts, name) {
+	constructor(parent, node, atts, nombre) {
 		super(parent, node, atts);
-		this.name = name;
+		this.name = nombre;
 		this.defaultContext = parent;
 	}
 	//get(prop, context = this.parent) {
@@ -123,8 +123,8 @@ class Attribute extends BasicStatObject {
 class Datum extends BasicIdObject {
 	constructor(id, parent, node, atts) {
 		var i;
-		console.log("Making id-" + id);
-		console.log(atts);
+		//console.log("Making id-" + id);
+		//console.log(atts);
 		super(id, parent, node, atts);
 		i = this.atts;
 		i.has("startingValue") || i.set("startingValue", null);
@@ -135,14 +135,14 @@ Datum.converter = function(input) { return input; }
 
 
 class Formula extends BasicStatObject {
-	constructor(node, name, atts) {
-		super(undefined, node, atts, name);
-		this.name = name;
+	constructor(node, nombre, atts) {
+		super(undefined, node, atts, nombre);
+		this.name = nombre;
 		this.node = node;
-		Formula.formulae.set(name, this);
+		Formula.formulae.set(nombre, this);
 	}
-	static getName(name) {
-		return Formula.formulae.get(name);
+	static getName(nombre) {
+		return Formula.formulae.get(nombre);
 	}
 }
 Formula.formulae = new Map();
@@ -396,7 +396,7 @@ class Equation extends SpecialGrabber {
 		atts.type = type;
 		tag = atts;
 		atts = [];
-		Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
+		Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
 		tag = new Equation(amount, parent, node, atts);
 		[...node.children].forEach( step => tag.addStep(step) );
 		return tag;
@@ -405,23 +405,23 @@ class Equation extends SpecialGrabber {
 		var value = this.startingAmount;
 		this.math.forEach(function(unit) {
 //			console.log(["MATH", value, ...unit]);
-			var newVal, [name, literalFlag, amount] = unit;
+			var newVal, [nombre, literalFlag, amount] = unit;
 			if(literalFlag) {
 				// A literal value
-				newVal = Equation[name](value, amount);
+				newVal = Equation[nombre](value, amount);
 			} else {
 				// A Reference as value
 //				console.log(["->", amount, context]);
 				Equation.tempV = amount;
 				Equation.tempC = context;
-				newVal = Equation[name](value, amount.grabValue(context));
+				newVal = Equation[nombre](value, amount.grabValue(context));
 			}
 			value = newVal;
 		});
 		return value;
 	}
 	addStep(node) {
-		var name = node.nodeName,
+		var nombre = node.nodeName,
 			amount = null,
 			literalFlag = true,
 			converter = this.get("type").converter;
@@ -442,7 +442,7 @@ class Equation extends SpecialGrabber {
 			// Set the amount to the text content of the element
 			amount = converter(node.textContent);
 		}
-		this.math.push([name, literalFlag, amount]);
+		this.math.push([nombre, literalFlag, amount]);
 	}
 	static Add(total, n) {
 		return total + n;
@@ -502,13 +502,13 @@ class If extends SpecialGrabber {
 		}
 		tag = atts;
 		atts = [];
-		Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
+		Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
 		tag = new If(parent, node, atts, intype, outtype, operation);
 //		console.log("Constructing IF");
 		[...node.children].forEach(function(step) {
 //			console.log(step);
-			var name = step.nodeName;
-			switch(name) {
+			var nombre = step.nodeName;
+			switch(nombre) {
 				case "Compare":
 //					console.log("Compare");
 					tag.addCompare(step, intype);
@@ -517,8 +517,8 @@ class If extends SpecialGrabber {
 				case "Then":
 				case "Else":
 //					console.log("Then/Else");
-					tag.addThenElse(step, name, outtype, parent, node);
-//					console.log([name.toUpperCase(), tag[name.toLowerCase()]]);
+					tag.addThenElse(step, nombre, outtype, parent, node);
+//					console.log([nombre.toUpperCase(), tag[nombre.toLowerCase()]]);
 					break;
 				default:
 //					console.log("step");
@@ -549,7 +549,7 @@ class If extends SpecialGrabber {
 		this.startingAmount = amount;
 	}
 	addComparison(node, intype) {
-		var name = node.nodeName,
+		var nombre = node.nodeName,
 			amount = null,
 			literalFlag = true,
 			converter = intype.converter;
@@ -570,9 +570,9 @@ class If extends SpecialGrabber {
 			// Set the amount to the text content of the element
 			amount = converter(node.textContent);
 		}
-		this.comparison.push([name, literalFlag, amount]);
+		this.comparison.push([nombre, literalFlag, amount]);
 	}
-	addThenElse(node, name, outtype, parent, pNode) {
+	addThenElse(node, nombre, outtype, parent, pNode) {
 		var amount = null,
 			converter = outtype.converter;
 		if(node.hasAttribute("value")) {
@@ -589,10 +589,10 @@ class If extends SpecialGrabber {
 			}
 		//} else if (node.children.length > 0) {
 		} else if (node.getAttribute("use") === "Math") {
-			//amount = new Attribute(name, outtype);
+			//amount = new Attribute(nombre, outtype);
 			amount = Equation.constructEquation(parent, node, [["type", outtype]]);
 			//amount = new BasicStatObject(parent, pNode, [["type", outtype]]);
-			//console.log(["ATTRIBUTE", name, outtype]);
+			//console.log(["ATTRIBUTE", nombre, outtype]);
 			//parseDataNodes(node, amount);
 		} else {
 			// Set the amount to the text content of the element
@@ -605,7 +605,7 @@ class If extends SpecialGrabber {
 		if(node.hasAttribute("append")) {
 			amount.push(converter(node.getAttribute("append")));
 		}
-		this[name.toLowerCase()] = amount;
+		this[nombre.toLowerCase()] = amount;
 	}
 	grabValue(context) {
 		var value = this.startingAmount, results = [], operation = this.operation, converter = this.inType.converter;
@@ -614,16 +614,16 @@ class If extends SpecialGrabber {
 			value = converter(value.grabValue(context));
 		}
 		this.comparison.forEach(function(unit) {
-			var test, [name, literalFlag, amount] = unit, refObj = If;
-			if(refObj[name] === undefined) {
+			var test, [nombre, literalFlag, amount] = unit, refObj = If;
+			if(refObj[nombre] === undefined) {
 				refObj = Equation;
 			}
 			if(literalFlag) {
 				// A literal value
-				test = refObj[name](value, converter(amount));
+				test = refObj[nombre](value, converter(amount));
 			} else {
 				// A Reference as value
-				test = refObj[name](value, converter(amount.grabValue(context)));
+				test = refObj[nombre](value, converter(amount.grabValue(context)));
 			}
 			results.push(test);
 		});
@@ -738,7 +738,7 @@ class While extends SpecialGrabber {
 		// Create While tag
 		tag = atts;
 		atts = [];
-		Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
+		Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
 		tag = new While(parent, node, atts, intype, outtype);
 		// Check Input
 		if(input !== undefined) {
@@ -862,11 +862,11 @@ class While extends SpecialGrabber {
 			tag.operation = "AND";
 		}
 		if(![...until.children].every(function(item) {
-			var name = item.nodeName,
+			var nombre = item.nodeName,
 				amount = null,
 				grabValueFlag = false;
-			if(If[name] === undefined) {
-				temp = name;
+			if(If[nombre] === undefined) {
+				temp = nombre;
 				return false;
 			}
 			if(node.hasAttribute("value")) {
@@ -886,7 +886,7 @@ class While extends SpecialGrabber {
 				// Set the amount to the text content of the element
 				amount = inconv(node.textContent);
 			}
-			tag.until.push([name, grabValueFlag, amount]);
+			tag.until.push([nombre, grabValueFlag, amount]);
 			return true;
 		})) {
 			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its Until tag.");
@@ -948,11 +948,11 @@ class While extends SpecialGrabber {
 	static doUntil(input, inconv, until, operation, context) {
 		var results = [], retVal = false;
 		until.forEach(function(condition) {
-			var [name, flag, value] = condition;
+			var [nombre, flag, value] = condition;
 			if(flag) {
 				value = inconv(value.grabValue(context));
 			}
-			results.push(If[name](input, value));
+			results.push(If[nombre](input, value));
 		});
 		switch (operation) {
 			case "AND":
@@ -1107,7 +1107,7 @@ function recurseNodes(parent, parentTag) {
 				parentTag.set("text", text);
 			}
 		} else {
-			let a = node.attributes, c = 0, atts = [], tag, name = node.nodeName, id = "";
+			let a = node.attributes, c = 0, atts = [], tag, nombre = node.nodeName, id = "";
  			while(c < a.length) {
 				let att = a.item(c), n = att.name, v = att.value;
 				if(n=== "ID") {
@@ -1117,10 +1117,10 @@ function recurseNodes(parent, parentTag) {
 				}
 				c++;
  			}
-			if(name === "Datum") {
+			if(nombre === "Datum") {
 				tag = new Datum(id, parentTag, node, atts);
 			} else {
-				tag = new BasicIdObject(name, parentTag, node, atts);
+				tag = new BasicIdObject(nombre, parentTag, node, atts);
 			}
 			//console.log(tag);
 			recurseNodes(node, tag);
@@ -1153,10 +1153,10 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 	// Go through each child
 	while(nodes.length > 0) {
 		let node = nodes.shift(),
-			name = node.nodeName;
-		if(BasicIdObject.preprocessTags[name] !== undefined) {
+			nombre = node.nodeName;
+		if(BasicIdObject.preprocessTags[nombre] !== undefined) {
 			// This node will be changed by a preprocessor
-			let info = BasicIdObject.preprocessTags[name](node, currentNode, currentTag);
+			let info = BasicIdObject.preprocessTags[nombre](node, currentNode, currentTag);
 			if(info === null) {
 				// Something bad happened: skip this node
 				continue;
@@ -1164,18 +1164,18 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 			// Use the returned value as the new node
 			node = info;
 		}
-		if(Datum.DataTagHandlers[name] !== undefined) {
+		if(Datum.DataTagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
-			Datum.DataTagHandlers[name](node, currentNode, currentTag);
-		} else if (BasicIdObject.TagHandlers[name] !== undefined) {
+			Datum.DataTagHandlers[nombre](node, currentNode, currentTag);
+		} else if (BasicIdObject.TagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
-			BasicIdObject.TagHandlers[name](node, currentNode, currentTag);
+			BasicIdObject.TagHandlers[nombre](node, currentNode, currentTag);
 		//} else if (node.children.length > 0) {
 		//	// This node has children: create a BasicIdObject for it and parse recursively
 		//	let atts = findNodeIdAndAtts(node),
 		//		id = atts.shift(),
 		//		allAtts = ancestorAtts.concat(atts),
-		//		tag = new BasicIdObject(name, id, parent, node, allAtts),
+		//		tag = new BasicIdObject(nombre, id, parent, node, allAtts),
 		//		newAncestry = ancestry.slice();
 		//	// Add ancestry if needed
 		//	if(currentTag !== undefined) {
@@ -1185,10 +1185,10 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 		//	parseDataNodes(node, tag, newAncestry, allAtts);
 		//} else {
 		//	// This is a simple text node: it will become a property of this node
-		//	props.push([name, node.textContent]);
+		//	props.push([nombre, node.textContent]);
 		} else {
 			// This is an unknown tag
-			logError(node, "Unknown tag enountered: " + name);
+			logError(node, "Unknown tag enountered: " + nombre);
 		}
 	}
 	return currentTag;
@@ -1277,11 +1277,11 @@ function parseGroup(node, parentNode, parentTag) {
 
 function parseAttribute(node, parentNode, parentTag) {
 	var atts = parseAttributesToObject(node), tag, type,
-		name = atts.name,
+		nombre = atts.name,
 		fromID = atts.getFromId,
 		formula = atts.formula,
 		att = atts.attribute;
-	if(name === undefined) {
+	if(nombre === undefined) {
 		return logError(node, "ATTRIBUTE: missing required \"name\" parameter");
 	} else {
 		delete atts.name;
@@ -1304,12 +1304,12 @@ function parseAttribute(node, parentNode, parentTag) {
 	atts.type = type;
 	tag = atts;
 	atts = [];
-	Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
-	tag = new Attribute(parentTag, node, atts, name, type);
+	Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
+	tag = new Attribute(parentTag, node, atts, nombre, type);
 	if(fromID !== undefined) {
 		// Copy from other attribute
-		//tag.set(fromID, att || name);
-		let ref = DatumReference.getReference(fromID, att || name, tag, node, []);
+		//tag.set(fromID, att || nombre);
+		let ref = DatumReference.getReference(fromID, att || nombre, tag, node, []);
 		tag.set("value", ref);
 	} else if (formula !== undefined) {
 		// Clone info from formula
@@ -1331,8 +1331,8 @@ function parseAttribute(node, parentNode, parentTag) {
 		tag.set("value", node.textContent);
 	}
 	// Save this attribute node
-	console.log([name, tag]);
-	parentTag.set(name, tag);
+	//console.log([nombre, tag]);
+	parentTag.set(nombre, tag);
 }
 
 function logError(node, msg) {
@@ -1357,16 +1357,16 @@ function parseAttributesToObject(node) {
 
 function parseFormulae(node) {
 	var atts = parseAttributesToObject(node),
-		name = atts.name,
+		nombre = atts.name,
 		type = atts.type,
 		overwrite = atts.overwrite,
 		tag;
-	if(name === undefined) {
+	if(nombre === undefined) {
 		return logError(node, "FORMULA: missing required \"name\" parameter");
 	}
 	delete atts.name;
-	if(Formula.getName(name) !== undefined && overwrite) {
-		return logError(node, "FORMULA: cannot overwrite existing \"" + name + "\" formula without an explicit \"overwrite\" parameter");
+	if(Formula.getName(nombre) !== undefined && overwrite) {
+		return logError(node, "FORMULA: cannot overwrite existing \"" + nombre + "\" formula without an explicit \"overwrite\" parameter");
 	}
 	if(overwrite) {
 		delete atts.overwrite;
@@ -1379,7 +1379,7 @@ function parseFormulae(node) {
 	atts.type = type;
 	tag = atts;
 	atts = [];
-	Object.getOwnPropertyNames(tag).forEach(name => atts.push([name, tag[name]]));
-	tag = new Formula(node, name, atts);
+	Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
+	tag = new Formula(node, nombre, atts);
 	parseDataNodes(node, tag);
 }
