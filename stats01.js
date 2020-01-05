@@ -735,9 +735,9 @@ class While extends SpecialGrabber {
 			outtype = BasicStat.getTypeObject(atts.outType || parent.get("outType") || parent.get("type"), Str),
 			input = atts.input,
 			output = atts.output,
-			modIn = node.querySelectorAll("ModifyInput"),
-			modOut = node.querySelectorAll("ModifyOutput"),
-			until = node.querySelector("Until"),
+			modIn = $a("ModifyInput", node),
+			modOut = $a("ModifyOutput", node),
+			until = $q("Until", node),
 			inconv, outconv, tag, temp;
 		if(modIn === null) {
 			return logError(node, "WHILE: Missing required ModifyInput tag");
@@ -772,7 +772,7 @@ class While extends SpecialGrabber {
 			input = intype.converter(input);
 			delete atts.input;
 		} else {
-			let i = node.querySelector("Input");
+			let i = $q("Input", node);
 			if(i === null) {
 				input = inconv("");
 			} else {
@@ -798,7 +798,7 @@ class While extends SpecialGrabber {
 			output = outtype.converter(output);
 			delete atts.output;
 		} else {
-			let i = node.querySelector("Output");
+			let i = $q("Output", node);
 			if(i === null) {
 				output = outconv("");
 			} else {
@@ -1110,7 +1110,7 @@ function loadAndAssembleInfo(cls) {
 	//console.log(doc);
 	//console.log(body);
 	//console.log("Begin");
-	[...body.querySelectorAll("Formulae Formula")].forEach(function(node) {
+	[...$q("Formulae Formula", body)].forEach(function(node) {
 		parseFormulae(node);
 	});
 	[...body.getElementsByTagName("Stats")].forEach(function(node) {
