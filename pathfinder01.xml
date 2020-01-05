@@ -18,14 +18,14 @@
 			</If>
 		</Formula>
 	</Formulae>
-	<Data>
-		<Group id="ability_scores" userEditable="true" type="Int" startingValue="0" minValue="0" maxValue="99">
-			<Datum id="STR" title="Strength" startingValue="20" />
-			<Datum id="DEX" title="Dexterity" />
-			<Datum id="CON" title="Constitution" />
-			<Datum id="INT" title="Intelligence" />
-			<Datum id="WIS" title="Wisdom" />
-			<Datum id="CHA" title="Charisma" />
+	<Stats>
+		<Group id="ability_scores" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
+			<Stat id="STR" title="Strength" startingValue="20" />
+			<Stat id="DEX" title="Dexterity" />
+			<Stat id="CON" title="Constitution" />
+			<Stat id="INT" title="Intelligence" />
+			<Stat id="WIS" title="Wisdom" />
+			<Stat id="CHA" title="Charisma" />
 			<Attribute name="modifier" userEditable="false" minValue="-99">
 				<Math>
 					<Add fromId="this" />
@@ -36,60 +36,61 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
 		</Group>
-		<Datum id="Level" title="Level" startingValue="1" minValue="1" />
-		<Datum id="Init" title="Initiative" startingValue="8" minValue="-99">
+		<Stat id="Level" title="Level" type="Int" startingValue="1" minValue="1" />
+		<Stat id="Init" title="Initiative" type="IntBonusable" startingValue="8" minValue="-99">
 			<Attribute name="modifier_text" formula="convert_value_to_string" />
-		</Datum>
-		<Group id="skills" userEditable="true" type="Int" startingValue="0" minValue="0" background="false">
+		</Stat>
+		<Stat id="SkillPoints" type="IntBonusable" title="Skill Points" minValue="0" />
+		<Group id="skills" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" background="false">
 			<Attribute name="maxValue" getFromId="Level" attribute="value" />
 			<Group id="strength_skill">
-				<Datum id="Climb" title="Climb" />
-				<Datum id="Swim" title="Swim" />
+				<Stat id="Climb" title="Climb" />
+				<Stat id="Swim" title="Swim" />
 				<Attribute name="score_mod" minValue="-99" getFromId="STR" attribute="modifier" />
 			</Group>
 			<Group id="dexterity_skill">
-				<Datum id="Acrobatics" title="Acrobatics" />
-				<Datum id="Disable Device" title="Disable Device" />
-				<Datum id="Escape Artist" title="Escape Artist" />
-				<Datum id="Fly" title="Fly" />
-				<Datum id="Ride" title="Ride" />
-				<Datum id="Sleight of Hand" title="Sleight of Hand" background="true" />
-				<Datum id="Stealth" title="Stealth" />
+				<Stat id="Acrobatics" title="Acrobatics" />
+				<Stat id="Disable Device" title="Disable Device" />
+				<Stat id="Escape Artist" title="Escape Artist" />
+				<Stat id="Fly" title="Fly" />
+				<Stat id="Ride" title="Ride" />
+				<Stat id="Sleight of Hand" title="Sleight of Hand" background="true" />
+				<Stat id="Stealth" title="Stealth" />
 				<Attribute name="score_mod" minValue="-99" getFromId="DEX" attribute="modifier" />
 			</Group>
 			<Group id="intelligence_skill">
-				<Datum id="Appraise" title="Appraise" background="true" />
-				<Datum id="Knowledge (arcana)" title="Knowledge (arcana)" />
-				<Datum id="Knowledge (dungeoneering)" title="Knowledge (dungeoneering)" />
-				<Datum id="Knowledge (engineering)" title="Knowledge (engineering)" background="true" />
-				<Datum id="Knowledge (geography)" title="Knowledge (geography)" background="true" />
-				<Datum id="Knowledge (history)" title="Knowledge (history)" background="true" />
-				<Datum id="Knowledge (local)" title="Knowledge (local)" />
-				<Datum id="Knowledge (nature)" title="Knowledge (nature)" />
-				<Datum id="Knowledge (nobility)" title="Knowledge (nobility)" background="true" />
-				<Datum id="Knowledge (planes)" title="Knowledge (planes)" />
-				<Datum id="Knowledge (religion)" title="Knowledge (religion)" />
-				<Datum id="Linguistics" title="Linguistics" background="true" />
-				<Datum id="Spellcraft" title="Spellcraft" />
-				<MultiDatum id="craft_skills" idPre="SkillCraft" titlePre="Craft (" titlePost=")" background="true" />
+				<Stat id="Appraise" title="Appraise" background="true" />
+				<Stat id="Knowledge (arcana)" title="Knowledge (arcana)" />
+				<Stat id="Knowledge (dungeoneering)" title="Knowledge (dungeoneering)" />
+				<Stat id="Knowledge (engineering)" title="Knowledge (engineering)" background="true" />
+				<Stat id="Knowledge (geography)" title="Knowledge (geography)" background="true" />
+				<Stat id="Knowledge (history)" title="Knowledge (history)" background="true" />
+				<Stat id="Knowledge (local)" title="Knowledge (local)" />
+				<Stat id="Knowledge (nature)" title="Knowledge (nature)" />
+				<Stat id="Knowledge (nobility)" title="Knowledge (nobility)" background="true" />
+				<Stat id="Knowledge (planes)" title="Knowledge (planes)" />
+				<Stat id="Knowledge (religion)" title="Knowledge (religion)" />
+				<Stat id="Linguistics" title="Linguistics" background="true" />
+				<Stat id="Spellcraft" title="Spellcraft" />
+				<MultiStat id="craft_skills" idPre="SkillCraft" titlePre="Craft (" titlePost=")" background="true" />
 				<Attribute name="score_mod" minValue="-99" getFromId="INT" attribute="modifier" />
 			</Group>
 			<Group id="wisdom_skill">
-				<Datum id="Heal" title="Heal" />
-				<Datum id="Perception" title="Perception" />
-				<Datum id="Sense Motive" title="Sense Motive" />
-				<Datum id="Survival" title="Survival" />
-				<MultiDatum id="profession_skills" idPre="SkillProfession" titlePre="Profession (" titlePost=")" background="true" />
+				<Stat id="Heal" title="Heal" />
+				<Stat id="Perception" title="Perception" />
+				<Stat id="Sense Motive" title="Sense Motive" />
+				<Stat id="Survival" title="Survival" />
+				<MultiStat id="profession_skills" idPre="SkillProfession" titlePre="Profession (" titlePost=")" background="true" />
 				<Attribute name="score_mod" minValue="-99" getFromId="WIS" attribute="modifier" />
 			</Group>
 			<Group id="charisma_skill">
-				<Datum id="Bluff" title="Bluff" />
-				<Datum id="Diplomacy" title="Diplomacy" />
-				<Datum id="Disguise" title="Disguise" />
-				<Datum id="Handle Animal" title="Handle Animal" background="true" />
-				<Datum id="Intimidate" title="Intimidate" />
-				<Datum id="Use Magic Device" title="Use Magic Device" />
-				<MultiDatum id="perform_skills" idPre="SkillPerform" titlePre="Perform (" titlePost=")" background="true" />
+				<Stat id="Bluff" title="Bluff" />
+				<Stat id="Diplomacy" title="Diplomacy" />
+				<Stat id="Disguise" title="Disguise" />
+				<Stat id="Handle Animal" title="Handle Animal" background="true" />
+				<Stat id="Intimidate" title="Intimidate" />
+				<Stat id="Use Magic Device" title="Use Magic Device" />
+				<MultiStat id="perform_skills" idPre="SkillPerform" titlePre="Perform (" titlePost=")" background="true" />
 				<Attribute name="score_mod" minValue="-99" getFromId="CHA" attribute="modifier" />
 			</Group>
 			<Attribute name="modifier" minValue="-99">
@@ -100,16 +101,16 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
 		</Group>
-		<Group id="saving_throws" type="Int" minValue="-99" maxValue="99" startingValue="0">
-			<Datum id="FortSave" title="Fortitude">
+		<Group id="saving_throws" type="IntBonusable" minValue="-99" maxValue="99" startingValue="0">
+			<Stat id="FortSave" title="Fortitude">
 				<Attribute name="score_mod" getFromId="CON" attribute="modifier" />
-			</Datum>
-			<Datum id="ReflSave" title="Reflex">
+			</Stat>
+			<Stat id="ReflSave" title="Reflex">
 				<Attribute name="score_mod" getFromId="DEX" attribute="modifier" />
-			</Datum>
-			<Datum id="WillSave" title="Will">
+			</Stat>
+			<Stat id="WillSave" title="Will">
 				<Attribute name="score_mod" getFromId="WIS" attribute="modifier" />
-			</Datum>
+			</Stat>
 			<Attribute name="modifier" minValue="-99">
 				<Math>
 					<Add fromId="this" attribute="value" />
@@ -118,8 +119,7 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
 		</Group>
-		<Datum id="SkillPoints" type="Int" title="Skill Points" minValue="0" />
-		<Datum id="BAB" type="Int" title="Base Attack Bonus" startingValue="0">
+		<Stat id="BAB" type="IntBonusable" title="Base Attack Bonus" startingValue="0">
 			<Attribute name="full_attack_text">
 				<While inType="Int" outType="Str">
 					<Until operation="AND">
@@ -132,8 +132,8 @@
 				</While>
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" formula="convert_value_to_string" />
-		</Datum>
-	</Data>
+		</Stat>
+	</Stats>
 	<displayModules>
 		<module title="Ability Scores">
 			<activate>

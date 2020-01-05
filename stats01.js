@@ -107,20 +107,10 @@ class Attribute extends BasicStatObject {
 		this.name = nombre;
 		this.defaultContext = parent;
 	}
-	//get(prop, context = this.parent) {
-	//	var found = this.atts.get(prop);
-	//	console.log(["ATTRIBUTE", found]);
-	//	if (found instanceof SpecialGrabber) {
-	//		found = found.grabValue(context);
-	//	} else if (found instanceof BasicStatObject) {
-	//		found = found.get("value");
-	//	}
-	//	return this.type.converter(found);
-	//}
 }
 
-// Datum changes 
-class Datum extends BasicIdObject {
+// BasicStat changes
+class BasicStat extends BasicIdObject {
 	constructor(id, parent, node, atts) {
 		var i;
 		//console.log("Making id-" + id);
@@ -131,7 +121,7 @@ class Datum extends BasicIdObject {
 		i.has("value") || i.set("value", i.get("startingValue"));
 	}
 }
-Datum.converter = function(input) { return input; }
+BasicStat.converter = function(input) { return input; }
 
 
 class Formula extends BasicStatObject {
@@ -174,30 +164,30 @@ class SelfReference extends SpecialGrabber {
 }
 SelfReference.refs = new Map();
 
-class DatumReference extends SelfReference {
-	constructor(datumStr, property, parent, node, atts) {
-		super([datumStr, property], parent, node, atts);
-		this.reference = datumStr;
+class StatReference extends SelfReference {
+	constructor(statStr, property, parent, node, atts) {
+		super([statStr, property], parent, node, atts);
+		this.reference = statStr;
 	}
 	grabValue(context) {
 		var reference = BasicIdObject.getById(this.reference);
-//		console.log(["DATUM REFERENCE", context]);
+//		console.log(["BasicStat REFERENCE", context]);
 		if(reference === undefined) {
-			logError(this, "ERROR: unable to find Datum named \"" + this.reference + "\" when fetching property");
+			logError(this, "ERROR: unable to find BasicStat named \"" + this.reference + "\" when fetching property");
 			return "";
 		}
 		return reference.get(this.property);
 	}
-	static getReference(datumStr, property, parent, node, atts) {
-		var test = DatumReference.refs.get(datumStr + "->" + property);
+	static getReference(statStr, property, parent, node, atts) {
+		var test = StatReference.refs.get(statStr + "->" + property);
 		if(test !== undefined) {
 			return test;
 		}
-		return new DatumReference(datumStr, property, parent, node, atts);
+		return new StatReference(statStr, property, parent, node, atts);
 	}
 }
 
-class MultiDatum extends BasicIdObject {
+class MultiStat extends BasicIdObject {
 	constructor(id, parent, node, type, atts) {
 		var i;
 		super(id, parent, node, atts);
@@ -207,19 +197,19 @@ class MultiDatum extends BasicIdObject {
 		this.inheritors = [];
 		this.inhCount = 1;
 		this.type = type;
-		MultiDatum.allIDs.set(id, this);
+		MultiStat.allIDs.set(id, this);
 	}
-	makeDatum(node, atts) {
+	makeStat(node, atts) {
 		var n = this.inhCount++,
 			id = this.get("idPre") + n.toString() + this.get("idPost"),
-			datum = new this.type(id, this, node, atts);
-		this.inheritors.push(datum);
-		return datum;
+			BasicStat = new this.type(id, this, node, atts);
+		this.inheritors.push(BasicStat);
+		return BasicStat;
 	}
 }
-MultiDatum.allIDs = new Map();
+MultiStat.allIDs = new Map();
 
-class Num extends Datum {
+class Num extends BasicStat {
 	constructor(id, parent, node, atts) {
 		var i, t;
 		super(id, parent, node, atts);
@@ -301,7 +291,7 @@ class Int extends Num {
 }
 Int.converter = function(x) { return Math.round(Number(x)) };
 
-class Str extends Datum {
+class Str extends BasicStat {
 	constructor(id, parent, node, atts) {
 		var i;
 		super(id, parent, node, atts);
@@ -323,36 +313,73 @@ class Str extends Datum {
 }
 Str.converter = String;
 
+class IntBonusable extends Int {
+	constructor(id, parent, node, atts) {
+		super(id, parent, node, atts);
+		this.bonuses = new Map();
+	}
+	getModifiedValue(context = this.defaultContext) {
+		var total = this.get("value");
+		this.bonuses.forEach(function(type) {
+			var bonuses = [];
+			type.forEach(function(value) {
+				var v = value;
+				if(value instanceof SpecialGrabber) {
+					v = value.grabValue(context);
+				}
+				bonuses.push(v);
+			});
+			total += Math.max(...bonuses, 0) + Math.min(...bonuses, 0);
+		});
+		return total;
+	}
+	addBonus(id, type, bonus) {
+		var b = this.bonuses,
+			bonuses = b.get(type) || new Map();
+		bonuses.set(id, bonus);
+		b.set(type, bonuses);
+	}
+	removeBonus(id, type, bonus) {
+		var b = this.bonuses,
+			bonuses = b.get(type);
+		if(bonuses !== undefined) {
+			bonuses.delete(id);
+			b.set(type, bonuses);
+		}
+	}
+}
+IntBonusable.converter = Int.converter;
 
-
-Datum.type = {
+BasicStat.type = {
+	Typeless: BasicStat,
 	Num: Num,
 	Int: Int,
 	Str: Str,
-	Typeless: Datum
+	IntBonusable: IntBonusable
 };
 
-Datum.converters = {
+BasicStat.converters = {
 	userEditable: function(input) { return input === "true"; },
-	type: Datum.getTypeObject
+	type: BasicStat.getTypeObject
 };
 
 // A function to handle Type attributes
-Datum.getTypeObject = function(type) {
-	var c = Datum.type[type];
+BasicStat.getTypeObject = function(type, fallback) {
+	var c = BasicStat.type[type];
 	// Is this a valid type?
 	if(c !== undefined) {
 		// If so, return it
 		return c;
 	}
 	// Otherwise, return Str as default
-	return Str;
+	return fallback || BasicStat.defaultTypeObject;
 };
+BasicStat.defaultTypeObject = Str;
 
-Datum.DataTagHandlers = {
+BasicStat.StatTagHandlers = {
 	Group: parseGroup,
-	Datum: parseDatum,
-	MultiDatum: parseMultiDatum,
+	Stat: parseStat,
+	MultiStat: parseMultiStat,
 	Math: parseMath,
 	If: parseIf,
 	While: parseWhile
@@ -388,9 +415,9 @@ class Equation extends SpecialGrabber {
 			type = parent.get("type") || Num;
 		}
 		if(typeof type === "string") {
-			type = Datum.type[type] || Num;
+			type = BasicStat.getTypeObject(type, Num);
 		}
-		if(type === Datum.type.Typeless) {
+		if(type === BasicStat.type.Typeless) {
 			type = Num;
 		}
 		atts.type = type;
@@ -435,7 +462,7 @@ class Equation extends SpecialGrabber {
 			if(amount === "this") {
 				amount = SelfReference.getReference(property, this, node, []);
 			} else {
-				amount = new DatumReference(amount, property);
+				amount = new StatReference(amount, property);
 			}
 			literalFlag = false;
 		} else {
@@ -480,19 +507,19 @@ class If extends SpecialGrabber {
 	static constructIfThenElse(parent, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
-			outtype = Datum.type[atts.outType || parent.get("outType") || parent.get("type") || "Str"],
+			outtype = BasicStat.getTypeObject(atts.outType || parent.get("outType") || parent.get("type"), Str),
 			operation = (atts.operation || "AND"),
 			tag;
 		if(intype === undefined) {
-			intype = Datum.type[parent.get("inType") || "Num"] || Num;
+			intype = BasicStat.getTypeObject(parent.get("inType"), Num);
 		} else {
-			intype = Datum.type[intype] || Num;
+			intype = BasicStat.getTypeObject(intype, Num);
 			delete atts.inType;
 		}
 		if(outtype === undefined) {
-			outtype = Datum.type[parent.get("inType") || parent.get("type") || "Str"] || Str;
+			outtype = BasicStat.getTypeObject(parent.get("inType") || parent.get("type"), Str);
 		} else {
-			outtype = Datum.type[outtype] || Str;
+			outtype = BasicStat.getTypeObject(outtype, Str);
 			delete atts.outType;
 		}
 		if(operation === undefined) {
@@ -540,7 +567,7 @@ class If extends SpecialGrabber {
 			if(amount === "this") {
 				amount = SelfReference.getReference(property, this, node, []);
 			} else {
-				amount = new DatumReference(amount, property);
+				amount = new StatReference(amount, property);
 			}
 		} else {
 			// Set the amount to the text content of the element
@@ -563,7 +590,7 @@ class If extends SpecialGrabber {
 			if(amount === "this") {
 				amount = SelfReference.getReference(property, this, node, []);
 			} else {
-				amount = new DatumReference(amount, property);
+				amount = new StatReference(amount, property);
 			}
 			literalFlag = false;
 		} else {
@@ -585,7 +612,7 @@ class If extends SpecialGrabber {
 			if(obj === "this") {
 				amount = SelfReference.getReference(property);
 			} else {
-				amount = new DatumReference(obj, property);
+				amount = new StatReference(obj, property);
 			}
 		//} else if (node.children.length > 0) {
 		} else if (node.getAttribute("use") === "Math") {
@@ -593,7 +620,7 @@ class If extends SpecialGrabber {
 			amount = Equation.constructEquation(parent, node, [["type", outtype]]);
 			//amount = new BasicStatObject(parent, pNode, [["type", outtype]]);
 			//console.log(["ATTRIBUTE", nombre, outtype]);
-			//parseDataNodes(node, amount);
+			//parseStatNodes(node, amount);
 		} else {
 			// Set the amount to the text content of the element
 			amount = converter(node.textContent);
@@ -705,7 +732,7 @@ class While extends SpecialGrabber {
 	static constructWhile(parent, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
-			outtype = Datum.type[atts.outType || parent.get("outType") || parent.get("type") || "Str"],
+			outtype = BasicStat.getTypeObject(atts.outType || parent.get("outType") || parent.get("type"), Str),
 			input = atts.input,
 			output = atts.output,
 			modIn = node.querySelectorAll("ModifyInput"),
@@ -721,17 +748,17 @@ class While extends SpecialGrabber {
 		}
 		// Find intype
 		if(intype === undefined) {
-			intype = Datum.type[parent.get("inType") || "Num"] || Num;
+			intype = BasicStat.getTypeObject(parent.get("inType"), Num);
 		} else {
-			intype = Datum.type[intype] || Num;
+			intype = BasicStat.getTypeObject(intype, Num);
 			delete atts.inType;
 		}
 		inconv = intype.converter;
 		// Find outtype
 		if(outtype === undefined) {
-			outtype = Datum.type[parent.get("inType") || parent.get("type") || "Str"] || Str;
+			outtype = BasicStat.getTypeObject(parent.get("inType") || parent.get("type"), Str);
 		} else {
-			outtype = Datum.type[outtype] || Str;
+			outtype = BasicStat.getTypeObject(outtype, Str);
 			delete atts.outType;
 		}
 		outconv = outtype.converter;
@@ -758,7 +785,7 @@ class While extends SpecialGrabber {
 					if(target === "this") {
 						input = SelfReference.getReference(property, tag, i, []);
 					} else {
-						input = DatumReference.getReference(target, property, tag, node, atts);
+						input = StatReference.getReference(target, property, tag, node, atts);
 					}
 				} else {
 					input = inconv(i.textContent);
@@ -784,7 +811,7 @@ class While extends SpecialGrabber {
 					if(target === "this") {
 						output = SelfReference.getReference(property, tag, i, []);
 					} else {
-						output = DatumReference.getReference(target, property, tag, node, atts);
+						output = StatReference.getReference(target, property, tag, node, atts);
 					}
 				} else {
 					output = outconv(i.textContent);
@@ -879,7 +906,7 @@ class While extends SpecialGrabber {
 				if(amount === "this") {
 					amount = SelfReference.getReference(property, this, node, []);
 				} else {
-					amount = new DatumReference(amount, property);
+					amount = new StatReference(amount, property);
 				}
 				grabValueFlag = true;
 			} else {
@@ -1009,7 +1036,7 @@ $i("rules").addEventListener("change", function(e) {
 	// Call a parse function when the fetching is done
 	getter.addEventListener("load", function() {
 		AJAXstorage.set(rules, getter.responseXML);
-		console.log("Info received");
+		//console.log("Info received");
 	});
 	getter.open("GET", "widgets/_" + rules + ".xml");
 	getter.send();
@@ -1082,17 +1109,17 @@ function loadAndAssembleInfo(cls) {
 	const main = $i("mainGrid");
 	//console.log(doc);
 	//console.log(body);
-	console.log("Begin");
+	//console.log("Begin");
 	[...body.querySelectorAll("Formulae Formula")].forEach(function(node) {
 		parseFormulae(node);
 	});
-	[...body.getElementsByTagName("Data")].forEach(function(node) {
+	[...body.getElementsByTagName("Stats")].forEach(function(node) {
 		//recurseNodes(bit, undefined);
-		parseDataNodes(node, undefined);
+		parseStatNodes(node, undefined);
 	});
 	//recurseNodes(body, ul);
 	//main.append(ul);
-	console.log("End");
+	//console.log("End");
 }
 
 function recurseNodes(parent, parentTag) {
@@ -1117,8 +1144,8 @@ function recurseNodes(parent, parentTag) {
 				}
 				c++;
  			}
-			if(nombre === "Datum") {
-				tag = new Datum(id, parentTag, node, atts);
+			if(nombre === "Stat") {
+				tag = new BasicStat(id, parentTag, node, atts);
 			} else {
 				tag = new BasicIdObject(nombre, parentTag, node, atts);
 			}
@@ -1129,13 +1156,13 @@ function recurseNodes(parent, parentTag) {
 }
 
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
-//parent, parentTag, node, id, atts, env, DatumNodes
+//parent, parentTag, node, id, atts, env, StatNodes
 
 
 function findNodeIdAndAtts(node) {
 	let a = node.attributes, c = 0, atts = [], id = "";
 	while(c < a.length) {
-		let att = a.item(c), n = att.name, v = att.value, converter = Datum.converters[n];
+		let att = a.item(c), n = att.name, v = att.value, converter = BasicStat.converters[n];
 		if(n === "id") {
 			id = v;
 		} else if (converter !== undefined) {
@@ -1148,7 +1175,7 @@ function findNodeIdAndAtts(node) {
 	return [id, ...atts];
 }
 
-function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.children]) {
+function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.children]) {
 	// Get kids of the parent
 	// Go through each child
 	while(nodes.length > 0) {
@@ -1164,9 +1191,9 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 			// Use the returned value as the new node
 			node = info;
 		}
-		if(Datum.DataTagHandlers[nombre] !== undefined) {
+		if(BasicStat.StatTagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
-			Datum.DataTagHandlers[nombre](node, currentNode, currentTag);
+			BasicStat.StatTagHandlers[nombre](node, currentNode, currentTag);
 		} else if (BasicIdObject.TagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
 			BasicIdObject.TagHandlers[nombre](node, currentNode, currentTag);
@@ -1182,7 +1209,7 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 		//		newAncestry.push([currentNode, currentTag]);
 		//	}
 		//	siblings.push(tag);
-		//	parseDataNodes(node, tag, newAncestry, allAtts);
+		//	parseStatNodes(node, tag, newAncestry, allAtts);
 		//} else {
 		//	// This is a simple text node: it will become a property of this node
 		//	props.push([nombre, node.textContent]);
@@ -1196,7 +1223,7 @@ function parseDataNodes(currentNode, currentTag, nodes = [...currentNode.childre
 
 // not sure if I need siblings... or all ancestors...
 
-function parseDatum(node, parentNode, parentTag) {
+function parseStat(node, parentNode, parentTag) {
 	var atts = findNodeIdAndAtts(node),
 		id = atts.shift(), tag, type;
 	if(atts.slice().reverse().every(function(pair) {
@@ -1212,16 +1239,12 @@ function parseDatum(node, parentNode, parentTag) {
 			type = parentTag.get("type");
 		}
 	}
-	if(type === undefined || Datum.type[type] === undefined) {
-		type = Str;
-	} else {
-		type = Datum.type[type];
-	}
+	type = BasicStat.getTypeObject(type, Str);
 	tag = new type(id, parentTag, node, atts);
-	parseDataNodes(node, tag);
+	parseStatNodes(node, tag);
 }
 
-function parseMultiDatum(node, parentNode, parentTag) {
+function parseMultiStat(node, parentNode, parentTag) {
 	var atts = findNodeIdAndAtts(node),
 		id = atts.shift(),
 		checkAtts = atts.slice(),
@@ -1237,13 +1260,9 @@ function parseMultiDatum(node, parentNode, parentTag) {
 		}
 		return true;
 	});
-	if(type === undefined || Datum.type[type] === undefined) {
-		type = Str;
-	} else {
-		type = Datum.type[type];
-	}
-	tag = new MultiDatum(id, parentTag, node, type, atts);
-	parseDataNodes(node, tag);
+	type = BasicStat.getTypeObject(type, Str);
+	tag = new MultiStat(id, parentTag, node, type, atts);
+	parseStatNodes(node, tag);
 }
 
 // these should probably set the Value property of their parent
@@ -1260,7 +1279,7 @@ function parseIf(node, parentNode, parentTag) {
 	parentTag.set("value", ifthen);
 }
 //intype, outtype, compareTag, style
-//parseDataNodes(currentNode, currentTag, ancestry, ancestorAtts)
+//parseStatNodes(currentNode, currentTag, ancestry, ancestorAtts)
 
 
 function parseWhile(node, parentNode, parentTag) {
@@ -1272,7 +1291,7 @@ function parseGroup(node, parentNode, parentTag) {
 	var atts = findNodeIdAndAtts(node),
 		id = atts.shift(),
 		tag = new BasicIdObject(id, parentTag, node, atts);
-	parseDataNodes(node, tag);
+	parseStatNodes(node, tag);
 }
 
 function parseAttribute(node, parentNode, parentTag) {
@@ -1296,12 +1315,7 @@ function parseAttribute(node, parentNode, parentTag) {
 		delete atts.attribute;
 	}
 	type = atts.type;
-	if(type === undefined || Datum.type[type] === undefined) {
-		atts.type = Datum.type.Typeless;
-	} else {
-		atts.type = Datum.type[type] || Datum.type.Typeless;
-	}
-	atts.type = type;
+	atts.type = BasicStat.getTypeObject(type, BasicStat.type.Typeless);
 	tag = atts;
 	atts = [];
 	Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
@@ -1309,7 +1323,7 @@ function parseAttribute(node, parentNode, parentTag) {
 	if(fromID !== undefined) {
 		// Copy from other attribute
 		//tag.set(fromID, att || nombre);
-		let ref = DatumReference.getReference(fromID, att || nombre, tag, node, []);
+		let ref = StatReference.getReference(fromID, att || nombre, tag, node, []);
 		tag.set("value", ref);
 	} else if (formula !== undefined) {
 		// Clone info from formula
@@ -1322,10 +1336,10 @@ function parseAttribute(node, parentNode, parentTag) {
 		while(clone.firstChild !== null) {
 			node.appendChild(clone.firstChild);
 		}
-		parseDataNodes(node, tag);
+		parseStatNodes(node, tag);
 	} else if(node.children.length > 0) {
 		// Node contains information that must be set as our value
-		parseDataNodes(node, tag);
+		parseStatNodes(node, tag);
 	} else {
 		// Node contains text that must be set as our value
 		tag.set("value", node.textContent);
@@ -1344,7 +1358,7 @@ function logError(node, msg) {
 function parseAttributesToObject(node) {
 	var a = node.attributes, c = 0, atts = {};
 	while(c < a.length) {
-		let att = a.item(c), key = att.name, value = att.value, converter = Datum.converters[key];
+		let att = a.item(c), key = att.name, value = att.value, converter = BasicStat.converters[key];
 		if (converter !== undefined) {
 			atts[key] = converter(value);
 		} else {
@@ -1371,15 +1385,15 @@ function parseFormulae(node) {
 	if(overwrite) {
 		delete atts.overwrite;
 	}
-	if(type === undefined) {
-		type = Datum.type.Typeless;
-	} else {
-		type = Datum.type[node.getAttribute("type")] || Datum.type.Typeless;
-	}
-	atts.type = type;
+	atts.type = BasicStat.getTypeObject(type, BasicStat.type.Typeless);
 	tag = atts;
 	atts = [];
 	Object.getOwnPropertyNames(tag).forEach(nombre => atts.push([nombre, tag[nombre]]));
 	tag = new Formula(node, nombre, atts);
-	parseDataNodes(node, tag);
+	parseStatNodes(node, tag);
 }
+
+
+
+
+
