@@ -56,5 +56,5 @@ This primary purpose of this tag is to include text that would be problematic to
 - **getFromId** indicates which group or stat we are pulling from.
 - **attribute** is the name of the attribute in the stat we're copying. If omitted, the *name* of the attribute will be used. For example, the first attribute tag in the Group above is copying the "fresh" attribute of the "unique_name" stat (or group), and the second will copy the "type" of the same.
 
-
+Note that an attribute tag cannot override **value** or **startingValue**.
     
