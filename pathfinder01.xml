@@ -40,6 +40,7 @@
 		<Stat id="Init" title="Initiative" type="IntBonusable" startingValue="8" minValue="-99">
 			<Attribute name="modifier_text" formula="convert_value_to_string" />
 		</Stat>
+		<Stat id="Feats" type="IntBonusable" title="Feats" minValue="0" />
 		<Stat id="SkillPoints" type="IntBonusable" title="Skill Points" minValue="0" />
 		<Group id="skills" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" background="false">
 			<Attribute name="maxValue" getFromId="Level" attribute="value" />
@@ -133,6 +134,7 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" formula="convert_value_to_string" />
 		</Stat>
+		<Stat id="langugesKnown" type="IntBonusable" title="Languages Known" startingValue="0" />
 	</Stats>
 	<Choices>
 		<Group category="race">
