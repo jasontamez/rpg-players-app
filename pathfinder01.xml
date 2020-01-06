@@ -134,6 +134,49 @@
 			<Attribute name="modifier_text" type="Str" formula="convert_value_to_string" />
 		</Stat>
 	</Stats>
+	<Choices>
+		<Group category="race">
+			<Choice id="human" title="Human" />
+			<Choice id="elf" title="Elf" />
+			<Choice id="halfElf" title="Half-Elf" />
+			<Choice id="halfOrc" title="Half-Orc" />
+			<Choice id="dwarf" title="Dwarf" />
+			<Choice id="gnome" title="Gnome" />
+			<Choice id="halfling" title="Halfling" />
+		</Group>
+		<Group category="class">
+			<Choice id="bard" title="Bard" />
+			<Choice id="barbarian" title="Barbarian" />
+			<Choice id="cleric" title="Cleric" />
+			<Choice id="druid" title="Druid" />
+			<Choice id="fighter" title="Fighter" />
+			<Choice id="monk" title="Monk" />
+			<Choice id="paladin" title="Paladin" />
+			<Choice id="ranger" title="Ranger" />
+			<Choice id="rogue" title="Rogue" />
+			<Choice id="unchRogue" title="Unchained Rogue" />
+			<Choice id="sorcerer" title="Sorcerer" />
+			<Choice id="wizard" title="Wizard" />
+			<Choice id="alchemist" title="Alchemist" />
+			<Choice id="cavalier" title="Cavalier" />
+			<Choice id="gunslinger" title="Gunslinger" />
+			<Choice id="inquisitor" title="Inquisitor" />
+			<Choice id="magus" title="Magus" />
+			<Choice id="oracle" title="Oracle" />
+			<Choice id="summoner" title="Summoner" />
+			<Choice id="witch" title="Witch" />
+			<Choice id="samurai" title="Samurai" />
+			<Choice id="hunter" title="Hunter" />
+			<Choice id="warpriest" title="Warpriest" />
+			<Choice id="bloodrager" title="Bloodrager" />
+			<Choice id="shaman" title="Shaman" />
+			<Choice id="skald" title="Skald" />
+			<Choice id="slayer" title="Slayer" />
+			<Choice id="swashbuckler" title="Swashbuckler" />
+			<Choice id="shifter" title="Shifter" />
+			<Choice id="investigator" title="Investigator" />
+		</Group>
+	</Choices>
 	<displayModules>
 		<module title="Ability Scores">
 			<activate>

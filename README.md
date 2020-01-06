@@ -26,6 +26,8 @@ A stat is a single piece of data.
 - **startingValue** defines what the initial value of the stat is. It defaults to an empty string or zero, depending on stat type.
 - **minValue** and **maxValue** are optional, and only work with *Int* and *Num* stats, limiting the possible values of the stat. 
 
+Note that **value**, though a callable property, cannot be set directly.
+
 ### Group
     <Group id="some_name" type="Int" userEditable="true">
       <Stat id="unique1" />
