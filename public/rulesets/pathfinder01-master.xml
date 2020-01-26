@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RuleSet name="pf" title="Pathfinder" description="Pathfinder Roleplaying Game">
+	<Modules>
+		<Module type="stats" src="pf-stat-module01.js" />
+		<Module type="pages" src="pf-page-module01.js" />
+	</Modules>
+	<Formulae>
+		<Formula name="convert_modifier_to_string" type="Str">
+			<If inType="Int" outType="Str">
+				<Compare fromId="this" attribute="modifier" />
+				<GreaterThan value="-1" />
+				<Then fromId="this" attribute="modifier" prepend="+" />
+				<Else fromId="this" attribute="modifier" />
+			</If>
+		</Formula>
+		<Formula name="convert_value_to_string" type="Str">
+			<If inType="Int" outType="Str">
+				<Compare fromId="this" attribute="value" />
+				<GreaterThan value="-1" />
+				<Then fromId="this" attribute="value" prepend="+" />
+				<Else fromId="this" attribute="value" />
+			</If>
+		</Formula>
+	</Formulae>
+	<Stats>
+		<Group id="ability_scores" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
+			<Stat id="STR" title="Strength" />
+			<Stat id="DEX" title="Dexterity" />
+			<Stat id="CON" title="Constitution" />
+			<Stat id="INT" title="Intelligence" />
+			<Stat id="WIS" title="Wisdom" />
+			<Stat id="CHA" title="Charisma" />
+			<Attribute name="modifier" userEditable="false" minValue="-99">
+				<Math>
+					<Add fromId="this" />
+					<Add value="-10" />
+					<Divide value="2" />
+					<Floor />
+				</Math>
+			</Attribute>
+			<Attribute name="modifierNonNegative" userEditable="false" minValue="-99">
+				<If inType="Int" outType="Int">
+					<Compare fromId="this" attribute="modifier" />
+					<NotLessThan value="0" />
+					<Then fromId="this" attribute="modifier" />
+					<Else value="0" />
+				</If>
+			</Attribute>
+			<Attribute name="modifierPositive" userEditable="false" minValue="-99">
+				<If inType="Int" outType="Int">
+					<Compare fromId="this" attribute="modifier" />
+					<GreaterThan value="0" />
+					<Then fromId="this" attribute="modifier" />
+					<Else value="1" />
+				</If>
+			</Attribute>
+			<Attribute name="modifier_text" type="Str" userEditable="false" formula="convert_modifier_to_string" />
+		</Group>
+		<Stat id="Level" title="Level" type="Int" startingValue="1" minValue="1">
+			<Attribute name="goodSave">
+				<Math>
+					<Add fromId="this" />
+					<Divide value="2" />
+					<Add value="2" />
+					<Floor />
+				</Math>
+			</Attribute>
+			<Attribute name="badSave">
+				<Math>
+					<Add fromId="this" />
+					<Divide value="3" />
+					<Floor />
+				</Math>
+			</Attribute>
+		</Stat>
+		<Stat id="Init" title="Initiative" type="IntBonusable" startingValue="8" minValue="-99">
+			<Attribute name="modifier_text" formula="convert_value_to_string" />
+		</Stat>
+		<Stat id="Feats" type="IntBonusable" title="Feats" minValue="0" />
+		<Stat id="SkillPoints" type="IntBonusable" title="Skill Points" minValue="0" />
+		<Group id="skills" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" background="false">
+			<Attribute name="maxValue" getFromId="Level" attribute="value" />
+			<Group id="strength_skill">
+				<Stat id="Climb" title="Climb" />
+				<Stat id="Swim" title="Swim" />
+				<Attribute name="score_mod" minValue="-99" getFromId="STR" attribute="modifier" />
+			</Group>
+			<Group id="dexterity_skill">
+				<Stat id="Acrobatics" title="Acrobatics" />
+				<Stat id="Disable Device" title="Disable Device" />
+				<Stat id="Escape Artist" title="Escape Artist" />
+				<Stat id="Fly" title="Fly">
+					<Bonus getFromId="size" attribute="flySkillModifier" />
+				</Stat>
+				<Stat id="Ride" title="Ride" />
+				<Stat id="Sleight of Hand" title="Sleight of Hand" background="true" />
+				<Stat id="Stealth" title="Stealth">
+					<Bonus getFromId="size" attribute="stealthSkillModifier" />
+				</Stat>
+				<Attribute name="score_mod" minValue="-99" getFromId="DEX" attribute="modifier" />
+			</Group>
+			<Group id="intelligence_skill">
+				<Stat id="Appraise" title="Appraise" background="true" />
+				<Stat id="Knowledge (arcana)" title="Knowledge (arcana)" />
+				<Stat id="Knowledge (dungeoneering)" title="Knowledge (dungeoneering)" />
+				<Stat id="Knowledge (engineering)" title="Knowledge (engineering)" background="true" />
+				<Stat id="Knowledge (geography)" title="Knowledge (geography)" background="true" />
+				<Stat id="Knowledge (history)" title="Knowledge (history)" background="true" />
+				<Stat id="Knowledge (local)" title="Knowledge (local)" />
+				<Stat id="Knowledge (nature)" title="Knowledge (nature)" />
+				<Stat id="Knowledge (nobility)" title="Knowledge (nobility)" background="true" />
+				<Stat id="Knowledge (planes)" title="Knowledge (planes)" />
+				<Stat id="Knowledge (religion)" title="Knowledge (religion)" />
+				<Stat id="Linguistics" title="Linguistics" background="true" />
+				<Stat id="Spellcraft" title="Spellcraft" />
+				<MultiStat id="craft_skills" idPre="SkillCraft" titlePre="Craft (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="INT" attribute="modifier" />
+			</Group>
+			<Group id="wisdom_skill">
+				<Stat id="Heal" title="Heal" />
+				<Stat id="Perception" title="Perception" />
+				<Stat id="Sense Motive" title="Sense Motive" />
+				<Stat id="Survival" title="Survival" />
+				<MultiStat id="profession_skills" idPre="SkillProfession" titlePre="Profession (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="WIS" attribute="modifier" />
+			</Group>
+			<Group id="charisma_skill">
+				<Stat id="Bluff" title="Bluff" />
+				<Stat id="Diplomacy" title="Diplomacy" />
+				<Stat id="Disguise" title="Disguise" />
+				<Stat id="Handle Animal" title="Handle Animal" background="true" />
+				<Stat id="Intimidate" title="Intimidate" />
+				<Stat id="Use Magic Device" title="Use Magic Device" />
+				<MultiStat id="perform_skills" idPre="SkillPerform" titlePre="Perform (" titlePost=")" background="true" />
+				<Attribute name="score_mod" minValue="-99" getFromId="CHA" attribute="modifier" />
+			</Group>
+			<Attribute name="modifier" minValue="-99">
+				<Math>
+					<Add fromId="this" attribute="value" />
+					<Add fromId="this" attribute="score_mod" />
+				</Math>
+			</Attribute>
+			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
+		</Group>
+		<Group id="saving_throws" type="IntBonusable" minValue="-99" maxValue="99" startingValue="0">
+			<Stat id="FortSave" title="Fortitude">
+				<Attribute name="score_mod" getFromId="CON" attribute="modifier" />
+			</Stat>
+			<Stat id="ReflSave" title="Reflex">
+				<Attribute name="score_mod" getFromId="DEX" attribute="modifier" />
+			</Stat>
+			<Stat id="WillSave" title="Will">
+				<Attribute name="score_mod" getFromId="WIS" attribute="modifier" />
+			</Stat>
+			<Attribute name="modifier" minValue="-99">
+				<Math>
+					<Add fromId="this" attribute="value" />
+					<Add fromId="this" attribute="score_mod" />
+				</Math>
+			</Attribute>
+			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
+		</Group>
+		<Stat id="BAB" type="IntBonusable" title="Base Attack Bonus" startingValue="0">
+			<Attribute name="full_attack_text">
+				<While inType="Int" outType="Str">
+					<Until operation="AND">
+						<GreaterThan value="5" />
+					</Until>
+					<Input fromId="this" attribute="value" />
+					<Output fromId="this" attribute="modifier_text" />
+					<ModifyInput add="-5" />
+					<ModifyOutput add="/+" useInput="add" />
+				</While>
+			</Attribute>
+			<Attribute name="modifier_text" type="Str" formula="convert_value_to_string" />
+		</Stat>
+		<Group id="speeds" type="IntBonusable" stepValue="5" startingValue="0">
+			<Stat id="landSpeed" title="Speed" />
+			<Stat id="flySpeed" title="Fly Speed" />
+			<Stat id="climbSpeed" title="Climb Speed" />
+			<Stat id="swimSpeed" title="Swim Speed" />
+			<Stat id="burrowSpeed" title="Burrow Speed" />
+		</Group>
+		<Stat id="darkvision" type="IntBonusable" title="Darkvision" startingValue="0" />
+		<Stat id="lowLightVision" type="IntBonusable" title="Low-Light Vision" startingValue="0" />
+		<Stat id="size" type="PfSize" title="Size" startingValue="4" />
+		<Stat id="creatureType" type="Str" startingValue="humanoid" />
+		<Stat id="characterName" type="Str" startingValue="Bob" />
+<!--		<Stat id="" type="IntBonusable" title="" startingValue="0" />
+		<Stat id="" type="IntBonusable" title="" startingValue="0" />
+		<Stat id="" type="IntBonusable" title="" startingValue="0" />-->
+		<Stat id="languagesKnown" type="IntBonusable" title="Languages Known" startingValue="1">
+			<Bonus getFromId="INT" attribute="modifierNonNegative" />
+			<Bonus getFromId="Linguistics" />
+		</Stat>
+		<Stat id="naturalArmor" type="IntBonusable" startingValue="0" />
+		<Stat id="dodgeBonus" type="IntBonusable" startingValue="0" />
+		<Stat id="delectionBonus" type="IntBonusable" startingValue="0" />
+		<Stat id="armorBonus" type="IntBonusable" startingValue="0" />
+		<Stat id="shieldBonus" type="IntBonusable" startingValue="0" />
+		<Stat id="hardACBonuses" type="IntBonusable" startingValue="0">
+			<Bonus getFromId="naturalArmor" type="natural armor" />
+			<Bonus getFromId="armorBonus" type="armor" />
+			<Bonus getFromId="shieldBonus" type="shield" />
+		</Stat>
+		<Stat id="universalACBonuses" type="IntBonusable" startingValue="0">
+			<Bonus getFromId="deflectionBonus" type="deflection" />
+		</Stat>
+		<Stat id="AC" type="IntBonusable" title="AC" startingValue="10">
+			<Bonus getFromId="DEX" attribute="modifier" />
+			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
+			<Bonus getFromId="dodgeBonus" type="dodge" />
+			<Bonus getFromId="hardACBonuses" attribute="modifiedValue" />
+			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+		</Stat>
+		<Stat id="TAC" type="IntBonusable" title="Touch AC" startingValue="10">
+			<Bonus getFromId="DEX" attribute="modifier" />
+			<Bonus getFromId="dodgeBonus" type="dodge" />
+			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
+			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+		</Stat>
+		<Stat id="FFAC" type="IntBonusable" title="Flat-footed AC" startingValue="10">
+			<Bonus getFromId="DEX" attribute="modifierNonPositive" />
+			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
+			<Bonus getFromId="hardACBonuses" attribute="modifiedValue" />
+			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+		</Stat>
+		<Stat id="CMB" type="IntBonusable" title="CMB" startingValue="0">
+			<Attribute name="statBonus" type="Int">
+				<If inType="Int" outType="Int">
+					<Compare fromId="size" />
+					<LessThan value="3" />
+					<Then fromId="DEX" attribute="modifier" />
+					<Else fromId="STR" attribute="modifier" />
+				</If>
+			</Attribute>
+			<Bonus getFromId="this" attribute="statBonus" />
+			<Bonus getFromId="BAB" attribute="modifiedValue" />
+			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
+		</Stat>
+		<Stat id="CMD" type="IntBonusable" title="CMD" startingValue="10">
+			<Bonus getFromId="STR" attribute="modifier" />
+			<Bonus getFromId="DEX" attribute="modifier" />
+			<Bonus getFromId="BAB" attribute="modifiedValue" />
+			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
+			<Bonus getFromId="dodgeBonus" type="dodge" />
+		</Stat>
+		<Stat id="CMDFF" type="IntBonusable" title="Flat-footed CMD" startingValue="10">
+			<Bonus getFromId="STR" attribute="modifier" />
+			<Bonus getFromId="DEX" attribute="modifierNonPositive" />
+			<Bonus getFromId="BAB" attribute="modifiedValue" />
+			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
+		</Stat>
+		<Group id="string_pools" type="Str" separator=",">
+			<Pool id="languages" title="Languages" fromCategory="languages">
+				<Attribute name="maxSelectable" type="Int" fromId="languagesKnown" />
+				<Item value="Common" />
+				<Item value="Elven" />
+				<Item value="Dwarven" />
+				<Item value="Gnomish" />
+				<Item value="Halfling" />
+				<Item value="Celestial" />
+				<Item value="Infernal" />
+				<Item value="Abyssal" />
+				<Item value="Draconic" />
+				<Item value="Sylvan" />
+				<Item value="Aquan" />
+				<Item value="Terran" />
+				<Item value="Ignan" />
+				<Item value="Auran" />
+				<Item value="Undercommon" />
+				<Item value="Gnoll" />
+				<Item value="Goblin" />
+				<Item value="Giant" />
+				<Item value="Orc" />
+				<Item value="Aboleth" />
+				<Item value="Aklo" />
+				<Item value="Boggard" />
+				<Item value="Cyclops" />
+				<Item value="Dark Folk" />
+				<Item value="D'ziriak" />
+				<Item value="Drow Sign Language" />
+				<Item value="Grippli" />
+				<Item value="Necril" />
+				<Item value="Protean" />
+				<Item value="Sphinx" />
+				<Item value="Tengu" />
+				<Item value="Treant" />
+				<Item value="Vegepygmy" />
+				<Item value="Read Lips" />
+			</Pool>
+			<Pool id="bonusLanguages" title="Bonus Language Choices" />
+			<Pool id="saveEffects" title="Saving Throw Effects" separator="%%%" />
+			<Pool id="creatureSubtypes" />
+			<Pool id="combatAbilities" />
+			<Pool id="spellcastingAbilities" />
+			<Pool id="speedAbilities" />
+		</Group>
+		<Pool id="spellLikeAbilities" type="PfSpells" />
+		<Pool id="spellsKnown" type="PfSpells" />
+	</Stats>
+	<Bundles>
+		<Bundle id="human" category="race">
+			<Bonus name="HumanBonusFeat" to="Feats" value="1" />
+			<Bonus name="HumanSkilled" to="SkillPoints" fromID="Level" />
+			<Bonus name="HumanSpeed" to="landSpeed" value="30" />
+			<BonusChoice name="HumanStat" to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<PoolBonusSelect name="HumanLanguages" to="languages" value="Common" />
+			<PoolBonus name="HumanBonusLanguages" to="bonusLanguages" fromId="languages" />
+			<PoolBonus name="HumanSubtype" to="creatureSubtype" value="human" />
+		</Bundle>
+		<Bundle id="elf" category="race">
+			<Bonus name="ElfStats" to="DEX" value="2" />
+			<Bonus name="ElfStats" to="INT" value="2" />
+			<Bonus name="ElfStats" to="CON" value="-2" />
+			<Bonus name="ElfSpeed" to="landSpeed" value="30" />
+			<Bonus name="ElfKeenSenses" type="racial" to="Perception" value="2" />
+			<Bonus name="ElfLanguage" to="languagesKnown" value="1" />
+			<PoolBonusSelect name="ElfLanguages" to="languages" value="Common,Elven" />
+			<PoolBonus name="ElfBonusLanguages" to="bonusLanguages" value="Celestial,Draconic,Gnoll,Gnome,Goblin,Orc,Sylvan" />
+			<PoolBonus name="ElfSleep" to="saveEffects" value="Immune to sleep effects%%%+2 racial bonus vs enchantment spells and effects" />
+			<Bonus name="ElfVision" to="lowLightVision" value="1" />
+			<Bonus note="situational" name="ElfMagic" to="Spellcraft" value="+2 racial bonus to identify the properties of magic items" />
+			<PoolBonus name="ElfMagic" to="spellcastingAbilities" value="You have a +2 racial bonus on caster level checks made to overcome spell resistance." />
+			<PoolBonus name="ElfSubtype" to="creatureSubtype" value="elf" />
+		</Bundle>
+		<Bundle id="halfElf" category="race">
+			<Bonus name="HalfElfSpeed" to="landSpeed" value="30" />
+			<Bonus name="HalfElfKeenSenses" type="racial" to="Perception" value="2" />
+			<BonusChoice name="HalfElfStat" to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<Bonus name="HalfElfLanguage" to="languagesKnown" value="1" />
+			<PoolBonusSelect name="HalfElfLanguages" to="languages" value="Common,Elven" />
+			<PoolBonus name="HalfElfBonusLanguages" to="bonusLanguages" fromId="languages" />
+			<Bonus name="HalfElfVision" to="lowLightVision" value="1" />
+			<PoolBonus name="HalfElfSubtype" to="creatureSubtype" value="human,elf" />
+		</Bundle>
+		<Bundle id="dwarf" category="race">
+			<Bonus name="DwarfStats" to="CON" value="2" />
+			<Bonus name="DwarfStats" to="WIS" value="2" />
+			<Bonus name="DwarfStats" to="CHA" value="-2" />
+			<Bonus name="DwarfSpeed" to="landSpeed" value="20" />
+			<PoolBonus name="DwarfSpeed" to="speedAbilities" value="Your speed is never modified by armor or encumbrance." />
+			<Bonus name="DwarfLanguage" to="languagesKnown" value="1" />
+			<PoolBonusSelect name="DwarfLanguages" to="languages" value="Common,Dwarven" />
+			<PoolBonus name="DwarfBonusLanguages" to="bonusLanguages" value="Giant,Gnome,Goblin,Orc,Terran,Undercommon" />
+			<Bonus name="DwarfVision" to="darkvision" value="60" />
+			<PoolBonus name="DwarfHardy" to="saveEffects" value="+2 racial bonus vs poison, spells and spell-like abilities" />
+			<Bonus note="situational" name="DwarfGreed" to="Appraise" value="+2 racial bonus to determine the price of non-magical goods that contain precious metals or gemstones" />
+			<Bonus note="situational" name="DwarfStonecunning" to="Perception" value="+2 racial bonus to notice unusual stonework, such as traps and hidden doors located in stone walls or floors; you receive a check to notice such features whenever you pass within 10 feet of them, whether or not you're actively looking" />
+			<PoolBonus name="DwarfSubtype" to="creatureSubtype" value="dwarf" />
+			<Bonus note="situational" name="DwarfHatred" to="BAB" value="+1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes" />
+		</Bundle>
+		<Bundle id="gnome" category="race">
+			<Bonus name="GnomeSize" to="size" value="-1" />
+			<Bonus name="GnomeStats" to="CON" value="2" />
+			<Bonus name="GnomeStats" to="CHA" value="2" />
+			<Bonus name="GnomeStats" to="STR" value="-2" />
+			<Bonus name="GnomeSpeed" to="landSpeed" value="20" />
+			<Bonus name="GnomeKeenSenses" type="racial" to="Perception" value="2" />
+			<Bonus name="GnomeLanguage" to="languagesKnown" value="2" />
+			<BonusChoice name="GnomeObsessive" to="craft_skills,profession_skills" type="racial" value="2" choices="1" />
+			<PoolBonusSelect name="GnomeLanguages" to="languages" value="Common,Gnome,Sylvan" />
+			<PoolBonus name="GnomeBonusLanguages" to="bonusLanguages" value="Draconic,Dwarven,Elven,Giant,Goblin,Orc" />
+			<Bonus name="GnomeVision" to="lowLightVision" value="1" />
+			<PoolBonus name="GnomeIllusion" to="saveEffects" value="+2 racial bonus vs illusion spells and effects" />
+			<PoolBonus name="GnomeSubtype" to="creatureSubtype" value="gnome" />
+			<PoolBonus name="GnomeMagic" to="spellcastingAbilities" value="You add +1 to the DC of any saving throws against illusion spells you cast." />
+			<Bonus note="situational" name="GnomeHatred" to="BAB" value="+1 racial bonus on attack rolls against humanoid creatures of the reptilian and goblinoid subtypes" />
+		</Bundle>
+		<Bundle id="halfling" category="race">
+			<Bonus name="HalflingSize" to="size" value="-1" />
+			<Bonus name="HalflingStats" to="DEX" value="2" />
+			<Bonus name="HalflingStats" to="CHA" value="2" />
+			<Bonus name="HalflingStats" to="STR" value="-2" />
+			<Bonus name="HalflingSpeed" to="landSpeed" value="20" />
+			<Bonus name="HalflingKeenSenses" type="racial" to="Perception" value="2" />
+			<Bonus name="HalflingLanguage" to="languagesKnown" value="1" />
+			<PoolBonusSelect name="HalflingLanguages" to="languages" value="Common,Halfling" />
+			<PoolBonus name="HalflingBonusLanguages" to="bonusLanguages" value="Dwarven,Elven,Gnome,Goblin" />
+			<PoolBonus name="HalflingFearless" to="saveEffects" value="+2 racial bonus vs fear" />
+			<Bonus name="HalflingLuck" to="FortSave" value="1" type="racial" />
+			<Bonus name="HalflingLuck" to="ReflSave" value="1" type="racial" />
+			<Bonus name="HalflingLuck" to="WillSave" value="1" type="racial" />
+			<Bonus name="HalflingSureFooted" to="Acrobatics" value="2" type="racial" />
+			<Bonus name="HalflingSureFooted" to="Climb" value="2" type="racial" />
+			<PoolBonus name="HalflingSubtype" to="creatureSubtype" value="halfling" />
+		</Bundle>
+		<Bundle id="halfOrc" category="race">
+			<Bonus name="HalfOrcSpeed" to="landSpeed" value="30" />
+			<BonusChoice name="HalfOrcStat" to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<Bonus name="HalfOrcLanguage" to="languagesKnown" value="1" />
+			<PoolBonusSelect name="HalfOrcLanguages" to="languages" value="Common,Orc" />
+			<PoolBonus name="HalfOrcBonusLanguages" to="bonusLanguages" value="Abyssal,Draconic,Giant,Gnoll,Goblin" />
+			<Bonus name="HalfOrcVision" to="darkvision" value="60" />
+			<Bonus name="HalfOrcIntimidating" to="Intimidate" value="2" type="racial" />
+			<PoolBonus name="HalfOrcSubtype" to="creatureSubtype" value="human,orc" />
+			<PoolBonus name="HalfOrcFerocity" to="combatAbilities">
+				<Item title="Orc Ferocity" value="Once per day, when you're brought below 0 hit points but not killed, you can fight on for 1 more round as if disabled. At the end of his next turn, unless brought to above 0 hit points, you immediately fall unconscious and begin dying." />
+			</PoolBonus>
+		</Bundle>
+	</Bundles>
+<!--
+**Human
+**Elf
+Elves are proficient with longbows (including composite longbows), longswords, rapiers, and shortbows (including composite shortbows), and treat any weapon with the word “elven” in its name as a martial weapon.
+**Half-Elf
+Adaptability: Half-elves receive Skill Focus as a bonus feat at 1st level.
+**Dwarf
+Defensive Training: Dwarves gain a +4 dodge bonus to AC against monsters of the giant subtype.
+Stability: Dwarves gain a +4 racial bonus to their Combat Maneuver Defense when resisting a bull rush or trip attempt while standing on the ground.
+Weapon Familiarity: Dwarves are proficient with battleaxes, heavy picks, and warhammers, and treat any weapon with the word “dwarven” in its name as a martial weapon.
+**Gnome
+Defensive Training: Gnomes gain a +4 dodge bonus to AC against monsters of the giant subtype.
+Gnome Magic: Gnomes add +1 to the DC[done]. Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—dancing lights, ghost sound, prestidigitation, and speak with animals. The caster level for these effects is equal to the gnome’s level. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Charisma modifier.
+Weapon Familiarity: Gnomes treat any weapon with the word “gnome” in its name as a martial weapon.
+**Halfling
+Weapon Familiarity: Halflings are proficient with slings and treat any weapon with the word “halfling” in its name as a martial weapon.
+**Half-Orc
+Weapon Familiarity: Half-orcs are proficient with greataxes and falchions and treat any weapon with the word “orc” in its name as a martial weapon.
+-->
+	<Choices>
+		<Group category="race">
+			<Choice id="human" title="Human" />
+			<Choice id="elf" title="Elf" />
+			<Choice id="halfElf" title="Half-Elf" />
+			<Choice id="halfOrc" title="Half-Orc" />
+			<Choice id="dwarf" title="Dwarf" />
+			<Choice id="gnome" title="Gnome" />
+			<Choice id="halfling" title="Halfling" />
+		</Group>
+		<Group category="class">
+			<Choice id="bard" title="Bard" />
+			<Choice id="barbarian" title="Barbarian" />
+			<Choice id="cleric" title="Cleric" />
+			<Choice id="druid" title="Druid" />
+			<Choice id="fighter" title="Fighter" />
+			<Choice id="monk" title="Monk" />
+			<Choice id="paladin" title="Paladin" />
+			<Choice id="ranger" title="Ranger" />
+			<Choice id="rogue" title="Rogue" />
+			<Choice id="unchRogue" title="Unchained Rogue" />
+			<Choice id="sorcerer" title="Sorcerer" />
+			<Choice id="wizard" title="Wizard" />
+			<Choice id="alchemist" title="Alchemist" />
+			<Choice id="cavalier" title="Cavalier" />
+			<Choice id="gunslinger" title="Gunslinger" />
+			<Choice id="inquisitor" title="Inquisitor" />
+			<Choice id="magus" title="Magus" />
+			<Choice id="oracle" title="Oracle" />
+			<Choice id="summoner" title="Summoner" />
+			<Choice id="witch" title="Witch" />
+			<Choice id="samurai" title="Samurai" />
+			<Choice id="hunter" title="Hunter" />
+			<Choice id="warpriest" title="Warpriest" />
+			<Choice id="bloodrager" title="Bloodrager" />
+			<Choice id="shaman" title="Shaman" />
+			<Choice id="skald" title="Skald" />
+			<Choice id="slayer" title="Slayer" />
+			<Choice id="swashbuckler" title="Swashbuckler" />
+			<Choice id="shifter" title="Shifter" />
+			<Choice id="investigator" title="Investigator" />
+		</Group>
+		<Group category="languages">
+		</Group>
+	</Choices>
+	<Pages>
+		<Page id="BEGIN" class="flex-vertical"> <!-- should this be a template? -->
+			<Block>
+				<ol>
+					<li><label>Name: <INPUT id="characterName" /></label></li>
+					<li>Stats:<ul>
+						<li><label><INPUT id="STR" /> Strength</label></li>
+						<li><label><INPUT id="DEX" /> Dexterity</label></li>
+						<li><label><INPUT id="CON" /> Constitution</label></li>
+						<li><label><INPUT id="INT" /> Intelligence</label></li>
+						<li><label><INPUT id="WIS" /> Wisdom</label></li>
+						<li><label><INPUT id="CHA" /> Charisma</label></li>
+					</ul></li>
+					<li><label>Choose a race: <CHOOSE category="race" /></label></li>
+				</ol>
+				<BUTTON to="page2">Continue</BUTTON>
+			</Block>
+		</Page>
+		<Page id="page2" class="flex-vertical">
+			<Block template="PfRacialTraits" contents="append"> <!-- how are values transmitted from page to page? -->
+				<BUTTON to="page3">Continue</BUTTON>
+			</Block>
+		</Page>
+		<Page id="page3" class="flex-vertical">
+			<Block>
+				<Block template="PfStats" />
+				<ol start="4">
+					<li><label>Choose a class: <CHOOSE category="classes" /></label></li>
+				</ol>
+				<BUTTON to="page4">Continue</BUTTON>
+			</Block>
+		</Page>
+		<Page id="page4" class="flex-vertical">
+			<Block template="PfClassArchetypes" contents="append">
+				<BUTTON to="page5">Continue</BUTTON>
+			</Block>
+		</Page>
+		<Page id="page5" class="flex-vertical">
+			<Block template="PfClassChoices" contents="append">
+				<BUTTON to="page6">Continue</BUTTON>
+			</Block>
+		</Page>
+		<Page id="page6" class="flex-vertical">
+			<ol start="5">
+				<li>Skill Ranks</li>
+			</ol>
+			<Block template="PfSkillsAdjust" />
+			<BUTTON to="page7">Continue</BUTTON>
+		</Page>
+	</Pages>
+</RuleSet>

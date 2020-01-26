@@ -1,62 +1,88 @@
-# rpg-players-app
-An attempt at making an app for struggling players in my Pathfinder campaigns, with a focus on making it simple for other RPGs to be supported.
+# Bleep bloop.
 
-# XML
+<http://expressjs.com/en/resources/middleware.html>
 
-# Special Attributes
+- SQLite has been installed
 
-## id
-    <Tag id="some string" />
-The **id** must be unique across all tags. Unlike a regular HTML id, this can contain spaces, punctuation, and other non-alphanumeric characters.
+## Errors
 
+- How do I import modules for the entire script? Neither pf- modules are loading correctly.
+- <https://stackoverflow.com/questions/30956636/sharing-data-between-es6-modules>
 
-# Major Tags
+## Meh
 
-## Stats
-    <Stats></Stats>
-Contains the stats the app needs to function.
+1. Choose savefile
+2. Choose Ruleset
+   1. loads in background
+3. Display - Initial
+   1. ask setup questions
+   2. changes should instantly apply
 
-### Stat
-    <Stat id="unique_name" title="optional" userEditable="true"
-      type="Int" startingValue="0" minValue="0" maxValue="99" />
-A stat is a single piece of data.
-- **title** is optional, but gives the stat a user-readable name.
-- **userEditable** indicates that the stat can be changed directly by the user. This defaults to false unless you explicitly set it to exactly "true".
-- **type** declares what type of data this stat holds. Defaults to *Str* (string). Other possible values are *Int* (integer), *Num* (number), *IntBonusable* (integer, with extra code for handling bonuses/penalties,) and *Typeless* (allows type inheritance, or when type is not important).
-- **startingValue** defines what the initial value of the stat is. It defaults to an empty string or zero, depending on stat type.
-- **minValue** and **maxValue** are optional, and only work with *Int* and *Num* stats, limiting the possible values of the stat. 
+1) Char Sheet
+2) Determine Ability Scores
+3) Choose a Race
+4) Choose a Class
+5) Allocate Skill Ranks
+6) Choose Feats
+7) Determine Starting Hit Points (HP)
+8) Get Equipped
+9) Determine Saving Throws, Initiative, and Attack Values.
+10) Description & Personality
+11) Other (Starting Spells)
 
-Note that **value**, though a callable property, cannot be set directly.
+## To-Do
 
-### Group
-    <Group id="some_name" type="Int" userEditable="true">
-      <Stat id="unique1" />
-      <Stat id="unique2" />
-      <Stat id="unique3" userEditable="false" />
-    </Group>
+- **PfSpells** :: Gnome Magic
+- UpgradePath? Which elements to update and in which order?
 
-Groups are used to join several stats together. If a child stat doesn't have a particular attribute, it will default to one defined on its nearest parent group.
+---
 
-In the example above, all three stats will be of type *Int*. The first two will be user-editable, while the third one will not.
+- Stats : use same save-in-the-background format, plus clone-document stuff
+- Give classes to real estate, so certain widgets can pop up in multiple places when needed
+- **Probably should determine how things get displayed, first**
+- .remove() on Tags (delete from parent, perhaps delete kids)
+- ...
+- ...
+- ModValue method="add" value="3"? fromId="STR" attribute="modifier"?
+- ...
+- ...
+- IntBonusable should have an _overwrite_ option?
+- <Choice> location attribute? Download on-demand as choices are loaded?
 
-### Attribute
-    <Stat id="funky">
-      <Attribute name="huh">This "text" might be 'problematic'</Attribute>
-    </Stat>
-    <Group id="family">
-      <Stat id="fresh" />
-      <Stat id="smelly" />
-      <Attribute name="really" getFromId="unique_name" attribute="fresh" />
-      <Attribute name="type" getFromId="unique_name" />
-    </Stat>
+## Display
 
-The attribute tag gives a new attribute to its parent stat or group, as if it was defined on the parent tag itself. In the examples above, the "funky" Stat will have a "huh" attribute, while the "fresh" and "smelly" Stats will both have "really" and "type" attributes.
+- **Page**
+  - _style_
+- **Block**
+  - _named_
 
-This primary purpose of this tag is to include text that would be problematic to put inside a typical tag attribute. It also has some built-in ways to copy data from other stats or groups.
+## Notes
 
-- **name** is the name of this attribute.
-- **getFromId** indicates which group or stat we are pulling from.
-- **attribute** is the name of the attribute in the stat we're copying. If omitted, the *name* of the attribute will be used. For example, the first attribute tag in the Group above is copying the "fresh" attribute of the "unique_name" stat (or group), and the second will copy the "type" of the same.
+- <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction>
+- <http://expressjs.com/en/resources/middleware.html>
+- BasicIdObject.allIDs.get("STR").parent.atts.get("modifier_text").value.grabValue(BasicIdObject.allIDs.get("STR")).get("value")
+- .
+- DATUM.value - converts at set
+- ATTRIBUTE.value - converts at get
+- GROUP - conversion should not be necessary
+- IF - test condition, then calculate
+- IF, MATH, WHILE - conversion is implicit - TAG.calculate(context)
+  - context should be a datum
+- THEN and ELSE should be Equations
+  - Equations should only evaluate when called with a context
+- References should only be used inside an Equation
 
-Note that an attribute tag cannot override **value** or **startingValue**.
-    
+## Your Project
+
+On the front-end,
+
+- edit `public/client.js`, `public/style.css` and `views/index.html`
+- drag in `assets`, like images or music, to add them to your project
+
+On the back-end,
+
+- your app starts at `server.js`
+- add frameworks and packages in `package.json`
+- safely store app secrets in `.env` (nobody can see this but you and people you invite)
+
+\ ゜ o ゜)ノ
