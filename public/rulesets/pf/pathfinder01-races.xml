@@ -82,10 +82,10 @@
 			<Alternate id="Draconic Heritage" replacesName="HumanSkilled" description="At times, a human's family history can have a dragon's power bound to the bloodline.">
 				<Bonus to="darkvision" value="10" />
 				<Bonus to="lowLightVision" value="1" />
-				<PoolBonus to="HIDDEN" value="Eldritch Heritage Charisma prerequisite" />
+				<PoolBonus to="HIDDEN VARIABLES" value="Eldritch Heritage Charisma prerequisite" />
 								<!-- They can also ignore the Charisma prerequisite for Eldritch Heritage and any feat that has Eldritch Heritage as a prerequisite,
 											but can select only the draconic bloodline with these feats. [DONE] -->
-				<PoolBonus to="HIDDEN" title="Eldritch Heritage bloodline lock" value="draconic" />
+				<PoolBonus to="HIDDEN VARIABLES" title="Eldritch Heritage bloodline lock" value="draconic" />
 			</Alternate>
 			<Alternate id="Dragon Scholar" replacesName="HumanBonusFeat" description="Dragons have a long history of individual interactions with specific humans, and some humans seek to better understand this relationship.">
 	 			<PoolBonus to="spellcastingEffects" value="+2 racial bonus on caster level checks to overcome a dragon's spell resistance" />
@@ -396,7 +396,7 @@
 			</Alternate>
 			<Alternate id="Dragon Magic" replacesName="ElfMagic" description="Some elves have potent draconic blood.">
 				<PoolBonus to="spellcastingEffects" value="If you take a draconic bloodline as a class feature, you treat your Charisma scores as 2 points higher when determining the DC and uses per day of all bloodline abilities and bloodline spells%%%You automatically add spells with the draconic descriptor to your class spell lists for any spellcasting classes in which you have levels" />
-				<PoolBonus to="HIDDEN" title="Dracon Magic bonus spells" />
+				<PoolBonus to="HIDDEN VARIABLES" title="Dracon Magic bonus spells" />
 				<!-- elves with this trait add spells with the draconic descriptor to their class spell lists for any spellcasting classes in which they have levels. -->
 			</Alternate>
 			<Alternate id="Draconic Consular" replacesName="ElfKeenSenses" description="Elves serving in the company of dragons are trained to assist and represent their draconic allies.">
@@ -639,7 +639,7 @@
 			</Alternate>
 			<Alternate id="Drow Heritage" replacesName="HalfElfBonusLanguages" description="">
 				<PoolBonus to="miscEffects" value="You count as drow for the purposes of any effect related to race, including prerequisites" />
-				<PoolBonus to="HIDDEN" value="DROW" />
+				<PoolBonus to="HIDDEN VARIABLES" value="DROW" />
 				<PoolBonus to="bonusLanguages" value="Abyssal,Aklo,Aquan,Undercommon,Draconic,Drow Sign Language,Gnome,Goblin" />
 			</Alternate>
 			<Alternate id="Drow Magic" replacesName="HalfElfAdaptability,HalfElfMultitalented" description="A few half-elves with drow ancestry exhibit the innate magic of that race.">

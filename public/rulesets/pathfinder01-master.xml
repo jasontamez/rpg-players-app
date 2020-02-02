@@ -283,89 +283,24 @@
 		<Stat id="ElecResist" title="Electricity Resistance" type="IntBonusable" startingValue="0" />
 		<Stat id="FireResist" title="Fire Resistance" type="IntBonusable" startingValue="0" />
 		<Group id="string_pools" type="Str" separator=",">
-			<Pool id="languages" title="Languages" fromCategory="languages">
+			<Pool id="languages" title="Languages" fromCategory="languages" value="Common,Elven,Dwarven,Gnomish,Halfling,Celestial,Infernal,Abyssal,Draconic,Sylvan,Aquan,Terran,Ignan,Auran,Undercommon,Gnoll,Goblin,Giant,Orc,Aboleth,Aklo,Boggard,Cyclops,Dark Folk,D'ziriak,Drow Sign Language,Grippli,Necril,Protean,Sphinx,Tengu,Treant,Vegepygmy,Read Lips">
 				<Attribute name="maxSelectable" type="Int" fromId="languagesKnown" />
-				<Item value="Common" />
-				<Item value="Elven" />
-				<Item value="Dwarven" />
-				<Item value="Gnomish" />
-				<Item value="Halfling" />
-				<Item value="Celestial" />
-				<Item value="Infernal" />
-				<Item value="Abyssal" />
-				<Item value="Draconic" />
-				<Item value="Sylvan" />
-				<Item value="Aquan" />
-				<Item value="Terran" />
-				<Item value="Ignan" />
-				<Item value="Auran" />
-				<Item value="Undercommon" />
-				<Item value="Gnoll" />
-				<Item value="Goblin" />
-				<Item value="Giant" />
-				<Item value="Orc" />
-				<Item value="Aboleth" />
-				<Item value="Aklo" />
-				<Item value="Boggard" />
-				<Item value="Cyclops" />
-				<Item value="Dark Folk" />
-				<Item value="D'ziriak" />
-				<Item value="Drow Sign Language" />
-				<Item value="Grippli" />
-				<Item value="Necril" />
-				<Item value="Protean" />
-				<Item value="Sphinx" />
-				<Item value="Tengu" />
-				<Item value="Treant" />
-				<Item value="Vegepygmy" />
-				<Item value="Read Lips" />
 			</Pool>
 			<Pool id="bonusLanguages" title="Bonus Language Choices" />
 			<Pool id="creatureSubtypes" title="Creature Subtypes" />
 			<Pool id="weaponProficiencies" title="Weapon Proficiencies" />
 			<Pool id="weaponMartial" />
+			<Pool id="favoredClassChoices" title="Favored Class Choices" value="bard,barbarian,cleric,druid,fighter,monk,paladin,ranger,rogue,unchRogue,sorcerer,wizard,alchemist,cavalier,gunslinger,inquisitor,magus,oracle,summoner,witch,samurai,hunter,warpriest,bloodrager,shaman,skald,slayer,swashbuckler,shifter,investigator" />
 		</Group>
 		<Stat id="favoredClasses" type="IntBonusable" startingValue="1" />
 		<Group id="string_pools_with_commas" type="Str" separator="%%%">
-			<Pool id="HIDDEN" />
+			<Pool id="HIDDEN VARIABLES" />
 			<Pool id="skillEffects" title="Skill Effects" />
 			<Pool id="saveEffects" title="Saving Throw Effects" />
 			<Pool id="combatEffects" title="Combat Effects" />
 			<Pool id="spellcastingEffects" title="Spellcasting Effects" />
 			<Pool id="speedEffects" title="Movement Effects" />
 			<Pool id="miscEffects" title="Skill Effects" />
-			<Pool id="favoredClassChoices" title="Favored Class Choices">
-				<Item value="bard" />
-				<Item value="barbarian" />
-				<Item value="cleric" />
-				<Item value="druid" />
-				<Item value="fighter" />
-				<Item value="monk" />
-				<Item value="paladin" />
-				<Item value="ranger" />
-				<Item value="rogue" />
-				<Item value="unchRogue" />
-				<Item value="sorcerer" />
-				<Item value="wizard" />
-				<Item value="alchemist" />
-				<Item value="cavalier" />
-				<Item value="gunslinger" />
-				<Item value="inquisitor" />
-				<Item value="magus" />
-				<Item value="oracle" />
-				<Item value="summoner" />
-				<Item value="witch" />
-				<Item value="samurai" />
-				<Item value="hunter" />
-				<Item value="warpriest" />
-				<Item value="bloodrager" />
-				<Item value="shaman" />
-				<Item value="skald" />
-				<Item value="slayer" />
-				<Item value="swashbuckler" />
-				<Item value="shifter" />
-				<Item value="investigator" />
-			</Pool>
 		</Group>
 		<Stat id="spellLikeAbilities" type="PfSpells" title="Spell-Like Abilities" />
 		<Stat id="spellsKnown" type="PfSpells" title="Spells Known" />
