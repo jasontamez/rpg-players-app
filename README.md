@@ -13,10 +13,32 @@ The **id** must be unique across all tags. Unlike a regular HTML id, this can co
 
 ## Major Tags
 
-### Stats
+### Formulae
 
-    <Stats></Stats>
-Contains the stats the app needs to function.
+    <Formulae></Formulae>
+Contains formulas used by *Stat* elements.
+
+#### Formula
+
+    <Formula name="unique_name" type="Str">
+      [text or tags]
+    </Formula>
+A formula is designed to store complicated tag-laden information that would be tedious to retype a dozen times in the *Stats* section. Any Tag that can be used in a *Stat* tag can be used in a *Formula*.
+
+### Modules
+
+    <Modules></Modules>
+Contains references to importable JavaScript modules.
+
+#### Module
+
+    <Module type="pages" src="module_filename.js" />
+A reference to a single module that should be read and included. See the **Modules** documentation for more information.
+
+- **type** is the type of information the module contains (stats or pages)
+- **src** is the path to the module itself, relative to the modules directory
+  - *src="file.js"* would fetch modules/file.js
+  - *src="mydir/file.js"* would fetch modules/mydir/file.js
 
 #### Stat
 
