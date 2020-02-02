@@ -1,7 +1,7 @@
 // Import query selectors
 import { $q, $a } from "./dollar-sign-module.js";
 // Import parsing and logging
-import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError } from "./parsing-logging.js";
+import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
 
 // temp variable to log all objects created
 export var record = [];
@@ -153,23 +153,6 @@ BasicStat.converter = function(input) { return input; }
 BasicStat.prototype.type = BasicStat;
 
 
-// Formula object with ability to find any formula by name
-//   o = new Formula(xmlNode, stringName, [attribute pairs])
-// Formula.getName("stringName") => o
-export class Formula extends BasicStatObject {
-	constructor(node, nombre, atts) {
-		super(undefined, node, atts, nombre);
-		this.name = nombre;
-		this.node = node;
-		Formula.formulae.set(nombre, this);
-	}
-	static getName(nombre) {
-		return Formula.formulae.get(nombre);
-	}
-}
-Formula.formulae = new Map();
-
-
 // SpecialGrabber instance representing a property in the same context
 //   o = SelfReference.getReference(stringProperty, parentTag || undefined, xmlNode, [attribute pairs])
 //   o.grabValue(context) => context.get("stringProperty")
@@ -206,7 +189,7 @@ export class StatReference extends SelfReference {
 	}
 	grabValue(context) {
 		var reference = BasicIdObject.getById(this.reference);
-//		console.log(["BasicStat REFERENCE", context]);
+		//console.log(["BasicStat REFERENCE", context]);
 		if(reference === undefined) {
 			logError(this, "ERROR: unable to find BasicStat named \"" + this.reference + "\" when fetching property");
 			return "";
@@ -226,7 +209,8 @@ export class StatReference extends SelfReference {
 // Master object for a set of similar, related stat objects
 //   o = new MultiStat(stringID, parentTag || undefined, xmlNode, statType, [attribute pairs])
 //         (statType is a child of BasicStat)
-//   o.makeStat(xmlNode, [attribute pairs]) => new statType(...)
+//   o.makeStatFromNode(xmlNode, [attribute pairs]) => new statType(...)
+//   o.makeStatBasic(name, title, description) => new statType(id_based_on_name, ...)
 //   MultiStat.getById(stringID) => o
 export class MultiStat extends BasicIdObject {
 	constructor(id, parent, node, type, atts) {
@@ -240,12 +224,92 @@ export class MultiStat extends BasicIdObject {
 		this.type = type;
 		MultiStat.allIDs.set(id, this);
 	}
-	makeStat(node, atts) {
+	makeStatFromNode(node, atts) {
 		var n = this.inhCount++,
 			id = this.get("idPre") + n.toString() + this.get("idPost"),
-			BasicStat = new this.type(id, this, node, atts);
-		this.inheritors.push(BasicStat);
-		return BasicStat;
+			newStat;
+		newStat = new this.type(id, this, node, atts);
+		this.inheritors.push(newStat);
+		return newStat;
+	}
+	makeStatBasic(name, title, description) {
+		var n = this.inhCount++,
+			pre = this.get("idPre"),
+			post = this.get("idPost"),
+			atts = [],
+			i = this.atts,
+			id, titlePre, titlePost, descPre, descPost, t, d,
+			newStat,
+			decrement = false;
+		// Get id
+		if(name) {
+			id = pre + name.toString() + post;
+		} else {
+			id = pre + n.toString() + post;
+			// flag in case we need to revert
+			decrement = true;
+		}
+		// Make sure this isn't a duplicate
+		if(BasicIdObject.getById(id) !== undefined) {
+			// It is
+			if(decrement) {
+				this.inhCount--;
+			}
+			return logErrorText("ERROR INHERITING FROM MULTISTAT: id \"" + id + "\" already exists");
+		}
+		// Parse atts
+		i.forEach(function(v, key) {
+			switch(key) {
+				case "idPre":
+				case "idPost":
+					// Do nothing
+					break;
+				case "titlePre":
+					titlePre = v;
+					break;
+				case "titlePost":
+					titlePost = v;
+					break;
+				case "descPre":
+					descPre = v;
+					break;
+				case "descPost":
+					descPost = v;
+					break;
+				case "title":
+					t = v;
+					break;
+				case "description":
+					d = v;
+					break;
+				default:
+					atts.push([key, v]);
+			}
+		});
+		// Check for title
+		if(title === undefined) {
+			if(t !== undefined) {
+				atts.push(["title", t]);
+			} else if (titlePre !== undefined && titlePost !== undefined) {
+				atts.push(["title", String(titlePre) + String(titlePost)]);
+			}
+		} else if (titlePre !== undefined && titlePost !== undefined) {
+			atts.push(["title", String(titlePre) + title + String(titlePost)]);
+		}
+		// Check for description
+		if(description === undefined) {
+			if(d !== undefined) {
+				atts.push(["description", d]);
+			} else if (descPre !== undefined && descPost !== undefined) {
+				atts.push(["description", String(descPre) + String(descPost)]);
+			}
+		} else if (descPre !== undefined && descPost !== undefined) {
+			atts.push(["description", String(descPre) + description + String(descPost)]);
+		}
+		// Make Stat
+		newStat = new this.type(id, this, undefined, atts);
+		this.inheritors.push(newStat);
+		return newStat;
 	}
 	static getById(id) {
 		return MultiStat.allIDs.get(id);
@@ -473,7 +537,10 @@ export class IntBonusable extends Int {
 		return super.get(prop, context);
 	}
 	getModifiedValue(context = this.defaultContext) {
-		var total = this.get("value");
+		// get unmodified-by-step value
+		var total = this.atts.get("value"),
+			t = this;
+		// go through all bonuses
 		this.bonuses.forEach(function(type) {
 			var bonuses = [0];
 			type.forEach(function(value) {
@@ -483,7 +550,7 @@ export class IntBonusable extends Int {
 				}
 				bonuses.push(v);
 			});
-			if(this.multistackable.indexOf(type) !== 1) {
+			if(t.multistackable.indexOf(type) !== 1) {
 				total += bonuses.reduce((acc, vv) => acc + vv, 0);
 			} else {
 				total += Math.max(...bonuses) + Math.min(...bonuses);
@@ -494,7 +561,7 @@ export class IntBonusable extends Int {
 	}
 	registerBonusTag(nombre, id, att, atts) {
 		var tag,
-			type = atts.type || "",
+			type = atts.type,
 			notation = atts.note;
 		if(id === "this") {
 			tag = SelfReference.getReference(att, undefined, undefined, []);
@@ -511,6 +578,9 @@ export class IntBonusable extends Int {
 			prop = this.notes;
 		} else {
 			prop = this.bonuses;
+		}
+		if(!type || type.constructor !== String) {
+			type = "";
 		}
 		bonuses = prop.get(type) || new Map();
 		bonuses.set(nombre, bonus);
@@ -537,7 +607,112 @@ export class IntBonusable extends Int {
 }
 IntBonusable.converter = Int.converter;
 IntBonusable.prototype.type = IntBonusable;
-IntBonusable.prototype.multistackable = ["dodge"];
+IntBonusable.prototype.multistackable = ["", "dodge"];
+
+
+// Stat with a true/false value
+//   o = new TF(stringID, parentTag || undefined, xmlNode, [attribute pairs])
+//         (attribute pairs may contain startingValue, defaults to false)
+//   TF.converter("123.5") => true
+//   TF.converter("0") => false
+export class TF extends IntBonusable {
+	constructor(id, parent, node, atts) {
+		super(id, parent, node, atts);
+		this.bonuses = [];
+		this.notes = new Map();
+	}
+	set(prop, v) {
+		var min, max, num;
+		//console.log(this.id + " " + prop + " = " + v);
+		switch(prop) {
+			case "value":
+			case "startingValue":
+				v = this.type.converter(v);
+				break;
+		}
+		return this.atts.set(prop, v);
+	}
+	get(prop, context = this.defaultContext) {
+		if(prop === "modifiedValue") {
+			return this.getModifiedValue(context);
+		}
+		return this.atts.get(prop);
+	}
+	getModifiedValue(context = this.defaultContext) {
+		// get unmodified-by-step value
+		var base = this.atts.get("value"),
+			list = this.bonuses;
+		if(list.length === 0) {
+			return base;
+		}
+		// only the final bonus counts
+		base = list.slice().pop().pop();
+		if(base instanceof SpecialGrabber) {
+			base = base.grabValue(context);
+		}
+		return this.type.converter(base);
+	}
+	registerBonusTag(nombre, id, att, atts) {
+		var tag,
+			type = atts.type;
+		if(id === "this") {
+			tag = SelfReference.getReference(att, undefined, undefined, []);
+		} else {
+			tag = StatReference.getReference(id, att, undefined, undefined, []);
+		}
+		this.addBonus(nombre, type, tag);
+		return nombre;
+	}
+	addBonus(nombre, type, bonus) {
+		this.bonuses.every(function(pair, i) {
+			var [n, v] = pair;
+			if(n === nombre) {
+				this.bonuses[i][1] = bonus;
+				return false;
+			}
+			return true;
+		});
+	}
+	removeBonus(nombre, type) {
+		var toDelete = false;
+		this.bonuses.every(function(pair, i) {
+			var [n, v] = pair;
+			if(n === nombre) {
+				toDelete = i;
+				return false;
+			}
+			return true;
+		});
+		if(toDelete !== false) {
+			let b = this.bonuses.slice(0, toDelete),
+				e = this.bonuses.slice(toDelete + 1);
+			this.bonuses = b.concat(e);
+			return true;
+		}
+		return false;
+	}
+}
+TF.converter = function(v) {
+	let test = parseInt(Number(v));
+	if(Number.isNaN(test)) {
+		switch (String(v).toLowerCase()) {
+			case "false":
+			case "fals":
+			case "fal":
+			case "fa":
+			case "f":
+				return false;
+			case "true":
+			case "tru":
+			case "tr":
+			case "t":
+				return true;
+		}
+		return Boolean(v);
+	}
+	return Boolean(test);
+};
+TF.prototype.type = TF;
 
 
 // This stat holds a pool of options and notes which options are selected
@@ -601,6 +776,16 @@ export class Pool extends BasicStat {
 	getItem(title) {
 		// Returns an object with .selected and .value properties
 		return this.values.get(title);
+	}
+	hasItem(title) {
+		return this.values.get(title) !== undefined;
+	}
+	hasItemSelected(title) {
+		var i = this.values.get(title);
+		if(i === undefined) {
+			return undefined;
+		}
+		return i.selected;
 	}
 	addSelection() {
 		var args = [...arguments],
@@ -731,14 +916,14 @@ export class Equation extends SpecialGrabber {
 	grabValue(context) {
 		var value = this.startingAmount;
 		this.math.forEach(function(unit) {
-//			console.log(["MATH", value, ...unit]);
+			//console.log(["MATH", value, ...unit]);
 			var newVal, [nombre, literalFlag, amount] = unit;
 			if(literalFlag) {
 				// A literal value
 				newVal = Equation[nombre](value, amount);
 			} else {
 				// A Reference as value
-//				console.log(["->", amount, context]);
+				//console.log(["->", amount, context]);
 				Equation.tempV = amount;
 				Equation.tempC = context;
 				newVal = Equation[nombre](value, amount.grabValue(context));
@@ -835,24 +1020,24 @@ export class If extends SpecialGrabber {
 			delete atts.operation;
 		}
 		tag = new If(parent, node, parseObjectToArray(atts), intype, outtype, operation);
-//		console.log("Constructing IF");
+		//console.log("Constructing IF");
 		[...node.children].forEach(function(step) {
-//			console.log(step);
+			//console.log(step);
 			var nombre = step.nodeName;
 			switch(nombre) {
 				case "Compare":
-//					console.log("Compare");
+					//console.log("Compare");
 					tag.addCompare(step, intype);
-//					console.log(["COMPARE:", tag.startingAmount]);
+					//console.log(["COMPARE:", tag.startingAmount]);
 					break;
 				case "Then":
 				case "Else":
-//					console.log("Then/Else");
+					//console.log("Then/Else");
 					tag.addThenElse(step, nombre, outtype, parent, node);
-//					console.log([nombre.toUpperCase(), tag[nombre.toLowerCase()]]);
+					//console.log([nombre.toUpperCase(), tag[nombre.toLowerCase()]]);
 					break;
 				default:
-//					console.log("step");
+					//console.log("step");
 					tag.addComparison(step, intype);
 			}
 		});
@@ -940,7 +1125,7 @@ export class If extends SpecialGrabber {
 	}
 	grabValue(context) {
 		var value = this.startingAmount, results = [], operation = this.operation, converter = this.inType.converter;
-//		console.log(["IF", this.type, this.outType, value]);
+		//console.log(["IF", this.type, this.outType, value]);
 		if(value instanceof SpecialGrabber) {
 			value = converter(value.grabValue(context));
 		}
@@ -1333,6 +1518,7 @@ InformationObject.type = {
 	Str: Str,
 	IntBonusable: IntBonusable,
 	Pool: Pool,
+	TF: TF
 };
 
 // A function to handle Type attributes
@@ -1343,7 +1529,7 @@ InformationObject.getTypeObject = function(type, fallback) {
 		// If so, return it
 		return c;
 	}
-	// Otherwise, return Str as default
+	// Otherwise, return Str or other specified default
 	return fallback || InformationObject.defaultTypeObject;
 };
 InformationObject.defaultTypeObject = Str;
@@ -1363,26 +1549,6 @@ InformationObject.converters = {
 //
 //
 //
-
-InformationObject.StatTagHandlers = {
-	Group: parseGroup,
-	Stat: parseStat,
-	MultiStat: parseMultiStat,
-	Math: parseMath,
-	If: parseIf,
-	While: parseWhile,
-	Pool: parsePool,
-	Bonus: parseBonus,
-	Item: parsePoolItem
-};
-
-InformationObject.preprocessTags = {};
-
-InformationObject.TagHandlers = {
-	Attribute: parseAttribute,
-	BasicIdObject: parseGroup
-};
-
 
 
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
@@ -1431,21 +1597,21 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 			// This node has a special handler: use it
 			InformationObject.TagHandlers[nombre](node, currentNode, currentTag);
 		//} else if (node.children.length > 0) {
-		//	// This node has children: create a BasicIdObject for it and parse recursively
-		//	let atts = parseIdAndAttributesToArray(node),
-		//		id = atts.shift(),
-		//		allAtts = ancestorAtts.concat(atts),
-		//		tag = new BasicIdObject(nombre, id, parent, node, allAtts),
-		//		newAncestry = ancestry.slice();
-		//	// Add ancestry if needed
-		//	if(currentTag !== undefined) {
-		//		newAncestry.push([currentNode, currentTag]);
-		//	}
-		//	siblings.push(tag);
-		//	parseStatNodes(node, tag, newAncestry, allAtts);
+		//  // This node has children: create a BasicIdObject for it and parse recursively
+		//  let atts = parseIdAndAttributesToArray(node),
+		//    id = atts.shift(),
+		//    allAtts = ancestorAtts.concat(atts),
+		//    tag = new BasicIdObject(nombre, id, parent, node, allAtts),
+		//    newAncestry = ancestry.slice();
+		//  // Add ancestry if needed
+		//  if(currentTag !== undefined) {
+		//    newAncestry.push([currentNode, currentTag]);
+		//  }
+		//  siblings.push(tag);
+		//  parseStatNodes(node, tag, newAncestry, allAtts);
 		//} else {
-		//	// This is a simple text node: it will become a property of this node
-		//	props.push([nombre, node.textContent]);
+		//  // This is a simple text node: it will become a property of this node
+		//  props.push([nombre, node.textContent]);
 		} else {
 			// This is an unknown tag
 			logError(node, "Unknown tag enountered: " + nombre);
@@ -1485,14 +1651,18 @@ export function parseMultiStat(node, parentNode, parentTag) {
 	if(parentTag !== undefined) {
 		 type = parentTag.get("type");
 	}
-	checkAtts.reverse().every(function(pair) {
+	if(checkAtts.reverse().every(function(pair) {
 		var [key, value] = pair;
 		if(key === "type") {
 			type = value;
 			return false;
 		}
 		return true;
-	});
+	})) {
+		// Did not find a type att inline
+		// Use inherited value
+		type = parentTag.get("type");
+	}
 	type = InformationObject.getTypeObject(type, Str);
 	tag = new MultiStat(id, parentTag, node, type, atts);
 	parseStatNodes(node, tag);
@@ -1580,26 +1750,43 @@ export function parseAttribute(node, parentNode, parentTag) {
 }
 
 export function parseBonus(node, parentNode, parentTag) {
-	var atts, fromID, att, nombre;
+	var atts, fromID, att, nombre, formula;
 	if(!(parentTag instanceof IntBonusable)) {
 		console.log(parentTag);
 		return logError(node, "BONUS used within a non-Bonus-accepting type");
 	}
 	atts = parseAttributesToObject(node);
+	formula = atts.formula;
 	fromID = atts.getFromId;
-	att = atts.attribute;
-	if(fromID === undefined) {
-		return logError(node, "BONUS: missing required \"getFromId\" parameter");
+	if(fromID === undefined && formula === undefined) {
+		return logError(node, "BONUS: missing required \"getFromId\" or \"formula\" parameter");
 	}
+ 	att = atts.attribute;
 	if(att === undefined) {
 		att = "value";
 	} else {
 		delete atts.attribute;
 	}
+	nombre = atts.id;
+	if(nombre === undefined) {
+		nombre = "Bonus from " + fromID + "." + att;
+	} else {
+		delete atts.id;  
+	}
+	if (formula !== undefined) {
+		//addBonus(nombre, type, bonus, notation = undefined)
+		let f = Formula.getName(formula);
+		if(f === undefined) {
+			return logError(node, "BONUS: formula \"" + formula + "\" is not defined");
+		}
+		return parentTag.addBonus(nombre, atts.type, f, atts.note); //redo Formula
+	}
 	delete atts.fromId;
-	nombre = atts.id || "Bonus from " + fromID + "." + att;
 	parentTag.registerBonusTag(nombre, fromID, att, parseObjectToArray(atts));
 }
+
+
+//<BonusChoice>
 
 
 export function parsePool(node, parentNode, parentTag) {
@@ -1638,6 +1825,83 @@ function parsePoolItem(node, parentNode, parentTag) {
 }
 
 
+//<PoolBonus>
+//<PoolBonusSelect>
+//<PoolBonusChoice>
+//<PoolBonusChoice to="combatEffects" title="Choose a breath weapon">
+
+
+InformationObject.StatTagHandlers = {
+	Group: parseGroup,
+	Stat: parseStat,
+	MultiStat: parseMultiStat,
+	Math: parseMath,
+	If: parseIf,
+	While: parseWhile,
+	Bonus: parseBonus,
+	Pool: parsePool,
+	Item: parsePoolItem
+};
+
+InformationObject.preprocessTags = {};
+
+InformationObject.TagHandlers = {
+	Attribute: parseAttribute,
+	BasicIdObject: parseGroup
+};
+
+
+
+
+//separate script?
+//separate script?
+//separate script?
+//separate script?
+InformationObject.BundleTagHandlers = {
+	Bonus: parseBonusBundle
+};
+export function parseBonusBundle() {
+	
+}
+//separate script?
+//separate script?
+//separate script?
+//separate script?
+
+
+
+
+
+
+
+// Formula object with ability to find any formula by name
+//   o = new Formula(xmlNode, stringName, [attribute pairs])
+// Formula.getName("stringName") => o
+export class Formula extends SpecialGrabber {
+	constructor(node, nombre, atts) {
+		super(undefined, node, atts, nombre);
+		this.name = nombre;
+		this.node = node;
+		Formula.formulae.set(nombre, this);
+	}
+	grabValue(context) {
+		var found = this.get("value", context);
+		while(found instanceof BasicStatObject) {
+			if (found instanceof SpecialGrabber) {
+				found = found.grabValue(context);
+			} else {
+				found = found.get("value", context);
+			}			
+		}
+		return found;
+	}
+	static getName(nombre) {
+		return Formula.formulae.get(nombre);
+	}
+}
+Formula.formulae = new Map();
+
+
 export function parseFormulae(nodelist, sharedObject) {
 	// Add in any additional properties
 	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
@@ -1661,13 +1925,13 @@ export function parseFormula(node) {
 	var atts = parseAttributesToObject(node),
 		nombre = atts.name,
 		type = atts.type,
-		overwrite = atts.overwrite,
+		overwrite = TF.converter(atts.overwrite),
 		tag;
 	if(nombre === undefined) {
 		return logError(node, "FORMULA: missing required \"name\" parameter");
 	}
 	delete atts.name;
-	if(Formula.getName(nombre) !== undefined && overwrite) {
+	if(Formula.getName(nombre) !== undefined && !overwrite) {
 		return logError(node, "FORMULA: cannot overwrite existing \"" + nombre + "\" formula without an explicit \"overwrite\" parameter");
 	}
 	if(overwrite) {
@@ -1677,4 +1941,6 @@ export function parseFormula(node) {
 	tag = new Formula(node, nombre, parseObjectToArray(atts));
 	parseStatNodes(node, tag);
 }
+
+InformationObject.formula = Formula;
 
