@@ -3,7 +3,7 @@ import { logErrorNode as logError, parseAttributesToObject } from "./parsing-log
 
 
 // This stat represents the size of the character
-//	 o = new PfSize(stringID, parentTag || undefined, xmlNode, [attribute pairs])
+//   o = new PfSize(stringID, parentTag || undefined, xmlNode, [attribute pairs])
 // 0 - Fine (min value)
 // 1 - Diminutive
 // 2 - Tiny
@@ -15,26 +15,26 @@ import { logErrorNode as logError, parseAttributesToObject } from "./parsing-log
 // 8 - Colossal (max value)
 //
 // Assuming that value = 2
-//	 o.get("sizeName") => "Tiny"
-//	 o.get("sizeModifier") => 2
-//	 o.get("specialSizeModifier") => -2
-//	 o.get("flyModifier") => 6
-//	 o.get("stealthModifier") => 12
-//	 o.get("sizeModifierText") => "+2"
-//	 o.get("specialSizeModifierText") => "-2"
-//	 o.get("flyModifierText") => "+4"
-//	 o.get("stealthModifierText") => "+8"
+//   o.get("sizeName") => "Tiny"
+//   o.get("sizeModifier") => 2
+//   o.get("specialSizeModifier") => -2
+//   o.get("flyModifier") => 6
+//   o.get("stealthModifier") => 12
+//   o.get("sizeModifierText") => "+2"
+//   o.get("specialSizeModifierText") => "-2"
+//   o.get("flyModifierText") => "+4"
+//   o.get("stealthModifierText") => "+8"
 //
 // Assuming that value = 8
-//	 o.get("sizeName") => "Colossal"
-//	 o.get("sizeModifier") => -8
-//	 o.get("specialSizeModifier") => 8
-//	 o.get("flyModifier") => -8
-//	 o.get("stealthModifier") => -16
-//	 o.get("sizeModifierText") => "-8"
-//	 o.get("specialSizeModifierText") => "+8"
-//	 o.get("flyModifierText") => "-8"
-//	 o.get("stealthModifierText") => "-16"
+//   o.get("sizeName") => "Colossal"
+//   o.get("sizeModifier") => -8
+//   o.get("specialSizeModifier") => 8
+//   o.get("flyModifier") => -8
+//   o.get("stealthModifier") => -16
+//   o.get("sizeModifierText") => "-8"
+//   o.get("specialSizeModifierText") => "+8"
+//   o.get("flyModifierText") => "-8"
+//   o.get("stealthModifierText") => "-16"
 export class PfSize extends IntBonusable {
 	constructor(id, parent, node, atts) {
 		super(id, parent, node, atts);
@@ -75,10 +75,10 @@ PfSize.prototype.type = PfSize;
 
 
 // This stat holds information about spellcasting and spell-like abilities
-//	 o = new PfSpells(stringID, parentTag || undefined, xmlNode, [attribute pairs])
-//		 attributes should include maxSpellLevel, or else it's set to 9
-//	 o.spells is a Map with keys from 0..maxSpellLevel, each containing an
-//		 empty Map
+//   o = new PfSpells(stringID, parentTag || undefined, xmlNode, [attribute pairs])
+//     attributes should include maxSpellLevel, or else it's set to 9
+//   o.spells is a Map with keys from 0..maxSpellLevel, each containing an
+//     empty Map
 export class PfSpells extends BasicStat {
 	constructor(id, parent, node, atts) {
 		var max, s = 0, map = new Map();
@@ -97,16 +97,16 @@ PfSpells.prototype.type = PfSpells;
 
 
 // This stat holds information about skills, specifically handling class skills
-//	 o = new PfSpkill(stringID, parentTag || undefined, xmlNode)
-//		 : startingValue is 0
-//		 : minValue is 0
-//		 : maxValue is equal to the character's Level
+//   o = new PfSpkill(stringID, parentTag || undefined, xmlNode)
+//     : startingValue is 0
+//     : minValue is 0
+//     : maxValue is equal to the character's Level
 //   o.addBonusRanks("unique_name", value, boolean true or false)
 //   o.removeBonusRanks("unique_name", boolean true or false)
 //     modifies ranks based on the existing rules (true) or regardless of the rules (false)
-//	 o.markClassSkill("unique_name_of_class_skill_granter", boolean true or false)
-//	 o.removeClassSkillMark("unique_name_of_class_skill_granter")
-//		 the final mark given to the skill will determine if it is a class skill (true) or not (false)
+//   o.markClassSkill("unique_name_of_class_skill_granter", boolean true or false)
+//   o.removeClassSkillMark("unique_name_of_class_skill_granter")
+//     the final mark given to the skill will determine if it is a class skill (true) or not (false)
 export class PfSkill extends IntBonusable {
 	constructor(id, parent, node) {
 		super(id, parent, node, [["startingValue", 0], ["minValue", 0]]);
