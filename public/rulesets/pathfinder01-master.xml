@@ -36,6 +36,14 @@
 				<Floor />
 			</Math>
 		</Formula>
+		<Formula name="if_class_skill_then_plus_one" type="Int">
+			<If inType="Pool" outType="Int">
+				<Compare fromId="this" attribute="source" />
+				<Has value="class" />
+				<Then value="1" />
+				<Else value="0" />
+			</If>
+		</Formula>
 	</Formulae>
 	<Stats>
 		<Group id="ability_scores" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
