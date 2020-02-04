@@ -43,7 +43,8 @@
 			<Alternate id="Adoptive Parentage - Halfling" replacesName="HumanLanguages,HumanBonusFeat" description="Humans are sometimes orphaned and adopted by other races.">
 				<Bonus to="languagesKnown" value="1" />
 				<PoolBonusSelect to="languages" value="Common,Halfling" />
-				<!-- ABOVE STILL NEEDS WEAPON FAMILIARITY (OR SKILL FOCUS) -->
+				<PoolBonus to="weaponProficiencies" value="sling" />
+				<PoolBonus to="weaponMartial" value="TYPEhalfling" />
 			</Alternate>
 			<Alternate id="Alchemically Enhanced" replacesName="HumanStat,HumanBonusFeat" description="Some humans use alchemical or scientific enhancements to push their bodies beyond the limits of nature. However, doing so comes at a significant price.">
 				<BonusChoice to="STR,DEX,CON," value="3" choices="1" type="racial" />
@@ -61,17 +62,27 @@
 	 			<Bonus to="concentrationCheckBase" value="1" type="racial" />
 			</Alternate>
 			<Alternate id="Comprehensive Education" replacesName="HumanSkilled" description="Humans raised with skilled teachers draw upon vast swathes of knowledge gained over centuries of civilization.">
-				<!--Comprehensive Education: they gain a +1 racial bonus on skill checks for each Knowledge skill that they gain as a class skill from their class levels.-->
-				<PfCSkill id="Human: Comprehensive Education" mark="Knowledge (arcana)" />
-				<PfCSkill id="Human: Comprehensive Education1" mark="Knowledge (dungeoneering)" />
-				<PfCSkill id="Human: Comprehensive Education2" mark="Knowledge (engineering)" />
-				<PfCSkill id="Human: Comprehensive Education3" mark="Knowledge (geography)" />
-				<PfCSkill id="Human: Comprehensive Education4" mark="Knowledge (history)" />
-				<PfCSkill id="Human: Comprehensive Education5" mark="Knowledge (local)" />
-				<PfCSkill id="Human: Comprehensive Education6" mark="Knowledge (nature)" />
-				<PfCSkill id="Human: Comprehensive Education7" mark="Knowledge (nobility)" />
-				<PfCSkill id="Human: Comprehensive Education8" mark="Knowledge (planes)" />
-				<PfCSkill id="Human: Comprehensive Education9" mark="Knowledge (religion)" />
+				<!--Comprehensive Education: they gain a +1 racial bonus on skill checks for each Knowledge skill that they gain as a class skill from their class-->
+				<PfCSkill id="Human: Comprehensive Education" source="racial trait" mark="Knowledge (arcana)" />
+				<Bonus to="Knowledge (arcana)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education1" source="racial trait" mark="Knowledge (dungeoneering)" />
+				<Bonus to="Knowledge (dungeoneering)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education2" source="racial trait" mark="Knowledge (engineering)" />
+				<Bonus to="Knowledge (engineering)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education3" source="racial trait" mark="Knowledge (geography)" />
+				<Bonus to="Knowledge (geography)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education4" source="racial trait" mark="Knowledge (history)" />
+				<Bonus to="Knowledge (history)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education5" source="racial trait" mark="Knowledge (local)" />
+				<Bonus to="Knowledge (local)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education6" source="racial trait" mark="Knowledge (nature)" />
+				<Bonus to="Knowledge (nature)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education7" source="racial trait" mark="Knowledge (nobility)" />
+				<Bonus to="Knowledge (nobility)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education8" source="racial trait" mark="Knowledge (planes)" />
+				<Bonus to="Knowledge (planes)" formula="if_class_skill_then_plus_one" type="racial" />
+				<PfCSkill id="Human: Comprehensive Education9" source="racial trait" mark="Knowledge (religion)" />
+				<Bonus to="Knowledge (religion)" formula="if_class_skill_then_plus_one" type="racial" />
 			</Alternate>
 			<Alternate id="Dimdweller" replacesName="HumanSkilled" description="Some humans spend their lives in darker places.">
 				<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
@@ -106,7 +117,7 @@
 						she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's
 						character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are
 						treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
-				<PfCSkillChoice id="Human Fey Magic" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+				<PfCSkillChoice id="Human Fey Magic" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 			</Alternate>
 			<Alternate id="Focused Study" replacesName="HumanBonusFeat" description="All humans are skillful, but some, rather than being generalists, tend to specialize in a handful of skills.">
 				<!-- At 1st, 8th, and 16th level, such humans gain Skill Focus in a skill of their choice as a bonus feat. -->
@@ -125,8 +136,8 @@
 				<Bonus to="lowLightVision" value="1" />
 				<Bonus to="ReflSave" value="1" type="racial" />
 				<Bonus to="WillSave" value="1" type="racial" />
-				<PfCSkill id="Human: Heart of the Fey" mark="Knowledge (nature)" />
-				<PfCSkill id="Human: Heart of the Fey1" mark="Perception" />
+				<PfCSkill id="Human: Heart of the Fey" source="racial trait" mark="Knowledge (nature)" />
+				<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 			</Alternate>
 			<Alternate id="Heart of the Fields" replacesName="HumanSkilled,HeartOfThe,HeartOfTheFields" description="Humans born in rural areas are used to hard labor.">
 				<BonusChoice to="craft_skills,profession_skills" formula="half_level" type="racial" choices="1" />
@@ -138,8 +149,8 @@
 				<PoolBonus to="miscEffects" value="You are considered acclimated to the effects of high altitude" />
 			</Alternate>
 			<Alternate id="Heart of the Sea" replacesName="HumanSkilled,HeartOfThe,HeartOfTheSea" description="Humans born near the sea are always drawn to it.">
-				<PfCSkill id="Human: Heart of the Sea" mark="Swim" />
-				<PfCSkill id="Human: Heart of the Sea1" mark="Profession (sailor)" multi="profession_skills" sub="sailor" />
+				<PfCSkill id="Human: Heart of the Sea" source="racial trait" mark="Swim" />
+				<PfCSkill id="Human: Heart of the Sea1" source="racial trait" mark="Profession (sailor)" multi="profession_skills" sub="sailor" />
 				<Bonus to="Swim" value="2" type="racial" />
 				<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" type="racial" />
 				<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
@@ -196,8 +207,8 @@
 				<Bonus to="lowLightVision" value="1" />
 				<Bonus to="ReflSave" value="1" type="racial" />
 				<Bonus to="WillSave" value="1" type="racial" />
-				<PfCSkill id="Human: Heart of the Fey" mark="Knowledge (nature)" />
-				<PfCSkill id="Human: Heart of the Fey1" mark="Perception" />
+				<PfCSkill id="Human: Heart of the Fey" source="racial trait" mark="Knowledge (nature)" />
+				<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 			</Alternate>
 			<Alternate id="Mixed Heritage: Heart of the Fields" replacesName="HumanBonusFeat" avoidName="HeartOfTheFields" requiresName="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 				<BonusChoice to="craft_skills,profession_skills" formula="half_level" type="racial" choices="1" />
@@ -209,8 +220,8 @@
 				<PoolBonus to="miscEffects" value="You are considered acclimated to the effects of high altitude" />
 			</Alternate>
 			<Alternate id="Mixed Heritage: Heart of the Sea" replacesName="HumanBonusFeat" avoidName="HeartOfTheSea" requiresName="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
-				<PfCSkill id="Human: Heart of the Sea" mark="Swim" />
-				<PfCSkill id="Human: Heart of the Sea1" mark="Profession (sailor)" multi="profession_skills" sub="sailor" />
+				<PfCSkill id="Human: Heart of the Sea" source="racial trait" mark="Swim" />
+				<PfCSkill id="Human: Heart of the Sea1" source="racial trait" mark="Profession (sailor)" multi="profession_skills" sub="sailor" />
 				<Bonus to="Swim" value="2" type="racial" />
 				<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" type="racial" />
 				<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
@@ -249,7 +260,7 @@
 			</Alternate>
 			<Alternate id="Piety" replacesName="HumanBonusFeat" description="Humans place great trust in the gods to protect them.">
 				<Bonus to="Knowledge (religion)" value="2" type="racial" />
-				<PfCSkill id="Human: Piety" mark="Knowledge (religion)" />
+				<PfCSkill id="Human: Piety" source="racial trait" mark="Knowledge (religion)" />
 				<PoolBonus to="miscEffects" value="1/day: before attempting an attack roll, saving throw, ability check, or skill check, you can call out to your deity in order to receive a +2 racial bonus on that roll; you can use this ability only if you are able to speak" />
 			</Alternate>
 			<Alternate id="Poison Minion" replacesName="HumanSkilled" description="Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison. The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters.">
@@ -257,9 +268,9 @@
 			</Alternate>
 			<Alternate id="Practiced Hunter" replacesName="HumanSkilled" description="Members of some human cultures train from youth to find and follow the trails of vital game and at the same time hide the evidence of their own passage.">
 				<Bonus to="Stealth" value="2" type="racial" />
-				<PfCSkill id="Human: Practiced Hunter" mark="Stealth" />
+				<PfCSkill id="Human: Practiced Hunter" source="racial trait" mark="Stealth" />
 				<Bonus to="Survival" value="2" type="racial" />
-				<PfCSkill id="Human: Practices Hunter1" mark="Survival" />
+				<PfCSkill id="Human: Practices Hunter1" source="racial trait" mark="Survival" />
 			</Alternate>
 			<Alternate id="Psychic Defense" replacesName="HumanBonusFeat" description="Humans from cultures steeped in the occult sometimes train their minds to resist outside influence.">
 				<PoolBonus to="saveEffects" value="+2 racial bonus vs psychic spells and spell-like abilities, including those that originate from the psychic magic ability" />
@@ -396,7 +407,7 @@
 			</Alternate>
 			<Alternate id="Dragon Magic" replacesName="ElfMagic" description="Some elves have potent draconic blood.">
 				<PoolBonus to="spellcastingEffects" value="If you take a draconic bloodline as a class feature, you treat your Charisma scores as 2 points higher when determining the DC and uses per day of all bloodline abilities and bloodline spells%%%You automatically add spells with the draconic descriptor to your class spell lists for any spellcasting classes in which you have levels" />
-				<PoolBonus to="HIDDEN VARIABLES" title="Dracon Magic bonus spells" />
+				<PoolBonus to="HIDDEN VARIABLES" title="Dragon Magic bonus spells" />
 				<!-- elves with this trait add spells with the draconic descriptor to their class spell lists for any spellcasting classes in which they have levels. -->
 			</Alternate>
 			<Alternate id="Draconic Consular" replacesName="ElfKeenSenses" description="Elves serving in the company of dragons are trained to assist and represent their draconic allies.">
@@ -436,7 +447,7 @@
 				<!-- You gain detect magic as a constant spell-like ability, with a caster level equal to your character level. -->
 			</Alternate>
 			<Alternate id="Fey Thoughts" replacesName="ElfWeaponFamiliarity" description="Some elves have fey ancestry or some other close ties to the fey, manifesting as innate skills.">
-				<PfCSkillChoice id="Elf: Fey Thoughts" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+				<PfCSkillChoice id="Elf: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 			</Alternate>
 			<Alternate id="Fleet-Footed" replacesName="ElfKeenSenses,ElfWeaponFamiliarity" description="While all elves are naturally lithe and agile, some also are naturally speedy and have a strong desire to rush into situations rather than worrying about looking ahead.">
 				<Bonus type="racial" to="Init" value="2" />
@@ -475,7 +486,7 @@
 			</Alternate>
 			<Alternate id="Memories Beyond Death" replacesName="ElfImmunities,ElfMagic" description="Some elves are born with sensitive souls that absorb insight from others and from the spirits of the deceased.">
 				<PoolBonus to="saveEffects" value="+2 racial bonus vs fear effects" />
-				<PfCSkillChoice id="Elf: Memories Beyond Death" mark="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" choice="2" />
+				<PfCSkillChoice id="Elf: Memories Beyond Death" source="racial trait" mark="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" choice="2" />
 				<!--If they take a class that grants either or both of those skills as class skills, they gain a +1 racial bonus on the overlapping skill or skills.-->
 			</Alternate>
 			<Alternate id="Moonkissed" replacesName="ElfImmunities,ElfKeenSenses" description="Some elves consider the moon to be lucky.">
@@ -592,8 +603,8 @@
 			</Standard>
 			<Alternate id="Alert for Betrayal" replacesName="HalfElfAdaptability" description="Half-elves tend to expect the worst.">
 				<PoolBonus to="saveEffects" value="+2 racial bonus vs illusion spells and effects" />
-				<PfCSkill id="Half-Elf: Alert for Betrayal" mark="Perception" />
-				<PfCSkill id="Half-Elf: Alert for Betrayal1" mark="Sense Motive" />
+				<PfCSkill id="Half-Elf: Alert for Betrayal" source="racial trait" mark="Perception" />
+				<PfCSkill id="Half-Elf: Alert for Betrayal1" source="racial trait" mark="Sense Motive" />
 			</Alternate>
 			<Alternate id="Ancestral Arms" replacesName="HalfElfAdaptability" description="Some half-elves receive training in an unusual weapon.">
 				<!-- Half-elves with this racial trait receive Exotic Weapon Proficiency or Martial Weapon Proficiency with one weapon as a bonus feat at 1st level. -->
@@ -664,7 +675,7 @@
 				<!-- The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
 			</Alternate>
 			<Alternate id="Fey Thoughts" replacesName="HalfElfMultitalented" description="Some half-elves have fey ancestry or some other close ties to the fey, manifesting as innate skills.">
-				<PfCSkillChoice id="Half-Elf: Fey Thoughts" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+				<PfCSkillChoice id="Half-Elf: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 			</Alternate>
 			<Alternate id="Inspire Imitation" replacesName="HalfElfAdaptability" description="Some half-elves have a flair with their skills.">
 				<PoolBonus to="skillEffects" value="When you succeed on a skill check, you can inspire imitators as a swift action: any ally within 30ft who witnesses the successful check and attempts the same check within the next minute gains a +2 bonus on the check as if from the aid another action" />
@@ -860,7 +871,7 @@
 				<!-- The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
 			</Alternate>
 			<Alternate id="Fey Thoughts" replacesName="DwarfHatred" description="Some dwarves have fey ancestry or some other close ties to the fey, manifesting as innate skills.">
-				<PfCSkillChoice id="Dwarf: Fey Thoughts" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+				<PfCSkillChoice id="Dwarf: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 			</Alternate>
 			<Alternate id="Giant Hunter" replacesName="DwarfHatred" description="Some dwarves are trained against giants.">
 				<PoolBonus to="combatEffects" value="+1 bonus on attack rolls against humanoids with the giant subtype" />
@@ -875,7 +886,7 @@
 			<Alternate id="Iron Citizen" replacesName="DwarfStability" description="Some dwarves replace the stoutness of stone with the stoutness of cities.">
 				<Bonus to="Diplomacy" value="2" />
 				<Bonus to="Sense Motive" value="2" />
-				<PfCSkill id="Dwarf: Iron Citizen" mark="Diplomacy" />
+				<PfCSkill id="Dwarf: Iron Citizen" source="racial trait" mark="Diplomacy" />
 			</Alternate>
 			<Alternate id="Iron Within" replacesName="DwarfHatred,DwarfDefensiveTraining" description="Some dwarves replace the stoutness of stone with stoutness of body and mind.">
 				<Bonus to="KiPoints" value="1" />
@@ -998,8 +1009,8 @@
 			</Alternate>
 			<Alternate id="Wanderer" replacesName="DwarfHardy" description="Some dwarves have a type of wanderlust.">
 				<!-- You gain Endurance as a bonus feat -->
-				<PfCSkill id="Dwarf: Wanderer" mark="Climb" />
-				<PfCSkill id="Dwarf: Wanderer1" mark="Swim" />
+				<PfCSkill id="Dwarf: Wanderer" source="racial trait" mark="Climb" />
+				<PfCSkill id="Dwarf: Wanderer1" source="racial trait" mark="Swim" />
 			</Alternate>
 			<Alternate id="Wyrmscourged" replacesName="DwarfHatred,DwarfDefensiveTraining,DwarfStonecunning" description="Some dwarves train to fight and overcome dragons.">
 				<PoolBonus to="combatEffects" value="+1 bonus on attack rolls and a +2 dodge bonus to AC vs dragons" />
@@ -1058,53 +1069,175 @@
 			<Standard name="GnomeWeaponFamiliarity">
 				<PoolBonus to="weaponMartial" value="TYPEgnome" />
 			</Standard>
-			<Alternate id="" replacesName="" description="">
+			<Alternate id="Academician" replacesName="GnomeObsessive" description="Some gnomes are more academically inclined than their kin.">
+				<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choice="1" />
+			</Alternate>
+			<Alternate id="Architectural Ingenuity" replacesName="GnomeObsessive,GnomeKeenSenses" description="Some gnomes demonstrate incredible talent for building and adjusting structures.">
+				<Bonus to="Knowledge (engineering)" value="2" type="racial" />
+				<PoolBonus to="skillEffects" value="+2 racial bonus on Craft and Perception checks related to structures (including structural traps)" />
+			</Alternate>
+			<Alternate id="Artistic" replacesName="GnomeObsessive" description="Some gnomes are quite adept at performance.">
+				<BonusChoice to="perform_skills" type="racial" value="2" choices="1" />
+			</Alternate>
+			<Alternate id="Behind the Veil" replacesName="GnomeVision" description="Some gnomes trade visual accuity for mental and physical dexterity">
+				<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+				<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			</Alternate>
+			<Alternate id="Blended View" replacesName="GnomeVision,GnomeKeenSenses" description="Half-drow whose non-drow parent had low-light vision might be blessed with a legacy of versatile senses.">
+				<Bonus to="lowLightVision" value="1" />
+				<Bonus to="darkvision" value="60" />
+			</Alternate>
+			<Alternate id="Bond to the Land" replacesName="GnomeHatred,GnomeDefensiveTraining" description="Some gnomes have strong ties to specific kinds of terrain, as a holdover from their fey origins.">
+				<!--These gnomes gain a +2 dodge bonus to AC when in a specific terrain type selected from the ranger list of favored terrains. This choice is made at character creation, and cannot be changed. This racial trait replaces defensive training and hatred.-->
+				<PoolBonusChoice to="combatEffects" title="Choose a specific terrain (you will have a +2 dodge bonus to AC within that specific terrain)">
+					<Item title="Cold" value="You have a +2 dodge bonus to AC when in cold terrain" />
+					<Item title="Desert" value="You have a +2 dodge bonus to AC when in desert terrain" />
+					<Item title="Forest" value="You have a +2 dodge bonus to AC when in forest terrain" />
+					<Item title="Jungle" value="You have a +2 dodge bonus to AC when in jungle terrain" />
+					<Item title="Mountain" value="You have a +2 dodge bonus to AC when in mountainous or hilly terrain" />
+					<Item title="Plains" value="You have a +2 dodge bonus to AC when on the plains" />
+					<Item title="Swamp" value="You have a +2 dodge bonus to AC when in swampy terrain" />
+					<Item title="Underground" value="You have a +2 dodge bonus to AC when underground" />
+					<Item title="Urban" value="You have a +2 dodge bonus to AC when in urban terrain" />
+					<Item title="Water" value="You have a +2 dodge bonus to AC when in or beneath open water" />
+				</PoolBonusChoice>
+			</Alternate>
+			<Alternate id="Charming Diviner" replacesName="GnomeMagic" description="Some gnomes excel at divination magic and certain charms.">
+				<PoolBonus to="spellcastingEffects" value="You treat your caster level as 1 higher for the purposes of divination spells you cast" />
+				<!--if the gnome has a Wisdom or Charisma score of 11 or higher, she also gains the ability to cast charm animal as a spell-like ability three times per day. The caster level for this effect is equal to the gnome's level, and the DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
+			</Alternate>
+			<Alternate id="Darkvision" replacesName="GnomeVision,GnomeKeenSenses" description="Some gnome strains have lived in the underground depths for so long they have given up on light entirely.">
+				<Bonus to="darkvision" value="60" />
+			</Alternate>
+			<Alternate id="Dimdweller" replacesName="GnomeWeaponFamiliarity" description="Some gnomes spend their lives learning to use the shadows to their benefit.">
+				<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			</Alternate>
+			<Alternate id="Dirty Trickster" replacesName="GnomeKeenSenses,GnomeDefensiveTraining,GnomeHatred" description="All gnomes love pranks, but some specialize in those improvised during battle.">
+				<PoolBonus to="combatEffects" value="+2 racial bonus on dirty trick combat maneuvers" />
+				<PoolBonus to="HIDDEN VARIABLES" value="Combat Expertise Intelligence prerequisite" />
+				<PoolBonus to="HIDDEN VARIABLES" value="Improved Dirty Trick Intelligence prerequisite" />
+				<!-- They need not meet the Intelligence requirement to select Combat Expertise, Improved Dirty Trick, and any feat with Improved Dirty Trick as a prerequisite.-->
+			</Alternate>
+			<Alternate id="Dusksight" replacesName="GnomeKeenSenses" description="Some gnomes aim uncannily well in dim light.">
+				<PoolBonus to="combatEffects" value="When using ranged weapons, you can reroll the miss chance granted by cover to any target in dim light and take the better of the two rolls (the miss chance for total concealment applies normally)" />
+			</Alternate>
+			<Alternate id="Eternal Hope" replacesName="GnomeDefensiveTraining,GnomeHatred" description="Gnomes rarely lose hope and are always confident that even hopeless situations will work out.">
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs fear and despair effects" />
+				<PoolBonus to="miscEffects" value="1/day: after rolling a 1 on a d20, you may reroll and use the second result" />
+			</Alternate>
+			<Alternate id="Explorer" replacesName="GnomeHatred,GnomeObsessive" description="Many gnomes are obsessed with seeing as much of the world as possible, rather than perfecting some specific talent or vocation.">
+				<Bonus to="Climb" value="2" type="racial" />
+				<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choice="1" />
+			</Alternate>
+			<Alternate id="Fairy Catcher" replacesName="GnomeKeenSenses,GnomeDefensiveTraining,GnomeHatred" description="Some gnomes are especially sensitive to the presence of fey.">
+				<PoolBonus to="saveEffects" value="+2 racial bonus on saving throws against the spells, spell-like abilities, and supernatural abilities of fey (this bonus stacks with the bonus granted by illusion resistance)" />
+				<PoolBonus to="spellcastingEffects" value="+2 bonus on caster level checks to overcome the spell resistance of fey" />
+				<PoolBonus to="skillEffects" value="+2 racial bonus on Perception, Sense Motive, and Survival checks against fey" />
+			</Alternate>
+			<Alternate id="Faerie Dragon Magic" replacesName="GnomeMagic" description="Some gnomes ally with capricious faerie dragons or share a supernatural kinship with these enigmatic creatures.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DCs of saves of illusion spells you cast" />
+				<!--Additionally, a gnome with a Charisma score of 11 or higher can use each of the following spell-like abilities once per day: ghost sound, grease, and silent image. The caster level for these effects is equal to the gnome's character level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier.-->
+			</Alternate>
+			<Alternate id="Fell Magic" replacesName="GnomeMagic" description="Some gnomes strongly feel the call of darker magics.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DCs of saves of necromancy spells you cast" />
+				<!--Gnomes with Wisdom scores of 11 or higher also gain the following spell-like abilities: 1/day—bleed, chill touch, detect poison, and touch of fatigue. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Wisdom modifier-->
+			</Alternate>
+			<Alternate id="Fey Fortitude" replacesName="GnomeWeaponFamiliarity" description="Some gnomes are infused with a connection to life.">
+				<PoolBonus to="spellcastingEffects" value="+2 racial bonus on saves to resist death effects" />
+			</Alternate>
+			<Alternate id="Fey Magic" replacesName="GnomeMagic,GnomeIllusion,GnomeObsessive" description="Some gnomes have strong fey ancestry or some other close ties to the fey, manifesting in magical abilities.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DC of enchantment (compulsion) spells you cast" />
+				<!--Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
+			</Alternate>
+			<Alternate id="Fey Thoughts" replacesName="GnomeWeaponFamiliarity" description="Some gnomes have strong fey ancestry or some other close ties to the fey, manifesting as innate skills.">
+				<PfCSkillChoice id="Gnome: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+			</Alternate>
+			<Alternate id="Fey-Tongued" replacesName="GnomeMagic" description="Some gnomes' innate magic is more in tune with the feywild.">
+				<!--You gain haunted fey aspect and speak with plants instead of dancing lights and speak with animals as spell-like abilities from the gnome magic racial trait-->
+			</Alternate>
+			<Alternate id="Gift of Tongues" replacesName="GnomeDefensiveTraining,GnomeHatred" description="Gnomes love languages and learning about those they meet.">
+				<Bonus to="Bluff" value="2" />
+				<Bonus to="Diplomacy" value="2" />
+				<Bonus to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" note="situational" />
+				<Bonus to="languagesKnown" getFromId="Linguistics" />
+			</Alternate>
+			<Alternate id="Inquisitive" replacesName="GnomeObsessive,GnomeKeenSenses" description="Gnomes have a knack for being in places they shouldn't be.">
+				<Bonus to="Disable Device" value="2" type="racial" />
+				<Bonus to="Escape Artist" value="2" type="racial" />
+			</Alternate>
+			<Alternate id="Intrepid Settler" replacesName="GnomeIllusion,GnomeObsessive,GnomeKeenSenses" description="Some gnomes add to the thrill of living by settling in precarious places.">
+				<Bonus to="Acrobatics" value="2" type="racial" />
+				<Bonus to="Climb" value="2" type="racial" />
+				<Bonus to="Swim" value="2" type="racial" />
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs fear effects" />
+			</Alternate>
+			<Alternate id="Knack with Poison" replacesName="GnomeIllusion,GnomeObsessive" description="Some gnomes have an instinctive understanding of poisons and their uses.">
+				<Bonus to="FortSave" value="+2 racial bonus vs poison, or +4 racial bonus if you accidentally poison yourself when applying or readying poison" note="situational" />
+				<Bonus to="Craft (alchemy)" multi="craft_skills" sub="alchemy" value="+2 racial bonus to make poison" note="situational" />
+			</Alternate>
+			<Alternate id="Magical Linguist" replacesName="GnomeIllusion,GnomeMagic" description="Gnomes study languages in both their mundane and supernatural manifestations.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DC of spells you cast with the language-dependent descriptor, or that create glyphs, symbols, or other magical writings" />
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs spells with the language-dependent descriptor, or that create glyphs, symbols, or other magical writings" />
+				<!--Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—arcane mark, comprehend languages, message, read magic. The caster level for these effects is equal to the gnome's level-->
+			</Alternate>
+			<Alternate id="Master Tinker" replacesName="GnomeDefensiveTraining,GnomeHatred" description="Gnomes experiment with all manner of mechanical devices.">
+				<Bonus to="Disable Device" value="1" />
+				<Bonus to="Knowledge (engineering)" value="1" />
+				<!--They are treated as proficient with any weapon they have personally crafted.-->
+			</Alternate>
+			<Alternate id="Nature Affinity" replacesName="GnomeKeenSenses" description="Some gnomes are physically built to handle the dangers of the wild.">
+				<Bonus to="FortSave" value="+2 racial bonus vs diseases and poisons inflicted by fey, plants, and forest-related hazards" note="situational" />
+			</Alternate>
+			<Alternate id="Nosophobia" replacesName="GnomeObsessive" description="Some gnomes are paranoid about catching disease.">
+				<Bonus to="FortSave" value="+4 bonus vs disease and poison, including magical diseases" note="situational" />
+			</Alternate>
+			<Alternate id="Poison Minion" replacesName="GnomeIllusion,GnomeMagic,GnomeDefensiveTraining" description="Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison. The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters.">
+				<PoolBonus to="combatEffects" value="Any creature that hits you with a bite attack is immediately exposed to your poison: save DC is equal to 10 + half your level + your Constitution modifier%%%Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save" />
+			</Alternate>
+			<Alternate id="Pyromaniac" replacesName="GnomeIllusion,GnomeMagic" description="Some gnomes just love to play with fire.">
+				<PoolBonus to="miscEffects" value="You are treated as one level higher when casting spells with the fire descriptor or using granted powers of the Fire domain, the bloodline powers of the fire elemental bloodline, and revelations of the oracle's flame mystery, and determining the damage of alchemist bombs that deal fire damage (you do not get early access to level-based powers)" />
+			</Alternate>
+			<Alternate id="Shadow Dodger" replacesName="GnomeIllusion,GnomeDefensiveTraining" description="Some gnomes are particularly resistant to shadowy dangers.">
+				<PoolBonus to="combatEffects" value="+4 dodge bonus to their AC against incorporeal creatures and partially real creatures and objects, such as those created by shadow conjuration, but only if successfully disbelieved" />
+			</Alternate>
+			<Alternate id="Shadow Foe" replacesName="GnomeDefensiveTraining,GnomeHatred" description="Some gnomes focus against creatures of darkness and shadow.">
+				<PoolBonus to="combatEffects" value="+1 bonus on attack rolls and to AC vs humanoids of the dark folk and wayang subtypes, and outsiders native to the Shadow Plane" />
+			</Alternate>
+			<Alternate id="Shadowhunter" replacesName="GnomeWeaponFamiliarity" description="Some gnomes are skilled in dealing with the shadow realms.">
+				<PoolBonus to="combatEffects" value="You deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons" />
+				<PoolBonus to="saveEffects" value="+2 bonus on saving throws to remove negative levels" />
+				<PoolBonus to="miscEffects" value="You recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day)" />
+			</Alternate>
+			<Alternate id="Shadowplay" replacesName="GnomeMagic" description="Some gnomes are skilled in magics of light and darkness.">
+				<PoolBonus to="spellcastingEffects" value="+1 to caster level when casting spells with the darkness, light or shadow descriptor" />
+				<!--also gaining the fetchling's spell-like abilities racial trait-->
+			</Alternate>
+			<Alternate id="Sound Mimicry" replacesName="GnomeWeaponFamiliarity" description="Gnomes sometimes show skill at imitating sounds and voices.">
+				<Bonus to="Bluff" value="+4 racial bonus on Bluff checks to mimic sounds (including accents and speech patterns) you have listened to for at least 10 minutes; listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check" note="situational" />
+			</Alternate>
+			<Alternate id="Stalker" replacesName="GnomeDefensiveTraining,GnomeHatred,GnomeObsessive" description="Some gnomes become obsessed with specific individuals.">
+				<PoolBonus to="miscEffects" value="1/day: You can observe a creature for 10 minutes, then gain a +1 bonus on Bluff, Knowledge, Perception, Sense Motive, and Survival checks against that creature, as well as a +1 bonus on weapon attack and damage rolls against that creature; these bonuses last for 1 day" />
+			</Alternate>
+			<Alternate id="Student of the City" replacesName="GnomeObsessive" description="Gnomes of the city learn all they can from newcomers and tend to make contacts in all quarters.">
+				<Bonus to="Knowledge (local)" value="2" type="racial" />
+				<Bonus to="Knowledge (local)" value="You can use this skill to gather information in place of Diplomacy" note="situational" />
+			</Alternate>
+			<Alternate id="Utilitarian Magic" replacesName="GnomeMagic" description="Some gnomes develop practical magic to assist them with their obsessive projects.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DC of any saving throws against transmutation spells you cast" />
+				<!--if their Intelligence score is 11 or higher, they also gain the following spell-like abilities 1/day—mage hand, open/close, prestidigitation, and unseen servant. The DC for these spells is equal to 10 + the spell's level + the gnome's Intelligence modifier-->
+			</Alternate>
+			<Alternate id="Vivacious" replacesName="GnomeMagic,GnomeKeenSenses" description="Some gnomes heal remarkably fast.">
+				<PoolBonus to="miscEffects" value="You recover 50% more hit points (minimum 1) whenever you recover hit points from rest%%%Whenever you are healed of hit point damage by a spell, you heal an additional amount equal to 1/2 the caster's level (minimum 0); the extra healing does not apply to spells that grant fast healing or similar effects" />
+			</Alternate>
+			<Alternate id="Warden of Nature" replacesName="GnomeDefensiveTraining,GnomeHatred" description="Gnomes often must protect their homes against unnatural or pestilential infestations.">
+				<PoolBonus to="combatEffects" value="You have a +2 dodge bonus to AC against aberrations, oozes, and vermin, and a +1 bonus on attack rolls against them" />
+			</Alternate>
+			<Alternate id="Wright" replacesName="" description="Some gnomes prefer to use their natural talents with mechanisms to drive machines.">
+				<PoolBonus to="skillEffects" value="You have a +2 racial bonus on driving checks%%%You have a +2 racial bonus on Craft checks to build or repair vehicles" />
 			</Alternate>
 		</Bundle>
-<!--
-		Academician Some gnomes are more academically inclined than their kin. Gnomes with this racial trait gain a +2 bonus on any single Knowledge skill. This racial trait replaces the obsessive racial trait.
-		Architectural Ingenuity: Some gnomes demonstrate incredible talent for building and adjusting structures. These gnomes gain a +2 racial bonus on Knowledge (engineering) checks and on Craft and Perception checks related to structures (including structural traps). This racial trait replaces keen senses and obsessive. Source PZO9280
-		Artistic: Gnomes with this racial trait gain a +2 racial bonus on a Perform skill of their choice. This replaces obsessive. PPC:HftF
-		Behind the Veil (1 RP): Characters with this trait gain a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover. Gnomes can take this trait in place of low-light vision. Source PZO9466
-		Blended View (2 RP): Prerequisite(s): low-light vision. Half-drow whose non-drow parent had low-light vision might be blessed with a legacy of versatile senses. Characters with this trait keep their low-light vision but also gain darkvision to a distance of 60 feet. Gnomes can take this trait in place of keen senses. Source PZO9466
-		Bond to the Land Some gnomes have strong ties to specific kinds of terrain, as a holdover from their fey origins. These gnomes gain a +2 dodge bonus to AC when in a specific terrain type selected from the ranger list of favored terrains. This choice is made at character creation, and cannot be changed. This racial trait replaces defensive training and hatred.
-		Charming Diviner: Gnomes with this racial trait treat their caster level as 1 higher for the purposes of divination spells they cast. Additionally, if the gnome has a Wisdom or Charisma score of 11 or higher, she also gains the ability to cast charm animal as a spell-like ability three times per day. The caster level for this effect is equal to the gnome’s level, and the DC for these spells is equal to 10 + the spell’s level + the gnome’s Charisma modifier. This replaces gnome magic. PPC:HftF
-		Darkvision Some gnome strains have lived in the underground depths for so long they have given up on light entirely and gained darkvision with a range of 60 feet. This racial trait replaces low-light vision and keen senses.
-		Dimdweller (2 RP): Whenever characters with this trait benefit from concealment or full concealment due to darkness or dim light, they gain a +2 racial bonus on Intimidate, Perception, and Stealth checks. Gnomes can take this trait in place of weapon familiarity. Source PZO9466
-		Dirty Trickster: All gnomes love pranks, but some specialize in those improvised during battle. These gnomes gain a +2 racial bonus on dirty trick combat maneuvers. They need not meet the Intelligence requirement to select Combat Expertise, Improved Dirty Trick, and any feat with Improved Dirty Trick as a prerequisite. This racial trait replaces defensive training, hatred, and keen senses. Source PZO9280
-		Dusksight (2 RP): When making ranged attacks, characters with this trait can reroll the miss chance granted by cover to any target in dim light, and take the better of the two rolls. The miss chance for total concealment applies normally. Gnomes can take this trait in place of keen senses. Source PZO9466
-		Eternal Hope Gnomes rarely lose hope and are always confident that even hopeless situations will work out. Gnomes with this racial trait receive a +2 racial bonus on saving throws against fear and despair effects. Once per day, after rolling a 1 on a d20, the gnome may reroll and use the second result. This racial trait replaces defensive training and hatred.
-		Explorer Many gnomes are obsessed with seeing as much of the world as possible, rather than perfecting some specific talent or vocation. These gnomes gain a +2 racial bonus on Climb checks and checks for one Knowledge skill of their choice. This racial trait replaces hatred and obsessive.
-		Fairy Catcher: Some gnomes are especially sensitive to the presence of fey and receive a +2 racial bonus on Perception, Sense Motive, and Survival checks against fey, a +2 racial bonus on saving throws against the spells, spell-like abilities, and supernatural abilities of fey (this bonus stacks with the bonus granted by illusion resistance), and a +2 bonus on caster level checks to overcome the spell resistance of fey. The racial trait replaces defensive training, hatred, and keen senses. Source PZO1135
-		Faerie Dragon Magic (2 RP): Some gnomes ally with capricious faerie dragons or share a supernatural kinship with these enigmatic creatures. Gnomes with this trait add 1 to the DCs of saves against the illusion spells they cast. Additionally, a gnome with a Charisma score of 11 or higher can use each of the following spell-like abilities once per day: ghost sound, grease, and silent image. The caster level for these effects is equal to the gnome’s character level. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Charisma modifier. This trait replaces gnome magic. Source PZO9470
-		Fell Magic Gnomes add +1 to the DC of any saving throws against necromancy spells that they cast. Gnomes with Wisdom scores of 11 or higher also gain the following spell-like abilities: 1/day—bleed, chill touch, detect poison, and touch of fatigue. The caster level for these effects is equal to the gnome’s level. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Wisdom modifier. This racial trait replaces gnome magic.
-		Fey Fortitude: Gnomes with this racial trait are infused with a connection to life. They gain a +2 racial bonus on saves to resist death effects. This replaces weapon familiarity. PPC:HftF
-		Fey Magic: Gnomes with this racial trait increase the DC of spells of the compulsion subschool they cast by 1. Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome’s level. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Charisma modifier. This replaces gnome magic, illusion resistance, and obsessive. PPC:HftF
-		Fey Thoughts (1 RP) Select two of the following skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform, Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device. The selected skills are always class skills for the character. This trait replaces racial weapon familiarity. Source PZO9456
-		Fey-Tongued You gain haunted fey aspect and speak with plants instead of dancing lights and speak with animals as spell-like abilities from the gnome magic racial trait. This racial trait alters the gnome magic racial trait. Source PZO9480
-		Gift of Tongues Gnomes love languages and learning about those they meet. Gnomes with this racial trait gain a +1 bonus on Bluff and Diplomacy checks, and they learn one additional language every time they put a rank in the Linguistics skill. This racial trait replaces defensive training and hatred.
-		Inquisitive: Gnomes have a knack for being in places they shouldn’t be. Gnomes with this trait gain a +2 racial bonus on Disable Device and Escape Artist checks. This racial trait replaces keen senses and obsessive. Source PZO1135
-		Intrepid Settler: Some gnomes add to the thrill of living by settling in precarious places. These intrepid gnomes gain a +2 racial bonus on saving throws against fear effects and on Acrobatics, Climb, and Swim checks. This racial trait replaces illusion resistance, keen senses, and obsessive. Source PZO9280
-		Knack with Poison Some gnomes have an instinctive understanding of poisons and their uses. Gnomes gain a +2 racial bonus on Fortitude saves against poison and a +2 bonus on Craft (alchemy) checks to make poison. The bonus on Fortitude saving throws against poisons increases to +4 if the gnome accidentally poisons himself when applying or readying the substance. This racial trait replaces illusion resistance and obsessive.
-		Magical Linguist Gnomes study languages in both their mundane and supernatural manifestations. Gnomes with this racial trait add +1 to the DC of spells they cast with the language-dependent descriptor or those that create glyphs, symbols, or other magical writings. They gain a +2 racial bonus on saving throws against such spells. Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—arcane mark, comprehend languages, message, read magic. The caster level for these effects is equal to the gnome’s level. This racial trait replaces gnome magic and illusion resistance.
-		Master Tinker Gnomes experiment with all manner of mechanical devices. Gnomes with this racial trait gain a +1 bonus on Disable Device and Knowledge (engineering) checks. They are treated as proficient with any weapon they have personally crafted. This racial trait replaces defensive training and hatred.
-		Nature Affinity: Gnomes with this racial trait gain a +2 racial bonus on Fortitude saves against diseases and poisons inflicted by fey, plants, and forest-related hazards. This replaces keen senses. PPC:HftF
-		Nosophobia You gain a +4 bonus on Fortitude saves against disease and poison, including magical diseases. This racial trait replaces obsessive. Source PZO9480
-		Poison Minion (4 RP): Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison (see below). The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters. Any creature that hits such a character with a bite attack is immediately exposed to its poison. The save DC for this poison is equal to 10 + 1/2 the character’s Hit Dice + the character’s Constitution modifier. Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save. Gnomes can take this trait in place of defensive training, gnome magic, and illusion resistance. Source PZO9466
-		Pyromaniac Gnomes with this racial trait are treated as one level higher when casting spells with the fire descriptor, using granted powers of the Fire domain, using the bloodline powers of the fire elemental bloodline or the revelations of the oracle’s flame mystery, and determining the damage of alchemist bombs that deal fire damage (this ability does not give gnomes early access to level-based powers; it only affects the powers they could use without this ability). Gnomes with Charisma scores of 11 or higher also gain the following spell-like abilities: 1/day—dancing lights, flare, prestidigitation, produce flame. The caster level for these effects is equal to the gnome’s level; the DCs are Charisma-based. This racial trait replaces gnome magic and illusion resistance.
-		Shadow Dodger: Gnomes with this trait gain a +4 dodge bonus to their AC against incorporeal creatures and partially real creatures and objects, such as those created by shadow conjuration, but only if successfully disbelieved. This racial trait replaces defensive training and illusion resistance. Source PZO1135
-		Shadow Foe: Gnomes with this trait receive a +1 bonus on attack rolls and to their AC against humanoids of the dark folk and wayang subtypes, and outsiders native to the Shadow Plane. This racial trait replaces defensive training and hatred. Source PZO1135
-		Shadowhunter (2 RP): Characters with this trait deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons. They also gain a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day). Gnomes can take this trait in place of weapon familiarity. Source PZO9466
-		Shadowplay (1 RP): Characters with this trait cast spells with the darkness, light, or shadow descriptor at +1 caster level. Gnomes can take this trait in place of gnome magic. Source PZO9466
-		Sound Mimicry: Gnomes with this racial trait are skilled at imitating sounds and voices. Doing so requires a Bluff check opposed by the listener’s Sense Motive check, and the gnome gains a +4 racial bonus on Bluff checks to mimic sounds (including accents and speech patterns) she has listened to for at least 10 minutes. Listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check. This replaces weapon familiarity. PPC:HftF
-		Stalker: Some gnomes become obsessed with specific individuals. Once per day, such a gnome can observe a creature for 10 minutes. After that, she gains a +1 bonus on Bluff, Knowledge, Perception, Sense Motive, and Survival checks against that creature. She also gains a +1 bonus on weapon attack and damage rolls against that creature. These bonuses last for 1 day. This racial trait replaces defensive training, hatred, and obsessive. Source PZO1135
-		Student of the City: Gnomes of the city learn all they can from newcomers and tend to make contacts in all quarters. They gain a +2 racial bonus on Knowledge (local) checks, and can use that skill to gather information in place of Diplomacy. This racial trait replaces obsessive. PPC:HotS
-		Utilitarian Magic: Some gnomes develop practical magic to assist them with their obsessive projects. These gnomes add 1 to the DC of any saving throws against transmutation spells they cast. If their Intelligence score is 11 or higher, they also gain the following spell-like abilities 1/day—mage hand, open/close, prestidigitation, and unseen servant. The DC for these spells is equal to 10 + the spell’s level + the gnome’s Intelligence modifier. This racial trait replaces gnome magic. Source PZO9280
-		Vivacious: Some gnomes recover 50% more hit points (minimum 1) whenever they recover hit points from rest. Whenever they are healed of hit point damage by a spell, they heal an additional amount equal to 1/2 the spell’s caster level (minimum 0). The extra healing does not apply to spells that grant fast healing or similar effects. This racial trait replaces gnome magic and keen senses. Source PZO9280
-		Warden of Nature Gnomes must often protect their homes against unnatural or pestilential infestations. Gnomes with this racial trait gain a +2 dodge bonus to AC against aberrations, oozes, and vermin, and a +1 bonus on attack rolls against them because of their special training. This racial trait replaces defensive training and hatred.
-		Wright: Some gnomes prefer to use their natural talents with mechanisms to drive machines. These gnomes gain a +2 racial bonus on driving checks and on Craft checks to build or repair vehicles. This racial trait replaces hatred and obsessive. Source PZO9280
--->
-
 
 
 
@@ -1132,12 +1265,10 @@
 				<PoolBonus to="bonusLanguages" value="Dwarven,Elven,Gnome,Goblin" />
 			</Standard>
 			<Standard name="HalflingFearless">
-				<PoolBonus to="saveEffects" value="+2 racial bonus vs fear" />
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs fear (stacks with Halfling Luck)" />
 			</Standard>
 			<Standard name="HalflingLuck">
-				<Bonus to="FortSave" value="1" type="racial" />
-				<Bonus to="ReflSave" value="1" type="racial" />
-				<Bonus to="WillSave" value="1" type="racial" />
+				<PoolBonus to="saveEffects" value="+1 racial bonus on all saving throws (Halfling Luck)" />
 			</Standard>
 			<Standard name="HalflingSureFooted">
 				<Bonus to="Acrobatics" value="2" type="racial" />
@@ -1150,44 +1281,128 @@
 			<Standard name="HalflingSubtype">
 				<PoolBonus to="creatureSubtype" value="halfling" />
 			</Standard>
+			<Alternate id="Adaptable Luck" replacesName="HalflingLuck" description="Some halflings have greater control over their innate luck. This ability gives them more options for how they can apply their good fortune from day to day, but also narrows its scope.">
+				<PoolBonus to="miscEffects" value="3/day: choose to gain a luck bonus on an ability check, attack roll, saving throw, or skill check: if you choose to use the ability before the roll or check, gain a +2 luck bonus; otherwise gain a +1 luck bonus" />
+			</Alternate>
+			<Alternate id="Acquisitive" replacesName="HalflingKeenSenses" description="Some halflings are good at sizing up treaure.">
+				<Bonus to="Appraise" value="2" type="racial" />
+				<Bonus to="Appraise" value="additional +2 (racial bonus) when used to determine the most valuable item visible in a treasure hoard" note="situational" />
+			</Alternate>
+			<Alternate id="Attentive" replacesName="HalflingKeenSenses" description="Some halflings pick up on subtle cues others may miss.">
+				<Bonus to="Sense Motive" value="2" type="racial" />
+				<Bonus to="Sense Motive" value="additional +2 (racial bonus) to notice when someone is enchanted or possessed" note="situational" />
+			</Alternate>
+			<Alternate id="Behind the Veil" replacesName="HalflingWeaponFamiliarity" description="Some halflings trade visual accuity for mental and physical dexterity">
+				<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+				<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			</Alternate>
+			<Alternate id="Blessed" replacesName="HalflingFearless" description="Some halflings can shrug off curses and hexes.">
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs curse effects and hexes (stacks with Halfling Luck)" />
+			</Alternate>
+			<Alternate id="Caretaker" replacesName="HalflingSureFooted,HalflingWeaponFamiliarity,HalflingLuck" description="Humans often entrust halfling families with the care of children and animals, a task that has helped them develop keen insight.">
+				<Bonus to="Sense Motive" value="2" type="racial" />
+				<!-- In addition, when they acquire an animal companion, bonded mount, cohort, or familiar, that creature gains a +2 bonus to one ability score
+						of the character's choice. -->
+			</Alternate>
+			<Alternate id="Craven" replacesName="HalflingFearless,HalflingLuck" description="While most halflings are fearless, some are skittish, making them particularly alert.">
+				<PoolBonus to="saveEffects" value="-2 penalty vs fear effects, and cannot use morale bonuses on such saves" />
+				<PoolBonus to="combatEffects" value="+1 bonus on attack rolls when flanking%%%When affected by a fear effect, you gain a +1 dodge bonus to AC" />
+				<Bonus to="Init" value="1" />
+				<PoolBonus to="speedEffects" value="When affected by a fear effect, your base speed increases by 10 feet" />
+			</Alternate>
+			<Alternate id="Creepy Doll" replacesName="HalflingSureFooted,HalflingKeenSenses" description="Glassy eyes and porcelain skin make some halflings look more like dolls than living creatures.">
+				<Bonus to="Stealth" value="If you cease moving and pretend to be a doll while not being observed, a successful Stealth check still allows other creatures to notice you, but they just believe you're a doll" note="situational" />
+				<Bonus to="Intimidate" value="You take no size penalty on Intimidate checks against larger humanoids" note="situational" />
+			</Alternate>
+			<Alternate id="Danger Detection" replacesName="HalflingKeenSenses" description="Some halflings are constantly on the lookout for danger.">
+				<Bonus to="Perception" value="+4 racial bonus to notice a creature using Stealth, a weapon being drawn, or a hidden trap (or similar signs of danger, subject to the GM's discretion)" note="situational" />
+			</Alternate>
+			<Alternate id="Deep Jungle" replacesName="HalflingSureFooted,HalflingWeaponFamiliarity,HalflingLanguages" description="Some reclusive halfling tribes flourish in tropical locales.">
+				<PoolBonusSelect to="languages" value="Halfling" />
+				<PoolBonus to="weaponProficiencies" value="blowgun" />
+				<Bonus to="Survival" value="2" type="racial" />
+				<PoolBonus to="miscEffects" value="You have the poison use ability (you never risk poisoning yourself accidentally)" />
+			</Alternate>
+			<Alternate id="Dimdweller" replacesName="HalflingWeaponFamiliarity" description="Some halflings spend their lives learning to use the shadows to their benefit.">
+				<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			</Alternate>
+			<Alternate id="Driven Worker" replacesName="HalflingSureFooted" description="Many halfling families have developed techniques to accomplish work faster and more efficiently, whether to contribute to the community or to please overbearing masters.">
+				<BonusChoice to="craft_skills,perform_skills,profession_skills" type="racial" value="4" choices="1" />
+			</Alternate>
+			<Alternate id="Dusksight" replacesName="HalflingKeenSenses" description="Some halflings aim uncannily well in dim light.">
+				<PoolBonus to="combatEffects" value="When using ranged weapons, you can reroll the miss chance granted by cover to any target in dim light and take the better of the two rolls (the miss chance for total concealment applies normally)" />
+			</Alternate>
+			<Alternate id="Evasive Nomad" replacesName="HalflingFearless" description="Some halflings react quickly to danger, especially fear.">
+				<Bonus to="ReflSave" value="2" type="racial" />
+				<PoolBonus to="saveEffects" value="-2 penalty vs fear effects" />
+			</Alternate>
+			<Alternate id="Festive" replacesName="HalflingSureFooted" description="Some halflings are quite festive.">
+				<PoolBonus to="miscEffects" value="1/day: You can grant an ally within 60 feet a +2 luck bonus on one skill check as a free action; this bonus can be applied after the ally's check result is determined" />
+			</Alternate>
+			<Alternate id="Fey Magic" replacesName="HalflingKeenSenses" description="Some halflings have fey ancestry or some other close ties to the fey, manifesting in magical abilities.">
+				<!-- The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
+			</Alternate>
+			<Alternate id="Fey-Quickened" replacesName="HalflingKeenSenses,HalflingFearless" description="Some halflings have fey ancestry or some other close ties to the fey, manifesting in uncanny speed.">
+				<Bonus to="Init" value="2" type="racial" />
+				<!--You gain Run as a bonus feat-->
+			</Alternate>
+			<Alternate id="Fey Thoughts" replacesName="HalflingFearless" description="Some halflings have fey ancestry or some other close ties to the fey, manifesting as innate skills.">
+				<PfCSkillChoice id="Halfling: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+			</Alternate>
+			<Alternate id="Fleet of Foot" replacesName="HalflingSureFooted,HalflingSpeed" description="Some halflings are quicker than their kin but less cautious.">
+				<Bonus to="landSpeed" value="30" />
+			</Alternate>
+			<Alternate id="Halfling Jinx" replacesName="HalflingLuck" description="Some halflings have a dark power they can use to curse others.">
+				<PoolBonus to="combatEffects" value="Jinx: As a standard action, you can target a creature within 30ft, who gets a Will save to resist (DC = 10 + 1/2 your level + your Charisma modifier); if your target makes this saving throw, it is immune to your jinx ability for 24 hours; a jinxed creature takes a –1 penalty on all saving throws, and the jinx lasts for 24 hours or until you attempt to use your jinx again%%%Your jinx is a supernatural ability, is not mind-affecting, does not allow spell resistance, and can affect any kind of creature not immune to luck effects" />
+			</Alternate>
+			<Alternate id="Human Shadow" replacesName="HalflingKeenSenses,HalflingSureFooted" description="Halflings seem to pop up wherever humans are found, in part because they actively support and move with human explorers, settlers, and travelers without drawing attention to themselves.">
+				<Bonus to="Stealth" note="situational" value="+2 racial bonus when within 30ft of a human%%%You can use Stealth to hide behind creatures at least one size category larger than you, without any other source of concealment or cover" />
+				<Bonus to="Sleight of Hand" note="situational" value="+2 racial bonus when within 30ft of a human" />
+			</Alternate>
+			<Alternate id="Ingratiating" replacesName="HalflingKeenSenses,HalflingSureFooted" description="Halflings often survive at the whims of larger, more aggressive races. Because of this, they go out of their way to make themselves more useful, or at least entertaining, to larger folk.">
+				<BonusChoice to="perform_skills" type="racial" value="2" choices="1" />
+				<PfCSkill id="Halfling: Ingratiating" source="racial trait" mark="perform_skills" />
+				<PoolBonus to="skillEffects" value="+2 bonus on Craft and Profession checks" />
+			</Alternate>
+			<Alternate id="Irrepressible" replacesName="HalflingFearless" description="Some halflings possess a fiery spirit that's hard to control.">
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs dominate and possession effects (stacks with Halfling Luck)" />
+			</Alternate>
+			<Alternate id="Joyous Companion" replacesName="HalflingFearless,HalflingWeaponFamiliarity" description="Halflings enjoy the companionship of copper dragons and other lighthearted representatives of dragonkind and learn to share the joyousness of that bond with others.">
+				<PoolBonus to="spellcastingEffects" value="When you cast spells or use spell-like abilities of the abjuration school or with the emotion descriptor, you can confer a +1 morale bonus on saves vs fear on all adjacent allies for a number of rounds equal to the spell's level" />
+			</Alternate>
+			<Alternate id="Low Blow" replacesName="HalflingKeenSenses" description="Some halflings train extensively in the art of attacking larger creatures.">
+				<PoolBonus to="combatEffects" value="+1 bonus on critical confirmation rolls against opponents larger than you" />
+			</Alternate>
+			<Alternate id="Luckbringer" replacesName="HalflingLuck" description="Some halflings learn to share their luck with others much in the way a gold dragon can imbue objects with good fortune.">
+				<PoolBonus to="miscEffects" value="1/day: You can, as a standard action, can confer good luck on a single non-magical token (such as a button or a ring) for one hour; any creature carrying this token during that time gains a +1 luck bonus on Will saves" />
+			</Alternate>
+			<Alternate id="Outrider" replacesName="HalflingSureFooted" description="Some halflings specialize in mounted combat.">
+				<Bonus to="Handle Animal" value="2" />
+				<Bonus to="Ride" value="2" />
+			</Alternate>
+			<Alternate id="Polyglot" replacesName="HalflingKeenSenses,HalflingLanguages" description="Some halflings, especially those who spend a lot of time traveling, develop a talent for learning new languages.">
+				<Bonus to="Linguistics" type="racial" value="2" />
+				<PfCSkill id="Halfling: Polyglot" source="racial trait" mark="Linguistics" />
+				<Bonus to="languagesKnown" value="2" />
+				<PoolBonusSelect to="languages" value="Common,Halfling" />
+				<!--Halflings with this racial trait also begin play with the ability to speak Common, Halfling, and any one other language of their choice-->
+			</Alternate>
+			<Alternate id="Practicality" replacesName="HalflingSureFooted,HalflingFearless" description="Halflings value hard work and common sense.">
+				<BonusChoice to="craft_skills,profession_skills" value="2" choices="1" />
+				<Bonus to="Sense Motive" value="2" />
+				<PoolBonus to="saveEffects" value="+2 bonus vs illusions" />
+			</Alternate>
 			<Alternate id="" replacesName="" description="">
 			</Alternate>
 		</Bundle>
 <!--
-		Adaptable Luck: Some halflings have greater control over their innate luck. This ability gives them more options for how they can apply their good fortune from day to day, but also narrows its scope. Three times per day, a halfling can gain a +2 luck bonus on an ability check, attack roll, saving throw, or skill check. If halflings choose to use the ability before they make the roll or check, they gain the full +2 bonus; if they choose to do so afterward, they only gain a +1 bonus. Using adaptive luck in this way is not an action. This racial trait replaces halfling luck.
-		Acquisitive: Halflings with this trait receive a +2 racial bonus on Appraise checks. This bonus increases to +4 when used to determine the most valuable item visible in a treasure hoard. This racial trait replaces keen senses. Source PZO1135
-		Attentive: Halflings with this trait receive a +2 racial bonus on Sense Motive checks. This bonus increases to +4 to notice when someone is enchanted or possessed. This racial trait replaces keen senses. Source PZO1135
-		Behind the Veil (1 RP): Characters with this trait gain a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover. Halflings can take this trait in place of weapon familiarity. Source PZO9466
-		Blessed: Halflings with this trait receive a +2 racial bonus on saving throws against curse effects and hexes. This bonus stacks with the bonus granted by halfling luck. This racial trait replaces fearless. Source PZO1135
-		Caretaker: Humans often entrust halfling families with the care of children and animals, a task that has helped them develop keen insight. Such halflings gain a +2 racial bonus on Sense Motive checks. In addition, when they acquire an animal companion, bonded mount, cohort, or familiar, that creature gains a +2 bonus to one ability score of the character’s choice. This racial trait replaces halfling luck, sure-footed, and weapon familiarity. Source PZO9280
-		Craven: While most halflings are fearless, some are skittish, making them particularly alert. Halflings with this racial trait gain a +1 bonus on initiative checks and a +1 bonus on attack rolls when flanking. They take a –2 penalty on saves against fear effects and gain no benefit from morale bonuses on such saves. When affected by a fear effect, their base speed increases by 10 feet and they gain a +1 dodge bonus to Armor Class. This racial trait replaces fearless and halfling luck.
-		Creepy Doll: Glassy eyes and porcelain skin make some halflings look more like dolls than living creatures. If they cease moving and pretend to be a doll while they aren’t being observed, they can use the Stealth skill without cover or concealment. A successful Stealth check still allows other creatures to notice the halfling; they just believe the halfling is a doll, similar to the freeze universal monster ability (without being able to take 20). In addition, they take no size penalty on Intimidate checks against larger humanoids. The racial trait replaces keen senses and sure-footed. Source PZO1135
-		Danger Detection: Halflings with this racial trait gain a +4 racial bonus on Perception checks to notice a creature using Stealth, as well as Perception checks to notice a weapon being drawn or a hidden trap (or similar signs of danger, subject to the GM’s discretion). This replaces keen senses. PPC:HftF
-		Deep Jungle: Some reclusive halfling tribes flourish in tropical locales. These halflings begin play speaking only Halfling (in addition to any additional languages gained from having a high Intelligence score), rather than Common and Halfling. They gain a +2 racial bonus on Survival checks and are proficient with blowguns. In addition, they have the poison use ability (they never risk poisoning themselves accidentally). This racial trait alters halflings’ languages and replaces sure-footed and weapon familiarity. Source PZO1135
-		Dimdweller (2 RP): Whenever characters with this trait benefit from concealment or full concealment due to darkness or dim light, they gain a +2 racial bonus on Intimidate, Perception, and Stealth checks. Halflings can take this trait in place of weapon familiarity. Source PZO9466
-		Driven Worker: Many halfling families have developed techniques to accomplish work faster and more efficiently, whether to contribute to the community or to please overbearing masters. These halflings gain a +4 racial bonus on checks with one Craft, Perform, or Profession skill. This racial trait replaces sure-footed. Source PZO9280
-		Dusksight (2 RP): When making ranged attacks, characters with this trait can reroll the miss chance granted by cover to any target in dim light, and take the better of the two rolls. The miss chance for total concealment applies normally. Halflings can take this trait in place of keen senses. Source PZO9466
-		Evasive Nomad: Halflings with this racial trait gain a +2 racial bonus on Reflex saves, but they take a –2 penalty on saving throws against fear effects. This replaces fearless. PPC:HftF
-		Festive: Once per day, a halfling with this racial trait can grant an ally within 60 feet a +2 luck bonus on one skill check as a free action; this bonus can be applied after the ally’s check result is determined. This replaces sure-footed. PPC:HftF
-		Fey Magic (2 RP): The character has a mystic connection to one terrain type, selected from the ranger’s favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user’s character level. The DC for the spell-like abilities is equal to 10 + the spell’s level + the user’s Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid’s resist nature’s lure class feature and similar abilities. This trait replaces keen senses. Source: PZO9456
-		Fey-Quickened You gain Run as a bonus feat and a +2 racial bonus on initiative checks. This racial trait replaces fearless and keen senses. Source PZO9480
-		Fey Thoughts (1 RP): Select two of the following skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform, Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device. The selected skills are always class skills for the character. This trait replaces fearless. Source: PZO9456
-		Fleet of Foot: Some halflings are quicker than their kin but less cautious. Halflings with this racial trait move at normal speed and have a base speed of 30 feet. This racial trait replaces slow speed and sure-footed.
-		Halfling Jinx: Halflings with this racial trait gain the ability to curse another creature with bad luck at will as a standard action. This curse has a range of 30 feet, and you must be able to see the target and have line of effect to it. The target gets a Will saving throw to resist this jinx (DC = 10 + 1/2 your level + your Charisma modifier). If your target makes this saving throw, it is immune to your jinx ability for 24 hours. A jinxed creature takes a –1 penalty on all saving throws. This jinx lasts for 24 hours or until you attempt to use your jinx again. A jinx is a supernatural ability, is not mind-affecting, does not allow spell resistance, and can affect any kind of creature not immune to luck effects. This replaces halfling luck.
-		Human Shadow: Halflings seem to pop up wherever humans are found, in part because they actively support and move with human explorers, settlers, and travelers without drawing attention to themselves. These halflings can use Stealth to hide behind creatures at least one size category larger than themselves, without any other source of concealment or cover. As long as the halflings are within 30 feet of a human, they gain a +2 racial bonus on Sleight of Hand checks and Stealth checks. This racial trait replaces keen senses and sure-footed. Source PZO9280
-		Ingratiating: Halflings often survive at the whims of larger, more aggressive races. Because of this, they go out of their way to make themselves more useful, or at least entertaining, to larger folk. Halflings with this racial trait gain a +2 bonus on skill checks for a single Perform skill of their choice, and Perform is always a class skill for them. They also gain a +2 bonus on Craft and Profession checks. This racial trait replaces keen senses and sure-footed.
-		Irrepressible: Halflings with this trait receive a +2 racial bonus on saving throws against dominate and possession effects. This bonus stacks with the bonus granted by halfling luck. This racial trait replaces fearless. Source PZO1135
-		Joyous Companion (2 RP): Halflings enjoy the companionship of copper dragons and other lighthearted representatives of dragonkind and learn to share the joyousness of that bond with others. When halflings with this trait cast spells or use spell-like abilities of the abjuration school or with the emotion descriptor, they can confer a +1 morale bonus on saves versus fear on all adjacent allies for a number of rounds equal to the spell’s level. This trait replaces fearless and weapon familiarity. Source PZO9470
-		Low Blow: Some halflings train extensively in the art of attacking larger creatures. Halflings with this racial trait gain a +1 bonus on critical confirmation rolls against opponents larger than themselves. This racial trait replaces keen senses.
-		Luckbringer (2 RP): Halflings with this trait learn to share their luck with others much in the way a gold dragon can imbue objects with good fortune. Once per day as a standard action, a halfling with this trait can confer good luck on a single non-magical token (such as a button or a ring). Any creature carrying this token gains a +1 luck bonus on Will saves. This effect lasts for 1 hour. This trait replaces lucky. Source PZO9470
-		Outrider: Some halflings specialize in mounted combat. Halflings with this racial trait gain a +2 bonus on Handle Animal and Ride checks. This racial trait replaces sure-footed.
-		Polyglot: Some halflings, especially those who spend a lot of time traveling, develop a talent for learning new languages. These halflings gain a +2 racial bonus on Linguistics checks, and it is always a class skill for them. Halflings with this racial trait also begin play with the ability to speak Common, Halfling, and any one other language of their choice (except for secret languages, such as Druidic) in addition to bonus languages due to high Intelligence. They still gain the normal list of halfling bonus languages. This racial trait replaces keen senses and alters the halfling language racial trait.
-		Practicality: Halflings value hard work and common sense. Halflings with this racial trait gain a +2 bonus on any one Craft or Profession skill, as well as on Sense Motive checks and saves against illusions. This racial trait replaces fearless and sure-footed.
 		Resourceful: Halflings with this trait do not take any penalties for using improvised weapons. This trait counts as the Catch Off-Guard or Throw Anything feats for the purpose of qualifying for feats. This racial trait replaces sure-footed and weapon familiarity. Source PZO1135
 		Secretive Survivor: Halflings from poor and desperate communities, most often in big cities, must take what they need without getting caught in order to survive. They gain a +2 racial bonus on Bluff and Stealth checks. This racial trait replaces sure-footed. Source PZO9280
 		Shadowhunter (2 RP): Characters with this trait deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons. They also gain a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day). Halflings can take this trait in place of weapon familiarity. Source PZO9466
 		Shadowplay (1 RP): Characters with this trait cast spells with the darkness, light, or shadow descriptor at +1 caster level. Halflings can take this trait in place of weapon familiarity. Source PZO9466
-		Shiftless: Halflings have a reputation for larceny and guile—and sometimes it’s well deserved. Halflings with this racial trait gain a +2 racial bonus on Bluff and Sleight of Hand checks, and Sleight of Hand is always a class skill for them. This racial trait replaces sure-footed.
+		Shiftless: Halflings have a reputation for larceny and guile—and sometimes it's well deserved. Halflings with this racial trait gain a +2 racial bonus on Bluff and Sleight of Hand checks, and Sleight of Hand is always a class skill for them. This racial trait replaces sure-footed.
 		Skulker: Oppressed halflings train from a young age to take advantage of times when their oppressors ignore them. Such halflings gain a +1 racial bonus on attacks against foes who are denied their Dexterity bonus to AC. This racial trait replaces fearless and weapon familiarity. Source PZO9280
 		Small Quarter Ally: A halfling with this racial trait grants herself and all allies of the same size category within 60 feet a +1 luck bonus on saving throws against fear effects. This replaces fearless. PPC:HftF
 		Swift as Shadows: Halflings possess incredible stealth even while moving through obstructed areas. Halflings with this racial trait reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10. This racial trait replaces sure-footed.
@@ -1256,35 +1471,35 @@
 		Dragon Slayer (2 RP): Some half-orcs train to defend their kind against dragons that would take advantage of or enslave them. Half-orcs with this trait gain a +2 dodge bonus to their AC against dragons and a +1 racial bonus on attack rolls against dragons. This trait replaces orc ferocity. Source PZO9470
 		Dusksight (2 RP): When making ranged attacks, characters with this trait can reroll the miss chance granted by cover to any target in dim light, and take the better of the two rolls. The miss chance for total concealment applies normally. Half-orcs can take this trait in place of weapon familiarity, also gaining low-light vision. Source PZO9466
 		Evader: While underground, half-orcs with this racial trait gain a +5 racial bonus on Survival checks to avoid becoming lost and a +1 racial bonus on Stealth checks. This replaces intimidating. PPC:HftF
-		Fey Magic (2 RP): The character has a mystic connection to one terrain type, selected from the ranger’s favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user’s character level. The DC for the spell-like abilities is equal to 10 + the spell’s level + the user’s Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid’s resist nature’s lure class feature and similar abilities. This trait replaces orc ferocity. Source: PZO9456
+		Fey Magic (2 RP): The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. This trait replaces orc ferocity. Source: PZO9456
 		Fey Thoughts (1 RP): Select two of the following skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform, Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device. The selected skills are always class skills for the character. This trait replaces racial weapon familiarity. Source: PZO9456
 		Forest Walker: More at home in the forests and jungles of the world, these half-orcs are well adapted to their surroundings. Half-orcs with this trait have low-light vision and gain a +2 racial bonus on Climb checks. This racial trait replaces darkvision.
 		Gatecrasher: Many half-orcs revel in acts of wanton destruction. Half-orcs with this racial trait gain a +2 racial bonus on Strength checks to break objects and on sunder combat maneuver checks. This racial trait replaces orc ferocity.
-		Hatred: Half-orcs raised among orcs must prove themselves against their people’s enemies. Half-orcs with this racial trait gain a +1 racial bonus on attack rolls against humanoids of the dwarf, elf, and human subtypes because of their special training against these hated foes. This racial trait replaces intimidating and orc ferocity.Source PZO9464
-		Human-Raised: Some half-orcs raised as humans lack their cousins’ ferocity and training in orc weapons, but pick up a bit of their human parents’ skills. They gain the human’s skilled racial trait. This racial trait replaces orc ferocity and weapon familiarity. Source PZO9280
+		Hatred: Half-orcs raised among orcs must prove themselves against their people's enemies. Half-orcs with this racial trait gain a +1 racial bonus on attack rolls against humanoids of the dwarf, elf, and human subtypes because of their special training against these hated foes. This racial trait replaces intimidating and orc ferocity.Source PZO9464
+		Human-Raised: Some half-orcs raised as humans lack their cousins' ferocity and training in orc weapons, but pick up a bit of their human parents' skills. They gain the human's skilled racial trait. This racial trait replaces orc ferocity and weapon familiarity. Source PZO9280
 		Inured: Half-orcs raised by orcs often become desensitized to the violence around them. Half-orcs with this trait gain a +4 bonus on Will saving throws to avoid sanity damage caused by encountering monsters, extreme violence, or death. This racial trait replaces orc ferocity. Source PZO1135
 		Low-Light Vision (1 RP): Feyborn half-orcs gain low-light vision. This trait replaces darkvision. Source: PZO9456
 		Monstrous Sympathy: Some half-orcs know how monsters think. They receive a +2 racial bonus on Bluff, Diplomacy, and Sense Motive checks against evil creatures. This racial trait replaces intimidating and orc ferocity. Source PZO1135
-		Orc Atavism: Some half-orcs have much stronger orc blood than human blood. Such half-orcs count as only half-orcs and orcs (not also humans) for any effect related to race. They gain a +2 bonus to Strength and a –2 penalty to one mental ability score of their choice. Finally, they gain the ferocity universal monster ability. This racial trait replaces the half-orc’s usual racial ability score modifiers, as well as intimidating, orc blood, and orc ferocity. Source PZO9280
-		Overlooked Mastermind: Some half-orcs use half-orcs’ brutish stereotypes to their advantage, causing others to underestimate their intelligence and scheming. Such half-orcs gain a +2 racial bonus on Bluff, Diplomacy, and Sense Motive checks. This bonus increases to +4 against other humanoids. They also receive a +2 racial bonus on Bluff checks to feign ignorance and Sense Motive checks to intercept secret messages, and this stacks with the above bonus. This racial trait replaces intimidating, orc ferocity, and weapon familiarity. Source PZO9280
+		Orc Atavism: Some half-orcs have much stronger orc blood than human blood. Such half-orcs count as only half-orcs and orcs (not also humans) for any effect related to race. They gain a +2 bonus to Strength and a –2 penalty to one mental ability score of their choice. Finally, they gain the ferocity universal monster ability. This racial trait replaces the half-orc's usual racial ability score modifiers, as well as intimidating, orc blood, and orc ferocity. Source PZO9280
+		Overlooked Mastermind: Some half-orcs use half-orcs' brutish stereotypes to their advantage, causing others to underestimate their intelligence and scheming. Such half-orcs gain a +2 racial bonus on Bluff, Diplomacy, and Sense Motive checks. This bonus increases to +4 against other humanoids. They also receive a +2 racial bonus on Bluff checks to feign ignorance and Sense Motive checks to intercept secret messages, and this stacks with the above bonus. This racial trait replaces intimidating, orc ferocity, and weapon familiarity. Source PZO9280
 		Pain Tolerance: Some half-orcs have an increased tolerance for pain. They gain DR 1/— against nonlethal damage and receive a +2 racial bonus on saving throws against spells and spell-like effects with the pain descriptor. This racial trait replaces intimidating and orc ferocity. Source PZO1135
 		Pariah: While many cultures discriminate against half-orcs, in some, particularly dwarven communities, half-orcs are complete social pariahs. It goes without saying that such a culture does not provide outlets for a half-orc to practice with traditional orc weapons. The few half-orcs who survive to adulthood in such harsh social climates are deeply scarred by their abusive treatment and find it hard to express and understand normal emotions. Such half-orcs gain a +2 racial bonus on saving throws against emotion and fear effects and a –2 penalty on Bluff, Diplomacy, and Sense Motive checks. This racial trait replaces weapon familiarity. Source PZO9280
-		Poison Minion (4 RP): Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison (see below). The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters. Any creature that hits such a character with a bite attack is immediately exposed to its poison. The save DC for this poison is equal to 10 + 1/2 the character’s Hit Dice + the character’s Constitution modifier. Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save. Half-orcs can take this trait in place of orc ferocity and weapon familiarity. Source PZO9466
+		Poison Minion (4 RP): Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison (see below). The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters. Any creature that hits such a character with a bite attack is immediately exposed to its poison. The save DC for this poison is equal to 10 + 1/2 the character's Hit Dice + the character's Constitution modifier. Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save. Half-orcs can take this trait in place of orc ferocity and weapon familiarity. Source PZO9466
 		Projection: Some half-orcs channel negative emotions through magic. The DCs of any saving throws against spells with the fear or pain descriptor they cast increase by 1. This racial trait replaces orc ferocity and weapon familiarity. Source PZO1135
 		Rock Climber: Half-orcs from mountainous regions are excellent climbers, and sometimes ambush prey by leaping down from above. Half-orcs with this racial trait gain a +1 racial bonus on Acrobatics and Climb checks. This racial trait replaces the intimidating trait.
 		Sacred Tattoo: Many half-orcs decorate themselves with tattoos, piercings, and ritual scarification, which they consider sacred markings. Half-orcs with this racial trait gain a +1 luck bonus on all saving throws. This racial trait replaces orc ferocity.
 		Scavenger: Some half-orcs eke out a leaving picking over the garbage heaps of society, and must learn to separate rare finds from the inevitable dross. Half-orcs with this racial trait receive a +2 racial bonus on Appraise checks and on Perception checks to find hidden objects (including traps and secret doors), determine whether food is spoiled, or identify a potion by taste. This racial trait replaces the intimidating trait.
 		Sea Raider: Half-orcs frequently take up sailing as pirates, raiders, and fishers, where they are known as tenacious fighters. They gain a +2 racial bonus on Profession (sailor) checks and Craft checks to repair ships, and a +1 racial bonus on damage rolls against foes and objects in or on top of the water. This racial trait replaces darkvision. Source PZO9280
 		Shadowhunter (2 RP): Characters with this trait deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons. They also gain a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day). Half-orcs can take this trait in place of weapon familiarity. Source PZO9466
-		Shadowplay (1 RP): Characters with this trait cast spells with the darkness, light, or shadow descriptor at +1 caster level. Half-orcs can take this trait in place of intimidating, also gaining the gnome’s illusion resistance racial trait. Source PZO9466
+		Shadowplay (1 RP): Characters with this trait cast spells with the darkness, light, or shadow descriptor at +1 caster level. Half-orcs can take this trait in place of intimidating, also gaining the gnome's illusion resistance racial trait. Source PZO9466
 		Shaman Enhancement You gain a +2 racial bonus on Spellcraft checks. In addition, when such a half-orc acquires an animal companion, bonded mount, cohort, familiar, or spirit animal, that creature gains a +2 bonus to Strength, Dexterity, or Constitution, as selected by the half-orc. This racial trait replaces weapon familiarity and intimidating. Source PZO9480
-		Shaman’s Apprentice: Only the most stalwart survive the years of harsh treatment that an apprenticeship to an orc shaman entails. Half-orcs with this trait gain Endurance as a bonus feat. This racial trait replaces the intimidating trait.
+		Shaman's Apprentice: Only the most stalwart survive the years of harsh treatment that an apprenticeship to an orc shaman entails. Half-orcs with this trait gain Endurance as a bonus feat. This racial trait replaces the intimidating trait.
 		Skilled: Second- and third-generation half-orcs often favor their human heritage more than their orc heritage. Half-orcs with this trait gain 1 additional skill rank per level. This racial trait replaces darkvision.
 		Smog Sight: Half-orcs with this racial trait can see double the normal range in dense fog and smoke (including magic effects like obscuring mist) and ignore concealment from smoke or fog for targets within 5 feet. This racial trait replaces darkvision. Source PZO1135
 		Squalid: Some half-orcs exist in surroundings so filthy and pestilent that even orcs would have difficulty living in them. Half-orcs with this racial trait gain a +2 racial bonus on saving throws made to resist nausea, the sickened condition, and disease. This racial trait replaces orc ferocity.
-		Stoic: Some half-orcs learn to suppress their strong emotions. They don’t usually gain morale bonuses, but instead gain a +2 racial bonus on saving throws against emotion and fear effects, and the DC to intimidate them increases by 2. They can choose to gain morale bonuses when they would normally be able to do so, but if they do, they lose the benefits from this racial trait for 24 hours. This racial trait replaces intimidating and orc ferocity. Source PZO1135
+		Stoic: Some half-orcs learn to suppress their strong emotions. They don't usually gain morale bonuses, but instead gain a +2 racial bonus on saving throws against emotion and fear effects, and the DC to intimidate them increases by 2. They can choose to gain morale bonuses when they would normally be able to do so, but if they do, they lose the benefits from this racial trait for 24 hours. This racial trait replaces intimidating and orc ferocity. Source PZO1135
 		Tenacious: City-dwelling half-orcs must often be tenacious to get by. Once per day if a half-orc fails a Fortitude save, Will save, or Constitution check, he can reroll the save or check. The half-orc must take the second result, even if it is worse. This racial trait replaces orc ferocity. PPC:HotS
-		Toothy: Some half-orcs’ tusks are large and sharp, granting a bite attack. This is a primary natural attack that deals 1d4 points of piercing damage. This racial trait replaces orc ferocity.
+		Toothy: Some half-orcs' tusks are large and sharp, granting a bite attack. This is a primary natural attack that deals 1d4 points of piercing damage. This racial trait replaces orc ferocity.
 		Unflinching Valor: half-orcs with this racial trait gain a +2 racial bonus on saving throws against fear effects, and a +1 racial bonus to CMD to avoid being grappled. This replaces intimidating. PPC:HftF
 		Voice in the Darkness (2 RP): Prerequisite(s): Charisma 13+. Characters who practice coercion and intimidation in the Underworld or on the Shadow Plane learn to do so in dim light or no light at all. As long as they are in dim light or darker conditions, characters with this trait gain a +2 bonus on Intimidate and Stealth checks. Half-orcs can take this trait in place of intimidating. Source PZO9466
 		Warded Skin: Half-orcs with this racial trait gain spell resistance against divine magic equal to 6 + their level. Additionally, divine spells cast on them by demon worshipers have a 10% chance of failure. This replaces orc ferocity. PPC:HftF
