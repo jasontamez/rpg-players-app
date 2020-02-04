@@ -108,11 +108,21 @@ PfSpells.prototype.type = PfSpells;
 //   o.removeClassSkillMark("unique_name_of_class_skill_granter")
 //     the final mark given to the skill will determine if it is a class skill (true) or not (false)
 export class PfSkill extends IntBonusable {
-	constructor(id, parent, node) {
-		super(id, parent, node, [["startingValue", 0], ["minValue", 0]]);
+	constructor(id, parent, node, atts = []) {
+		//var siblings = PfSkill.getSkillsBySource(source) || [];
+		super(id, parent, node, [["startingValue", 0], ["minValue", 0], ["source", []]]);
 		this.classSkillMarkings = [];
 		this.rankBonusesLimited = new Map();
 		this.rankBonusesUnlimited = new Map();
+		//siblings.push(this);
+		//PfSkill.sources.set(source, siblings);
+		// If the parent is a multistat, it may have preset class skill [un]markings: process any
+		atts.forEach(function(att) {
+			switch(att) {
+				case "class_skills":
+					att.forEach(this.markClassSkill(...att));
+			}
+		});
 	}
 	get(prop, context = this.defaultContext) {
 		var v;
@@ -146,7 +156,7 @@ export class PfSkill extends IntBonusable {
 				break;
 			default:
 				// Get normal value
-				v = super.get(prop, context);
+				v = this.atts.get(prop, context);
 		}
 		return v;
 	}
@@ -175,19 +185,29 @@ export class PfSkill extends IntBonusable {
 		}
 		return this.atts.set(prop, v);
 	}
+	isClassSkill() {
+		// See if we have more true markings than false
+		var source = [],
+			cs = this.classSkillMarkings.slice(),
+			test = cs.reduce(function(total, v) {
+				if(v[2]) {
+					source.push(v[1]);
+					return total + 1;
+				}
+				return total;
+			}, 0);
+		this.set("source", source);
+		return test > 0;
+	}
 	getModifiedValue(context = this.defaultContext) {
-		// fetch markings and modified value (stepValue is not needed)
-		var cs = this.classSkillMarkings.slice(),
+		// call isClassSkill and fetch value and modified value (stepValue is not needed)
+		var isClassSkill = this.isClassSkill(),
 			amount = super.getModifiedValue(context),
 			v = this.get("value");
 		// check if we have marks and see if raw value (ranks) are at least 1
-		if(cs.length > 0 && v > 0) {
-			// See if we have more true markings than false
-			let test = cs.reduce( (total, v) => total + (v[1] ? 1 : 0), 0);
+		if(v > 0 && isClassSkill) {
 			// If so, add three!
-			if(test > 0) {
-				amount += 3;
-			}
+			amount += 3;
 		}
 		return amount;
 	}
@@ -199,37 +219,72 @@ export class PfSkill extends IntBonusable {
 		var prop = limited ? "L" : "Unl";
 		return this["rankBonuses" + prop + "imited"].delete(title);
 	}
-	markClassSkill(id, tf) {
-		var cs = this.classSkillMarkings;
+	markClassSkill(id, source, tf) {
+		var cs = this.classSkillMarkings,
+			newSources = [];
 		tf = TF.converter(tf);
-		if(cs.every(function(pair, i) {
-			var [n, v] = pair;
+		// Check to see if this ID was used before, and therefore need to be overwritten
+		if(cs.every(function(trio, i) {
+			var [n, s, v] = trio;
+			// Found a match!
 			if(n === id) {
-				cs[i][1] = tf;
+				// Set to new values.
+				cs[i] = [n, source, tf];
+				// Compile new array of sources
+				cs.forEach(function(trio) {
+					if(trio[2]) {
+						newSources.push(trio[1]);
+					}
+				});
+				// Return false, we don't need to search any farther
 				return false;
 			}
+			// Keep searching
 			return true;
 		})) {
-			// Did not find a previously-existing value maching id.
-			cs.push([id, tf]);
+			// Did not find a previously-existing value maching id
+			// Add it
+			cs.push([id, source, tf]);
+			// Get array of sources
+			newSources = this.get("sources");
+			if(tf) {
+				// If this is a new class skill marking, then add its source
+				newSources.push(source);
+			}
 		}
+		// Set (possibly new) array of sources
+		this.set("source", newSources);
 		return cs;
 	}
 	removeClassSkillMark(id) {
 		var cs = this.classSkillMarkings;
-		if(cs.every(function(pair, i) {
-			var [n, v] = pair;
+		// Find id
+		if(cs.every(function(trio, i) {
+			var [n, s, v] = trio;
 			if(n === id) {
+				// Found it
 				let front = cs.slice(0, i),
-					back = cs.slice(i+1);
-				this.classSkillMarkings = front.concat(back);
+					back = cs.slice(i+1),
+					newSources = [];
+				// Store new list of class skill markings, minus this deleted one
+				cs = front.concat(back);
+				this.classSkillMarkings = cs;
+				// Compile new array of sources
+				cs.forEach(function(trio) {
+					if(trio[2]) {
+						newSources.push(trio[1]);
+					}
+				});
+				// Set (possibly new) array of sources
+				this.set("source", newSources);
 				return false;
 			}
 			return true;
 		})) {
-			// Did not find a previously-existing value matching id.
+			// Did not find a previously-existing value matching id
 			return false;
 		}
+		// Found and deleted: return true
 		return true;
 	}
 }
@@ -244,11 +299,14 @@ export function parsePfCSkill(node, parentNode, parentTag) {
 		id = atts.id,
 		mark = atts.mark,
 		unmark = atts.unmark,
+		source = atts.source,
 		value = mark ? true : false;
 	if(id === undefined) {
 		return logError(node, "PFCSKILL: missing required \"id\" parameter");
 	} else if(mark === undefined && unmark === undefined) {
 		return logError(node, "PFCSKILL: missing required \"mark\" or \"unmark\" parameter");
+	} else if(source === undefined) {
+		return logError(node, "PFCSKILL: missing required \"source\" parameter");
 	}
 	skill = BasicIdObject.getById(mark || unmark);
 	if(!(skill instanceof PfSkill)) {
@@ -263,12 +321,17 @@ export function parsePfCSkill(node, parentNode, parentTag) {
 		} else {
 			return logError(node, "PFCSKILL: \"" + (mark || unmark) + "\" is not a Skill object");
 		}
+	} else if (skill instanceof MultiStat) {
+		let cSkill = skill.get("class_skills") || [];
+		cSkill.push([id, source, value]);
+		skill.set("class_skills", cSkill);
+		return null;
 	}
-	skill.markClassSkill(id, value);
+	skill.markClassSkill(id, source, value);
 }
 
 
-// Handling  <BonusPfSkillRank> tags
+// Handling <BonusPfSkillRank> tags
 export function parseBonusPfSkillRank(node, parentNode, parentTag) {
 	//<BonusPfSkillRank to="Sense Motive" fromId="level" />
 	var atts = parseAttributesToObject(node),
@@ -297,7 +360,7 @@ export function parseBonusPfSkillRank(node, parentNode, parentTag) {
 	if(nombre === undefined) {
 		nombre = "Bonus from " + fromID + "." + att;
 	} else {
-		delete atts.id;  
+		delete atts.id;
 	}
 	if(formula !== undefined) {
 		tag = Formula.getName(formula);
