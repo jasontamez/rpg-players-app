@@ -862,15 +862,11 @@ export class Pool extends BasicStat {
 		return selection;
 	}
 }
-Pool.converter = function(value) {
-	var v = [], conv = this.itemType.converter;
+Pool.converter = function(value, convObj = Str) {
 	if(value.constructor !== Array) {
 		value = [value];
 	}
-	value.forEach(function(test) {
-		v.push(conv(test));
-	});
-	return v;
+	return value.map(test => convObj.converter(test));
 };
 Pool.prototype.type = Pool;
 
@@ -1200,6 +1196,12 @@ export class If extends SpecialGrabber {
 	}
 	static NotContains(value, test) {
 		return !String(value).includes(String(test));
+	}
+	static Has(value, test) {
+		return !value.every( item => item !== test );
+	}
+	static DoesNotHave(value, test) {
+		return value.every( item => item !== test );
 	}
 }
 
