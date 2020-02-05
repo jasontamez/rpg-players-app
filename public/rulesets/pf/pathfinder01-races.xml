@@ -944,7 +944,6 @@
 			</Alternate>
 			<Alternate id="Shadowplay" replacesName="DwarfGreed" description="Some dwarves are skilled in magics of light and darkness.">
 				<PoolBonus to="spellcastingEffects" value="+1 to caster level when casting spells with the darkness, light or shadow descriptor" />
-				<!--also gaining the fetchling's spell-like abilities racial trait-->
 			</Alternate>
 			<Alternate id="Siege Survivor" replacesName="DwarfGreed,DwarfHatred,DwarfHardy" description="Dwarves who make their homes in the Sky Citadels are trained to outlast sieges and serve as vigilant guards.">
 				<!--They gain Endurance as a bonus feat.-->
@@ -1212,7 +1211,6 @@
 			</Alternate>
 			<Alternate id="Shadowplay" replacesName="GnomeMagic" description="Some gnomes are skilled in magics of light and darkness.">
 				<PoolBonus to="spellcastingEffects" value="+1 to caster level when casting spells with the darkness, light or shadow descriptor" />
-				<!--also gaining the fetchling's spell-like abilities racial trait-->
 			</Alternate>
 			<Alternate id="Sound Mimicry" replacesName="GnomeWeaponFamiliarity" description="Gnomes sometimes show skill at imitating sounds and voices.">
 				<Bonus to="Bluff" value="+4 racial bonus on Bluff checks to mimic sounds (including accents and speech patterns) you have listened to for at least 10 minutes; listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check" note="situational" />
@@ -1394,25 +1392,67 @@
 				<Bonus to="Sense Motive" value="2" />
 				<PoolBonus to="saveEffects" value="+2 bonus vs illusions" />
 			</Alternate>
-			<Alternate id="" replacesName="" description="">
+			<Alternate id="Resourceful" replacesName="HalflingSureFooted,HalflingWeaponFamiliarity" description="Some halflings can use their environment to their advantage.">
+				<PoolBonus to="combatEffects" value="You do not take penalties for using improvised weapons" />
+				<PoolBonus to="HIDDEN VARIABLES" value="Catch Off-Guard feat prerequisite" />
+				<PoolBonus to="HIDDEN VARIABLES" value="Throw Anything feat prerequisite" />
+			</Alternate>
+			<Alternate id="Secretive Survivor" replacesName="HalflingSureFooted" description="Halflings from poor and desperate communities, most often in big cities, must take what they need without getting caught in order to survive.">
+				<Bonus to="Bluff" type="racial" value="2" />
+				<Bonus to="Stealth" type="racial" value="2" />
+			</Alternate>
+			<Alternate id="Shadowhunter" replacesName="HalflingWeaponFamiliarity" description="Some halflings are skilled in dealing with the shadow realms.">
+				<PoolBonus to="combatEffects" value="You deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons" />
+				<PoolBonus to="saveEffects" value="+2 bonus on saving throws to remove negative levels" />
+				<PoolBonus to="miscEffects" value="You recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day)" />
+			</Alternate>
+			<Alternate id="Shadowplay" replacesName="HalflingWeaponFamiliarity" description="Some halflings are skilled in magics of light and darkness.">
+				<PoolBonus to="spellcastingEffects" value="+1 to caster level when casting spells with the darkness, light or shadow descriptor" />
+			</Alternate>
+			<Alternate id="Shiftless" replacesName="HalflingSureFooted" description="Halflings have a reputation for larceny and guile -- and sometimes it's well deserved.">
+				<Bonus to="Bluff" type="racial" value="2" />
+				<Bonus to="Sleight of Hand" type="racial" value="2" />
+				<PfCSkill id="Halfling: Shiftless" source="racial trait" mark="Sleight of Hand" />
+			</Alternate>
+			<Alternate id="Skulker" replacesName="HalflingWeaponFamiliarity,HalflingFearless" description="Oppressed halflings train from a young age to take advantage of times when their oppressors ignore them.">
+				<PoolBonus to="combatEffects" value="+1 racial bonus on attacks against foes who are denied their Dexterity bonus to AC" />
+			</Alternate>
+			<Alternate id="Small Quarter Ally" replacesName="HalflingFearless" description="Some halflings are born a beacon of hope.">
+				<PoolBonus to="saveEffects" value="+1 luck bonus vs fear effects" />
+				<PoolBonus to="miscEffects" value="Allies within 60ft of you who are the same size category as you gain a +1 luck bonus vs fear effects" />
+			</Alternate>
+			<Alternate id="Swift as Shadows" replacesName="HalflingSureFooted" description="Halflings possess incredible stealth even while moving through obstructed areas.">
+				<Bonus to="Stealth" note="situational" value="You reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10" />
+			</Alternate>
+			<Alternate id="Underfoot" replacesName="HalflingLuck" description="Halflings must train hard to effectively fight bigger opponents.">
+				<PoolBonus to="combatEffects" value="+1 dodge bonus to AC against foes larger than you" />
+				<Bonus to="ReflSave" note="situational" value="+1 bonus vs trample attacks" />
+			</Alternate>
+			<Alternate id="Underfoot Dodger" replacesName="HalflingWeaponFamiliarity,HalflingFearless" description="City-dwelling halflings are adept at handling crowds.">
+				<PoolBonus to="speedEffects" value="You do not treat crowd squares as difficult terrain" />
+				<Bonus to="Acrobatics" note="situational" value="+5 bonus to move through the spaces of larger foes" />
+			</Alternate>
+			<Alternate id="Unfettered" replacesName="HalflingLuck,HalflingKeenSenses" description="Former slips liberated from slavery train to ensure they will never be slaves again.">
+				<Bonus to="Escape Artist" type="racial" value="4" />
+				<PoolBonus to="combatEffects" value="+2 racial bonus to CMD against grapples, and on combat maneuver checks to escape a grapple" />
+				<PoolBonus to="saveEffects" value="+2 racial bonus vs effects that cause the entangled condition" />
+			</Alternate>
+			<Alternate id="Unlucky Halfling" replacesName="HalflingLuck" description="Some halflings buck the trend and aren't very lucky, and are good at spreading their bad luck around.">
+				<Bonus to="WillSave" value="-1" />
+				<Bonus to="ReflSave" value="-1" />
+				<Bonus to="FortSave" value="-1" />
+				<!--In addition, such halflings can use ill omen as a spell-like ability once per day-->-->
+				<PoolBonus to="spellcastingEffects" value="+1 racial bonus to the caster level and save DC of all curse spells and spell-like abilities" />
+			</Alternate>
+			<Alternate id="Wanderlust" replacesName="HalflingLuck,HalflingFearless" description="Halflings love travel and maps.">
+				<Bonus to="Knowledge (geography)" value="2" />
+				<Bonus to="Survival" value="2" />
+				<PoolBonus to="spellcastingEffects" value="You treat your caster level as +1 higher than normal when casting spells or using abilities that provide or enhance movement" />
+			</Alternate>
+			<Alternate id="Warslinger" replacesName="HalflingSureFooted" description="Halflings are experts at the use of the sling.">
+				<PoolBonus to="combatEffects" value="You can reload a sling as a free action (still requires two hands and provokes attacks of opportunity)" />
 			</Alternate>
 		</Bundle>
-<!--
-		Resourceful: Halflings with this trait do not take any penalties for using improvised weapons. This trait counts as the Catch Off-Guard or Throw Anything feats for the purpose of qualifying for feats. This racial trait replaces sure-footed and weapon familiarity. Source PZO1135
-		Secretive Survivor: Halflings from poor and desperate communities, most often in big cities, must take what they need without getting caught in order to survive. They gain a +2 racial bonus on Bluff and Stealth checks. This racial trait replaces sure-footed. Source PZO9280
-		Shadowhunter (2 RP): Characters with this trait deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons. They also gain a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day). Halflings can take this trait in place of weapon familiarity. Source PZO9466
-		Shadowplay (1 RP): Characters with this trait cast spells with the darkness, light, or shadow descriptor at +1 caster level. Halflings can take this trait in place of weapon familiarity. Source PZO9466
-		Shiftless: Halflings have a reputation for larceny and guile—and sometimes it's well deserved. Halflings with this racial trait gain a +2 racial bonus on Bluff and Sleight of Hand checks, and Sleight of Hand is always a class skill for them. This racial trait replaces sure-footed.
-		Skulker: Oppressed halflings train from a young age to take advantage of times when their oppressors ignore them. Such halflings gain a +1 racial bonus on attacks against foes who are denied their Dexterity bonus to AC. This racial trait replaces fearless and weapon familiarity. Source PZO9280
-		Small Quarter Ally: A halfling with this racial trait grants herself and all allies of the same size category within 60 feet a +1 luck bonus on saving throws against fear effects. This replaces fearless. PPC:HftF
-		Swift as Shadows: Halflings possess incredible stealth even while moving through obstructed areas. Halflings with this racial trait reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10. This racial trait replaces sure-footed.
-		Underfoot: Halflings must train hard to effectively fight bigger opponents. Halflings with this racial trait gain a +1 dodge bonus to AC against foes larger than themselves and a +1 bonus on Reflex saving throws to avoid trample attacks. This racial trait replaces halfling luck.
-		Underfoot Dodger: City-dwelling halflings do not treat crowd squares as difficult terrain and they gain a +5 bonus on Acrobatics checks to move through the spaces of larger foes. This racial trait replaces fearless and weapon familiarity. PPC:HotS
-		Unfettered: Former slips liberated from slavery train to ensure they will never be slaves again. They gain a +4 racial bonus on Escape Artist checks and a +2 racial bonus on saving throws against effects that cause the entangled condition, to CMD against grapples, and on combat maneuver checks to escape a grapple. This racial trait replaces halfling luck and keen senses. Source PZO9280
-		Unlucky Halfling: These halflings take a –1 penalty on saving throws but also gain a +1 racial bonus to the caster level and save DC of all curse spells and spell-like abilities. In addition, such halflings can use ill omen as a spell-like ability once per day. This racial trait replaces halfling luck. Source PZO9280
-		Wanderlust: Halflings love travel and maps. Halflings with this racial trait receive a +2 bonus on Knowledge (geography) and Survival checks. When casting spells or using abilities that provide or enhance movement, halflings treat their caster level as +1 higher than normal. This racial trait replaces fearless and halfling luck.
-		Warslinger: Halflings are experts at the use of the sling. Halflings with this racial trait can reload a sling as a free action. Reloading a sling still requires two hands and provokes attacks of opportunity. This racial trait replaces sure-footed.
--->
 
 
 
@@ -1458,7 +1498,7 @@
 <!--
 		Acute Darkvision: Some half-orcs have exceptionally sharp darkvision, gaining darkvision 90 feet. This racial trait replaces orc ferocity. FAQ: Can I select this racial trait if I have a racial trait that replaces darkvision? No. You need to have darkvision as a racial trait in order to select acute darkvision as a racial trait. [Source]
 		Beastmaster: Some half-orcs have a spiritual kinship with fantastical beasts, capturing them for sport or living and hunting with them. A half-orc with this trait treats whips and nets as martial weapons and gains a +2 racial bonus on Handle Animal checks. This racial trait replaces orc ferocity.
-		Behind the Veil (1 RP): Characters with this trait gain a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover. Half-orcs can take this trait in place of intimidating, also gaining the shadow blending fetchling racial trait. Source PZO9466
+		Behind the Veil (1 RP): Characters with this trait gain a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover. Half-orcs can take this trait in place of intimidating, ******also gaining the shadow blending fetchling racial trait. Source PZO9466
 		Bestial: The orc blood of some half-orcs manifests in the form of particularly prominent orc features, exacerbating their bestial appearances but improving their already keen senses. They gain a +2 racial bonus on Perception checks. This racial trait replaces orc ferocity.
 		Burning Assurance: Half-orcs acquire as a result of prejudice, and their self-confidence puts others at ease. Desert half-orcs with this racial trait gain a +2 racial bonus on Diplomacy checks. This replaces intimidating. PPC:HftF
 		Cavewight: Some half-orcs live far below the surface, seeking freedom in winding cave complexes. Half-orcs with this racial trait gain a +1 racial bonus on Knowledge (dungeoneering) and Survival checks made underground. This racial trait replaces the intimidating racial trait.
