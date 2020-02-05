@@ -1491,29 +1491,81 @@
 				<PoolBonus to="weaponProficiencies" value="greataxe,falchion" />
 				<PoolBonus to="weaponMartial" value="TYPEorc" />
 			</Standard>
+			<Standard name="HalfOrcBlood">
+				<PoolBonus to="miscEffects" value="You count as both human and orc for the purposes of effects related to race" />
+			</Standard>
+			<Alternate id="Acute Darkvision" replacesName="HalfOrcFerocity,HalfOrcVision" description="Some half-orcs have exceptionally sharp darkvision.">
+				<Bonus to="darkvision" value="90" />
+			</Alternate>
+			<Alternate id="Beastmaster" replacesName="HalfOrcFerocity" description="Some half-orcs have a spiritual kinship with fantastical beasts, capturing them for sport or living and hunting with them.">
+				<Bonus to="Handle Animal" type="racial" value="2" />
+				<PoolBonus to="weaponMartial" value="whip,net" />
+			</Alternate>
+			<Alternate id="Behind the Veil" replacesName="HalfOrcIntimidating" description="Some half-orcs trade visual accuity for mental and physical dexterity">
+				<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+				<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+				<!--also gaining the shadow blending fetchling racial trait-->
+			</Alternate>
+			<Alternate id="Bestial" replacesName="HalfOrcFerocity" description="The orc blood of some half-orcs manifests in the form of particularly prominent orc features, exacerbating their bestial appearances but improving their already keen senses.">
+				<Bonus to="Perception" type="racial" value="2" />
+			</Alternate>
+			<Alternate id="Burning Assurance" replacesName="HalfOrcIntimidating" description="Some half-orcs lack the chip on their shoulder that many half-orcs acquire as a result of prejudice, and their self-confidence puts others at ease.">
+				<Bonus to="Diplomacy" type="racial" value="2" />
+			</Alternate>
+			<Alternate id="Cavewight" replacesName="HalfOrcIntimidating" description="Some half-orcs live far below the surface, seeking freedom in winding cave complexes.">
+				<Bonus to="Knowledge (dungeoneering)" type="racial" value="1" />
+				<Bonus to="Survival" value="+1 racial bonus to checks made underground" note="situational" />
+			</Alternate>
+			<Alternate id="Chain Fighter" replacesName="HalfOrcWeaponFamiliarity" description="Some half-orcs have escaped from slavery and reforged the chains of their imprisonment into deadly weapons.">
+				<PoolBonus to="weaponProficiencies" value="flail,heavy flail" />
+				<PoolBonus to="weaponMartial" value="dire flail,spiked chain" />
+			</Alternate>
+			<Alternate id="City-Raised" replacesName="HalfOrcWeaponFamiliarity" description="Some half-orcs know little of their orc ancestry, raised among humans and other half-orcs in a large city.">
+				<PoolBonus to="weaponProficiencies" value="whip,longsword" />
+				<Bonus to="Knowledge (local)" type="racial" value="2" />
+			</Alternate>
+			<Alternate id="Cliffside Charger" replacesName="HalfOrcWeaponFamiliarity,HalfOrcFerocity" description="Some half-orcs grow up in rough terrain and learn to navigate it quickly.">
+				<PoolBonus to="speedEffects" value="You can move through natural difficult terrain at your normal speed (magically affected terrain affects you normally)" />
+				<PoolBonus to="combatEffects" value="You gain a +10-foot racial bonus to speed while charging" />
+			</Alternate>
+			<Alternate id="Dimdweller" replacesName="HalfOrcWeaponFamiliarity" description="Some half-orcs spend their lives learning to use the shadows to their benefit.">
+				<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+				<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			</Alternate>
+			<Alternate id="Divided Attention" replacesName="HalfOrcFerocity,HalfOrcIntimidating" description="Half-orcs must learn to divide their attention among multiple threats to stay alive, since both humans and orcs often attempt to put them in their place.">
+				<PoolBonus to="combatEffects" value="+1 dodge bonus to AC vs foes flanking you" />
+			</Alternate>
+			<Alternate id="Dragon Sight" replacesName="HalfOrcIntimidating,HalfOrcVision" description="Some half-orcs also have the blood of dragons in them.">
+				<Bonus to="darkvision" value="120" />
+			</Alternate>
+			<Alternate id="Dragon Slayer" replacesName="HalfOrcFerocity" description="Some half-orcs train to defend their kind against dragons that would take advantage of or enslave them.">
+				<PoolBonus to="combatEffects" value="+2 dodge bonus to AC vs dragons%%%+1 racial bonus on attack rolls vs dragons" />
+			</Alternate>
+			<Alternate id="Dusksight" replacesName="HalfOrcWeaponFamiliarity" description="Some half-orcs aim uncannily well in dim light.">
+				<PoolBonus to="combatEffects" value="When using ranged weapons, you can reroll the miss chance granted by cover to any target in dim light and take the better of the two rolls (the miss chance for total concealment applies normally)" />
+				<Bonus to="lowLightVision" value="1" />
+			</Alternate>
+			<Alternate id="Evader" replacesName="HalfOrcIntimidating" description="Some half-orcs are adept at finding their way underground.">
+				<Bonus to="Survival" note="situational" value="+5 racial bonus to avoid becoming lost underground" />
+				<Bonus to="Stealth" note="situational" value="+1 racial bonus when underground" />
+			</Alternate>
+			<Alternate id="Fey Magic" replacesName="HalfOrcFerocity" description="Some half-orcs have fey ancestry or some other close ties to the fey, manifesting in magical abilities.">
+				<PoolBonus to="spellcastingEffects" value="+1 to the DC of enchantment (compulsion) spells you cast" />
+				<!--Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
+			</Alternate>
+			<Alternate id="Fey Thoughts" replacesName="HalfOrcWeaponFamiliarity" description="Some half-orcs have fey ancestry or some other close ties to the fey, manifesting as innate skills.">
+				<PfCSkillChoice id="Gnome: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
+			</Alternate>
+			<Alternate id="Forest Walker" replacesName="HalfOrcVision" description="More at home in the forests and jungles of the world, some half-orcs are well adapted to those surroundings.">
+				<Bonus to="lowLightVision" value="1" />
+				<Bonus to="Climb" type="racial" value="2" />
+			</Alternate>
 			<Alternate id="" replacesName="" description="">
 			</Alternate>
 		</Bundle>
 	</Bundles>
 <!--
-		Acute Darkvision: Some half-orcs have exceptionally sharp darkvision, gaining darkvision 90 feet. This racial trait replaces orc ferocity. FAQ: Can I select this racial trait if I have a racial trait that replaces darkvision? No. You need to have darkvision as a racial trait in order to select acute darkvision as a racial trait. [Source]
-		Beastmaster: Some half-orcs have a spiritual kinship with fantastical beasts, capturing them for sport or living and hunting with them. A half-orc with this trait treats whips and nets as martial weapons and gains a +2 racial bonus on Handle Animal checks. This racial trait replaces orc ferocity.
-		Behind the Veil (1 RP): Characters with this trait gain a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover. Half-orcs can take this trait in place of intimidating, ******also gaining the shadow blending fetchling racial trait. Source PZO9466
-		Bestial: The orc blood of some half-orcs manifests in the form of particularly prominent orc features, exacerbating their bestial appearances but improving their already keen senses. They gain a +2 racial bonus on Perception checks. This racial trait replaces orc ferocity.
-		Burning Assurance: Half-orcs acquire as a result of prejudice, and their self-confidence puts others at ease. Desert half-orcs with this racial trait gain a +2 racial bonus on Diplomacy checks. This replaces intimidating. PPC:HftF
-		Cavewight: Some half-orcs live far below the surface, seeking freedom in winding cave complexes. Half-orcs with this racial trait gain a +1 racial bonus on Knowledge (dungeoneering) and Survival checks made underground. This racial trait replaces the intimidating racial trait.
-		Chain Fighter: Some half-orcs have escaped from slavery and reforged the chains of their imprisonment into deadly weapons. Half-orcs with this racial trait are proficient with flails and heavy flails, and treat dire flails and spiked chains as martial weapons. This racial trait replaces weapon familiarity.
-		City-Raised: Half-orcs with this trait know little of their orc ancestry and were raised among humans and other half-orcs in a large city. City-raised half-orcs are proficient with whips and longswords, and receive a +2 racial bonus on Knowledge (local) checks. This racial trait replaces weapon familiarity.
-		Cliffside Charger: Half-orcs with this racial trait can move through natural difficult terrain at their normal speed; magically altered terrain affects them normally. In addition, you gain a +10-foot racial bonus to speed while charging. This replaces orc ferocity and weapon familiarity. PPC:HftF
-		Dimdweller (2 RP): Whenever characters with this trait benefit from concealment or full concealment due to darkness or dim light, they gain a +2 racial bonus on Intimidate, Perception, and Stealth checks. Half-orcs can take this trait in place of weapon familiarity. Source PZO9466
-		Divided Attention: Half-orcs must learn to divide their attention among multiple threats to stay alive, since both humans and orcs often attempt to put them in their place. Half-orcs gain a +1 dodge bonus to AC against foes who flank them. This racial trait replaces intimidating and orc ferocity. Source PZO9280
-		Dragon Sight (2 RP): Half-orcs with this trait gain some of the keen senses of dragonkind. They have darkvision with a range of 120 feet. This replaces darkvision and intimidating. Source PZO9470
-		Dragon Slayer (2 RP): Some half-orcs train to defend their kind against dragons that would take advantage of or enslave them. Half-orcs with this trait gain a +2 dodge bonus to their AC against dragons and a +1 racial bonus on attack rolls against dragons. This trait replaces orc ferocity. Source PZO9470
-		Dusksight (2 RP): When making ranged attacks, characters with this trait can reroll the miss chance granted by cover to any target in dim light, and take the better of the two rolls. The miss chance for total concealment applies normally. Half-orcs can take this trait in place of weapon familiarity, also gaining low-light vision. Source PZO9466
-		Evader: While underground, half-orcs with this racial trait gain a +5 racial bonus on Survival checks to avoid becoming lost and a +1 racial bonus on Stealth checks. This replaces intimidating. PPC:HftF
-		Fey Magic (2 RP): The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. This trait replaces orc ferocity. Source: PZO9456
-		Fey Thoughts (1 RP): Select two of the following skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform, Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device. The selected skills are always class skills for the character. This trait replaces racial weapon familiarity. Source: PZO9456
-		Forest Walker: More at home in the forests and jungles of the world, these half-orcs are well adapted to their surroundings. Half-orcs with this trait have low-light vision and gain a +2 racial bonus on Climb checks. This racial trait replaces darkvision.
 		Gatecrasher: Many half-orcs revel in acts of wanton destruction. Half-orcs with this racial trait gain a +2 racial bonus on Strength checks to break objects and on sunder combat maneuver checks. This racial trait replaces orc ferocity.
 		Hatred: Half-orcs raised among orcs must prove themselves against their people's enemies. Half-orcs with this racial trait gain a +1 racial bonus on attack rolls against humanoids of the dwarf, elf, and human subtypes because of their special training against these hated foes. This racial trait replaces intimidating and orc ferocity.Source PZO9464
 		Human-Raised: Some half-orcs raised as humans lack their cousins' ferocity and training in orc weapons, but pick up a bit of their human parents' skills. They gain the human's skilled racial trait. This racial trait replaces orc ferocity and weapon familiarity. Source PZO9280
