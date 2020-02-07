@@ -15,6 +15,9 @@ export class BasicPageObject {
 		this.html = [];
 		BasicPageObject.allIDs.set(id, this);
 	}
+	static getById(id) {
+		return BasicPageObject.allIDs.get(id);
+	}
 }
 BasicPageObject.allIDs = new Map();
 BasicPageObject.handlers = {
@@ -36,6 +39,7 @@ var InformationObject = {
 };
 
 
+// Parse an array of <Page> objects
 export function parsePages(nodelist, sharedObject) {
 	var pages = [];
 	// Add in any additional properties
@@ -57,6 +61,7 @@ export function parsePages(nodelist, sharedObject) {
 }
 
 
+// parse a single <Page> node, returning a BasicPageObject with its data
 export function parsePageNodes(pageNode) {
 	var pageTag, kids,
 		atts = parseAttributesToObject(pageNode),
@@ -150,7 +155,7 @@ export function parseInput(node, filler) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
 		stat = BasicIdObject.getById(id),
-		e;
+		inputObject;
 	if(id === undefined) {
 		logError(node, "INPUT: missing required \"id\" parameter");
 		return null;
@@ -164,13 +169,13 @@ export function parseInput(node, filler) {
 		case IntBonusable:
 		case Num:
 			atts.type = "number";
-			e = stat.get("minValue");
-			if(e !== undefined && e === e) {
-				atts.min = e.toString();
+			inputObject = stat.get("minValue");
+			if(inputObject !== undefined && inputObject === inputObject) {
+				atts.min = inputObject.toString();
 			}
-			e = stat.get("maxValue");
-			if(e !== undefined && e === e) {
-				atts.max = e.toString();
+			inputObject = stat.get("maxValue");
+			if(inputObject !== undefined && inputObject === inputObject) {
+				atts.max = inputObject.toString();
 			}
 			break;
 		case Str:
@@ -181,9 +186,9 @@ export function parseInput(node, filler) {
 			return null;
 	}
 	atts.value = stat.get("value");
-	e = $e("input", atts);
-	e.append(...filler);
-	return e;
+	inputObject = $e("input", atts);
+	inputObject.append(...filler);
+	return inputObject;
 }
 
 
@@ -191,20 +196,20 @@ export function parseButton(node, filler) {
 	//<BUTTON to="page2">Continue</BUTTON>
 	var atts = parseAttributesToObject(node),
 		to = atts.to,
-		e;
+		buttonElement;
 	if(to === undefined) {
 		logError(node, "BUTTON: missing required \"to\" parameter");
 		return null;
 	}
 	delete atts.to;
-	e = $e("button", atts);
+	buttonElement = $e("button", atts);
 	if(filler.length === 0) {
-		e.textContent = "Next";
+		buttonElement.textContent = "Next";
 	} else {
-		e.append(...filler);
+		buttonElement.append(...filler);
 	}
-	e.dataset.loadNext = to;
-	return e;
+	buttonElement.dataset.loadNext = to;
+	return buttonElement;
 }
 
 
@@ -212,12 +217,26 @@ export function parseChoose(node) {
 	//<CHOOSE category="race" />
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		e;
+		bundles = InformationObject.bundles,
+		selectObject;
 	if(cat === undefined) {
 		logError(node, "CHOOSE: missing required \"category\" parameter");
 		return null;
 	}
 	delete atts.category;
-	e = $e("select", atts);
-	return e;
+	selectObject = $e("select", atts);
+	if(bundles) {
+		let info = bundles.get(cat);
+		if(info) {
+			info.forEach(function(optionObj, optionName) {
+				selectObject.append($e("option", { value: optionName }, optionObj.get("title")));
+			});
+		}
+	}
+	return selectObject;
+}
+
+
+export function loadPage(pageName, sharedObject, formInfo) {
+	//maybe not needed
 }
