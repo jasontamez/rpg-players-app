@@ -11,8 +11,8 @@
 	},
 	"dependencies": {
 		"express": "^4.17.1",
-		"fs": "0.0.1-security",
 		"glob": "^7.1.6",
+		"pug": "^2.0.4",
 		"sqlite": "^3.0.3"
 	},
 	"engines": {
