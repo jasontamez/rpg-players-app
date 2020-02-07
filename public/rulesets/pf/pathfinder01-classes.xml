@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RuleSet name="pf" title="Pathfinder" description="Pathfinder Roleplaying Game">
-	<Bundles>
-		<Bundle id="bard" title="Bard">
-		</Bundle>
-		<Bundle id="barbarian" title="Barbarian">
-		</Bundle>
-		<Bundle id="cleric" title="Cleric">
-		</Bundle>
-		<Bundle id="druid" title="Druid">
-		</Bundle>
-		<Bundle id="fighter" title="Fighter">
-		</Bundle>
-		<Bundle id="monk" title="Monk">
-		</Bundle>
-		<Bundle id="paladin" title="Paladin">
-		</Bundle>
-		<Bundle id="ranger" title="Ranger">
-		</Bundle>
-		<Bundle id="rogue" title="Rogue">
-		</Bundle>
-		<Bundle id="unchRogue" title="Unchained Rogue">
-		</Bundle>
-		<Bundle id="sorcerer" title="Sorcerer">
-		</Bundle>
-		<Bundle id="wizard" title="Wizard">
-		</Bundle>
-		<Bundle id="alchemist" title="Alchemist">
-		</Bundle>
-		<Bundle id="cavalier" title="Cavalier">
-		</Bundle>
-		<Bundle id="gunslinger" title="Gunslinger">
-		</Bundle>
-		<Bundle id="inquisitor" title="Inquisitor">
-		</Bundle>
-		<Bundle id="magus" title="Magus">
-		</Bundle>
-		<Bundle id="oracle" title="Oracle">
-		</Bundle>
-		<Bundle id="summoner" title="Summoner">
-		</Bundle>
-		<Bundle id="witch" title="Witch">
-		</Bundle>
-		<Bundle id="samurai" title="Samurai">
-		</Bundle>
-		<Bundle id="hunter" title="Hunter">
-		</Bundle>
-		<Bundle id="warpriest" title="Warpriest">
-		</Bundle>
-		<Bundle id="bloodrager" title="Bloodrager">
-		</Bundle>
-		<Bundle id="shaman" title="Shaman">
-		</Bundle>
-		<Bundle id="skald" title="Skald">
-		</Bundle>
-		<Bundle id="slayer" title="Slayer">
-		</Bundle>
-		<Bundle id="swashbuckler" title="Swashbuckler">
-		</Bundle>
-		<Bundle id="shifter" title="Shifter">
-		</Bundle>
-		<Bundle id="investigator" title="Investigator">
-		</Bundle>
-	</Bundles>
+	<Bundle id="bard" title="Bard">
+	</Bundle>
+	<Bundle id="barbarian" title="Barbarian">
+	</Bundle>
+	<Bundle id="cleric" title="Cleric">
+	</Bundle>
+	<Bundle id="druid" title="Druid">
+	</Bundle>
+	<Bundle id="fighter" title="Fighter">
+	</Bundle>
+	<Bundle id="monk" title="Monk">
+	</Bundle>
+	<Bundle id="paladin" title="Paladin">
+	</Bundle>
+	<Bundle id="ranger" title="Ranger">
+	</Bundle>
+	<Bundle id="rogue" title="Rogue">
+	</Bundle>
+	<Bundle id="unchRogue" title="Unchained Rogue">
+	</Bundle>
+	<Bundle id="sorcerer" title="Sorcerer">
+	</Bundle>
+	<Bundle id="wizard" title="Wizard">
+	</Bundle>
+	<Bundle id="alchemist" title="Alchemist">
+	</Bundle>
+	<Bundle id="cavalier" title="Cavalier">
+	</Bundle>
+	<Bundle id="gunslinger" title="Gunslinger">
+	</Bundle>
+	<Bundle id="inquisitor" title="Inquisitor">
+	</Bundle>
+	<Bundle id="magus" title="Magus">
+	</Bundle>
+	<Bundle id="oracle" title="Oracle">
+	</Bundle>
+	<Bundle id="summoner" title="Summoner">
+	</Bundle>
+	<Bundle id="witch" title="Witch">
+	</Bundle>
+	<Bundle id="samurai" title="Samurai">
+	</Bundle>
+	<Bundle id="hunter" title="Hunter">
+	</Bundle>
+	<Bundle id="warpriest" title="Warpriest">
+	</Bundle>
+	<Bundle id="bloodrager" title="Bloodrager">
+	</Bundle>
+	<Bundle id="shaman" title="Shaman">
+	</Bundle>
+	<Bundle id="skald" title="Skald">
+	</Bundle>
+	<Bundle id="slayer" title="Slayer">
+	</Bundle>
+	<Bundle id="swashbuckler" title="Swashbuckler">
+	</Bundle>
+	<Bundle id="shifter" title="Shifter">
+	</Bundle>
+	<Bundle id="investigator" title="Investigator">
+	</Bundle>
 </RuleSet>
