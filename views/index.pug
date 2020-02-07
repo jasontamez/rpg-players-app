@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title RPG-Players App
+    link(rel='stylesheet' type='text/css' href='/css/reset-beta.css')
+    link(rel='stylesheet' type='text/css' href='/css/tank02.css')
+    link(rel='stylesheet' type='text/css' href='/css/stats01.css')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes')
+    meta(name='theme-color' content='#dcd6da')
+  body
+    h1#mainHeader(class='start') Welcome
+    div#mainGrid(class='start')
+      p Choose a RuleSet:
+        |
+        |
+        select#rules
+          option(value='x' selected) --Choose One--
+          - rulesets.forEach(function(filename, rulesetname) {
+          option(value=filename)= rulesetname
+          - })
+      p
+        button#loadInfo Recurse!
+    #output
+    #loading
+      div Please wait...
+      #loading-message
+    script(src='stats01.js' type='module')
