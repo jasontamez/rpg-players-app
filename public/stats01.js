@@ -1,29 +1,50 @@
-import { $a, $i, $ea as $e } from "./modules/dollar-sign-module.js";
-import { parseAttributesToObject, logErrorNode as logError } from "./modules/parsing-logging.js";
+import { $a, $i, $t, $ea as $e } from "./modules/dollar-sign-module.js";
+import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
-import { parsePages } from "./modules/pages-module01.js";
-const xmlDir = "./rulesets/",
-	modDir = "./modules/";
-var sharedObjects = {
-	formulae: {},
-	stats: {},
-	pages: {}
-};
+import { parsePages, BasicPageObject } from "./modules/pages-module01.js";
+const xmlDir = "rulesets/",
+	modDir = "./modules/",
+	BODY = document.body,
+	MAIN = $i("mainGrid");
+var okToDeload = false,
+	data = new Map(),
+	bundles = new Map(),
+	sharedObjects = {
+		formulae: {},
+		stats: {},
+		pages: {
+			data: data,
+			bundles: bundles
+		}
+	},
+	AJAXstorage = new Map();
 
-//Object.getOwnPropertyNames(stats1).forEach(function(prop) {
-//	stats[prop] = stats1[prop];
-//});
-//Object.getOwnPropertyNames(pages1).forEach(function(prop) {
-//	pages[prop] = pages1[prop];
-//});
-
-//moduleObjects.stats = stats;
-//moduleObjects.pages = pages;
-//moduleObjects.pageTemplates = pageTemplates;
+window.bundles = bundles;
 
 // initialize global variables
-var	AJAXstorage = new Map(),
-	numberWords=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+var	numberWords=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+
+
+// Show the loading screen
+function showLoadingScreen() {
+	BODY.classList.add("loading");
+	okToDeload = false;
+}
+// Remove the loading screen
+function removeLoadingScreen() {
+	if(!okToDeload) {
+		return setTimeout(removeLoadingScreen, 150);
+	}
+	BODY.classList.remove("loading");
+}
+// Modify the loading screen with a message
+function modifyLoadingScreen() {
+	var msg = $i("loading-message");
+	while(msg.firstChild !== null) {
+		msg.firstChild.remove();
+	}
+	msg.append(...arguments);
+}
 
 
 // Add rulesets to the drop-down menu
@@ -37,12 +58,17 @@ async function findRulesets() {
 			r.appendChild(clone);
 		});
 		//console.log(options);
+		modifyLoadingScreen($t("[Done!]"));
+		okToDeload = true;
 	});
 	getter.responseType = "document";
 	getter.open("GET", "/rulesets");
 	getter.send();
 }
-findRulesets();
+//modifyLoadingScreen($t("[loading rulesets]"));
+//findRulesets();
+//removeLoadingScreen();
+
 
 // Call function when ruleset drop-down list is changed
 $i("rules").addEventListener("change", function(e) {
@@ -65,6 +91,7 @@ $i("rules").addEventListener("change", function(e) {
 
 // Load a ruleset.
 $i("loadInfo").addEventListener("click", tryDisplayInfo);
+
 
 // When the button is pressed...
 function tryDisplayInfo(event, x = 0) {
@@ -100,13 +127,13 @@ function tryDisplayInfo(event, x = 0) {
 	}
 
 	// Show "loading" screen
-	document.body.classList.add("loading");
+	showLoadingScreen();
 
 	asyncF = new Promise(function(resolve, reject) {
 		// disable class/race choice and indicate we can recalculate at will
 		$i("rules").disabled = true;
-		button.textContent = "Recalculate!";
-		button.disabled = false;
+		//button.textContent = "Recalculate!";
+		//button.disabled = false;
 		// Run the meat of the program, giving it a pause to wait for the transition to play
 		setTimeout(loadAndAssembleInfo.bind(null, cls), 100);
 		resolve();
@@ -117,9 +144,10 @@ function tryDisplayInfo(event, x = 0) {
 		console.log(error.name + " :: " + error.message + " :: " + error.fileName + "\n" + error.stack);
 		alert(error.name + " :: " + error.message + " :: " + error.fileName + "\n\nPlease inform the webmaster. Or, reload the page and try again.");
 	}).finally(function() {
-		setTimeout(() => document.body.classList.remove("loading"), 250);
+		setTimeout(() => okToDeload = true, 250);
 	});
 }
+
 
 async function loadAndAssembleInfo(cls) {
 	var doc = AJAXstorage.get(cls),
@@ -127,8 +155,10 @@ async function loadAndAssembleInfo(cls) {
 //		ul = $e("ul"),
 		modules = Array.from($a("Modules Module", body)),
 		c = 0,
-		l = modules.length;
-	const main = $i("mainGrid");
+		l = modules.length,
+		nodes,
+		start;
+	modifyLoadingScreen($t("[parsing modules]"));
 	while(c < l) {
 		let node = modules[c];
 		await parseModuleNode(node);
@@ -138,17 +168,61 @@ async function loadAndAssembleInfo(cls) {
 	//console.log(doc);
 	//console.log(body);
 	//console.log("Begin");
+	modifyLoadingScreen($t("[parsing formulae]"));
 	parseFormulae(Array.from($a("Formulae Formula", body)), sharedObjects.formulae);
 	//console.log("Formulas done");
+	modifyLoadingScreen($t("[parsing stats]"));
 	parseStats(Array.from($a("Stats", body)), sharedObjects.stats);
 	//console.log("Stats done");
 	//recurseNodes(body, ul);
 	//main.append(ul);
-	parsePages(Array.from($a("Pages Page", body)), sharedObjects.pages).forEach(function(page) {
-		main.append(...page.html);
+	modifyLoadingScreen($t("[parsing data]"));
+	Array.from($a("Data Datum", body)).forEach(function(n) {
+		var id = n.getAttribute("id"),
+			value = n.getAttribute("value");
+		if(id === undefined || value === undefined) {
+			return logError(n, "DATUM: missing required \"id\" and/or \"value\" parameters");
+		}
+		data.set(id, value);
 	});
+	modifyLoadingScreen($t("[parsing bundles]"));
+	Array.from($a("Bundles Bundle", body)).forEach(function(n) {
+		parseBundle(n);
+	});
+	nodes = Array.from($a("Bundles Category", body));
+	while(nodes.length > 0) {
+		let node = nodes.shift(),
+			atts = parseAttributesToObject(node),
+			category = atts.name,
+			src = atts.src;
+		if(category === undefined) {
+			return logError(node, "BUNDLE CATEGORY: missing required \"name\" parameter");
+		} else if (src === undefined) {
+			node.querySelectorAll("Bundle").forEach( n => parseBundle(n, category) );
+		} else {
+			await parseBundles(src)
+				.then( bundleDoc => Array.from($a("Bundle", bundleDoc)).forEach( n => parseBundle(n, category) ) )
+				.catch(function(err) {
+					logError(node, err.statusText);
+					console.log(err);
+				});
+		}
+	}
+	modifyLoadingScreen($t("[parsing pages]"));
+	parsePages(Array.from($a("Pages Page", body)), sharedObjects.pages);
+	modifyLoadingScreen($t("[loading first page]"));
+	start = data.get("firstPage");
+	if(start === undefined) {
+		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
+		return;
+	}
+	loadPage(BasicPageObject.getById(start));
+	modifyLoadingScreen($t("[Done!]"));
 	//console.log("End");
+	// Remove "loading" screen
+	removeLoadingScreen();
 }
+
 
 //function recurseNodes(parent, parentTag) {
 //	var nodes = [...parent.childNodes];
@@ -163,7 +237,7 @@ async function loadAndAssembleInfo(cls) {
 //			}
 //		} else {
 //			let a = node.attributes, c = 0, atts = [], tag, nombre = node.nodeName, id = "";
-// 			while(c < a.length) {
+//			while(c < a.length) {
 //				let att = a.item(c), n = att.name, v = att.value;
 //				if(n=== "ID") {
 //					id = v;
@@ -171,7 +245,7 @@ async function loadAndAssembleInfo(cls) {
 //					atts.push([a.name, a.value])
 //				}
 //				c++;
-// 			}
+//			}
 //			if(nombre === "Stat") {
 //				tag = new stats.BasicStat(id, parentTag, node, atts);
 //			} else {
@@ -182,6 +256,7 @@ async function loadAndAssembleInfo(cls) {
 //		}
 //	}
 //}
+
 
 async function parseModuleNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
@@ -234,3 +309,73 @@ async function parseModuleNode(modNode) {
 		});
 }
 
+
+function parseBundles(location) {
+	return new Promise(function(resolve, reject) {
+		// Create AJAX fetcher
+		var getter = new XMLHttpRequest();
+		getter.open("GET", xmlDir + location);
+		// Call a parse function when the fetching is done
+		getter.onload = function() {
+			if (this.status >= 200 && this.status < 300) {
+				resolve(getter.responseXML);
+			} else {
+				reject({
+					status: this.status,
+					statusText: getter.statusText
+				});
+			}
+		};
+		getter.send();
+	});
+}
+
+
+function parseBundle(node, category) {
+	var atts = parseAttributesToObject(node),
+		id = atts.id,
+		bundle = new Map(),
+		theseKids = Array.from(node.children),
+		info, item;
+	if(category === undefined) {
+		category = atts.category;
+		delete atts.category;
+	}
+	if(id === undefined || category === undefined) {
+		return logError(node, "BUNDLE: missing required \"id\" and/or \"category\" parameters");
+	}
+	delete atts.id;
+	atts = parseObjectToArray(atts);
+	info = bundles.get(category);
+	if(info !== undefined) {
+		// category found
+		item = info.get(id);
+		if(item !== undefined) {
+			// id found
+			let kids = item.get("kids");
+			item.set("kids", kids.concat(theseKids));
+		} else {
+			// id not found
+			item = new Map();
+			item.set("kids", theseKids);
+		}
+	} else {
+		// category not found
+		item = new Map([["kids", theseKids]]);
+		info = new Map([[id, item]]);
+	}
+	atts.forEach(pair => item.set(pair[0], pair[1]));
+	info.set(id, item);
+	bundles.set(category, info);
+}
+
+
+window.pages = BasicPageObject;
+function loadPage(page, subPage = false) {
+	if(!subPage) {
+		while(MAIN.firstChild !== null) {
+			MAIN.firstChild.remove();
+		}
+	}
+	MAIN.append(...page.html);
+}
