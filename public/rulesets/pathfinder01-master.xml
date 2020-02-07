@@ -194,15 +194,15 @@
 		</Group>
 		<Stat id="BAB" type="IntBonusable" title="Base Attack Bonus" startingValue="0">
 			<Attribute name="full_attack_text">
-				<While inType="Int" outType="Str">
-					<Until operation="AND">
+				<Do inType="Int" outType="Str">
+					<While operation="AND">
 						<GreaterThan value="5" />
-					</Until>
+					</While>
 					<Input fromId="this" attribute="value" />
 					<Output fromId="this" attribute="modifier_text" />
 					<ModifyInput add="-5" />
 					<ModifyOutput add="/+" useInput="add" />
-				</While>
+				</Do>
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" formula="convert_modified_value_to_string" />
 		</Stat>
@@ -290,10 +290,12 @@
 		<Stat id="ColdResist" title="Cold Resistance" type="IntBonusable" startingValue="0" />
 		<Stat id="ElecResist" title="Electricity Resistance" type="IntBonusable" startingValue="0" />
 		<Stat id="FireResist" title="Fire Resistance" type="IntBonusable" startingValue="0" />
+		<Stat id="LeadershipScore" title="Leadership Score" type="IntBonusable" startingValue="0" />
 		<Group id="string_pools" type="Str" separator=",">
 			<Pool id="languages" title="Languages" fromCategory="languages" value="Common,Elven,Dwarven,Gnomish,Halfling,Celestial,Infernal,Abyssal,Draconic,Sylvan,Aquan,Terran,Ignan,Auran,Undercommon,Gnoll,Goblin,Giant,Orc,Aboleth,Aklo,Boggard,Cyclops,Dark Folk,D'ziriak,Drow Sign Language,Grippli,Necril,Protean,Sphinx,Tengu,Treant,Vegepygmy,Read Lips">
 				<Attribute name="maxSelectable" type="Int" fromId="languagesKnown" />
 			</Pool>
+			<Pool id="DR" title="Damage Resistance" />
 			<Pool id="bonusLanguages" title="Bonus Language Choices" />
 			<Pool id="creatureSubtypes" title="Creature Subtypes" />
 			<Pool id="weaponProficiencies" title="Weapon Proficiencies" />
@@ -308,6 +310,7 @@
 			<Pool id="combatEffects" title="Combat Effects" />
 			<Pool id="spellcastingEffects" title="Spellcasting Effects" />
 			<Pool id="speedEffects" title="Movement Effects" />
+			<Pool id="senseEffects" title="Sense Effects" />
 			<Pool id="miscEffects" title="Skill Effects" />
 		</Group>
 		<Stat id="spellLikeAbilities" type="PfSpells" title="Spell-Like Abilities" />
@@ -315,8 +318,8 @@
 		<Stat id="concentrationCheckBase" type="IntBonusable" startingValue="0" />
 	</Stats>
 	<Bundles>
-		<Bundle category="race" src="pf/pathfinder01-races.xml" />
-		<Bundle category="class" src="pf/pathfinder01-classes.xml" />
+		<Category name="race" src="pf/pathfinder01-races.xml" />
+		<Category name="class" src="pf/pathfinder01-classes.xml" />
 	</Bundles>
 	<Choices>
 		<Group category="race">
@@ -332,8 +335,8 @@
 		</Group>
 	</Choices>
 	<Pages>
-		<Page id="BEGIN" class="flex-vertical"> <!-- should this be a template? -->
-			<Block>
+		<Page id="BEGIN"> <!-- should this be a template? -->
+			<div class="flex-vertical">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
 					<li>Stats:<ul>
@@ -347,7 +350,7 @@
 					<li><label>Choose a race: <CHOOSE category="race" /></label></li>
 				</ol>
 				<BUTTON to="page2">Continue</BUTTON>
-			</Block>
+			</div>
 		</Page>
 		<Page id="page2" class="flex-vertical">
 			<Block template="PfRacialTraits" contents="append"> <!-- how are values transmitted from page to page? -->
@@ -381,4 +384,7 @@
 			<BUTTON to="page7">Continue</BUTTON>
 		</Page>
 	</Pages>
+	<Data>
+		<Datum id="firstPage" value="BEGIN" />
+	</Data>
 </RuleSet>
