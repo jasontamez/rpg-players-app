@@ -1206,13 +1206,13 @@ export class If extends SpecialGrabber {
 }
 
 
-// Stat that contains an while/until loop construction
-//   o = While.constructWhile(parentTag || undefined, xmlNode)
-// Creating an If without a well-formed XML <While> node is not recommended.
+// Stat that contains an do/while loop construction
+//   o = Do.constructDo(parentTag || undefined, xmlNode)
+// Creating an If without a well-formed XML <Do> node is not recommended.
 //
-//   o.grabValue(context) => the result of the while/until loop
+//   o.grabValue(context) => the result of the do/while loop
 //      NOTE that context is mandatory
-export class While extends SpecialGrabber {
+export class Do extends SpecialGrabber {
 	constructor(parent, node, atts, intype, outtype, input, output) {
 		super(parent, node, atts);
 		this.inType = intype;
@@ -1222,9 +1222,9 @@ export class While extends SpecialGrabber {
 		this.modInput = [];
 		this.modOutput = [];
 		this.operation = "AND";
-		this.until = [];
+		this.whiile = [];
 	}
-	static constructWhile(parent, node) {
+	static constructDo(parent, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
 			outtype = InformationObject.getTypeObject(atts.outType || parent.get("outType") || parent.get("type"), Str),
@@ -1232,13 +1232,13 @@ export class While extends SpecialGrabber {
 			output = atts.output,
 			modIn = $a("ModifyInput", node),
 			modOut = $a("ModifyOutput", node),
-			until = $q("Until", node),
+			whiile = $q("While", node),
 			inconv, outconv, tag, temp;
 		if(modIn === null) {
 			return logError(node, "WHILE: Missing required ModifyInput tag");
 		} else if(modOut === null) {
 			return logError(node, "WHILE: Missing required ModifyOutput tag");
-		} else if(until === null) {
+		} else if(whiile === null) {
 			return logError(node, "WHILE: Missing required ModifyOutput tag");
 		}
 		// Find intype
@@ -1257,8 +1257,8 @@ export class While extends SpecialGrabber {
 			delete atts.outType;
 		}
 		outconv = outtype.converter;
-		// Create While tag
-		tag = new While(parent, node, [], intype, outtype);
+		// Create Do tag
+		tag = new Do(parent, node, [], intype, outtype);
 		// Check Input
 		if(input !== undefined) {
 			input = intype.converter(input);
@@ -1369,11 +1369,11 @@ export class While extends SpecialGrabber {
 				temp.push([Equation.Round, null]);
 			}
 			if(a.useInput) {
-				temp.push([While.ModOutWithIn, a.useInput]);
+				temp.push([Do.ModOutWithIn, a.useInput]);
 			}
 		});
 		tag.modifyOutput = temp;
-		temp = parseAttributesToObject(until);
+		temp = parseAttributesToObject(whiile);
 		if(temp.operation) {
 			let op = "AND";
 			if (temp.operation === "OR") {
@@ -1385,7 +1385,7 @@ export class While extends SpecialGrabber {
 		} else {
 			tag.operation = "AND";
 		}
-		if(![...until.children].every(function(item) {
+		if(![...whiile.children].every(function(item) {
 			var nombre = item.nodeName,
 				amount = null,
 				grabValueFlag = false;
@@ -1410,12 +1410,12 @@ export class While extends SpecialGrabber {
 				// Set the amount to the text content of the element
 				amount = inconv(node.textContent);
 			}
-			tag.until.push([nombre, grabValueFlag, amount]);
+			tag.whiile.push([nombre, grabValueFlag, amount]);
 			return true;
 		})) {
-			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its Until tag.");
-		} else if (tag.until.length === 0) {
-			return logError(node, "WHILE: tag has no valid comparison tags inside its Until tag.");
+			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its While tag.");
+		} else if (tag.whiile.length === 0) {
+			return logError(node, "WHILE: tag has no valid comparison tags inside its While tag.");
 		}
 		return tag;
 	}
@@ -1425,7 +1425,7 @@ export class While extends SpecialGrabber {
 			output = this.output,
 			modIn = this.modifyInput,
 			modOut = this.modifyOutput,
-			until = this.until,
+			whiile = this.whiile,
 			operation = this.operation,
 			mi = [],
 			mo = [],
@@ -1453,13 +1453,13 @@ export class While extends SpecialGrabber {
 			mo.push([func, value]);
 		});
 		modOut = mo;
-		check = While.doUntil(input, inconv, until, operation, context);
+		check = Do.doWhile(input, inconv, whiile, operation, context);
 		while(check) {
 			modIn.forEach(function(mod) {
 				var [func, value] = mod;
 				input = func(input, value);
 			});
-			check = While.doUntil(input, inconv, until, operation, context);
+			check = Do.doWhile(input, inconv, whiile, operation, context);
 			if(check) {
 				modOut.forEach(function(mod) {
 					var [func, value] = mod;
@@ -1469,9 +1469,9 @@ export class While extends SpecialGrabber {
 		}
 		return output;
 	}
-	static doUntil(input, inconv, until, operation, context) {
+	static doWhile(input, inconv, whiile, operation, context) {
 		var results = [], retVal = false;
-		until.forEach(function(condition) {
+		whiile.forEach(function(condition) {
 			var [nombre, flag, value] = condition;
 			if(flag) {
 				value = inconv(value.grabValue(context));
@@ -1687,9 +1687,9 @@ export function parseIf(node, parentNode, parentTag) {
 //parseStatNodes(currentNode, currentTag, ancestry, ancestorAtts)
 
 
-export function parseWhile(node, parentNode, parentTag) {
-	var awhile = While.constructWhile(parentTag, node);
-	parentTag.set("value", awhile);
+export function parseDo(node, parentNode, parentTag) {
+	var doWhile = Do.constructDo(parentTag, node);
+	parentTag.set("value", doWhile);
 }
 
 export function parseGroup(node, parentNode, parentTag) {
@@ -1839,7 +1839,7 @@ InformationObject.StatTagHandlers = {
 	MultiStat: parseMultiStat,
 	Math: parseMath,
 	If: parseIf,
-	While: parseWhile,
+	Do: parseDo,
 	Bonus: parseBonus,
 	Pool: parsePool,
 	Item: parsePoolItem
