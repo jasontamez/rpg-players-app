@@ -53,3 +53,48 @@ export function parseObjectToArray(o) {
 	Object.getOwnPropertyNames(o).forEach(nombre => atts.push([nombre, o[nombre]]));
 	return atts;
 }
+
+
+// Checks an object for the specified properties (!== undefined)
+// Returns array of unfound atts
+// Return first unfound att (not in array) if anyFailure is provided and true
+// Logs error unless errorHeader is false
+export function checkObjProps(node, obj, props, errorHeader, anyFailure = false) {
+	var bad1, bad2 = [];
+	if(anyFailure) {
+		props.every(function(test) {
+			if(obj[test] === undefined) {
+				bad1 = prop;
+				return false;
+			}
+			return true;
+		});
+	} else {
+		props.forEach(function(test) {
+			if(obj[test] === undefined) {
+				bad2.push(test);
+			}
+		});
+	}
+	if(bad1 === undefined && bad2.length === 0) {
+		return bad2;
+	} else if (errorHeader) {
+		let msg = "";
+		if(bad1) {
+			msg = " \"" + bad1 + "\"";
+		} else {
+			let e = bad2.pop();
+			if(bad2.length > 0) {
+				msg += "s";
+			}
+			msg += " \"" + bad2.join("\", \"") + "\" and \"" + e + "\"";
+		}
+		// Set node to a falsy value to use text-only error handling
+		if(node) {
+			logError(node, errorHeader + ": missing required parameter" + msg);
+		} else {
+			logErrorText(errorHeader + ": missing required parameter" + msg);
+		}
+	}
+	return bad1 || bad2;
+}
