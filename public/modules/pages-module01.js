@@ -251,6 +251,7 @@ export function loadPageNamed(pageName, subPage, sharedObject) {
 
 
 export function loadPage(page, subPage) {
+	var MAIN = InformationObject.MAIN;
 	// If we're not a subpage, clear out all previous info on-screen
 	if(!subPage) {
 		while(MAIN.firstChild !== null) {

@@ -64,7 +64,7 @@ export function checkObjProps(node, obj, props, errorHeader, anyFailure = false)
 	if(anyFailure) {
 		props.every(function(test) {
 			if(obj[test] === undefined) {
-				bad1 = prop;
+				bad1 = test;
 				return false;
 			}
 			return true;
@@ -91,7 +91,7 @@ export function checkObjProps(node, obj, props, errorHeader, anyFailure = false)
 		}
 		// Set node to a falsy value to use text-only error handling
 		if(node) {
-			logError(node, errorHeader + ": missing required parameter" + msg);
+			logErrorNode(node, errorHeader + ": missing required parameter" + msg);
 		} else {
 			logErrorText(errorHeader + ": missing required parameter" + msg);
 		}
