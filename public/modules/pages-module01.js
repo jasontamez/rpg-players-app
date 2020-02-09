@@ -1,5 +1,5 @@
-import { $t, $ea as $e } from "./dollar-sign-module.js";
-import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./parsing-logging.js";
+import { $t, $ea as $e, $listen } from "./dollar-sign-module.js";
+import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError } from "./parsing-logging.js";
 import { BasicIdObject, Int, Str, IntBonusable, Num } from "./stats-module01.js";
 
 
@@ -35,6 +35,22 @@ var InformationObject = {
 		INPUT: parseInput,
 		CHOOSE: parseChoose,
 		BUTTON: parseButton	
+	},
+	buttonTypes: {
+		navigation: function(node, atts, filler) {
+			var buttonElement = checkObjProps(node, atts, ["to"], "BUTTON, navigation");
+			if(!buttonElement) {
+				if(filler.length === 0) {
+					buttonElement = $e("button", atts);
+					buttonElement.textContent = "Next";
+				} else {
+					buttonElement.append(...filler);
+				}
+				buttonElement.dataset.loadNext = atts.to;
+				$listen(buttonElement, loadPage);
+			}
+			return buttonElement;
+		}
 	}
 };
 
@@ -43,6 +59,14 @@ var InformationObject = {
 export function parsePages(nodelist, sharedObject) {
 	var pages = [];
 	// Add in any additional properties
+	populateInformation(sharedObject);
+	// Parse nodes
+	nodelist.forEach( node => pages.push(parsePageNodes(node)) );
+	return pages;
+}
+
+
+function populateInformation(sharedObject) {
 	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
 		if(InformationObject[prop] === undefined) {
 			// New property.
@@ -55,9 +79,6 @@ export function parsePages(nodelist, sharedObject) {
 			});
 		}
 	});
-	// Parse nodes
-	nodelist.forEach( node => pages.push(parsePageNodes(node)) );
-	return pages;
 }
 
 
@@ -65,8 +86,7 @@ export function parsePages(nodelist, sharedObject) {
 export function parsePageNodes(pageNode) {
 	var pageTag, kids,
 		atts = parseAttributesToObject(pageNode),
-		id = atts.id,
-		html = [];
+		id = atts.id;
 	if(id === undefined) {
 		logError(pageNode, "PAGE: missing required parameter \"id\"");
 		return null;
@@ -193,23 +213,19 @@ export function parseInput(node, filler) {
 
 
 export function parseButton(node, filler) {
-	//<BUTTON to="page2">Continue</BUTTON>
+	//<BUTTON type="nav" to="page2">Continue</BUTTON>
 	var atts = parseAttributesToObject(node),
-		to = atts.to,
-		buttonElement;
-	if(to === undefined) {
-		logError(node, "BUTTON: missing required \"to\" parameter");
+		type = atts.type,
+		buttonType = InformationObject.buttonTypes[type];
+	if(type === undefined) {
+		logError(node, "BUTTON: missing required \"type\" parameter");
+		return null;
+	} else if (buttonType === undefined) {
+		logError(node, "BUTTON: type \"" + type + "\" is invalid");
 		return null;
 	}
-	delete atts.to;
-	buttonElement = $e("button", atts);
-	if(filler.length === 0) {
-		buttonElement.textContent = "Next";
-	} else {
-		buttonElement.append(...filler);
-	}
-	buttonElement.dataset.loadNext = to;
-	return buttonElement;
+	delete atts.type;
+	return buttonType(node, atts, filler);
 }
 
 
@@ -237,6 +253,22 @@ export function parseChoose(node) {
 }
 
 
-export function loadPage(pageName, sharedObject, formInfo) {
-	//maybe not needed
+// loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
+export function loadPageNamed(pageName, subPage, sharedObject) {
+	var MAIN, page;
+	sharedObject && populateInformation(sharedObject);
+	MAIN = InformationObject.MAIN;
+	page = BasicPageObject.getById(pageName);
+	loadPage(page, subPage);
+}
+
+
+export function loadPage(page, subPage) {
+	// If we're not a subpage, clear out all previous info on-screen
+	if(!subPage) {
+		while(MAIN.firstChild !== null) {
+			MAIN.firstChild.remove();
+		}
+	}
+	MAIN.append(...page.html);
 }

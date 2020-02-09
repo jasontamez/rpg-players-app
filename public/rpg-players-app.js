@@ -1,7 +1,7 @@
-import { $a, $i, $t, $ea as $e } from "./modules/dollar-sign-module.js";
+import { $a, $i, $t, $ea as $e, $listen } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
-import { parsePages, BasicPageObject } from "./modules/pages-module01.js";
+import { parsePages, BasicPageObject, loadPageNamed } from "./modules/pages-module01.js";
 const xmlDir = "rulesets/",
 	modDir = "./modules/",
 	BODY = document.body,
@@ -14,7 +14,8 @@ var okToDeload = false,
 		stats: {},
 		pages: {
 			data: data,
-			bundles: bundles
+			bundles: bundles,
+			MAIN: MAIN
 		}
 	},
 	AJAXstorage = new Map();
@@ -90,7 +91,7 @@ $i("rules").addEventListener("change", function(e) {
 
 
 // Load a ruleset.
-$i("loadInfo").addEventListener("click", tryDisplayInfo);
+$listen($("loadInfo"), tryDisplayInfo);
 
 
 // When the button is pressed...
@@ -216,7 +217,7 @@ async function loadAndAssembleInfo(cls) {
 		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
 		return;
 	}
-	loadPage(BasicPageObject.getById(start));
+	loadPageNamed(start, false, sharedObjects.pages);
 	modifyLoadingScreen($t("[Done!]"));
 	//console.log("End");
 	// Remove "loading" screen
@@ -371,11 +372,4 @@ function parseBundle(node, category) {
 
 
 window.pages = BasicPageObject;
-function loadPage(page, subPage = false) {
-	if(!subPage) {
-		while(MAIN.firstChild !== null) {
-			MAIN.firstChild.remove();
-		}
-	}
-	MAIN.append(...page.html);
-}
+
