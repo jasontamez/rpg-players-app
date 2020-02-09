@@ -51,3 +51,8 @@ export function $e(tag, text="") {
 export function $t(text) {
 	return document.createTextNode(text);
 }
+// add event listeners - click and enter
+export function listen(element, func) {
+	element.addEventListener("click", func);
+	element.addEventListener("keydown", ev => ev.keyCode === 13 && func());
+}
