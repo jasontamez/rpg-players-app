@@ -336,7 +336,7 @@
 	</Choices>
 	<Pages>
 		<Page id="BEGIN"> <!-- should this be a template? -->
-			<div class="flex-vertical">
+			<Block class="flex-vertical">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
 					<li>Stats:<ul>
@@ -349,12 +349,12 @@
 					</ul></li>
 					<li><label>Choose a race: <CHOOSE category="race" /></label></li>
 				</ol>
-				<BUTTON to="page2">Continue</BUTTON>
-			</div>
+				<BUTTON type="navigation" to="page2">Continue</BUTTON>
+			</Block>
 		</Page>
 		<Page id="page2" class="flex-vertical">
 			<Block template="PfRacialTraits" contents="append"> <!-- how are values transmitted from page to page? -->
-				<BUTTON to="page3">Continue</BUTTON>
+				<BUTTON type="navigation" to="page3">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page3" class="flex-vertical">
@@ -363,17 +363,17 @@
 				<ol start="4">
 					<li><label>Choose a class: <CHOOSE category="classes" /></label></li>
 				</ol>
-				<BUTTON to="page4">Continue</BUTTON>
+				<BUTTON type="navigation" to="page4">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page4" class="flex-vertical">
 			<Block template="PfClassArchetypes" contents="append">
-				<BUTTON to="page5">Continue</BUTTON>
+				<BUTTON type="navigation" to="page5">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page5" class="flex-vertical">
 			<Block template="PfClassChoices" contents="append">
-				<BUTTON to="page6">Continue</BUTTON>
+				<BUTTON type="navigation" to="page6">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page6" class="flex-vertical">
@@ -381,7 +381,7 @@
 				<li>Skill Ranks</li>
 			</ol>
 			<Block template="PfSkillsAdjust" />
-			<BUTTON to="page7">Continue</BUTTON>
+			<BUTTON type="navigation" to="page7">Continue</BUTTON>
 		</Page>
 	</Pages>
 	<Data>

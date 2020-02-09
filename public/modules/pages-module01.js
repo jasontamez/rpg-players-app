@@ -137,14 +137,6 @@ export function recursePageNodes(node) {
 }
 
 
-//
-//
-// Can't "return filler" if it's an array, now
-//
-//
-//
-
-
 export function parseBlock(node, filler) {
 	var atts = parseAttributesToObject(node),
 		temp = atts.template,
@@ -152,11 +144,9 @@ export function parseBlock(node, filler) {
 		format;
 	if(temp === undefined) {
 		// Assume this is a plain <div>.
-		let div = $e("div");
+		let div = $e("div", atts);
 		div.append(...filler);
 		return div;
-		//return "<div>" + filler + "</div>";
-//	} else if ((format = PageTemplate.find(temp)) === undefined) {
 	} else if ((format = InformationObject.pageTemplates[temp]) === undefined) {
 		logError(node, "BLOCK: template \"" + temp + "\" is not defined");
 		return null;
@@ -255,11 +245,8 @@ export function parseChoose(node) {
 
 // loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
 export function loadPageNamed(pageName, subPage, sharedObject) {
-	var MAIN, page;
 	sharedObject && populateInformation(sharedObject);
-	MAIN = InformationObject.MAIN;
-	page = BasicPageObject.getById(pageName);
-	loadPage(page, subPage);
+	loadPage(BasicPageObject.getById(pageName), subPage);
 }
 
 
