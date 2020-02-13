@@ -1,27 +1,41 @@
 import { $ea as $e } from "./dollar-sign-module.js";
 
-function templatePfRacialTraits() {
-	return $e("div", {}, "Racial Traits");
+// filler = list of nodes to insert into the element
+// contents = where to insert those elements (or "ignore")
+// atts = object
+
+function templatePfRacialTraits(filler, contents, atts) {
+	var div = $e("div", {}, "Racial Traits");
+	div.append(...filler);
+	return div;
 }
 
-function templatePfStats() {
-	return $e("div", {}, "Stats");
+function templatePfStats(filler, contents, atts) {
+	var div = $e("div", {}, "Stats");
+	div.append(...filler);
+	return div;
 }
 
-function templatePfClassArchetypes() {
-	return $e("div", {}, "Class Archetypes");
+function templatePfClassArchetypes(filler, contents, atts) {
+	var div = $e("div", {}, "Class Archetypes");
+	div.append(...filler);
+	return div;
 }
 
-function templatePfClassChoices() {
-	return $e("div", {}, "Class Choice");
+function templatePfClassChoices(filler, contents, atts) {
+	var div = $e("div", {}, "Class Choice");
+	div.append(...filler);
+	return div;
 }
 
-function templatePfSkillsAdjust() {
-	return $e("div", {}, "Skills Adjust");
+function templatePfSkillsAdjust(filler, contents, atts) {
+	var div = $e("div", {}, "Skills Adjust");
+	div.append(...filler);
+	return div;
 }
 
 
-export var exports = [
+export const exports = [
 	["pageTemplates", "PfRacialTraits", templatePfRacialTraits],
 	["pageTemplates", "PfStats", templatePfStats],
 	["pageTemplates", "PfClassArchetypes", templatePfClassArchetypes],
