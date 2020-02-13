@@ -91,7 +91,7 @@ $i("rules").addEventListener("change", function(e) {
 
 
 // Load a ruleset.
-$listen($("loadInfo"), tryDisplayInfo);
+$listen($i("loadInfo"), tryDisplayInfo);
 
 
 // When the button is pressed...
@@ -335,7 +335,6 @@ function parseBundles(location) {
 function parseBundle(node, category) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
-		bundle = new Map(),
 		theseKids = Array.from(node.children),
 		info, item;
 	if(category === undefined) {
