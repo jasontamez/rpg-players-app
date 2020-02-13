@@ -1,28 +1,42 @@
 doctype html
+|
+|
 html
+  |
+  |
   head
     meta(charset='UTF-8')
     title RPG-Players App
+    link(rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Noto+Serif:400,700&display=swap')
     link(rel='stylesheet' type='text/css' href='/css/reset-beta.css')
     link(rel='stylesheet' type='text/css' href='/css/tank02.css')
     link(rel='stylesheet' type='text/css' href='/css/rpg-players-app.css')
     meta(name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes')
     meta(name='theme-color' content='#dcd6da')
+  |
+  |
   body
-    h1#mainHeader(class='start') Welcome
-    div#mainGrid(class='start')
-      p Choose a RuleSet:
-        |
-        |
-        select#rules
-          option(value='x' selected) --Choose One--
-          - rulesets.forEach(function(filename, rulesetname) {
-          option(value=filename)= rulesetname
-          - })
-      p
-        button#loadInfo Recurse!
-    #output
+    |
+    |
+    <!--h1#mainHeader(class='start') Welcome-->
+    header#welcome Welcome
+    div#mainGrid
+      div(class='start')
+        p Choose a RuleSet:
+          |
+          |
+          select#rules
+            option(value='x' selected) --Choose One--
+            - rulesets.forEach(function(filename, rulesetname) {
+            option(value=filename)= rulesetname
+            - })
+        p
+          button#loadInfo Recurse!
     #loading
       div Please wait...
       #loading-message
     script(src='rpg-players-app.js' type='module')
+    |
+    |
+  |
+  |
