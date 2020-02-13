@@ -1,6 +1,6 @@
-import { $t, $ea as $e, $listen } from "./dollar-sign-module.js";
-import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError } from "./parsing-logging.js";
-import { BasicIdObject, Int, Str, IntBonusable, Num } from "./stats-module01.js";
+import { $a, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
+import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
+import { BasicIdObject, Int, Str, IntBonusable, Num, TF } from "./stats-module01.js";
 
 
 // Define a class for XML tags
@@ -24,7 +24,8 @@ BasicPageObject.handlers = {
 	Block: parseBlock,
 	INPUT: parseInput,
 	CHOOSE: parseChoose,
-	BUTTON: parseButton
+	BUTTON: parseButton,
+	BUNDLE: parseBundle
 };
 
 
@@ -34,22 +35,33 @@ var InformationObject = {
 		Block: parseBlock,
 		INPUT: parseInput,
 		CHOOSE: parseChoose,
-		BUTTON: parseButton	
+		BUTTON: parseButton,
+		BUNDLE: parseBundle
 	},
 	buttonTypes: {
-		navigation: function(node, atts, filler) {
-			var buttonElement = checkObjProps(node, atts, ["to"], "BUTTON, navigation");
-			if(!buttonElement) {
-				if(filler.length === 0) {
-					buttonElement = $e("button", atts);
-					buttonElement.textContent = "Next";
-				} else {
-					buttonElement.append(...filler);
-				}
-				buttonElement.dataset.loadNext = atts.to;
-				$listen(buttonElement, loadPage);
-			}
-			return buttonElement;
+		navigation: {
+			mandatoryProps: ["nextPage"],
+			datasetProps: ["nextPage"],
+			defaultText: "Next",
+			listenFunc: loadPageFromButton
+		},
+		calculation: {
+			mandatoryProps: [],
+			datasetProps: [["which", "toCalc"]],
+			defaultText: "Calculate",
+			listenFunc: calculateFromPage
+		},
+		calcNav: {
+			mandatoryProps: ["nextPage"],
+			datasetProps: ["nextPage", "which", "haltable"],
+			defaultText: "Save and Continue",
+			listenFunc: calculateThenNavigate
+		},
+		closeSub: {
+			mandatoryProps: ["subpage"],
+			datasetProps: ["subpage"],
+			defaultText: "Close",
+			listenFunc: loadPageFromButton ////////////////
 		}
 	}
 };
@@ -137,6 +149,7 @@ export function recursePageNodes(node) {
 }
 
 
+// <Block template="whatever"> ... </Block>
 export function parseBlock(node, filler) {
 	var atts = parseAttributesToObject(node),
 		temp = atts.template,
@@ -161,6 +174,12 @@ export function parseBlock(node, filler) {
 }
 
 
+export function parseTemplate() {
+	
+}
+
+
+// <INPUT id="Stat" />
 export function parseInput(node, filler) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
@@ -198,15 +217,18 @@ export function parseInput(node, filler) {
 	atts.value = stat.get("value");
 	inputObject = $e("input", atts);
 	inputObject.append(...filler);
+	inputObject.classList.add("Stat");
+	inputObject.dataset.stat = id;
 	return inputObject;
 }
 
 
+// <BUTTON type="navigation" to="page2">Continue</BUTTON>
 export function parseButton(node, filler) {
-	//<BUTTON type="nav" to="page2">Continue</BUTTON>
 	var atts = parseAttributesToObject(node),
 		type = atts.type,
-		buttonType = InformationObject.buttonTypes[type];
+		buttonType = InformationObject.buttonTypes[type],
+		button;
 	if(type === undefined) {
 		logError(node, "BUTTON: missing required \"type\" parameter");
 		return null;
@@ -214,23 +236,62 @@ export function parseButton(node, filler) {
 		logError(node, "BUTTON: type \"" + type + "\" is invalid");
 		return null;
 	}
-	delete atts.type;
-	return buttonType(node, atts, filler);
+	// Check for any/all mandatory properties
+	button = checkObjProps(node, atts, buttonType.mandatoryProps, "BUTTON, " + type);
+	if(button.length !== 0) {
+		// Some/all mandatory properties did not exist
+		button = null;
+	} else {
+		// All mandatory properties are present
+		let data = [["type", type]], d;
+		delete atts.type;
+		// Go through all datasetProps (they may or may not be present)
+		buttonType.datasetProps.forEach(function(prop) {
+			var info = atts[prop];
+			// If the prop exists, save its value with its dataset name, then delete it from atts
+			// Otherwise, ignore it and move on
+			if(info !== undefined) {
+				data.push([prop, info]);
+				delete atts[prop];
+			}
+		});
+		// Make button
+		button = $e("button", atts);
+		// Fill button with text
+		if(filler.length === 0) {
+			button.textContent = buttonType.defaultText;
+		} else {
+			button.append(...filler);
+		}
+		// Set dataset info
+		d = button.dataset;
+		data.forEach(pair => d[pair[0]] = pair[1]);
+		// Set listener
+		$listen(button, buttonType.listenFunc);
+	}
+	return button;
 }
 
 
+// <CHOOSE category="name" />
+// Makes a <select> tag filled with <options> drawn from a category of Bundles
 export function parseChoose(node) {
 	//<CHOOSE category="race" />
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
 		bundles = InformationObject.bundles,
+		saveTo = atts.saveTo,
 		selectObject;
 	if(cat === undefined) {
 		logError(node, "CHOOSE: missing required \"category\" parameter");
 		return null;
 	}
 	delete atts.category;
+	delete atts.saveTo;
 	selectObject = $e("select", atts);
+	if(saveTo !== undefined) {
+		selectObject.dataset.stat = saveTo;
+	}
 	if(bundles) {
 		let info = bundles.get(cat);
 		if(info) {
@@ -243,10 +304,20 @@ export function parseChoose(node) {
 }
 
 
+
+export function parseBundle(node) {
+	
+}
+
+
 // loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
 export function loadPageNamed(pageName, subPage, sharedObject) {
+	var page = BasicPageObject.getById(pageName);
+	if(page === undefined) {
+		return logErrorText("There is no page with the id \"" + pageName + "\"");
+	}
 	sharedObject && populateInformation(sharedObject);
-	loadPage(BasicPageObject.getById(pageName), subPage);
+	loadPage(page, subPage);
 }
 
 
@@ -259,4 +330,46 @@ export function loadPage(page, subPage) {
 		}
 	}
 	MAIN.append(...page.html);
+}
+
+
+// button = this
+export function loadPageFromButton() {
+	var d = this.dataset,
+		to = d.nextPage,
+		subPage = TF.converter(d.subpage);
+	return loadPageNamed(to, subPage);
+}
+
+
+// button = this
+export function calculateFromPage() {
+	var MAIN = InformationObject.MAIN,
+		parent = this.parentNode,
+		errors = [];
+	// Look up chain until we find a statContainer node, or hit the main node
+	while(!parent.classList.contains("statContainer")) {
+		let p = parent.parentNode;
+		if(p === MAIN) {
+			break;
+		}
+		parent = p;
+	}
+	// Look for all inputs and selects
+	$a("input.Stat,select[data-stat]", parent).forEach(function(input) {
+		var id = input.dataset.stat,
+			stat = BasicIdObject.getById(id),
+			value = input.value;
+		if(stat === undefined) {
+			errors.push([input, id]);
+			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
+		}
+		return stat.set("value", value);
+	});
+}
+
+
+export function calculateThenNavigate(e) {
+	calculateFromPage.bind(this).call();
+	loadPageFromButton.bind(this).call();
 }
