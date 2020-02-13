@@ -496,7 +496,7 @@ export class Str extends BasicStat {
 	get(prop, context = this.defaultContext) {
 		var value = super.get(prop, context);
 		// If validator is fetched from somewhere else, make sure it's a RegExp.
-		if(prop === "validator" && value.constructor !== RegExp) {
+		if(prop === "validator" && value !== undefined && value.constructor !== RegExp) {
 			return new RegExp(value);
 		}
 		return value;
@@ -1800,9 +1800,15 @@ export function parsePool(node, parentNode, parentTag) {
 		return logError(node, "POOL: missing required \"id\" property");
 	}
 	if(type === undefined) {
-		type = parentTag.get("type");
+		if(parentTag === undefined) {
+			console.log([node, parentNode, parentTag]);
+			type = Str;
+		} else {
+			type = InformationObject.getTypeObject(parentTag.get("type"), Str);
+		}
+	} else {
+		type = InformationObject.getTypeObject(type, Str);
 	}
-	type = InformationObject.getTypeObject(type, Str);
 	tag = new Pool(id, parentTag, node, type, parseObjectToArray(atts));
 	parseStatNodes(node, tag);
 }
@@ -1945,4 +1951,95 @@ export function parseFormula(node) {
 }
 
 InformationObject.formula = Formula;
+
+
+
+
+export async function parseDeferredPools(nodelist) {
+	while(nodelist.length > 0) {
+		let node = nodelist.shift(),
+			atts = parseAttributesToObject(node),
+			id = atts.for,
+			src = atts.src,
+			pool;
+		if(id === undefined) {
+			return logError(node, "DEFERRED-POOL ITEMS: missing required \"for\" parameter");
+		}
+		pool = BasicIdObject.getById(id);
+		if(pool === undefined) {
+			return logError(node, "DEFERRED-POOL ITEMS: cannot find a Pool with id \"" + id + "\"");
+		} else if (pool.type !== Pool) {
+			return logError(node, "DEFERRED-POOL ITEMS: id \"" + id + "\" is not a Pool");
+		} else if (src === undefined) {
+			node.querySelectorAll("DeferredItem").forEach( n => parseDeferredItem(n, pool) );
+		} else {
+			await grabDeferredItems(src)
+				.then( poolDoc => Array.from($a("DeferredItem", poolDoc)).forEach( n => parseDeferredItem(n, pool) ) )
+				.catch(function(err) {
+					logError(node, err.statusText);
+					console.log(err);
+				});
+		}
+	}
+
+}
+
+
+function parseDeferredItem(node, pool) {
+	var atts = parseAttributesToObject(node),
+		id = atts.id,
+		theseKids, info, item;
+	if(pool === undefined) {
+		pool = BasicIdObject.getById(atts.poolID);
+		delete atts.poolID;
+	}
+	if(id === undefined || pool === undefined) {
+		return logError(node, "DEFERRED-ITEM: missing required \"poolID\" and/or \"id\" parameters");
+	}
+	delete atts.id;
+	atts = parseObjectToArray(atts);
+	info = pool.get("deferred items");
+	theseKids = Array.from(node.children);
+	if(info !== undefined) {
+		// category found
+		item = info.get(id);
+		if(item !== undefined) {
+			// id found - should already be an array
+			let kids = item.get("kids");
+			item.set("kids", kids.concat(theseKids));
+		} else {
+			// id not found
+			item = new Map();
+			item.set("kids", theseKids);
+		}
+	} else {
+		// category not found
+		item = new Map([["kids", theseKids]]);
+		info = new Map([[id, item]]);
+	}
+	atts.forEach(pair => item.set(pair[0], pair[1]));
+	info.set(id, item);
+	pool.set("deferred items", info);
+}
+
+
+function grabDeferredItems(location) {
+	return new Promise(function(resolve, reject) {
+		// Create AJAX fetcher
+		var getter = new XMLHttpRequest();
+		getter.open("GET", InformationObject.xmlDir + location);
+		// Call a parse function when the fetching is done
+		getter.onload = function() {
+			if (this.status >= 200 && this.status < 300) {
+				resolve(getter.responseXML);
+			} else {
+				reject({
+					status: this.status,
+					statusText: getter.statusText
+				});
+			}
+		};
+		getter.send();
+	});
+}
 
