@@ -300,7 +300,15 @@
 			<Pool id="creatureSubtypes" title="Creature Subtypes" />
 			<Pool id="weaponProficiencies" title="Weapon Proficiencies" />
 			<Pool id="weaponMartial" />
+			<!--- -->
+			<!--- -->
+			<!--- -->
+			<!--- -->
 			<Pool id="favoredClassChoices" title="Favored Class Choices" value="bard,barbarian,cleric,druid,fighter,monk,paladin,ranger,rogue,unchRogue,sorcerer,wizard,alchemist,cavalier,gunslinger,inquisitor,magus,oracle,summoner,witch,samurai,hunter,warpriest,bloodrager,shaman,skald,slayer,swashbuckler,shifter,investigator" />
+			<!--- -->
+			<!--- -->
+			<!--- -->
+			<!--- -->
 		</Group>
 		<Stat id="favoredClasses" type="IntBonusable" startingValue="1" />
 		<Group id="string_pools_with_commas" type="Str" separator="%%%">
@@ -316,27 +324,16 @@
 		<Stat id="spellLikeAbilities" type="PfSpells" title="Spell-Like Abilities" />
 		<Stat id="spellsKnown" type="PfSpells" title="Spells Known" />
 		<Stat id="concentrationCheckBase" type="IntBonusable" startingValue="0" />
+		<Stat id="race" title="Race" type="Str" startingValue="" />
+		<Stat id="class" title="Class" type="Str" startingValue="" />
 	</Stats>
 	<Bundles>
 		<Category name="race" src="pf/pathfinder01-races.xml" />
 		<Category name="class" src="pf/pathfinder01-classes.xml" />
 	</Bundles>
-	<Choices>
-		<Group category="race">
-			<Choice id="human" title="Human" />
-			<Choice id="elf" title="Elf" />
-			<Choice id="halfElf" title="Half-Elf" />
-			<Choice id="halfOrc" title="Half-Orc" />
-			<Choice id="dwarf" title="Dwarf" />
-			<Choice id="gnome" title="Gnome" />
-			<Choice id="halfling" title="Halfling" />
-		</Group>
-		<Group category="languages">
-		</Group>
-	</Choices>
 	<Pages>
 		<Page id="BEGIN"> <!-- should this be a template? -->
-			<Block class="flex-vertical">
+			<Block class="flex-vertical statContainer">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
 					<li>Stats:<ul>
@@ -347,41 +344,68 @@
 						<li><label><INPUT id="WIS" /> Wisdom</label></li>
 						<li><label><INPUT id="CHA" /> Charisma</label></li>
 					</ul></li>
-					<li><label>Choose a race: <CHOOSE category="race" /></label></li>
+					<li><label>Choose a race: <CHOOSE category="race" saveTo="race" /></label></li>
 				</ol>
-				<BUTTON type="navigation" to="page2">Continue</BUTTON>
+				<BUTTON type="calcNav" nextPage="RACIAL TRAITS">Continue</BUTTON>
 			</Block>
 		</Page>
-		<Page id="page2" class="flex-vertical">
-			<Block template="PfRacialTraits" contents="append"> <!-- how are values transmitted from page to page? -->
-				<BUTTON type="navigation" to="page3">Continue</BUTTON>
+		<Page id="RACIAL TRAITS" filter="PfArchetypePicker">
+			<Block class="flex-vertical">
+				<header>Racial Traits</header>
+				<p>Select a racial trait to see its benefits.</p>
+				<BUNDLE category="race">
+					<div class="selectable">
+						<div class="title"><span class="id"><ITEM show="id" /></span></div>
+						<div class="desc">
+							<div><ITEM show="description" /></div>
+							<ITEM show="namespaces" repeat="true" filter="PfArchetypeNamespaces"><div><ITEM /></div></ITEM>
+						</div>
+					</div>
+				</BUNDLE>
+				<BUTTON type="navigation" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
+			</Block>
+			<Block class="flex-vertical">
+				<header>Alternates</header>
+				<p>Select an alternate racial trait to see its benefits and what it replaces. Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
+				<BUNDLE id="race" show="unselected">
+					<div class="selectable">
+						<div class="title"><span class="addMe">+</span><span class="delMe">x</span><span class="id"><ITEM show="id" /></span></div>
+						<div class="desc">
+							<div><ITEM show="description" /></div>
+							<div><ITEM show="namespaces" filter="PfArchetypeNamespaces" /></div>
+						</div>
+					</div>
+				</BUNDLE>
+				<BUTTON type="navigation" nextPage="BEGIN">Go Back</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page3" class="flex-vertical">
 			<Block>
 				<Block template="PfStats" />
 				<ol start="4">
-					<li><label>Choose a class: <CHOOSE category="classes" /></label></li>
+					<li><label>Choose a class: <CHOOSE category="classes" saveTo="class" /></label></li>
 				</ol>
-				<BUTTON type="navigation" to="page4">Continue</BUTTON>
+				<BUTTON type="navigation" nextPage="page4">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page4" class="flex-vertical">
 			<Block template="PfClassArchetypes" contents="append">
-				<BUTTON type="navigation" to="page5">Continue</BUTTON>
+				<BUTTON type="navigation" nextPage="page5">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page5" class="flex-vertical">
 			<Block template="PfClassChoices" contents="append">
-				<BUTTON type="navigation" to="page6">Continue</BUTTON>
+				<BUTTON type="navigation" nextPage="page6">Continue</BUTTON>
 			</Block>
 		</Page>
 		<Page id="page6" class="flex-vertical">
-			<ol start="5">
-				<li>Skill Ranks</li>
-			</ol>
-			<Block template="PfSkillsAdjust" />
-			<BUTTON type="navigation" to="page7">Continue</BUTTON>
+			<Block>
+				<ol start="5">
+					<li>Skill Ranks</li>
+				</ol>
+				<Block template="PfSkillsAdjust" />
+				<BUTTON type="navigation" nextPage="page7">Continue</BUTTON>
+			</Block>
 		</Page>
 	</Pages>
 	<Data>
