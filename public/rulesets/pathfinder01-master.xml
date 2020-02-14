@@ -332,7 +332,7 @@
 		<Category name="class" src="pf/pathfinder01-classes.xml" />
 	</Bundles>
 	<Pages>
-		<Page id="BEGIN"> <!-- should this be a template? -->
+		<Page id="BEGIN">
 			<Block class="flex-vertical statContainer">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
@@ -353,7 +353,7 @@
 			<Block class="flex-vertical">
 				<header>Racial Traits</header>
 				<p>Select a racial trait to see its benefits.</p>
-				<BUNDLE category="race">
+				<BUNDLE category="race" show="Standard">
 					<div class="selectable">
 						<div class="title"><span class="id"><ITEM show="id" /></span></div>
 						<div class="desc">
@@ -367,7 +367,7 @@
 			<Block class="flex-vertical">
 				<header>Alternates</header>
 				<p>Select an alternate racial trait to see its benefits and what it replaces. Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
-				<BUNDLE id="race" show="unselected">
+				<BUNDLE category="race" show="Alternative">
 					<div class="selectable">
 						<div class="title"><span class="addMe">+</span><span class="delMe">x</span><span class="id"><ITEM show="id" /></span></div>
 						<div class="desc">
