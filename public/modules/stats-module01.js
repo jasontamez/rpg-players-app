@@ -1556,9 +1556,7 @@ InformationObject.converters = {
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
 
-
-export function parseStats(nodelist, sharedObject) {
-	// Add in any additional properties
+function populateInformation(sharedObject) {
 	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
 		if(InformationObject[prop] === undefined) {
 			// New property.
@@ -1571,6 +1569,12 @@ export function parseStats(nodelist, sharedObject) {
 			});
 		}
 	});
+}
+
+
+export function parseStats(nodelist, sharedObject) {
+	// Add in any additional properties
+	populateInformation(sharedObject);
 	// Parse nodes
 	nodelist.forEach( node => parseStatNodes(node, undefined) );
 }
