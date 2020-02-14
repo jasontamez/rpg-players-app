@@ -555,7 +555,7 @@
 			<Bonus to="Intimidate" value="+2 racial bonus when in dim light or darker conditions" note="situational" />
 			<Bonus to="Stealth" value="+2 racial bonus when in dim light or darker conditions" note="situational" />
 		</Alternative>
-		<Alternative id="Woodcraft" namespaces="" description="Elves know the deep secrets of the wild like no others, especially secrets of the forests.">
+		<Alternative id="Woodcraft" namespaces="ElfMagic" description="Elves know the deep secrets of the wild like no others, especially secrets of the forests.">
 			<Bonus type="racial" to="Knowledge (nature)" value="1" />
 			<Bonus to="Knowledge (nature)" value="Additional +1 to racial bonus when in forest terrain" note="situational" />
 			<Bonus type="racial" to="Survival" value="1" />
@@ -758,7 +758,7 @@
 			<Bonus to="Sense Motive" value="1" type="racial" />
 			<Bonus to="Bluff" value="1" type="racial" />
 		</Alternative>
-		<Alternative id="Water Child" namespaces="" description="Some half-elves are born of elves adapted to life on or near the water.">
+		<Alternative id="Water Child" namespaces="HalfElfAdaptability,HalfElfMultitalented" description="Some half-elves are born of elves adapted to life on or near the water.">
 			<Bonus type="racial" to="Swim" value="4" />
 			<Bonus to="Swim" value="You can always take 10 on a Swim check" note="situational" />
 			<PoolBonus to="bonusLanguages" value="Aquan" />
@@ -1233,7 +1233,7 @@
 		<Alternative id="Warden of Nature" namespaces="GnomeDefensiveTraining,GnomeHatred" description="Gnomes often must protect their homes against unnatural or pestilential infestations.">
 			<PoolBonus to="combatEffects" value="You have a +2 dodge bonus to AC against aberrations, oozes, and vermin, and a +1 bonus on attack rolls against them" />
 		</Alternative>
-		<Alternative id="Wright" namespaces="" description="Some gnomes prefer to use their natural talents with mechanisms to drive machines.">
+		<Alternative id="Wright" namespaces="GnomeHatred,GnomeObsessive" description="Some gnomes prefer to use their natural talents with mechanisms to drive machines.">
 			<PoolBonus to="skillEffects" value="You have a +2 racial bonus on driving checks%%%You have a +2 racial bonus on Craft checks to build or repair vehicles" />
 		</Alternative>
 	</Bundle>
