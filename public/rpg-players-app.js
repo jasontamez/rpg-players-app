@@ -8,19 +8,19 @@ const xmlDir = "rulesets/",
 	MAIN = $i("mainGrid");
 var okToDeload = false,
 	data = new Map(),
-	bundles = new Map(),
+	BUNDLES = new Map(),
 	sharedObjects = {
 		formulae: {},
 		stats: {},
 		pages: {
 			data: data,
-			bundles: bundles,
+			rawBundles: BUNDLES,
 			MAIN: MAIN
 		}
 	},
 	AJAXstorage = new Map();
 
-window.bundles = bundles;
+window.bundles = BUNDLES;
 
 // initialize global variables
 var	numberWords=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
@@ -315,6 +315,7 @@ function parseBundles(location) {
 	return new Promise(function(resolve, reject) {
 		// Create AJAX fetcher
 		var getter = new XMLHttpRequest();
+		// Fetch the file
 		getter.open("GET", xmlDir + location);
 		// Call a parse function when the fetching is done
 		getter.onload = function() {
@@ -327,6 +328,7 @@ function parseBundles(location) {
 				});
 			}
 		};
+		// Launch the fetcher!
 		getter.send();
 	});
 }
@@ -346,7 +348,7 @@ function parseBundle(node, category) {
 	}
 	delete atts.id;
 	atts = parseObjectToArray(atts);
-	info = bundles.get(category);
+	info = BUNDLES.get(category);
 	if(info !== undefined) {
 		// category found
 		item = info.get(id);
@@ -366,7 +368,7 @@ function parseBundle(node, category) {
 	}
 	atts.forEach(pair => item.set(pair[0], pair[1]));
 	info.set(id, item);
-	bundles.set(category, info);
+	BUNDLES.set(category, info);
 }
 
 
