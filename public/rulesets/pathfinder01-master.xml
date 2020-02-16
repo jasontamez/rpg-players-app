@@ -355,10 +355,10 @@
 				<p>Select a racial trait to see its benefits.</p>
 				<BUNDLE category="race" show="Standard">
 					<div class="selectable">
-						<div class="title"><span class="id"><ITEM show="id" /></span></div>
+						<div class="title"><span class="id"><ITEM text="id" /></span></div>
 						<div class="desc">
-							<div><ITEM show="description" /></div>
-							<ITEM show="namespaces" repeat="true" filter="PfArchetypeNamespaces"><div><ITEM /></div></ITEM>
+							<div><ITEM text="description" /></div>
+							<ITEM text="namespaces" tag="div" filter="PfNamespace" />
 						</div>
 					</div>
 				</BUNDLE>
@@ -369,10 +369,10 @@
 				<p>Select an alternate racial trait to see its benefits and what it replaces. Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
 				<BUNDLE category="race" show="Alternative">
 					<div class="selectable">
-						<div class="title"><span class="addMe">+</span><span class="delMe">x</span><span class="id"><ITEM show="id" /></span></div>
+						<div class="title"><span class="addMe">+</span><span class="delMe">x</span><span class="id"><ITEM text="id" /></span></div>
 						<div class="desc">
-							<div><ITEM show="description" /></div>
-							<div><ITEM show="namespaces" filter="PfArchetypeNamespaces" /></div>
+							<div><ITEM text="description" /></div>
+							<ITEM text="namespaces" tag="div" filter="PfNamespace" />
 						</div>
 					</div>
 				</BUNDLE>
