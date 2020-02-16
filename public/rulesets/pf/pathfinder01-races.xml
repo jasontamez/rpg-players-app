@@ -202,23 +202,23 @@
 		<!-- <Alternative id="Military Tradition" namespaces="HumanBonusFeat" description="Several human cultures raise all children (or all children of a certain social class) to serve in the military or defend themselves with force of arms.">-->
 			<!-- They gain proficiency with up to two martial or exotic weapons appropriate to their culture. -->
 		<!-- </Alternative> -->
-		<Alternative id="Mixed Heritage: Heart of the Fey" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheFey" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Fey" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheFey" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<Bonus to="lowLightVision" value="1" />
 			<Bonus to="ReflSave" value="1" type="racial" />
 			<Bonus to="WillSave" value="1" type="racial" />
 			<PfCSkill id="Human: Heart of the Fey" source="racial trait" mark="Knowledge (nature)" />
 			<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Fields" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheFields" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Fields" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheFields" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<BonusChoice to="craft_skills,profession_skills" formula="half_level" type="racial" choices="1" />
 			<PoolBonus to="miscEffects" value="1/day: you may ignore an effect that would cause you to become fatigued or exhausted" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Mountains" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheMountains" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Mountains" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheMountains" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<Bonus to="Climb" value="2" type="racial" />
 			<Bonus to="Acrobatics" value="+2 racial bonus to move on narrow surfaces and uneven ground" note="situational" />
 			<PoolBonus to="miscEffects" value="You are considered acclimated to the effects of high altitude" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Sea" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheSea" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Sea" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSea" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<PfCSkill id="Human: Heart of the Sea" source="racial trait" mark="Swim" />
 			<PfCSkill id="Human: Heart of the Sea1" source="racial trait" mark="Profession (sailor)" multi="profession_skills" sub="sailor" />
 			<Bonus to="Swim" value="2" type="racial" />
@@ -226,12 +226,12 @@
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
 			<Bonus to="concentrationCheckBase" value="+4 racial bonus on concentration checks when attempting to cast spells underwater" note="situational" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Slums" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheSlums" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Slums" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSlums" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<Bonus to="Sleight of Hand" value="2" type="racial" />
 			<Bonus to="Stealth" value="2" type="racial" />
 			<Bonus to="Survival" value="+4 racial bonus in urban and underground settings" note="situational" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Snows" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheSnows" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Snows" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSnows" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<PoolBonus to="miscEffects" value="You treat cold climates as one category less severe" />
 			<Bonus to="FortSave" value="+2 racial bonus vs the effects of cold climates" note="situational" />
 			<Bonus to="ReflSave" value="+2 racial bonus vs slipping and falling" note="situational" />
@@ -240,16 +240,16 @@
 			<Bonus to="CMB" value="+2 racial bonus vs trip" note="situational" />
 			<Bonus to="CMBFF" value="+2 racial bonus vs trip" note="situational" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Streets" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheStreets" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Streets" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheStreets" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<Bonus to="dodgeBonus" value="+1 dodge bonus when adjacent to at least two other allies" note="situational" />
 			<Bonus to="ReflSave" value="+1 racial bonus when adjacent to at least two other allies" note="situational" />
 			<PoolBonus to="speedEffects" value="Crowds do not count as difficult terrain for you." />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Sun" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheSun" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Sun" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSun" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<PoolBonus to="miscEffects" value="You treat hot climates as one category less severe" />
 			<Bonus to="FortSave" value="+2 racial bonus vs the effects of hot climates, and vs the poison and distraction abilities of vermin and swarms." note="situational" />
 		</Alternative>
-		<Alternative id="Mixed Heritage: Heart of the Wilderness" namespaces="HumanBonusFeat" avoidnamespaces="HeartOfTheWilderness" requiresnamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
+		<Alternative id="Mixed Heritage: Heart of the Wilderness" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheWilderness" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait.">
 			<Bonus to="Survival" formula="half_level" type="racial" />
 			<PoolBonus to="combatEffects" value="+5 racial bonus on Constitution checks to stabilize when dying.%%%Add half your level to your CON score to determine the negative hp necessary to kill you." />
 		</Alternative>
