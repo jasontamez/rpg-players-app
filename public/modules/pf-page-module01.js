@@ -34,13 +34,24 @@ function templatePfSkillsAdjust(filler, contents, atts) {
 	return div;
 }
 
+function pfArchetypePicker(bundle) {
+
+}
+
+
+function pfArchetypeNamespace(bundle, item, atts) {
+
+}
+
 
 export const exports = [
 	["pageTemplates", "PfRacialTraits", templatePfRacialTraits],
 	["pageTemplates", "PfStats", templatePfStats],
 	["pageTemplates", "PfClassArchetypes", templatePfClassArchetypes],
 	["pageTemplates", "PfClassChoices", templatePfClassChoices],
-	["pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust]
+	["pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust],
+	["bundleHandlers", "PfArchetypePicker", pfArchetypePicker],
+	["bundleHandlers", "PfNamespace", pfArchetypeNamespace]
 ];
 
 //BasicPageObject.pageTemplates.PfRacialTraits = templatePfRacialTraits,
