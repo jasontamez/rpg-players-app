@@ -30,7 +30,8 @@ var InformationObject = {
 		INPUT: parseInput,
 		CHOOSE: parseChoose,
 		BUTTON: parseButton,
-		BUNDLE: parseBundle
+		BUNDLE: parseBundle,
+		ITEM: parseItem
 	},
 	buttonTypes: {
 		navigation: {
@@ -57,7 +58,8 @@ var InformationObject = {
 			defaultText: "Close",
 			listenFunc: loadPageFromButton ////////////////
 		}
-	}
+	},
+	bundleHandlers: {}
 };
 window.pageInfo = InformationObject;
 
@@ -317,6 +319,8 @@ export function parseChoose(node) {
 //            att => att...
 //          }
 //        ),
+//        separator: string,
+//        allTags: Set (tagName, tagName...),
 //        allNamespaces: Set [maybe don't use this, just assume Standard is chosen and don't duplicate other namespaces already chosen?]
 //      }
 //    )
@@ -328,20 +332,21 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 		cat = atts.category,
 		category = BUNDLES[cat],
 		stat = atts.stat,
-		test, chosen;
+		filter = atts.filter,
+		statObj, chosen, bundle, show, tempDiv, content;
 	if(stat === undefined) {
 		// Assume the stat is the same as the category
 		stat = cat;
 	} else {
 		delete atts.stat;
 	}
-	test = BasicIdObject.getById(stat);
-	if(test === undefined) {
+	statObj = BasicIdObject.getById(stat);
+	if(statObj === undefined) {
 		logError(node, "BUNDLE: stat \"" + stat + "\" not found");
 		console.log([node, atts, rawcategory]);
 		return null;
 	}
-	chosen = test.get("value");
+	chosen = statObj.get("value");
 	if(!rawcategory.has(chosen)) {
  		logError(node, "BUNDLE: bundle \"" + chosen + "\" (via stat \"" + stat + "\") not found within category \"" + cat +  "\"");
 		return null;
@@ -355,6 +360,7 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 			var kids = bundle.get("kids"),
 				separator = bundle.get("separator") || ",",
 				masterNSlist = new Set(),
+				masterTagList = new Set(),
 				o = {
 					title: bundle.get("title")
 				};
@@ -403,28 +409,108 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 				o[tagName] = kidmap;
 				// Save namespaces
 				namespaces.forEach(ns => masterNSlist.add(ns));
+				// Save tagName
+				masterTagList.add(tagName);
 			});
 			// Save namespaces
 			o.allNamespaces = masterNSlist;
+			// Save tagNames
+			o.allTags = masterTagList;
+			// Save separator
+			o.separator = separator;
 			tempcat.set(id, o);
 		});
 		category = tempcat;
 		BUNDLES[cat] = category;
 	}
-	// Bundle is parsed
+	// Category is parsed
+	bundle = category.get(chosen);
+	show = atts.show;
+	if(show !== undefined) {
+		// Check if "show" exists
+		chosen = bundle[show];
+		if(chosen === undefined) {
+			logError(node, "BUNDLE: no \"" + show + "\" tags to show");
+			return null;
+		}
+		chosen = [chosen];
+	} else {
+		// Show all tags
+		chosen = [];
+		bundle.allTags.forEach(b => chosen.push(b));
+	}
+	//bundle.title, bundle.tagName, bundle.allNamespaces
+	title = bundle.title;
+	namespaces = bundle.allNamespaces;
+	content = bundle.content;
 	// Turn into HTML
-	
+	tempDiv = $e("div");
+	// Go through chosen tags, looping through the given contents for each item in each tag
+	chosen.forEach(function(tag) {
+		tag.forEach(function(object, id) {
+			// object.att ...
+			parseDeepHTMLArray(tempDiv, content,
+				// checker function
+				[item => (item.ITEM !== undefined),
+				// loader function
+				function(item) {
+					// item is an object with a set of properties
+					// filter property??
+					var filter = item.filter;
+					if(filter !== undefined) {
+						let handler = InformationObject.bundleHandlers[filter];
+						if(handler === undefined) {
+							logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist");
+						} else {
+							return handler(item, object, id);
+						}
+					}
+					// No (or invalid) filter
+					// See if this is asking to be surrounded by a tag
+					if(item.tag) {
+						let a = Object.getOwnPropertyNames(item),
+							atts = {},
+							text = item.text;
+						a.forEach(function(att) {
+							if(att !== "filter" && att !== "tag" && att !== "text") {
+								atts[att] = item[att];
+							}
+						});
+						return $e(item.tag, atts, object[text] || "");
+					}
+					// Otherwise, turn it into text
+					return $t(object[item[text]] || "");
+				}]
+			);
+		});
+	});
+	if(filter !== undefined) {
+		let f = InformationObject.bundleHandlers[filter];
+		if(f === undefined) {
+			logError(node, "BUNDLE: filter \"" + filter + "\" does not exist");
+		} else {
+			// Let the filter modify the div's contents
+			let retVal = f(tempDiv);
+			if(retVal === false) {
+				// Do not send any results
+				return;
+			}
+		}
+	}
+	// Send results to document.
+	while(tempDiv.firstChild !== null) {
+		appendTo.append(tempDiv.firstChild);
+	}
+	// probably some filter-type property to call a function to $listen these elements
 
-
-	delete atts.show;
+	// README: put character name in header, other options to click on
 }
 
 
-function parseBundle(node) {
+function parseBundle(node, filler) {
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		raw = InformationObject.rawBundles,
-		test;
+		raw = InformationObject.rawBundles;
 	if(cat === undefined) {
 		logError(node, "BUNDLE: missing required \"category\" parameter");
 		return null;
@@ -432,16 +518,26 @@ function parseBundle(node) {
 		logError(node, "BUNDLE: category \"" + cat + "\" does not seem to exist");
 		return null;
 	}
-	/// HOW do you defer parsing this until later?
+	/// Defer parsing this until later
 	return {
 		deferred: true,
 		atts: atts,
 		node: node,
 		raw: InformationObject.rawBundles.get(cat),
-		loader: loadBundle
+		loader: loadBundle,
+		contents: filler
 	};
 }
 
+
+function parseItem(node, filler) {
+	var o = parseAttributesToObject(node);
+	o.content = filler;
+	o.deferred = true;
+	o.ITEM = true;
+	o.loader = String;
+	return o;
+}
 
 
 // loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
@@ -455,20 +551,27 @@ export function loadPageNamed(pageName, subPage, sharedObject) {
 }
 
 
-export function loadPage(page, subPage) {
-	var MAIN = InformationObject.MAIN, held = [], unit, appendTo = MAIN, html = page.html.slice();
-	// If we're not a subpage, clear out all previous info on-screen
-	if(!subPage) {
-		while(MAIN.firstChild !== null) {
-			MAIN.firstChild.remove();
-		}
-	}
-	// If an item is an array, the first element is the parent, followed by an array of filler
+function parseDeepHTMLArray(appendTo, deepArray, optionalChecks = []) {
+	var held = [], html = deepArray.slice();
 	while(html.length > 0) {
-		unit = html.shift();
+		let unit = html.shift();
 		// Screen for a node/element
 		while(!(unit instanceof Node)) {
-			if(unit.deferred === true) {
+			if(!optionalChecks.every(function(pair) {
+				var [checker, loader] = pair;
+				if(checker(unit)) {
+					unit = loader(unit);
+					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
+					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
+					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
+					unit = $e("div", {});
+					return false;
+				}
+				return true;
+			})) {
+				// A passed-in check was triggered, stopping the flow.
+				// unit should be changed by the passed-in loader
+			} else if(unit.deferred === true) {
 				// Deferred object
 				unit = unit.loader(appendTo, unit.node, unit.atts, unit.raw);
 				// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
@@ -508,6 +611,20 @@ export function loadPage(page, subPage) {
 }
 
 
+// Does the heavy lifting of displaying a new page
+export function loadPage(page, subPage) {
+	var MAIN = InformationObject.MAIN;
+	// If we're not a subpage, clear out all previous info on-screen
+	if(!subPage) {
+		while(MAIN.firstChild !== null) {
+			MAIN.firstChild.remove();
+		}
+	}
+	// If an item is an array, the first element is the parent, followed by an array of filler
+	parseDeepHTMLArray(MAIN, page.html);
+}
+
+
 // button = this
 export function loadPageFromButton() {
 	var d = this.dataset,
@@ -544,6 +661,7 @@ export function calculateFromPage() {
 }
 
 
+// button = this
 export function calculateThenNavigate(e) {
 	calculateFromPage.bind(this).call();
 	loadPageFromButton.bind(this).call();
