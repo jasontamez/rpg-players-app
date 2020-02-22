@@ -18,7 +18,6 @@ html
   body
     |
     |
-    <!--h1#mainHeader(class='start') Welcome-->
     header#welcome Welcome
     div#mainGrid
       div(class='start')
@@ -36,6 +35,9 @@ html
       div Please wait...
       #loading-message
     script(src='rpg-players-app.js' type='module')
+    script.
+      // Set up a global variable for use in the module system
+      window["$RPG"] = {};
     |
     |
   |

@@ -6,10 +6,11 @@ import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArra
 // temp variable to log all objects created
 export var record = [];
 
-var InformationObject = {},
+var $RPG = window["$RPG"],
+	InformationObject = {},
 	FormulaeObject = {};
-
-window.info = InformationObject;
+$RPG.formulae = FormulaeObject;
+$RPG.stats = InformationObject;
 
 // Parsing functions, specialized for this module instead of taken from parsing-logging.js
 function paarseAttributesToObject(node) {

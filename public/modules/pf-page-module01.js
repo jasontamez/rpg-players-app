@@ -1,5 +1,8 @@
 import { $ea as $e } from "./dollar-sign-module.js";
 
+var $RPG = window["$RPG"],
+	$Pages = $RPG.pages;
+
 // filler = list of nodes to insert into the element
 // contents = where to insert those elements (or "ignore")
 // atts = object
@@ -44,15 +47,19 @@ function pfArchetypeNamespace(bundle, item, atts) {
 }
 
 
-export const exports = [
-	["pageTemplates", "PfRacialTraits", templatePfRacialTraits],
-	["pageTemplates", "PfStats", templatePfStats],
-	["pageTemplates", "PfClassArchetypes", templatePfClassArchetypes],
-	["pageTemplates", "PfClassChoices", templatePfClassChoices],
-	["pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust],
-	["bundleHandlers", "PfArchetypePicker", pfArchetypePicker],
-	["bundleHandlers", "PfNamespace", pfArchetypeNamespace]
-];
+export const exports = [];
+
+
+$Pages.pageTemplates.PfRacialTraits = templatePfRacialTraits;
+$Pages.pageTemplates.PfStats = templatePfStats;
+$Pages.pageTemplates.PfClassArchetypes = templatePfClassArchetypes;
+$Pages.pageTemplates.PfClassChoices = templatePfClassChoices;
+$Pages.pageTemplates.PfSkillsAdjust = templatePfSkillsAdjust;
+$Pages.pageFilters.PfArchetypePicker = pfArchetypePicker;
+$Pages.bundleItemFilters.PfNamespace = pfArchetypeNamespace;
+
+$Pages.subLoaders.bundle.push([pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
+$Pages.handlers.ADDTOPOOL = parseAddToPool;
 
 //BasicPageObject.pageTemplates.PfRacialTraits = templatePfRacialTraits,
 //BasicPageObject.pageTemplates.PfStats = templatePfStats,
