@@ -1,7 +1,6 @@
 import { $a, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
-import { BasicIdObject, Int, Str, IntBonusable, Num, TF } from "./stats-module01.js";
-
+import { BasicIdObject, Int, Str, IntBonusable, Num, TF, Pool } from "./stats-module01.js";
 
 // Define a class for XML tags
 export class BasicPageObject {
@@ -22,69 +21,71 @@ export class BasicPageObject {
 BasicPageObject.allIDs = new Map();
 
 
-var InformationObject = {
-	pageTemplates: {},
-	bundles: {},
-	handlers: {
-		Block: parseBlock,
-		INPUT: parseInput,
-		CHOOSE: parseChoose,
-		BUTTON: parseButton,
-		BUNDLE: parseBundle,
-		ITEM: parseItem
-	},
-	buttonTypes: {
-		navigation: {
-			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage"],
-			defaultText: "Next",
-			listenFunc: loadPageFromButton
+var $RPG = window["$RPG"],
+	InformationObject = {
+		pageTemplates: {},
+		bundles: {},
+		handlers: {
+			Block: parseBlock,
+			INPUT: parseInput,
+			"INPUT-HIDDEN": parseInputHidden,
+			CHOOSE: parseChoose,
+			BUTTON: parseButton,
+			BUNDLE: parseBundle,
+			ITEM: parseItem
 		},
-		calculation: {
-			mandatoryProps: [],
-			datasetProps: [["which", "toCalc"]],
-			defaultText: "Calculate",
-			listenFunc: calculateFromPage
+		buttonTypes: {
+			navigation: {
+				mandatoryProps: ["nextPage"],
+				datasetProps: ["nextPage"],
+				defaultText: "Next",
+				listenFunc: loadPageFromButton
+			},
+			calculation: {
+				mandatoryProps: [],
+				datasetProps: [["which", "toCalc"]],
+				defaultText: "Calculate",
+				listenFunc: calculateFromPage
+			},
+			calcNav: {
+				mandatoryProps: ["nextPage"],
+				datasetProps: ["nextPage", "which", "haltable"],
+				defaultText: "Save and Continue",
+				listenFunc: calculateThenNavigate
+			},
+			resetNavigation: {
+				mandatoryProps: ["nextPage"],
+				datasetProps: ["nextPage", "which", "haltable"],
+				defaultText: "Go Back",
+				listenFunc: resetThenNavigate
+			},
+			closeSub: {
+				mandatoryProps: ["subpage"],
+				datasetProps: ["subpage"],
+				defaultText: "Close",
+				listenFunc: loadPageFromButton
+			}
 		},
-		calcNav: {
-			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage", "which", "haltable"],
-			defaultText: "Save and Continue",
-			listenFunc: calculateThenNavigate
-		},
-		closeSub: {
-			mandatoryProps: ["subpage"],
-			datasetProps: ["subpage"],
-			defaultText: "Close",
-			listenFunc: loadPageFromButton ////////////////
-		}
-	},
-	bundleHandlers: {}
-};
-window.pageInfo = InformationObject;
+		bundleFilters: {},
+		bundleItemFilters: {},
+		pageFilters: {},
+ 	  subLoaders: {
+	 	  page: [],
+		 	bundle: [
+				[item => (item.ITEM !== undefined), loadBundleItem]        
+ 	    ],
+	 	  bundleItem: [
+		 	  [i => (i.ITEM !== undefined), loadBundleItem]
+			],
+ 	  }
+	};
 
-
-function populateInformation(sharedObject) {
-	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
-		if(InformationObject[prop] === undefined) {
-			// New property.
-			InformationObject[prop] = sharedObject[prop];
-		} else {
-			// Add to existing property.
-			let Iprop = InformationObject[prop], sprop = sharedObject[prop];
-			Object.getOwnPropertyNames(sprop).forEach(function(p) {
-				Iprop[p] = sprop[p];
-			});
-		}
-	});
-}
+$RPG.pages = InformationObject;
 
 
 // Parse an array of <Page> objects
-export function parsePages(nodelist, sharedObject) {
+export function parsePages(nodelist) {
 	var pages = [];
-	// Add in any additional properties
-	populateInformation(sharedObject);
 	// Parse nodes
 	nodelist.forEach( node => pages.push(parsePageNodes(node)) );
 	return pages;
@@ -111,13 +112,6 @@ export function parsePageNodes(pageNode) {
 	});
 	return pageTag;
 }
-
-// Need to redo .html as a deep array
-// Need to redo .html as a deep array
-// Need to redo .html as a deep array
-// Need to redo .html as a deep array
-// Need to redo .html as a deep array
-// Need to redo .html as a deep array
 
 
 export function recursePageNodes(node) {
@@ -227,12 +221,64 @@ export function parseInput(node, filler) {
 }
 
 
+// <INPUT-HIDDEN id="Stat" />
+export function parseInputHidden(node, filler) {
+	var atts = parseAttributesToObject(node),
+		id = atts.id,
+		stat = BasicIdObject.getById(id),
+		tagID = atts.tagId,
+		tagClass = atts.tagClass,
+		inputObject, CL;
+	if(id === undefined) {
+		logError(node, "INPUT-HIDDEN: missing required \"id\" parameter");
+		return null;
+	} else if (stat === undefined) {
+		logError(node, "INPUT-HIDDEN: unable to find a Stat named \"" + id + "\"");
+		return null;
+	}
+	delete atts.id;
+	if(tagID !== undefined) {
+		delete atts.tagId;
+		atts.id = tagID;
+	}
+	if(tagClass !== undefined) {
+		delete atts.tagClass;
+		tagClass = tagClass.split(" ");
+	} else {
+		tagClass = [];
+	}
+	switch(stat.type) {
+		case Int:
+		case IntBonusable:
+		case Num:
+		case Str:
+			atts.value = stat.get("value");
+			break;
+		case Pool:
+			let sep = stat.separator || ",";
+			atts.value = Array.from(stat.getSelection()).join(sep);
+			break;
+		default:
+			logError(node, "INPUT: Stat id=\"" + id + "\" is not of a user-definable type.");
+			return null;
+	}
+	atts.type = "hidden";
+	inputObject = $e("input", atts);
+	CL = inputObject.classList;
+	//inputObject.append(...filler);
+	CL.add("Stat");
+	tagClass.forEach(c => CL.add(c));
+	inputObject.dataset.stat = id;
+	return inputObject;
+}
+
+
 // <BUTTON type="navigation" to="page2">Continue</BUTTON>
 export function parseButton(node, filler) {
 	var atts = parseAttributesToObject(node),
 		type = atts.type,
 		buttonType = InformationObject.buttonTypes[type],
-		button;
+		button, listener, data, d;
 	if(type === undefined) {
 		logError(node, "BUTTON: missing required \"type\" parameter");
 		return null;
@@ -244,36 +290,49 @@ export function parseButton(node, filler) {
 	button = checkObjProps(node, atts, buttonType.mandatoryProps, "BUTTON, " + type);
 	if(button.length !== 0) {
 		// Some/all mandatory properties did not exist
-		button = null;
-	} else {
-		// All mandatory properties are present
-		let data = [["type", type]], d;
-		delete atts.type;
-		// Go through all datasetProps (they may or may not be present)
-		buttonType.datasetProps.forEach(function(prop) {
-			var info = atts[prop];
-			// If the prop exists, save its value with its dataset name, then delete it from atts
-			// Otherwise, ignore it and move on
-			if(info !== undefined) {
-				data.push([prop, info]);
-				delete atts[prop];
-			}
-		});
-		// Make button
-		button = $e("button", atts);
-		// Fill button with text
-		if(filler.length === 0) {
-			button.textContent = buttonType.defaultText;
-		} else {
-			button.append(...filler);
-		}
-		// Set dataset info
-		d = button.dataset;
-		data.forEach(pair => d[pair[0]] = pair[1]);
-		// Set listener
-		$listen(button, buttonType.listenFunc);
+		return null;
 	}
-	return button;
+	// All mandatory properties are present
+	data = [["type", type]];
+	delete atts.type;
+	// Go through all datasetProps (they may or may not be present)
+	buttonType.datasetProps.forEach(function(prop) {
+		var info = atts[prop];
+		// If the prop exists, save its value with its dataset name, then delete it from atts
+		// Otherwise, ignore it and move on
+		if(info !== undefined) {
+			data.push([prop, info]);
+			delete atts[prop];
+		}
+	});
+	// Make button
+	button = $e("button", atts);
+	// Fill button with text
+	if(filler.length === 0) {
+		button.textContent = buttonType.defaultText;
+	} else {
+		button.append(...filler);
+	}
+	// Set dataset info
+	d = button.dataset;
+	data.forEach(pair => d[pair[0]] = pair[1]);
+	// Save listener
+	listener = buttonType.listenFunc;
+	return {
+		deferred: true,
+		button: button,
+		node: node,
+		loader: loadButton,
+		listener: listener
+	};
+}
+
+
+function loadButton(appendTo, unit) {
+	var button = unit.button.cloneNode(true);
+	$listen(button, unit.listener);
+	appendTo.append(button);
+	return null;
 }
 
 
@@ -327,13 +386,17 @@ export function parseChoose(node) {
 //  }
 
 //<BUNDLE category="x" ?show="Tag"></BUNDLE>
-export function loadBundle(appendTo, node, atts, rawcategory) {
+export function loadBundle(appendTo, unit) {
 	var BUNDLES = InformationObject.bundles,
+		node = unit.node,
+		atts = unit.atts,
+		contents = unit.contents,
+		rawcategory = unit.raw,
 		cat = atts.category,
 		category = BUNDLES[cat],
 		stat = atts.stat,
 		filter = atts.filter,
-		statObj, chosen, bundle, show, tempDiv, content;
+		statObj, chosen, bundle, show, tempDiv;
 	if(stat === undefined) {
 		// Assume the stat is the same as the category
 		stat = cat;
@@ -348,7 +411,7 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 	}
 	chosen = statObj.get("value");
 	if(!rawcategory.has(chosen)) {
- 		logError(node, "BUNDLE: bundle \"" + chosen + "\" (via stat \"" + stat + "\") not found within category \"" + cat +  "\"");
+ 		logError(node, "BUNDLE: bundle \"" + chosen + "\" (via stat \"" + stat + "\") not found within category \"" + cat + "\"");
 		return null;
 	} else if (category === undefined) {
 		// Category exists but is not parsed yet
@@ -377,7 +440,7 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 					k = Array.from(node.children),
 					obj;
 				if(id === undefined || namespaces === undefined) {
-					logError(node, "BUNDLE: category \"" + cat +  "\", tag \"" + tagName +  "\" missing id and/or namespaces parameters");
+					logError(node, "BUNDLE: category \"" + cat + "\", tag \"" + tagName + "\" missing id and/or namespaces parameters");
 					return null;
 				}
 				namespaces = namespaces.split(separator);
@@ -440,60 +503,25 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 		bundle.allTags.forEach(b => chosen.push(b));
 	}
 	//bundle.title, bundle.tagName, bundle.allNamespaces
-	title = bundle.title;
-	namespaces = bundle.allNamespaces;
-	content = bundle.content;
 	// Turn into HTML
 	tempDiv = $e("div");
 	// Go through chosen tags, looping through the given contents for each item in each tag
 	chosen.forEach(function(tag) {
 		tag.forEach(function(object, id) {
 			// object.att ...
-			parseDeepHTMLArray(tempDiv, content,
-				// checker function
-				[item => (item.ITEM !== undefined),
-				// loader function
-				function(item) {
-					// item is an object with a set of properties
-					// filter property??
-					var filter = item.filter;
-					if(filter !== undefined) {
-						let handler = InformationObject.bundleHandlers[filter];
-						if(handler === undefined) {
-							logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist");
-						} else {
-							return handler(item, object, id);
-						}
-					}
-					// No (or invalid) filter
-					// See if this is asking to be surrounded by a tag
-					if(item.tag) {
-						let a = Object.getOwnPropertyNames(item),
-							atts = {},
-							text = item.text;
-						a.forEach(function(att) {
-							if(att !== "filter" && att !== "tag" && att !== "text") {
-								atts[att] = item[att];
-							}
-						});
-						return $e(item.tag, atts, object[text] || "");
-					}
-					// Otherwise, turn it into text
-					return $t(object[item[text]] || "");
-				}]
-			);
+			parseDeepHTMLArray(tempDiv, contents, InformationObject.subLoaders.bundle, id, object);
 		});
 	});
 	if(filter !== undefined) {
-		let f = InformationObject.bundleHandlers[filter];
+		let f = InformationObject.bundleFilters[filter];
 		if(f === undefined) {
 			logError(node, "BUNDLE: filter \"" + filter + "\" does not exist");
 		} else {
 			// Let the filter modify the div's contents
-			let retVal = f(tempDiv);
+			let retVal = f(tempDiv, unit);
 			if(retVal === false) {
 				// Do not send any results
-				return;
+				return null;
 			}
 		}
 	}
@@ -502,9 +530,58 @@ export function loadBundle(appendTo, node, atts, rawcategory) {
 		appendTo.append(tempDiv.firstChild);
 	}
 	// probably some filter-type property to call a function to $listen these elements
-
-	// README: put character name in header, other options to click on
+	// return null so the processor won't re-process this
+	return null;
 }
+
+
+export function loadBundleItem(appTo, item, id, object) {
+	// item is an object with a set of properties
+	var filter = item.filter,
+		tag, text;
+	if(filter !== undefined) {
+		let f = InformationObject.bundleItemFilters[filter];
+		if(f === undefined) {
+			logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist");
+		} else {
+			return f(appTo, item, object, id);
+		}
+	}
+	// No (or invalid) filter
+	// Get the plain text of the element
+	text = item.text;
+	if(text === "id") {
+		text = id;
+	} else {
+		text = object[text];
+	}
+	// See if this is asking to be surrounded by a tag
+	tag = item.tag;
+	if(tag === undefined && item.contents.length > 0) {
+		// No tag attribute, but has contents. Assume this is inline.
+		tag = "span";
+	}
+	if(tag !== undefined) {
+		let a = Object.getOwnPropertyNames(item),
+			atts = {},
+			e;
+		// Get any HTML attributes for the element
+		a.forEach(function(att) {
+			if(att !== "filter" && att !== "tag" && att !== "text") {
+				atts[att] = item[att];
+			}
+		});
+		// Create the element
+		e = $e(tag, atts, text || "");
+		// Parse any contents
+		parseDeepHTMLArray(e, item.contents, InformationObject.subLoaders.bundleItem, id, object);
+		// Return the element
+		return e;
+	}
+	// No tag attribute means turn it into text, ignoring contents
+	return $t(text || "");
+}
+
 
 
 function parseBundle(node, filler) {
@@ -525,14 +602,14 @@ function parseBundle(node, filler) {
 		node: node,
 		raw: InformationObject.rawBundles.get(cat),
 		loader: loadBundle,
-		contents: filler
+		contents: filler.slice()
 	};
 }
 
 
 function parseItem(node, filler) {
 	var o = parseAttributesToObject(node);
-	o.content = filler;
+	o.contents = filler.slice();
 	o.deferred = true;
 	o.ITEM = true;
 	o.loader = String;
@@ -541,48 +618,54 @@ function parseItem(node, filler) {
 
 
 // loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
-export function loadPageNamed(pageName, subPage, sharedObject) {
+export function loadPageNamed(pageName, subPage) {
 	var page = BasicPageObject.getById(pageName);
 	if(page === undefined) {
 		return logErrorText("There is no page with the id \"" + pageName + "\"");
 	}
-	sharedObject && populateInformation(sharedObject);
 	loadPage(page, subPage);
 }
 
 
-function parseDeepHTMLArray(appendTo, deepArray, optionalChecks = []) {
-	var held = [], html = deepArray.slice();
+// parseDeepHTMLArray(appendTo, deepArray, ?optionalChecks = [], ...?optional arguments)
+export function parseDeepHTMLArray() {
+	var args = Array.from(arguments),
+			appendTo = args.shift(),
+			html = args.shift().slice(),
+			held = [],
+			optionalChecks;
+	if(args.length > 0) {
+		optionalChecks = args.shift();
+	}
 	while(html.length > 0) {
-		let unit = html.shift();
+		let unit = html.shift(), okToAppend = true;
 		// Screen for a node/element
 		while(!(unit instanceof Node)) {
-			if(!optionalChecks.every(function(pair) {
-				var [checker, loader] = pair;
+			if(unit === null || unit === undefined) {
+				// Null element detected - skip this
+				okToAppend = false;
+				break;
+			} else if(optionalChecks.length > 0 && !optionalChecks.every(function(pair) {
+				var a = pair.slice(),
+					checker = a.shift(),
+					loader = a.shift();
 				if(checker(unit)) {
-					unit = loader(unit);
-					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-					// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-					unit = $e("div", {});
+					unit = loader(appendTo, unit, ...args);
 					return false;
 				}
 				return true;
 			})) {
 				// A passed-in check was triggered, stopping the flow.
-				// unit should be changed by the passed-in loader
+				// unit should be changed into a node or valid array by the passed-in loader, or changed to null.
 			} else if(unit.deferred === true) {
 				// Deferred object
-				unit = unit.loader(appendTo, unit.node, unit.atts, unit.raw);
-				// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-				// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-				// DELETE THE LINE BELOW ONCE LOADERS ARE SET UP
-				unit = $e("div", {});
+				// unit should be changed into a node or valid array by the passed-in loader, or changed to null.
+				unit = unit.loader(appendTo, unit);
 			} else {
-				// Must be an array
+				// Must be an array : [parentNode, [children]]
 				// Get parent of next group
 				let u = unit.slice(),
-					x = u.shift();
+					x = u.shift().cloneNode(true);
 				// Save current remainders
 				held.push([appendTo, html]);
 				// Load the new group as 'html'
@@ -593,9 +676,12 @@ function parseDeepHTMLArray(appendTo, deepArray, optionalChecks = []) {
 				unit = html.shift();
 			}
 		}
-		// We have a node
-		// Append to parent element
-		appendTo.append(unit);
+		if(okToAppend) {
+			// We have a node
+			// Append to parent element
+			appendTo.append(unit.cloneNode(true));
+			//console.log(appendTo);
+		}
 		while(html.length === 0 && held.length > 0) {
 			// We're out of the current array
 			// See if we have more
@@ -613,15 +699,31 @@ function parseDeepHTMLArray(appendTo, deepArray, optionalChecks = []) {
 
 // Does the heavy lifting of displaying a new page
 export function loadPage(page, subPage) {
-	var MAIN = InformationObject.MAIN;
+	var MAIN = InformationObject.MAIN,
+		filter = page.atts.get("filter"),
+		tempDiv = $e("div");
 	// If we're not a subpage, clear out all previous info on-screen
 	if(!subPage) {
 		while(MAIN.firstChild !== null) {
 			MAIN.firstChild.remove();
 		}
 	}
-	// If an item is an array, the first element is the parent, followed by an array of filler
-	parseDeepHTMLArray(MAIN, page.html);
+	// parse the page into tempDiv
+	parseDeepHTMLArray(tempDiv, page.html, InformationObject.subLoaders.page);
+	// filter if necessary
+	if(filter !== undefined) {
+		let f = InformationObject.pageFilters[filter];
+		if(f === undefined) {
+			logError(page.node, "PAGE: filter \"" + filter + "\" does not exist");
+		} else if(f(tempDiv, page) === false) {
+			// Do nothing, print nothing.
+			return;
+		}
+	}
+	// Load to MAIN
+	while(tempDiv.firstChild !== null) {
+		MAIN.append(tempDiv.firstChild);
+	}
 }
 
 
@@ -638,17 +740,31 @@ export function loadPageFromButton() {
 export function calculateFromPage() {
 	var MAIN = InformationObject.MAIN,
 		parent = this.parentNode,
+		d = this.dataset,
+		which = d.which,
+		targets = [],
 		errors = [];
-	// Look up chain until we find a statContainer node, or hit the main node
-	while(!parent.classList.contains("statContainer")) {
-		let p = parent.parentNode;
-		if(p === MAIN) {
-			break;
+	if(which) {
+		// Look for all Stats with the specified classes
+		targets = $a(
+			which.split(" ")
+				.map(w => "input.Stat." + w + ",select[data-stat]." + w)
+				.join(",")
+		, MAIN);
+	} else {
+		// Look up chain until we find a statContainer node, or hit the main node
+		while(!parent.classList.contains("statContainer")) {
+			let p = parent.parentNode;
+			if(p === MAIN) {
+				break;
+			}
+			parent = p;
 		}
-		parent = p;
+		// Look for all Stats
+		targets = $a("input.Stat,select[data-stat]", parent);
 	}
-	// Look for all inputs and selects
-	$a("input.Stat,select[data-stat]", parent).forEach(function(input) {
+	// Look at the inputs and selects
+	targets.forEach(function(input) {
 		var id = input.dataset.stat,
 			stat = BasicIdObject.getById(id),
 			value = input.value;
@@ -664,5 +780,51 @@ export function calculateFromPage() {
 // button = this
 export function calculateThenNavigate(e) {
 	calculateFromPage.bind(this).call();
+	loadPageFromButton.bind(this).call();
+}
+
+
+// button = this
+export function resetThenNavigate(e) {
+	var MAIN = InformationObject.MAIN,
+		parent = this.parentNode,
+		d = this.dataset,
+		which = d.which,
+		targets = [],
+		errors = [];
+	if(which) {
+		// Look for all Stats with the specified classes
+		targets = $a(
+			which.split(" ")
+				.map(w => "input.Stat." + w + ",select[data-stat]." + w)
+				.join(",")
+		, MAIN);
+	} else {
+		// Look up chain until we find a statContainer node, or hit the main node
+		while(!parent.classList.contains("statContainer")) {
+			let p = parent.parentNode;
+			if(p === MAIN) {
+				break;
+			}
+			parent = p;
+		}
+		// Look for all Stats
+		targets = $a("input.Stat,select[data-stat]", parent);
+	}
+	console.log(targets);
+	// Look at the inputs and selects
+	targets.forEach(function(input) {
+		var id = input.dataset.stat,
+			stat = BasicIdObject.getById(id),
+			starting;
+		if(stat === undefined) {
+			errors.push([input, id]);
+			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
+		} else if (stat instanceof Pool) {
+			return stat.values = new Map();
+		}
+		return stat.set("value", stat.get("startingValue"));
+	});
+	// Load new page
 	loadPageFromButton.bind(this).call();
 }
