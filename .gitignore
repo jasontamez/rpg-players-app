@@ -110,6 +110,7 @@ dist
 # glitch stuff
 shrinkwrap.yaml
 pnpm-debug.log
-public/css/
+public/css/*.css
+!public/css/rpg-players-app.css
 views/index-old.html
 NOTES.md
