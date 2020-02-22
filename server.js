@@ -53,6 +53,16 @@ app.get("/", function(request, response) {
 	//response.sendFile(__dirname + "/views/index.html");
 });
 
+app.get(/^\/.*\.html/, function(request, response) {
+	var r = /^\/[^.]*(?=.html$)/,
+		m = request.url.match(r);
+	if (m === null) {
+		//Error?
+		return response.sendStatus(500);
+	}
+	response.sendFile(__dirname + "/views/" + m[0] + ".html");
+});
+
 
 // Requests for XML documents can also be served by Pug documents
 app.get(/^\/.*\.xml/, function(request, response) {
