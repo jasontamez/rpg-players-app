@@ -9,18 +9,14 @@ const xmlDir = "rulesets/",
 var okToDeload = false,
 	data = new Map(),
 	BUNDLES = new Map(),
-	sharedObjects = {
-		formulae: {},
-		stats: {},
-		pages: {
-			data: data,
-			rawBundles: BUNDLES,
-			MAIN: MAIN
-		}
-	},
-	AJAXstorage = new Map();
+	AJAXstorage = new Map(),
+	$RPG = window["$RPG"];
 
-window.bundles = BUNDLES;
+// Set up global variable
+$RPG.pages.data = data;
+$RPG.pages.rawBundles = BUNDLES;
+$RPG.pages.MAIN = MAIN;
+
 
 // initialize global variables
 var	numberWords=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
@@ -170,10 +166,10 @@ async function loadAndAssembleInfo(cls) {
 	//console.log(body);
 	//console.log("Begin");
 	modifyLoadingScreen($t("[parsing formulae]"));
-	parseFormulae(Array.from($a("Formulae Formula", body)), sharedObjects.formulae);
+	parseFormulae(Array.from($a("Formulae Formula", body)));
 	//console.log("Formulas done");
 	modifyLoadingScreen($t("[parsing stats]"));
-	parseStats(Array.from($a("Stats", body)), sharedObjects.stats);
+	parseStats(Array.from($a("Stats", body)));
 	//console.log("Stats done");
 	//recurseNodes(body, ul);
 	//main.append(ul);
@@ -210,14 +206,14 @@ async function loadAndAssembleInfo(cls) {
 		}
 	}
 	modifyLoadingScreen($t("[parsing pages]"));
-	parsePages(Array.from($a("Pages Page", body)), sharedObjects.pages);
+	parsePages(Array.from($a("Pages Page", body)));
 	modifyLoadingScreen($t("[loading first page]"));
 	start = data.get("firstPage");
 	if(start === undefined) {
 		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
 		return;
 	}
-	loadPageNamed(start, false, sharedObjects.pages);
+	loadPageNamed(start, false);
 	modifyLoadingScreen($t("[Done!]"));
 	//console.log("End");
 	// Remove "loading" screen
@@ -262,7 +258,7 @@ async function loadAndAssembleInfo(cls) {
 async function parseModuleNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
 		t = atts.type,
-		type = sharedObjects[t],
+		type = $RPG[t],
 		src = atts.src,
 		msg = false;
 	if(t === undefined) {
@@ -370,7 +366,4 @@ function parseBundle(node, category) {
 	info.set(id, item);
 	BUNDLES.set(category, info);
 }
-
-
-window.pages = BasicPageObject;
 
