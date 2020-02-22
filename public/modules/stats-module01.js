@@ -757,15 +757,15 @@ export class Pool extends BasicStat {
 	}
 	get(prop, context = this.defaultContext) {
 		if(prop === "startingValue") {
-			return undefined;
-		} else if(prop === "value") {
+			return (this.itemType || Str).converter.call();
+		} else if (prop === "value") {
 			return this.getSelectionValues();
 		}
 		return super.get(prop, context);
 	}
 	addItem(title, value, selected = false) {
 		var o = {
-			value: value,
+			value: this.itemType.converter(value),
 			title: title,
 			selected: selected
 		};
@@ -1121,7 +1121,10 @@ export class If extends SpecialGrabber {
 		this[nombre.toLowerCase()] = amount;
 	}
 	grabValue(context) {
-		var value = this.startingAmount, results = [], operation = this.operation, converter = this.inType.converter;
+		var value = this.startingAmount,
+			results = [],
+			operation = this.operation,
+			converter = this.inType.converter;
 		//console.log(["IF", this.type, this.outType, value]);
 		if(value instanceof SpecialGrabber) {
 			value = converter(value.grabValue(context));
@@ -1140,16 +1143,7 @@ export class If extends SpecialGrabber {
 			}
 			results.push(test);
 		});
-		switch (operation) {
-			case "AND":
-				value = results.every(v => v);
-				break;
-			case "OR":
-				value = !results.every(v => !v);
-				break;
-			case "XOR":
-				value = results.filter(v => v).length === 1;
-		}
+		value = If.operation(operation, results);
 		if(value) {
 			value = this.then;
 		} else {
@@ -1174,6 +1168,21 @@ export class If extends SpecialGrabber {
 		}
 		return value;
 	}
+	static operation(operation, testing) {
+		var value;
+		switch (operation) {
+			case "XOR":
+				value = testing.filter(v => v).length === 1;
+				break;
+			case "OR":
+				value = !testing.every(v => !v);
+				break;
+			case "AND":
+			default:
+				value = testing.every(v => v);
+		}
+		return value;
+	}
 	static GreaterThan(value, test) {
 		return value > test;
 	}
@@ -1195,7 +1204,7 @@ export class If extends SpecialGrabber {
 	static Contains(value, test) {
 		return String(value).includes(String(test));
 	}
-	static NotContains(value, test) {
+	static DoesNotContain(value, test) {
 		return !String(value).includes(String(test));
 	}
 	static Has(value, test) {
@@ -1557,25 +1566,7 @@ InformationObject.converters = {
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
 
-function populateInformation(sharedObject) {
-	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
-		if(InformationObject[prop] === undefined) {
-			// New property.
-			InformationObject[prop] = sharedObject[prop];
-		} else {
-			// Add to existing property.
-			let Iprop = InformationObject[prop], sprop = sharedObject[prop];
-			Object.getOwnPropertyNames(sprop).forEach(function(p) {
-				Iprop[p] = sprop[p];
-			});
-		}
-	});
-}
-
-
-export function parseStats(nodelist, sharedObject) {
-	// Add in any additional properties
-	populateInformation(sharedObject);
+export function parseStats(nodelist) {
 	// Parse nodes
 	nodelist.forEach( node => parseStatNodes(node, undefined) );
 }
@@ -1863,6 +1854,9 @@ InformationObject.TagHandlers = {
 	BasicIdObject: parseGroup
 };
 
+InformationObject.comparators = {
+	If: If
+}
 
 
 
@@ -1915,20 +1909,7 @@ export class Formula extends SpecialGrabber {
 Formula.formulae = new Map();
 
 
-export function parseFormulae(nodelist, sharedObject) {
-	// Add in any additional properties
-	Object.getOwnPropertyNames(sharedObject).forEach(function(prop) {
-		if(FormulaeObject[prop] === undefined) {
-			// New property.
-			FormulaeObject[prop] = sharedObject[prop];
-		} else {
-			// Add to existing property.
-			let Iprop = FormulaeObject[prop], sprop = sharedObject[prop];
-			Object.getOwnPropertyNames(sprop).forEach(function(p) {
-				Iprop[p] = sprop[p];
-			});
-		}
-	});
+export function parseFormulae(nodelist) {
 	// Parse nodes
 	nodelist.forEach( node => parseFormula(node) );
 }
