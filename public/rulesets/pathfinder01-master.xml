@@ -44,9 +44,18 @@
 				<Else value="0" />
 			</If>
 		</Formula>
+		<Formula name="if_class_skill_and_memory_racial_trait_then_plus_one" type="Int">
+			<If inType="Pool" outType="Int">
+				<Compare fromId="this" attribute="source" />
+				<Has value="class" />
+				<Has value="racial trait: memory" />
+				<Then value="1" />
+				<Else value="0" />
+			</If>
+		</Formula>
 	</Formulae>
 	<Stats>
-		<Group id="ability_scores" userEditable="true" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
+		<Group id="ability_scores" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
 			<Stat id="STR" title="Strength" />
 			<Stat id="DEX" title="Dexterity" />
 			<Stat id="CON" title="Constitution" />
@@ -192,6 +201,7 @@
 			</Attribute>
 			<Attribute name="modifier_text" type="Str" formula="convert_modifier_to_string" />
 		</Group>
+		<Stat id="HeroPointsPerLevel" type="IntBonusable" startingValue="1" />
 		<Stat id="BAB" type="IntBonusable" title="Base Attack Bonus" startingValue="0">
 			<Attribute name="full_attack_text">
 				<Do inType="Int" outType="Str">
@@ -292,7 +302,7 @@
 		<Stat id="FireResist" title="Fire Resistance" type="IntBonusable" startingValue="0" />
 		<Stat id="LeadershipScore" title="Leadership Score" type="IntBonusable" startingValue="0" />
 		<Group id="string_pools" type="Str" separator=",">
-			<Pool id="languages" title="Languages" fromCategory="languages" value="Common,Elven,Dwarven,Gnomish,Halfling,Celestial,Infernal,Abyssal,Draconic,Sylvan,Aquan,Terran,Ignan,Auran,Undercommon,Gnoll,Goblin,Giant,Orc,Aboleth,Aklo,Boggard,Cyclops,Dark Folk,D'ziriak,Drow Sign Language,Grippli,Necril,Protean,Sphinx,Tengu,Treant,Vegepygmy,Read Lips">
+			<Pool id="languages" title="Languages" fromCategory="languages" value="Common,Elven,Dwarven,Gnomish,Halfling,Celestial,Infernal,Abyssal,Draconic,Sylvan,Aquan,Terran,Ignan,Auran,Undercommon,Gnoll,Goblin,Giant,Orc,Aboleth,Aklo,Boggard,Cyclops,Dark Folk,D'ziriak,Drow Sign Language,Grippli,Necril,Protean,Sphinx,Tengu,Treant,Vegepygmy,Read Lips,Azlanti">
 				<Attribute name="maxSelectable" type="Int" fromId="languagesKnown" />
 			</Pool>
 			<Pool id="DR" title="Damage Resistance" />
@@ -320,6 +330,8 @@
 			<Pool id="speedEffects" title="Movement Effects" />
 			<Pool id="senseEffects" title="Sense Effects" />
 			<Pool id="miscEffects" title="Skill Effects" />
+			<Pool id="archetypes" title="Archetypes" />
+			<Pool id="racialTraits" title="Racial Traits" type="Typeless" />
 		</Group>
 		<Stat id="spellLikeAbilities" type="PfSpells" title="Spell-Like Abilities" />
 		<Stat id="spellsKnown" type="PfSpells" title="Spells Known" />
@@ -351,32 +363,38 @@
 		</Page>
 		<Page id="RACIAL TRAITS" filter="PfArchetypePicker">
 			<Block class="flex-vertical">
+				<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" />
 				<header>Racial Traits</header>
-				<p>Select a racial trait to see its benefits.</p>
-				<BUNDLE category="race" show="Standard">
-					<div class="selectable">
-						<div class="title"><span class="id"><ITEM text="id" /></span></div>
-						<div class="desc">
-							<div><ITEM text="description" /></div>
-							<ITEM text="namespaces" tag="div" filter="PfNamespace" />
-						</div>
-					</div>
-				</BUNDLE>
-				<BUTTON type="navigation" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
+				<div class="standardAbilities selectableContent">
+					<BUNDLE category="race" show="Standard">
+						<ITEM tag="div" filter="PfNamespace" class="standard">
+							<div class="title"><span class="id"><ITEM text="id" /></span></div>
+							<div class="explanation">
+								<div><ITEM text="explanation" /></div>
+							</div>
+						</ITEM>
+						<ADDTOPOOL id="racialTraits" selected="true" />
+					</BUNDLE>
+				</div>
+				<BUTTON type="resetNavigation" which="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
 			</Block>
 			<Block class="flex-vertical">
 				<header>Alternates</header>
-				<p>Select an alternate racial trait to see its benefits and what it replaces. Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
-				<BUNDLE category="race" show="Alternative">
-					<div class="selectable">
-						<div class="title"><span class="addMe">+</span><span class="delMe">x</span><span class="id"><ITEM text="id" /></span></div>
-						<div class="desc">
-							<div><ITEM text="description" /></div>
-							<ITEM text="namespaces" tag="div" filter="PfNamespace" />
-						</div>
-					</div>
-				</BUNDLE>
-				<BUTTON type="navigation" nextPage="BEGIN">Go Back</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
+				<div class="alternateAbilities selectableContent">
+					<BUNDLE category="race" show="Alternative">
+						<ITEM tag="div" filter="PfNamespace">
+							<div class="title"><span class="addMe btn">+</span><span class="delMe btn">x</span><span class="id"><ITEM text="id" /></span></div>
+							<div class="description">
+								<div><ITEM text="description" /></div>
+							</div>
+							<div class="explanation">
+								<div><ITEM text="explanation" /></div>
+							</div>
+						</ITEM>
+						<ADDTOPOOL id="racialTraits" selected="false" />
+					</BUNDLE>
+				</div>
+				<p>Click on an alternate racial trait to see its benefits.<br />Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
 			</Block>
 		</Page>
 		<Page id="page3" class="flex-vertical">
