@@ -50,7 +50,7 @@
  			<PoolBonus to="saveEffects" value="-2 vs poison" type="racial" />
 		</Alternative>
 		<Alternative id="Aquatic Ancestry" namespaces="HumanSkilled" description="Humans with deep one or skum ancestry may exhibit prominent round eyes or webbed fingers and toes." explanation="You have a racial bonus to Swim equal to half your level (min 0); you can hold your breath for twice as long as a normal human can; at 16th level, you can always take 10 on Swim checks, even when threatened or distracted">
-			<Bonus to="Swim" formula="half_level" type="racial" />
+			<Bonus to="Swim" fromID="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
 			<Bonus to="Swim" note="situational" value="At 16th level, you can always take 10 on Swim checks, even when threatened or distracted" />
 		</Alternative>
@@ -140,7 +140,7 @@
 			<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 		</Alternative>
 		<Alternative id="Heart of the Fields" namespaces="HumanSkilled,HeartOfThe,HeartOfTheFields" description="Humans born in rural areas are used to hard labor." explanation="You gain half your level (min 0) as a racial bonus to a Craft or Profession skill of your choice; 1/day: you may ignore an effect that would cause you to become fatigued or exhausted">
-			<BonusChoice to="craft_skills,profession_skills" formula="half_level" type="racial" choices="1" />
+			<BonusChoice to="craft_skills,profession_skills" fromID="Level" fromAtt="halfLevel" type="racial" choices="1" />
 			<PoolBonus to="miscEffects" value="1/day: you may ignore an effect that would cause you to become fatigued or exhausted" />
 		</Alternative>
 		<Alternative id="Heart of the Mountains" namespaces="HumanSkilled,HeartOfThe,HeartOfTheMountains" description="Humans born in the mountains are skilled at negotiating heights and precipices." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
@@ -180,7 +180,7 @@
 			<Bonus to="FortSave" value="+2 racial bonus vs the effects of hot climates, and vs the poison and distraction abilities of vermin and swarms" note="situational" />
 		</Alternative>
 		<Alternative id="Heart of the Wilderness" namespaces="HumanSkilled,HeartOfThe,HeartOfTheWilderness" description="Humans raised in the wild learn the hard way that only the strong survive." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
-			<Bonus to="Survival" formula="half_level" type="racial" />
+			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="+5 racial bonus on Constitution checks to stabilize when dying%%%Add half your level to your CON score to determine the negative hp necessary to kill you" />
 		</Alternative>
 		<Alternative id="Heroic" namespaces="HumanBonusFeat" description="Some humans are born heroes." explanation="In campaigns that use the optional hero point system, each time you gain a level, you gain 2 hero points instead of 1; if you take the Blood of Heroes feat, you gain 3 hero points each level instead of 2">
@@ -215,7 +215,7 @@
 			<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Fields" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheFields" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You gain half your level (min 0) as a racial bonus to a Craft or Profession skill of your choice; 1/day: you may ignore an effect that would cause you to become fatigued or exhausted">
-			<BonusChoice to="craft_skills,profession_skills" formula="half_level" type="racial" choices="1" />
+			<BonusChoice to="craft_skills,profession_skills" fromID="Level" fromAtt="halfLevel" type="racial" choices="1" />
 			<PoolBonus to="miscEffects" value="1/day: you may ignore an effect that would cause you to become fatigued or exhausted" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Mountains" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheMountains" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
@@ -255,7 +255,7 @@
 			<Bonus to="FortSave" value="+2 racial bonus vs the effects of hot climates, and vs the poison and distraction abilities of vermin and swarms" note="situational" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Wilderness" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheWilderness" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
-			<Bonus to="Survival" formula="half_level" type="racial" />
+			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="+5 racial bonus on Constitution checks to stabilize when dying%%%Add half your level to your CON score to determine the negative hp necessary to kill you" />
 		</Alternative>
 		<Alternative id="One of the Multitude" namespaces="HumanSkilled" description="City-dwelling humans are skilled at blending in with the busy multitudes of the city." explanation="You gain a +1 racial bonus on Bluff, Diplomacy, Disguise, Sleight of Hand, and Stealth checks when within 10 feet of at least two other humanoids; you gain a +1 racial bonus on attacks of opportunity made while flanking">
@@ -318,7 +318,7 @@
 			<Bonus to="Knowledge (geography)" value="2" type="racial" />
 			<Bonus to="Knowledge (local)" value="2" type="racial" />
 			<Bonus to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" note="situational" />
-			<Bonus to="languagesKnown" getFromId="Linguistics" />
+			<Bonus to="languagesKnown" fromId="Linguistics" />
 		</Alternative>
 	</Bundle>
 
@@ -1172,7 +1172,7 @@
 			<Bonus to="Bluff" value="2" />
 			<Bonus to="Diplomacy" value="2" />
 			<Bonus to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" note="situational" />
-			<Bonus to="languagesKnown" getFromId="Linguistics" />
+			<Bonus to="languagesKnown" fromId="Linguistics" />
 		</Alternative>
 		<Alternative id="Inquisitive" namespaces="GnomeObsessive,GnomeKeenSenses" description="Gnomes have a knack for being in places they shouldn't be." explanation="You have a +2 racial bonus to Disable Device and Escape Artist">
 			<Bonus to="Disable Device" value="2" type="racial" />

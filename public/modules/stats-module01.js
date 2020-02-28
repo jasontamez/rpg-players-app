@@ -1704,7 +1704,7 @@ export function parseGroup(node, parentNode, parentTag) {
 export function parseAttribute(node, parentNode, parentTag) {
 	var atts = parseAttributesToObject(node), tag, type,
 		nombre = atts.name,
-		fromID = atts.getFromId,
+		fromID = atts.fromId,
 		formula = atts.formula,
 		att = atts.attribute;
 	if(nombre === undefined) {
@@ -1761,9 +1761,9 @@ export function parseBonus(node, parentNode, parentTag) {
 	}
 	atts = parseAttributesToObject(node);
 	formula = atts.formula;
-	fromID = atts.getFromId;
+	fromID = atts.fromId;
 	if(fromID === undefined && formula === undefined) {
-		return logError(node, "BONUS: missing required \"getFromId\" or \"formula\" parameter");
+		return logError(node, "BONUS: missing required \"fromId\" or \"formula\" parameter");
 	}
  	att = atts.attribute;
 	if(att === undefined) {

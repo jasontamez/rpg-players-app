@@ -21,21 +21,6 @@
 				<Else fromId="this" attribute="value" />
 			</If>
 		</Formula>
-		<Formula name="odd_levels" type="Int">
-			<Math>
-				<Add fromId="Level" />
-				<Add value="1" />
-				<Divide value="2" />
-				<Floor />
-			</Math>
-		</Formula>
-		<Formula name="half_level" type="Int">
-			<Math>
-				<Add fromId="Level" />
-				<Divide value="2" />
-				<Floor />
-			</Math>
-		</Formula>
 		<Formula name="if_class_skill_then_plus_one" type="Int">
 			<If inType="Pool" outType="Int">
 				<Compare fromId="this" attribute="source" />
@@ -104,33 +89,54 @@
 					<Floor />
 				</Math>
 			</Attribute>
+			<Attribute name="halfLevel">
+				<Math>
+					<Add fromId="this" />
+					<Divide value="2" />
+					<Floor />
+				</Math>
+			</Attribute>
+			<Attribute name="threeQuarters">
+				<Math>
+					<Add fromId="this" />
+					<Multiply value="3" />
+					<Divide value="4" />
+					<Floor />
+				</Math>
+			</Attribute>
+			<Attribute name="oddLevels">
+				<Math>
+					<Add fromId="this" />
+					<Add value="1" />
+					<Divide value="2" />
+					<Floor />
+				</Math>
+			</Attribute>
 		</Stat>
 		<Stat id="Init" title="Initiative" type="IntBonusable" startingValue="0" minValue="-99">
 			<Attribute name="modifier_text" formula="convert_modified_value_to_string" />
 		</Stat>
-		<Stat id="Feats" type="IntBonusable" title="Feats" minValue="0" startingValue="0">
-			<Bonus formula="odd_levels" />
-		</Stat>
+		<Stat id="Feats" type="IntBonusable" title="Feats" minValue="0" startingValue="0" />
 		<Stat id="SkillPoints" type="IntBonusable" title="Skill Points" minValue="0" />
 		<Group id="skills" type="PfSkill">
 			<Group id="strength_skill">
 				<Stat id="Climb" title="Climb" />
 				<Stat id="Swim" title="Swim" />
-				<Attribute name="score_mod" minValue="-99" getFromId="STR" attribute="modifier" />
+				<Attribute name="score_mod" minValue="-99" fromId="STR" attribute="modifier" />
 			</Group>
 			<Group id="dexterity_skill">
 				<Stat id="Acrobatics" title="Acrobatics" />
 				<Stat id="Disable Device" title="Disable Device" />
 				<Stat id="Escape Artist" title="Escape Artist" />
 				<Stat id="Fly" title="Fly">
-					<Bonus getFromId="size" attribute="flySkillModifier" />
+					<Bonus fromId="size" attribute="flySkillModifier" />
 				</Stat>
 				<Stat id="Ride" title="Ride" />
 				<Stat id="Sleight of Hand" title="Sleight of Hand" background="1" />
 				<Stat id="Stealth" title="Stealth">
-					<Bonus getFromId="size" attribute="stealthSkillModifier" />
+					<Bonus fromId="size" attribute="stealthSkillModifier" />
 				</Stat>
-				<Attribute name="score_mod" minValue="-99" getFromId="DEX" attribute="modifier" />
+				<Attribute name="score_mod" minValue="-99" fromId="DEX" attribute="modifier" />
 			</Group>
 			<Group id="intelligence_skill">
 				<Stat id="Appraise" title="Appraise" background="1" />
@@ -155,7 +161,7 @@
 				</Stat>
 				<Stat id="Spellcraft" title="Spellcraft" />
 				<MultiStat id="craft_skills" idPre="Craft (" idPost=")" titlePre="Craft (" titlePost=")" background="1" />
-				<Attribute name="score_mod" minValue="-99" getFromId="INT" attribute="modifier" />
+				<Attribute name="score_mod" minValue="-99" fromId="INT" attribute="modifier" />
 			</Group>
 			<Group id="wisdom_skill">
 				<Stat id="Heal" title="Heal" />
@@ -163,7 +169,7 @@
 				<Stat id="Sense Motive" title="Sense Motive" />
 				<Stat id="Survival" title="Survival" />
 				<MultiStat id="profession_skills" idPre="Profession (" idPost=")" titlePre="Profession (" titlePost=")" background="1" />
-				<Attribute name="score_mod" minValue="-99" getFromId="WIS" attribute="modifier" />
+				<Attribute name="score_mod" minValue="-99" fromId="WIS" attribute="modifier" />
 			</Group>
 			<Group id="charisma_skill">
 				<Stat id="Bluff" title="Bluff" />
@@ -173,7 +179,7 @@
 				<Stat id="Intimidate" title="Intimidate" />
 				<Stat id="Use Magic Device" title="Use Magic Device" />
 				<MultiStat id="perform_skills" idPre="Perform (" idPost=")" titlePre="Perform (" titlePost=")" background="1" />
-				<Attribute name="score_mod" minValue="-99" getFromId="CHA" attribute="modifier" />
+				<Attribute name="score_mod" minValue="-99" fromId="CHA" attribute="modifier" />
 			</Group>
 			<Attribute name="modifier" minValue="-99">
 				<Math>
@@ -185,13 +191,13 @@
 		</Group>
 		<Group id="saving_throws" type="IntBonusable" minValue="-99" maxValue="99" startingValue="0">
 			<Stat id="FortSave" title="Fortitude">
-				<Attribute name="score_mod" getFromId="CON" attribute="modifier" />
+				<Attribute name="score_mod" fromId="CON" attribute="modifier" />
 			</Stat>
 			<Stat id="ReflSave" title="Reflex">
-				<Attribute name="score_mod" getFromId="DEX" attribute="modifier" />
+				<Attribute name="score_mod" fromId="DEX" attribute="modifier" />
 			</Stat>
 			<Stat id="WillSave" title="Will">
-				<Attribute name="score_mod" getFromId="WIS" attribute="modifier" />
+				<Attribute name="score_mod" fromId="WIS" attribute="modifier" />
 			</Stat>
 			<Attribute name="modifier" minValue="-99">
 				<Math>
@@ -232,8 +238,8 @@
 		<Stat id="" type="IntBonusable" title="" startingValue="0" />
 		<Stat id="" type="IntBonusable" title="" startingValue="0" />-->
 		<Stat id="languagesKnown" type="IntBonusable" title="Languages Known" startingValue="1">
-			<Bonus getFromId="INT" attribute="modifierNonNegative" />
-			<Bonus getFromId="Linguistics" />
+			<Bonus fromId="INT" attribute="modifierNonNegative" />
+			<Bonus fromId="Linguistics" />
 		</Stat>
 		<Stat id="naturalArmor" type="IntBonusable" startingValue="0" />
 		<Stat id="dodgeBonus" type="IntBonusable" startingValue="0" />
@@ -241,31 +247,31 @@
 		<Stat id="armorBonus" type="IntBonusable" startingValue="0" />
 		<Stat id="shieldBonus" type="IntBonusable" startingValue="0" />
 		<Stat id="hardACBonuses" type="IntBonusable" startingValue="0">
-			<Bonus getFromId="naturalArmor" type="natural armor" />
-			<Bonus getFromId="armorBonus" type="armor" />
-			<Bonus getFromId="shieldBonus" type="shield" />
+			<Bonus fromId="naturalArmor" type="natural armor" />
+			<Bonus fromId="armorBonus" type="armor" />
+			<Bonus fromId="shieldBonus" type="shield" />
 		</Stat>
 		<Stat id="universalACBonuses" type="IntBonusable" startingValue="0">
-			<Bonus getFromId="deflectionBonus" type="deflection" />
+			<Bonus fromId="deflectionBonus" type="deflection" />
 		</Stat>
 		<Stat id="AC" type="IntBonusable" title="AC" startingValue="10">
-			<Bonus getFromId="DEX" attribute="modifier" />
-			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
-			<Bonus getFromId="dodgeBonus" type="dodge" />
-			<Bonus getFromId="hardACBonuses" attribute="modifiedValue" />
-			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="DEX" attribute="modifier" />
+			<Bonus fromId="size" attribute="sizeModifier" type="size" />
+			<Bonus fromId="dodgeBonus" type="dodge" />
+			<Bonus fromId="hardACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="universalACBonuses" attribute="modifiedValue" />
 		</Stat>
 		<Stat id="TAC" type="IntBonusable" title="Touch AC" startingValue="10">
-			<Bonus getFromId="DEX" attribute="modifier" />
-			<Bonus getFromId="dodgeBonus" type="dodge" />
-			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
-			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="DEX" attribute="modifier" />
+			<Bonus fromId="dodgeBonus" type="dodge" />
+			<Bonus fromId="size" attribute="sizeModifier" type="size" />
+			<Bonus fromId="universalACBonuses" attribute="modifiedValue" />
 		</Stat>
 		<Stat id="FFAC" type="IntBonusable" title="Flat-footed AC" startingValue="10">
-			<Bonus getFromId="DEX" attribute="modifierNonPositive" />
-			<Bonus getFromId="size" attribute="sizeModifier" type="size" />
-			<Bonus getFromId="hardACBonuses" attribute="modifiedValue" />
-			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="DEX" attribute="modifierNonPositive" />
+			<Bonus fromId="size" attribute="sizeModifier" type="size" />
+			<Bonus fromId="hardACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="universalACBonuses" attribute="modifiedValue" />
 		</Stat>
 		<Stat id="CMB" type="IntBonusable" title="CMB" startingValue="0">
 			<Attribute name="statBonus" type="Int">
@@ -276,24 +282,24 @@
 					<Else fromId="STR" attribute="modifier" />
 				</If>
 			</Attribute>
-			<Bonus getFromId="this" attribute="statBonus" />
-			<Bonus getFromId="BAB" attribute="modifiedValue" />
-			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
+			<Bonus fromId="this" attribute="statBonus" />
+			<Bonus fromId="BAB" attribute="modifiedValue" />
+			<Bonus fromId="size" attribute="specialSizeModifier" type="size" />
 		</Stat>
 		<Stat id="CMD" type="IntBonusable" title="CMD" startingValue="10">
-			<Bonus getFromId="STR" attribute="modifier" />
-			<Bonus getFromId="DEX" attribute="modifier" />
-			<Bonus getFromId="BAB" attribute="modifiedValue" />
-			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
-			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
-			<Bonus getFromId="dodgeBonus" type="dodge" />
+			<Bonus fromId="STR" attribute="modifier" />
+			<Bonus fromId="DEX" attribute="modifier" />
+			<Bonus fromId="BAB" attribute="modifiedValue" />
+			<Bonus fromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="size" attribute="specialSizeModifier" type="size" />
+			<Bonus fromId="dodgeBonus" type="dodge" />
 		</Stat>
 		<Stat id="CMDFF" type="IntBonusable" title="Flat-footed CMD" startingValue="10">
-			<Bonus getFromId="STR" attribute="modifier" />
-			<Bonus getFromId="DEX" attribute="modifierNonPositive" />
-			<Bonus getFromId="BAB" attribute="modifiedValue" />
-			<Bonus getFromId="universalACBonuses" attribute="modifiedValue" />
-			<Bonus getFromId="size" attribute="specialSizeModifier" type="size" />
+			<Bonus fromId="STR" attribute="modifier" />
+			<Bonus fromId="DEX" attribute="modifierNonPositive" />
+			<Bonus fromId="BAB" attribute="modifiedValue" />
+			<Bonus fromId="universalACBonuses" attribute="modifiedValue" />
+			<Bonus fromId="size" attribute="specialSizeModifier" type="size" />
 		</Stat>
 		<Stat id="SR" title="Spell Resistance" type="IntBonusable" startingValue="0" />
 		<Stat id="AcidResist" title="Acid Resistance" type="IntBonusable" startingValue="0" />
@@ -308,6 +314,7 @@
 			<Pool id="DR" title="Damage Resistance" />
 			<Pool id="bonusLanguages" title="Bonus Language Choices" />
 			<Pool id="creatureSubtypes" title="Creature Subtypes" />
+			<Pool id="armorProficiencies" title="Armor Proficiencies" />
 			<Pool id="weaponProficiencies" title="Weapon Proficiencies" />
 			<Pool id="weaponMartial" />
 			<!--- -->
