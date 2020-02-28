@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RuleSet name="pf" title="Pathfinder" description="Pathfinder Roleplaying Game">
 	<Bundle id="bard" title="Bard">
+		<Basics hitDie="8" startingWealthX10="3d6" startingWealthAverage="105" />
+		<ClassSkills>
+			<PfCSkill id="Bard Class Skill: Acrobatics" source="class" mark="Acrobatics" />
+			<PfCSkill id="Bard Class Skill: Appraise" source="class" mark="Appraise" />
+			<PfCSkill id="Bard Class Skill: Bluff" source="class" mark="Bluff" />
+			<PfCSkill id="Bard Class Skill: Climb" source="class" mark="Climb" />
+			<PfCSkill id="Bard Class Skill: Craft" source="class" mark="craft_skills" />
+			<PfCSkill id="Bard Class Skill: Diplomacy" source="class" mark="Diplomacy" />
+			<PfCSkill id="Bard Class Skill: Disguise" source="class" mark="Disguise" />
+			<PfCSkill id="Bard Class Skill: Escape Artist" source="class" mark="Escape Artist" />
+			<PfCSkill id="Bard Class Skill: Intimidate" source="class" mark="Intimidate" />
+			<PfCSkill id="Bard Class Skill: Knowledge Arcana" source="class" mark="Knowledge (arcana)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Dungeoneering" source="class" mark="Knowledge (dungeoneering)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Engineering" source="class" mark="Knowledge (engineering)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Geography" source="class" mark="Knowledge (geography)" />
+			<PfCSkill id="Bard Class Skill: Knowledge History" source="class" mark="Knowledge (history)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Local" source="class" mark="Knowledge (local)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Nature" source="class" mark="Knowledge (nature)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Nobility" source="class" mark="Knowledge (nobility)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Planes" source="class" mark="Knowledge (planes)" />
+			<PfCSkill id="Bard Class Skill: Knowledge Religion" source="class" mark="Knowledge (religion)" />
+			<PfCSkill id="Bard Class Skill: Linguistics" source="class" mark="Linguistics" />
+			<PfCSkill id="Bard Class Skill: Perception" source="class" mark="Perception" />
+			<PfCSkill id="Bard Class Skill: Perform" source="class" mark="perform_skills" />
+			<PfCSkill id="Bard Class Skill: Profession" source="class" mark="profession_skills" />
+			<PfCSkill id="Bard Class Skill: Sense Motive" source="class" mark="Sense Motive" />
+			<PfCSkill id="Bard Class Skill: Sleight of Hand" source="class" mark="Sleight of Hand" />
+			<PfCSkill id="Bard Class Skill: Spellcraft" source="class" mark="Spellcraft" />
+			<PfCSkill id="Bard Class Skill: Stealth" source="class" mark="Stealth" />
+			<PfCSkill id="Bard Class Skill: Use Magic Device" source="class" mark="Use Magic Device" />
+		</ClassSkills>
+		<Bonus to="ReflSave" fromID="Level" attribute="goodSave" />
+		<Bonus to="WillSave" fromID="Level" attribute="goodSave" />
+		<Bonus to="FortSave" fromID="Level" attribute="badSave" />
+		<PoolBonus to="weaponProficiencies" value="TYPEsimple,longsword,rapier,sap,shortsword,shortbow,whip" />
+		<PoolBonus to="armorProficiencies" value="TYPElight,TYPEshield" />
+		<Bonus to="BAB" fromID="Level" attribute="threeQuarters" />
+		<Bonus to="skillPoints">
+			<Math>
+				<Add value="6" />
+				<Add fromID="INT" fromAtt="modifier" />
+				<Multiply fromID="Level" />
+				<AtLeast fromID="Level" />
+			</Math>
+		</Bonus>
 	</Bundle>
 	<Bundle id="barbarian" title="Barbarian">
 	</Bundle>
