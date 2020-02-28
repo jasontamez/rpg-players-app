@@ -10,9 +10,11 @@
 		"start": "node server.js"
 	},
 	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
 		"express": "^4.17.1",
 		"glob": "^7.1.6",
 		"pug": "^2.0.4",
+		"request": "^2.88.2",
 		"sqlite": "^3.0.3"
 	},
 	"engines": {
