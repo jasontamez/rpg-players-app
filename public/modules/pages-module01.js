@@ -191,33 +191,51 @@ export function parseInput(node, filler) {
 		return null;
 	}
 	delete atts.id;
+	return {
+		deferred: true,
+		stat: stat,
+		id: id,
+		atts: atts,
+		node: node,
+		loader: loadInput,
+		contents: filler.slice()
+	};
+}
+
+
+function loadInput(appendTo, unit) {
+	var stat = unit.stat,
+		atts = {},
+		temp, i;
+	Object.assign(atts, unit.atts);
 	switch(stat.type) {
 		case Int:
 		case IntBonusable:
 		case Num:
 			atts.type = "number";
-			inputObject = stat.get("minValue");
-			if(inputObject !== undefined && inputObject === inputObject) {
-				atts.min = inputObject.toString();
+			temp = stat.get("minValue");
+			if(temp !== undefined && temp === temp) {
+				atts.min = temp.toString();
 			}
-			inputObject = stat.get("maxValue");
-			if(inputObject !== undefined && inputObject === inputObject) {
-				atts.max = inputObject.toString();
+			temp = stat.get("maxValue");
+			if(temp !== undefined && temp === temp) {
+				atts.max = temp.toString();
 			}
 			break;
 		case Str:
 			atts.type = "text";
 			break;
 		default:
-			logError(node, "INPUT: Stat id=\"" + id + "\" is not of a user-definable type.");
+			logError(unit.node, "INPUT: Stat id=\"" + unit.id + "\" is not of a user-definable type.");
 			return null;
 	}
 	atts.value = stat.get("value");
-	inputObject = $e("input", atts);
-	inputObject.append(...filler);
-	inputObject.classList.add("Stat");
-	inputObject.dataset.stat = id;
-	return inputObject;
+	i = $e("input", atts);
+	i.classList.add("Stat");
+	i.dataset.stat = unit.id;
+	// Ignore unit.contents
+	appendTo.append(i);
+	return null;
 }
 
 
@@ -227,7 +245,6 @@ export function parseInputHidden(node, filler) {
 		id = atts.id,
 		stat = BasicIdObject.getById(id),
 		tagID = atts.tagId,
-		tagClass = atts.tagClass,
 		inputObject, CL;
 	if(id === undefined) {
 		logError(node, "INPUT-HIDDEN: missing required \"id\" parameter");
@@ -241,6 +258,25 @@ export function parseInputHidden(node, filler) {
 		delete atts.tagId;
 		atts.id = tagID;
 	}
+	return {
+		deferred: true,
+		stat: stat,
+		id: id,
+		atts: atts,
+		node: node,
+		loader: loadInputHidden,
+		contents: filler.slice()
+	};
+}
+
+
+function loadInputHidden(appendTo, unit) {
+	var stat = unit.stat,
+		atts = {},
+		tagClass = atts.tagClass,
+		sep = stat.separator || ",",
+		temp, i, CL;
+	Object.assign(atts, unit.atts);
 	if(tagClass !== undefined) {
 		delete atts.tagClass;
 		tagClass = tagClass.split(" ");
@@ -255,21 +291,22 @@ export function parseInputHidden(node, filler) {
 			atts.value = stat.get("value");
 			break;
 		case Pool:
-			let sep = stat.separator || ",";
 			atts.value = Array.from(stat.getSelection()).join(sep);
 			break;
 		default:
-			logError(node, "INPUT: Stat id=\"" + id + "\" is not of a user-definable type.");
+			logError(unit.node, "INPUT-HIDDEN: Stat id=\"" + unit.id + "\" is not of a user-definable type.");
 			return null;
 	}
 	atts.type = "hidden";
-	inputObject = $e("input", atts);
-	CL = inputObject.classList;
-	//inputObject.append(...filler);
+	i = $e("input", atts);
+	CL = i.classList;
 	CL.add("Stat");
 	tagClass.forEach(c => CL.add(c));
-	inputObject.dataset.stat = id;
-	return inputObject;
+	i.dataset.stat = unit.id;
+	i.dataset.separator = sep;
+	// Ignore unit.contents
+	appendTo.append(i);
+	return null;
 }
 
 
@@ -389,14 +426,15 @@ export function parseChoose(node) {
 export function loadBundle(appendTo, unit) {
 	var BUNDLES = InformationObject.bundles,
 		node = unit.node,
-		atts = unit.atts,
+		atts = {},
 		contents = unit.contents,
 		rawcategory = unit.raw,
-		cat = atts.category,
-		category = BUNDLES[cat],
-		stat = atts.stat,
-		filter = atts.filter,
-		statObj, chosen, bundle, show, tempDiv;
+		category, cat, stat, filter, statObj, chosen, bundle, show, tempDiv;
+	Object.assign(atts, unit.atts);
+	cat = atts.category;
+	category = BUNDLES[cat];
+	stat = atts.stat;
+	filter = atts.filter;
 	if(stat === undefined) {
 		// Assume the stat is the same as the category
 		stat = cat;
