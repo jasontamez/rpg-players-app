@@ -349,8 +349,12 @@
 	<Bundles>
 		<Category name="race" src="pf/pf01-races.xml" />
 		<Category name="class" src="pf/pf01-classes.xml" />
-		<Category name="race" src="pf/pathfinder01-races.xml" />
-		<Category name="class" src="pf/pathfinder01-classes.xml" />
+		<Category name="feat" src="pf/pf01-feats-a-c.xml" />
+		<Category name="feat" src="pf/pf01-feats-d-go.xml" />
+		<Category name="feat" src="pf/pf01-feats-gr-l.xml" />
+		<Category name="feat" src="pf/pf01-feats-m-ph.xml" />
+		<Category name="feat" src="pf/pf01-feats-pi-sq.xml" />
+		<Category name="feat" src="pf/pf01-feats-st-x.xml" />
 	</Bundles>
 	<Pages>
 		<Page id="BEGIN">
