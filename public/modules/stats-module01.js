@@ -444,7 +444,7 @@ export class Int extends Num {
 		return this.atts.set(prop, v);
 	}
 }
-Int.converter = function(x) { return Math.round(Number(x)) };
+Int.converter = function() { return Math.round(Number(...arguments)); };
 Int.prototype.type = Int;
 
 
@@ -973,6 +973,12 @@ export class Equation extends SpecialGrabber {
 	}
 	static Floor(total, n) {
 		return Math.floor(total);
+	}
+	static AtMost(total, n) {
+		return Math.min(total);
+	}
+	static AtLeast(total, n) {
+		return Math.max(total);
 	}
 }
 
