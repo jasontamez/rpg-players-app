@@ -61,7 +61,7 @@ function addArchetype(event) {
 		return;
 	}
 	// Check for a hidden input tag and set 'pool' appropriately
-	if(input !== undefined) {
+	if(input !== null) {
 		pool = BasicIdObject.getById(input.dataset.stat);
 	}
 	// Move selected ability to the "standard" area
@@ -120,7 +120,7 @@ function removeArchetype(event) {
 		input = $q("input.Archetype"),
 		pool, d, sep, namespaces, keepLooping, possiblyRemoveable, possiblyHideable, activeNamespaces;
 	// Check for a hidden input tag and set 'pool' appropriately
-	if(input !== undefined) {
+	if(input !== null) {
 		pool = BasicIdObject.getById(input.dataset.stat);
 	}
 	// Move selected ability to "alternate" area
@@ -263,6 +263,7 @@ function clickArchetype(event) {
 // set up list of standards to be replaced by an alternate
 // invalidate options that do not meet prerequisites
 function pfArchetypePicker(html, unit) {
+	var i = $q("input.Archetype", html);
 	// Listen on add(+) and remove(x) "buttons"
 	$a(".selectable .addMe", html).forEach(sel => $listen(sel, addArchetype));
 	$a(".selectable .delMe", html).forEach(sel => $listen(sel, removeArchetype));
@@ -362,6 +363,24 @@ function pfArchetypePicker(html, unit) {
 				}
 				// Add a prerequisites line with "description" class
 				sel.append($ec("div", ["description", "prereq"], "Prerequisite(s): " + text.join(" " + operation + " ")));
+			}
+		}
+		// Check the hidden-input and update options if necessary.
+		if(i !== null) {
+			let stat = i.dataset.stat,
+				val = i.value.split(i.dataset.separator),
+				standard = new Set(),
+				alt = new Set(),
+				ids = Array.from($a(".standardAbilities .id")),
+				a = Array.from($a(".alternateAbilities .id"));
+			ids.map(id => standard.add(id.textContent));
+			val.forEach(v => standard.has(v) || alt.add(v));
+			if(alt.size > 0) {
+				a.forEach(function(arch) {
+					if (alt.has(arch.textContent)) {
+						addArchetype.call($q(".addMe", arch.parentNode));
+					}
+				});
 			}
 		}
 	});
