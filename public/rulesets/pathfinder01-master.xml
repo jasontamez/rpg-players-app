@@ -347,6 +347,8 @@
 		<Stat id="class" title="Class" type="Str" startingValue="" />
 	</Stats>
 	<Bundles>
+		<Category name="race" src="pf/pf01-races.xml" />
+		<Category name="class" src="pf/pf01-classes.xml" />
 		<Category name="race" src="pf/pathfinder01-races.xml" />
 		<Category name="class" src="pf/pathfinder01-classes.xml" />
 	</Bundles>
@@ -368,7 +370,7 @@
 				<BUTTON type="calcNav" nextPage="RACIAL TRAITS">Continue</BUTTON>
 			</Block>
 		</Page>
-		<Page id="RACIAL TRAITS" filter="PfArchetypePicker">
+		<Page id="RACIAL TRAITS" filter="PfArchetypePicker" pfArchetypePickerID="racialTraits">
 			<Block class="flex-vertical">
 				<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" />
 				<header>Racial Traits</header>
