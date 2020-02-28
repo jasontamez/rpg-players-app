@@ -20,7 +20,7 @@
 			<PoolBonus to="bonusLanguages" fromId="languages" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (human)" namespaces="HumanSubtype">
-			<PoolBonus to="creatureSubtype" value="human" />
+			<PoolBonus to="creatureSubtypes" value="human" />
 		</Standard>
  		<Alternative id="Adoptive Parentage - Dwarf" namespaces="HumanLanguages,HumanBonusFeat" description="Humans are sometimes orphaned and adopted by other races." explanation="You speak Common and Dwarven; you are proficient with the battleaxe, heavy pick and warhammer, and you treat weapons with 'Dwarven' in their name as martial weapons">
 			<Bonus to="languagesKnown" value="1" />
@@ -349,7 +349,7 @@
 			<PoolBonus to="spellcastingEffects" value="You have a +2 racial bonus on caster level checks made to overcome spell resistance" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (elf)" namespaces="ElfSubtype">
-			<PoolBonus to="creatureSubtype" value="elf" />
+			<PoolBonus to="creatureSubtypes" value="elf" />
 		</Standard>
 		<Standard id="Weapon Familiarity" explanation="You are proficient in longbows, longswords, rapiers, shortbows and treat any weapon with 'Elven' in the name as a martial weapon" namespaces="ElfWeaponFamiliarity">
 			<PoolBonus to="weaponProficiencies" value="longbow,TYPElongbow,longsword,rapier,shortbow,TYPEshortbow" />
@@ -606,7 +606,7 @@
 			<Bonus to="lowLightVision" value="1" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (human, elf)" namespaces="HalfElfSubtype">
-			<PoolBonus to="creatureSubtype" value="human,elf" />
+			<PoolBonus to="creatureSubtypes" value="human,elf" />
 		</Standard>
 		<Standard id="Multitalented" explanation="You choose two favored classes" namespaces="HalfElfMultitalented">
 			<Bonus to="favoredClasses" value="1" />
@@ -649,7 +649,7 @@
 			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Dragon Soul" namespaces="HalfElfAdaptability,HalfElfImmunities,HalfElfBlood,HalfElfSubtype" description="Some half-elves have forsaken a part of their lineage by embracing a more distant connection to dragons." explanation="You are considered an elf or a human, but not both; you count as a dragon for the purposes of effects targeting creatures by type (such as favored enemy and bane weapons); you have a +2 racial bonus on saves vs fear, sleep and paralysis effects">
-			<PoolBonusChoice to="creatureSubtype" value="human,elf" choices="1" />
+			<PoolBonusChoice to="creatureSubtypes" value="human,elf" choices="1" />
 			<PoolBonus to="miscEffects" value="You count as a dragon for the purposes of effects targeting creatures by type (such as favored enemy and bane weapons)" />
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs fear, sleep and paralysis effects" />
 		</Alternative>
@@ -827,7 +827,7 @@
 			<PoolBonus to="weaponMartial" value="TYPEdwarf" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (dwarf)" namespaces="DwarfSubtype">
-			<PoolBonus to="creatureSubtype" value="dwarf" />
+			<PoolBonus to="creatureSubtypes" value="dwarf" />
 		</Standard>
 		<Alternative id="Ancient Enmity" namespaces="DwarfHatred" description="Dwarves have long been in conflict with elves, especially the hated drow." explanation="You have a +1 racial bonus on attack rolls against humanoid creatures of the elf subtype">
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls against humanoid creatures of the elf subtype" />
@@ -889,7 +889,7 @@
 			<PoolBonus to="combatEffects" value="+1 bonus on attack rolls against humanoids with the giant subtype" />
 			<Bonus to="Survival" note="situational" value="+2 bonus to find and follow tracks made by humanoids with the giant subtype" />
 		</Alternative>
-		<Alternative id="Healthy" namespaces="DwarfHardy" description="Some dwarves are exceptionally hardy against diseases and poison." explanation="You have a 2 racial bonus on saves vs disease and poison, and you need one fewer consecutive successful save (minimum 1) to be cured of diseases and poisons">
+		<Alternative id="Healthy" namespaces="DwarfHardy" description="Some dwarves are exceptionally hardy against diseases and poison." explanation="You have a +2 racial bonus on saves vs disease and poison, and you need one fewer consecutive successful save (minimum 1) to be cured of diseases and poisons">
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs disease and poison, and you need one fewer consecutive successful save (minimum 1) to be cured of diseases and poisons" />
 		</Alternative>
 		<Alternative id="Industrious Urbanite" namespaces="DwarfHatred" description="Some dwarves have adapted to the expectations of their host cities." explanation="You have a +4 bonus on Profession checks to earn money; you make double the normal progress on Craft checks to create non-magical items">
@@ -1064,7 +1064,7 @@
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs illusion spells and effects" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (gnome)" namespaces="GnomeSubtype">
-			<PoolBonus to="creatureSubtype" value="gnome" />
+			<PoolBonus to="creatureSubtypes" value="gnome" />
 		</Standard>
 		<Standard id="Gnomish Magic" explanation="You add +1 to the DC of any saving throws against illusion spells you cast; if you have a Charisma score of 11 or higher, you also gain the following spell-like abilities: 1/day—dancing lights, ghost sound, prestidigitation, and speak with animals" namespaces="GnomeMagic">
 			<PoolBonus to="spellcastingEffects" value="You add +1 to the DC of any saving throws against illusion spells you cast." />
@@ -1289,7 +1289,7 @@
 			<PoolBonus to="weaponMartial" value="TYPEhalfling" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (halfling)" namespaces="HalflingSubtype">
-			<PoolBonus to="creatureSubtype" value="halfling" />
+			<PoolBonus to="creatureSubtypes" value="halfling" />
 		</Standard>
 		<Alternative id="Adaptable Luck" namespaces="HalflingLuck" description="Some halflings have greater control over their innate luck. This ability gives them more options for how they can apply their good fortune from day to day, but also narrows its scope." explanation="3/day: choose to gain a luck bonus on an ability check, attack roll, saving throw, or skill check: if you choose to use the ability before the roll or check, gain a +2 luck bonus; otherwise gain a +1 luck bonus">
 			<PoolBonus to="miscEffects" value="3/day: choose to gain a luck bonus on an ability check, attack roll, saving throw, or skill check: if you choose to use the ability before the roll or check, gain a +2 luck bonus; otherwise gain a +1 luck bonus" />
@@ -1491,7 +1491,7 @@
 			<Bonus to="Intimidate" value="2" type="racial" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (human, orc)" namespaces="HalfOrcSubtype">
-			<PoolBonus to="creatureSubtype" value="human,orc" />
+			<PoolBonus to="creatureSubtypes" value="human,orc" />
 		</Standard>
 		<Standard id="Orcish Ferocity" explanation="Once per day, when you're brought below 0 hit points but not killed, you can fight on for 1 more round as if disabled. At the end of his next turn, unless brought to above 0 hit points, you immediately fall unconscious and begin dying" namespaces="HalfOrcFerocity">
 			<PoolBonus to="combatEffects">
