@@ -349,12 +349,16 @@
 	<Bundles>
 		<Category name="race" src="pf/pf01-races.xml" />
 		<Category name="class" src="pf/pf01-classes.xml" />
-		<Category name="feat" src="pf/pf01-feats-a-c.xml" />
-		<Category name="feat" src="pf/pf01-feats-d-go.xml" />
-		<Category name="feat" src="pf/pf01-feats-gr-l.xml" />
-		<Category name="feat" src="pf/pf01-feats-m-ph.xml" />
-		<Category name="feat" src="pf/pf01-feats-pi-sq.xml" />
-		<Category name="feat" src="pf/pf01-feats-st-x.xml" />
+		<Category name="feat" src="pf/pf01-feats-a-b.xml" />
+		<Category name="feat" src="pf/pf01-feats-c-de.xml" />
+		<Category name="feat" src="pf/pf01-feats-di-e.xml" />
+		<Category name="feat" src="pf/pf01-feats-f-h.xml" />
+		<Category name="feat" src="pf/pf01-feats-i-l.xml" />
+		<Category name="feat" src="pf/pf01-feats-m.xml" />
+		<Category name="feat" src="pf/pf01-feats-n-rh.xml" />
+		<Category name="feat" src="pf/pf01-feats-ri-sp.xml" />
+		<Category name="feat" src="pf/pf01-feats-sq-t.xml" />
+		<Category name="feat" src="pf/pf01-feats-u-z.xml" />
 	</Bundles>
 	<Pages>
 		<Page id="BEGIN">

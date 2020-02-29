@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Bundles>
+	<Bundle id="Named Bullet" title="Named Bullet" groups="Grit" description="You can craft ammunition intended to kill specific foes.">
+		<Prerequisites>Amateur Gunslinger feat or grit class feature, Gunsmithing, base attack bonus +5.</Prerequisites>
+		<Benefit>
+			<p>Whenever you craft ammunition using Gunsmithing, you may inscribe a bullet or alchemical cartridge with the name of its intended target. The ammunition gains the bane weapon special ability against the chosen creature only. If the ammunition is used to attack any other target, the attack roll is instead made with a &#x2013;2 penalty. Crafting a named bullet costs 1 grit point and reduces your maximum grit points by 1 until the named bullet is fired or destroyed.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Narrow Frame" title="Narrow Frame" groups="Animal Companion Feat" description="Your excellent coordination allows you to maneuver better in close quarters.">
+		<Prerequisites>Escape Artist 1 rank, animal or magical beast.</Prerequisites>
+		<Benefit>
+			<p>You do not take penalties on your attack rolls or to your AC for squeezing through a narrow space that is at least half as wide as your normal space, though each move into or through a narrow space still counts as if it were 2 squares.</p>
+		</Benefit>
+		<Normal>
+			<p>You take a &#x2013;4 penalty on attack rolls and a &#x2013;4 penalty to AC while squeezing.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Natural Charmer" title="Natural Charmer" groups="Dhampir" description="...">
+		<Prerequisites>Cha 17, dhampir.</Prerequisites>
+		<Benefit>
+			<p>You can take 20 on any Charisma-based skills to charm, convince, persuade, or seduce humanoids whose attitude is at least friendly to you. Taking 20 still requires 20 times the normal time to perform the skill.</p>
+		</Benefit>
+		<Normal>
+			<p>You cannot take 20 on any check where you incur penalties for failure.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Natural Jouster" title="Natural Jouster" groups="Combat" description="You are adept at jousting using your natural tauric form.">
+		<Prerequisites>Centaur (or any tauric creature at the GM&apos;s discretion)</Prerequisites>
+		<Benefit>
+			<p>You gain proficiency with the lance. You can wield a lance one-handed as if you were mounted, and you deal double damage with a lance when charging.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Natural Poison Antitoxin" title="Natural Poison Antitoxin" groups="" description="You have learned how to create antitoxin that can resist natural poisons.">
+		<Prerequisites>Natural Poison Harvester, Craft (alchemy) 8 ranks, Survival 8 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you succeed at a Craft (alchemy) check to create an antitoxin using a dose of a natural poison you harvested, you increase the duration of the antitoxin to an amount equal to 4 hours plus an additional hour for every 5 by which your result exceeds the DC.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Natural Poison Harvester" title="Natural Poison Harvester" groups="" description="You are exceedingly proficient at harvesting and distilling poison from venomous monsters.">
+		<Prerequisites>Craft (alchemy) 6 ranks, Survival 6 ranks.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on Craft (alchemy) checks when creating poison harvested from poisonous monsters. When you successfully craft such poisons, the DC of the poison increases by 2.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Natural Spell" title="Natural Spell" groups="" description="You can cast spells even while in a form that cannot normally cast spells.">
+		<Prerequisites>Wis 13, wild shape class feature.</Prerequisites>
+		<Benefit>
+			<p>You can complete the verbal and somatic components of spells while using wild shape. You substitute various noises and gestures for the normal verbal and somatic components of a spell.</p>
+			<p>You can also use any material components or focuses you possess, even if such items are melded within your current form. This feat does not permit the use of magic items while you are in a form that could not ordinarily use them, and you do not gain the ability to speak while using wild shape.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nature Magic" title="Nature Magic" groups="" description="You are able to use simple spells by drawing on nature's raw majesty.">
+		<Prerequisites>Knowledge (nature) 1 rank.</Prerequisites>
+		<Benefit>
+			<p>You gain know direction as a constant spell-like ability, and can choose another druid orison you can cast as a spell-like ability once per day. Your caster level for both of these spell-like abilities is equal to your character level.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nature Soul" title="Nature Soul" groups="" description="You are innately in tune with nature and venerate the power and mystery of the natural world.">
+		<Benefit>
+			<p>You get a +2 bonus on all Knowledge (nature) checks and Survival checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nature's Freedom" title="Nature's Freedom" groups="" description="Creatures affected by your channel energy are not affected by difficult terrain.">
+		<Prerequisites>Animal or Plant domain; channel energy class feature.</Prerequisites>
+		<Benefit>
+			<p>When you expend one additional use when you channel energy, you enable affected creatures to move freely through undergrowth as per the druid&apos;s woodland stride class feature. This effect lasts a for number of minutes equal to your Charisma modifier (minimum 1). Multiple uses of this feat extend the duration of the woodland stride effect.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nature's Weapons" title="Nature's Weapons" groups="Combat" description="You can make a weapon out of nearly anything that can be found in the wild.">
+		<Prerequisites>Catch Off-Guard; base attack bonus +2; Knowledge (nature) or Survival 2 ranks.</Prerequisites>
+		<Benefit>
+			<p>You can turn nearly anything you might find in the wilderness into an improvised melee weapon. This improvised melee weapon is one-handed and deals 1d6 points of damage for Medium creatures and 1d4 for Small creatures. Depending on the weapon, it deals bludgeoning, piercing, or slashing damage (at the GM&apos;s discretion). Grabbing an object to use as a weapon is the same action as drawing a weapon. The weapon must be of a material that is naturally occurring in that terrain.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Neckbreaker" title="Neckbreaker" groups="Combat" description="With a quick jerk, you snap an enemy's neck.">
+		<Prerequisites>Bonebreaker, Greater Grapple, Improved Grapple, Improved Unarmed Strike, Jawbreaker, Stunning Fist, Heal 12 ranks.</Prerequisites>
+		<Benefit>
+			<p>If you have an opponent your size or smaller helpless or pinned, after you initiate or maintain a grapple, you can make a Stunning Fist attempt at a -5 penalty on the attack roll. If you succeed, you wrench that opponent&apos;s neck, dealing 2d6 Strength or Dexterity damage. If the targeted ability score is reduced to 0, any remaining damage is dealt to that opponent&apos;s Constitution score. A creature that is immune to critical hits or that has no discernible head and neck is immune to the effects of this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Necromantic Affinity" title="Necromantic Affinity" groups="" description="Long exposure to necromantic energies has granted you a small measure of resistance against them.">
+		<Prerequisites>Con 15.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on saving throws made to resist spells and effects that utilize negative energy, cause negative levels, or cause ability damage, ability drain, or ability penalties. In addition, damage caused by inflict spells heals you as if you were an undead creature, but you also take damage from cure spells. </p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Neither Elf Nor Human" title="Neither Elf Nor Human" groups="Half-Elf" description="">
+		<Prerequisites>Exile&apos;s Path, Seen and Unseen, character level 11th, half-elf.</Prerequisites>
+		<Benefit>
+			<p>You are not considered elven or human for the purpose of harmful spells or effects based on your type, like a bane weapon or a ranger&apos;s favored enemy class feature.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nerve-Racking Negotiator" title="Nerve-Racking Negotiator" groups="" description="You've mastered the art of intimidation to get what you want without suffering unwanted repercussions.">
+		<Prerequisites>Persuasive.</Prerequisites>
+		<Benefit>
+			<p>When you successfully use the Intimidate skill to force an opponent to act friendly toward you, the target must attempt a Will save once the intimidation wears off.</p>
+			<p>The DC is equal to 10 + your number of ranks in Intimidate.</p>
+			<p>If the target fails this save, after the intimidation period expires, the target counts as having the same attitude toward you as it initially did (usually indifferent) and will not report you to the authorities for intimidating it.</p>
+		</Benefit>
+		<Normal>
+			<p>The target of a successful Intimidate check is unfriendly to you and potentially reports you to the authorities after the duration ends.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Net Adept" title="Net Adept" groups="Combat" description="You have trained to use the net as a melee weapon.">
+		<Prerequisites>Exotic Weapon Proficiency (net), base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>You can treat a net as a one-handed melee reach weapon with a 10-foot reach. Further, you take no penalty on melee attack rolls for using an unfolded net, and you can use one full-round action or two move actions to fold a net.</p>
+		</Benefit>
+		<Normal>
+			<p>A net is a ranged weapon that imposes a -4 penalty on ranged attack rolls if it is unfolded. Folding a net takes a proficient user 2 rounds.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Net Maneuvering" title="Net Maneuvering" groups="Combat" description="With sweeping movements and brute force, you can use your net to put foes at a disadvantage.">
+		<Prerequisites>Exotic Weapon Proficiency (net), Net Adept, base attack bonus +3.</Prerequisites>
+		<Benefit>
+			<p>In melee, you can use a net to trip or disarm opponents instead of entangling them. You gain a +2 bonus on disarm checks made to use a net in this way. Further, if you have an opponent entangled in your net, you can attempt to drag or reposition that opponent as long as he is within your net&apos;s reach or you control the trailing rope on your net.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Net Trickery" title="Net Trickery" groups="Combat" description="You have become very proficient at using your net to hinder your enemies.">
+		<Prerequisites>Exotic Weapon Proficiency (net), Net Adept, Net Maneuvering, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>In place of one of your melee attacks, you can use your net to attempt a dirty trick combat maneuver to blind an opponent. If you have an opponent entangled in your net, you can attempt to trip that opponent as long as he is within your net&apos;s reach or you control the trailing rope on your net. You also gain a +2 bonus on drag and reposition combat maneuver checks you make using your net.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Net and Trident" title="Net and Trident" groups="Combat" description="Your skill with lighter weapons allows you to wield one alongside your net.">
+		<Prerequisites>Dex 15, Exotic Weapon Proficiency (net), Net Adept, Two-Weapon Fighting.</Prerequisites>
+		<Benefit>
+			<p>You can treat a net as a one-handed ranged weapon, allowing you to wield a light or one-handed melee weapon and still make ranged attacks with your net. When you use your light or one-handed melee weapon to attack an entangled opponent, you gain a +2 bonus on damage rolls and on attack rolls to confirm a critical hit.</p>
+		</Benefit>
+		<Normal>
+			<p>A net is a two-handed ranged weapon.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Night Sky Hex" title="Night Sky Hex" groups="" description="You use the mystical network of power that blazes in the night sky to empower your hexes.">
+		<Prerequisites>Hex class feature; moon, stars, or winter patron.</Prerequisites>
+		<Benefit>
+			<p>When you gain this feat, choose one hex that you can use to affect no more than one opponent. When you are in view of the night sky and use that hex, increase the save DC of that hex by 2.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nightmare Fist" title="Nightmare Fist" groups="Combat" description="You are even more deadly in magical darkness.">
+		<Prerequisites>Improved Unarmed Strike, Intimidate 1 rank, ability to create magical darkness.</Prerequisites>
+		<Benefit>
+			<p>While fighting within an area of magical darkness, you gain a +2 bonus on damage rolls with unarmed strikes, or a +4 bonus against opponents that are shaken, frightened, or panicked. You also gain a +2 morale bonus on Acrobatics and Intimidate checks.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nightmare Striker" title="Nightmare Striker" groups="Combat" description="Your faerie fire not only illuminates your foes, but it also shows you their weaknesses.">
+		<Prerequisites>Improved Unarmed Strike, Nightmare Fist, Nightmare Weaver, Stunning Fist, Heal 5 ranks, ability to cast faerie fire.</Prerequisites>
+		<Benefit>
+			<p>While a faerie fire you have cast (not one cast from a spell completion or spell trigger item) outlines an opponent, the DC for that opponent to resist your Stunning Fist attempts increases by +2. If you hit an opponent with a Stunning Fist attempt, and that opponent fails her saving throw, you can render the target shaken for 1d2 rounds plus 1 round for every 5 by which the opponent failed her save.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nightmare Weaver" title="Nightmare Weaver" groups="Combat" description="You can use your ability to create magical darkness to terrorize enemies.">
+		<Prerequisites>Improved Unarmed Strike, Nightmare Fist, Intimidate 2 ranks, ability to cast darkness.</Prerequisites>
+		<Benefit>
+			<p>By spending a full-round action to cast darkness, you can also make Intimidate checks to demoralize all foes in the spell&apos;s initial area.</p>
+		</Benefit>
+		<Special>
+			<p>This feat counts as Dazzling Display for purposes of qualifying for Deadly Stroke and Shatter Defenses.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Nimble Moves" title="Nimble Moves" groups="" description="You can move across a single obstacle with ease.">
+		<Prerequisites>Dex 13.</Prerequisites>
+		<Benefit>
+			<p>Whenever you move, you may move through 5 feet of difficult terrain each round as if it were normal terrain. This feat allows you to take a 5-foot step into difficult terrain.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nimble Natural Summons" title="Nimble Natural Summons" groups="" description="Your summoned natural allies may walk the wild parts of the world unimpeded.">
+		<Prerequisites>Augmented Summoning, Spell Focus (conjuration), ability to cast summon nature&apos;s ally, caster level 6th, worshiper of a good deity.</Prerequisites>
+		<Benefit>
+			<p>Creatures you summon with summon nature&apos;s ally can move through any sort of undergrowth (such as natural thorns, briars, and similar terrain) at their normal speeds without taking damage or suffering other impairment. Thorns, briars, and undergrowth areas that have been magically manipulated to impede motion, however, still affect summoned creatures.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Nimble Striker" title="Nimble Striker" groups="Combat, Catfolk" description="">
+		<Prerequisites>Dex 13, base attack bonus +1, catfolk, sprinter racial trait.</Prerequisites>
+		<Benefit>
+			<p>You do not take a &#x2013;2 penalty to AC when you use the Cleave feat, Lunge feat, or when you charge.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="No Name" title="No Name" groups="Grit" description="You don't need an elaborate disguise to keep your identity under wraps.">
+		<Prerequisites>Grit class feature or Amateur Gunslinger feat, Bluff 4 ranks.</Prerequisites>
+		<Benefit>
+			<p>You often rely on surprise and misdirection in your social dealings. You gain a +2 bonus on Bluff checks, and you can spend 1 grit point to gain a +10 bonus on Disguise checks for 10 minutes per your gunslinger level (minimum 10 minutes). This deed does not actually change your appearance, but rather allows you to hide your identity in other ways.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Noble Scion" title="Noble Scion" groups="" description="You are a member of a proud noble family, whether or not you remain in good standing with your family.">
+		<Prerequisites>Cha 13, must be taken at 1st level.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on all Knowledge (nobility) checks, and that chosen Knowledge skill is always considered a class skill for you.</p>
+			<p>When you select this feat, choose one of the benefits listed below that matches the flavor of your noble family. Work with your GM to ensure that your choice is appropriate.</p>
+			<p>Source PPC:HotHC</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Noble Spell Resistance" title="Noble Spell Resistance" groups="Drow" description="...">
+		<Prerequisites>Cha 13, Wis 13, Greater Drow Nobility, character level 13th, drow.</Prerequisites>
+		<Benefit>
+			<p>Your spell resistance is equal to 11 + your character level.</p>
+		</Benefit>
+		<Special>
+			<p>You receive a +1 circumstance bonus on Diplomacy and Intimidate checks made against any drow.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Notorious Vigilante" title="Notorious Vigilante" groups="Combat" description="You are widely known as dangerous and fearsome.">
+		<Prerequisites>Dazzling Display, Weapon Focus, any nongood alignment, great renown social talent, proficiency with chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>Your presence can act as a fast and effective Dazzling Display. As a standard action, you use the benefit of Dazzling Display even when you are not wielding a weapon in which you have Weapon Focus. If you are wielding such a weapon, you gain a +2 bonus on the Intimidate check.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Numbing Blow" title="Numbing Blow" groups="Combat" description="You strike the weapons of your opponents so forcefully that they are unable to quickly recover or counterattack.">
+		<Prerequisites>Int 13, Str 13, Combat Expertise, Improved Disarm, Power Attack.</Prerequisites>
+		<Benefit>
+			<p>Whenever you succeed at a combat maneuver check to disarm an opponent, the opponent must succeed at a Fortitude save (DC = 10 + your base attack bonus) or be hampered by the pain of the blow. For 1 round, if the target of your disarm combat maneuver failed its save, it can&apos;t use the limb or limbs that had been wielding the disarmed weapon to wield a weapon or shield, provide somatic components for spells, or manipulate objects. This is a pain effect.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Obscuring Beacon" title="Obscuring Beacon" groups="Combat" description="You use light to disrupt your foes' darkness-adapted vision.">
+		<Benefit>
+			<p>When you&apos;re holding a light source in an area that is otherwise dim or darker, foes within the normal or bright light radius shed by your light source take a -1 penalty on attack rolls against other targets that are also within the radius of your light. Blind creatures aren&apos;t affected by this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Octopus Focus" title="Octopus Focus" groups="Combat" description="The more enemies that surround you, the more accurate your attacks become.">
+		<Prerequisites>Dex 13, Dodge, Octopus Style, Acrobatics 3 ranks, Perception 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>When using this style, you gain a cumulative +1 bonus on melee attacks for each enemy that threatens you, up to a maximum equal to your Dexterity modifier.</p>
+			<p>In addition, when you attempt to grapple without two free hands, you take only a -2 penalty on your combat maneuver check instead of the usual -4.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Octopus Style" title="Octopus Style" groups="Combat,Style" description="You anticipate the attacks of more than one enemy at once.">
+		<Prerequisites>Dex 13, Dodge, Improved Unarmed Strike, Acrobatics 1 rank, Perception 1 rank.</Prerequisites>
+		<Benefit>
+			<p>As a move action when using this style, you can select a number of creatures you are aware of equal to your Dexterity modifier. You can&apos;t be flanked by the selected creatures until the start of your next turn.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Octopus Thrash" title="Octopus Thrash" groups="Combat" description="Your arms flail about in a confusing pattern of strikes that trips and batters your foes.">
+		<Prerequisites>Dex 13, Dodge, Improved Trip, Octopus Focus, Octopus Style, Acrobatics 7 ranks, Perception 7 ranks.</Prerequisites>
+		<Benefit>
+			<p>While using Octopus Style, when you threaten two enemies who are adjacent to each other, you can attempt a trip combat maneuver check against both targets at once in place of a melee attack. You attempt a single combat maneuver check at a -5 penalty and apply the result to both targets.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Omnipresent Mentor" title="Omnipresent Mentor" groups="" description="You're able to impart your guidance to a single ally, regardless of location.">
+		<Prerequisites>Cha 17, Inspiring Mentor, inspire competence bardic performance.</Prerequisites>
+		<Benefit>
+			<p>By expending 4 rounds of your bardic performance at the start of the day, you can instill one ally with your inspiring words. Select one skill in which you possess ranks. Your ally gains the benefits of your inspire competence bardic performance, regardless of distance, until the next time you replenish rounds of bardic performance. This doesn&apos;t count as an active performance, so the effects don&apos;t end if you start another performance.</p>
+			<p>Only one ally can be affected by this ability at a time; if you use this ability again before the duration expires, the ally currently affected loses the bonuses from this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="One Eye Open" title="One Eye Open" groups="" description="Your senses seek out threats even while you sleep.">
+		<Prerequisites>Wis 13, Alertness.</Prerequisites>
+		<Benefit>
+			<p>The DCs of your Perception checks don&apos;t increase when you are asleep. If you succeed at a Perception check to notice something dangerous while asleep, you can wake up to confront the danger.</p>
+		</Benefit>
+		<Normal>
+			<p>The DC for a Perception check attempted by a sleeping creature increases by 10.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="One Mind" title="One Mind" groups="Teamwork" description="Your nearly supernatural mental connection with your allies keeps you in a constant state of readiness.">
+		<Prerequisites>Alertness, Sense Motive 3 ranks, human.</Prerequisites>
+		<Benefit>
+			<p>Whenever you&apos;re adjacent to an ally who also has this feat, if your ally is not flat-footed, you&apos;re also not considered flat-footed before you act in combat (you might become flat-footed in other ways, however).</p>
+			<p>Additionally, if your ally can see a creature that you can&apos;t see, that creature doesn&apos;t gain a +2 bonus on attack rolls against you from being invisible, nor do you take a &#x2013;2 penalty to AC for being blinded if your ally can see.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="One with the Land" title="One with the Land" groups="" description="Your connection your favored terrain is so intense that you draw strength from the power of nature itself.">
+		<Prerequisites>Favored terrain class feature.</Prerequisites>
+		<Benefit>
+			<p>In your favored terrain, you require only half the normal amount of food, water, and sleep, and your rate of natural healing is doubled. You add half your favored terrain bonus as a bonus on saving throws and Constitution checks to stave off the effects of cold exposure, heat exposure, starvation, and thirst in your favored terrain.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="One-Inch Punch" title="One-Inch Punch" groups="Combat" description="You combine the force of multiple blows into a single strike to potentially send a foe flying.">
+		<Prerequisites>Improved Unarmed Strike, base attack bonus +6, brawler&apos;s flurry class feature or flurry of blows class feature.</Prerequisites>
+		<Benefit>
+			<p>When making a full attack against a corporeal foe, you can forgo multiple attacks to make one unarmed strike at your highest base attack bonus. For each attack you forgo, you can add half your Strength modifier (minimum +0) to your damage roll. If you hit with this attack, you can attempt a bull rush combat maneuver check as a free action, substituting your attack roll result for the combat maneuver check result and adding a bonus equal to half your Strength modifier for each attack you forgo. This bull rush does not provoke an attack of opportunity, and you do not move as a result of the bull rush.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Onslaught" title="Onslaught" groups="Combat" description="No one is prepared for how hard you strike until they see it firsthand.">
+		<Prerequisites>Str 13, Power Attack, base attack bonus +1, sneak attack class feature.</Prerequisites>
+		<Benefit>
+			<p>If you use Power Attack with the first melee attack you make during a surprise round, you can sneak attack even if you are not flanking your target and it&apos;s not denied its Dexterity bonus to AC.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Open Conduit" title="Open Conduit" groups="" description="You can draw forth planar energies with unparalleled ease.">
+		<Prerequisites>Knowledge (planes) 5 ranks or outsider with the native subtype.</Prerequisites>
+		<Benefit>
+			<p>Select a conduit feat you have. When determining the uses per day or the amount of time per day you can use this conduit feat, you are treated as though you had an additional 5 ranks in Knowledge (planes). This does not offer any other benefit or affect other uses of Knowledge (planes).</p>
+		</Benefit>
+		<Special>
+			<p>You can select this feat more than once. Its effects do not stack. Each time you select it, choose another conduit feat to gain its benefits.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Open Up" title="Open Up" groups="Combat,Teamwork" description="You pull an opponent's shield, opening your foe up to an unobstructed attack by an ally.">
+		<Prerequisites>Int 13, Combat Expertise.</Prerequisites>
+		<Benefit>
+			<p>When you successfully use the aid another action to improve the next attack roll against an opponent by an ally who also has this feat, that attack also ignores any Armor Class bonus granted by the opponent&apos;s shield.</p>
+			<p>This benefit affects only physical shields, not shield bonuses from spells or other sources.</p>
+		</Benefit>
+		<Special>
+			<p>If both you and your ally also have the Harrying Partners teamwork feat, all of your ally&apos;s attacks made before your next turn ignore the opponent&apos;s Armor Class bonus from a shield.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Opening Volley" title="Opening Volley" groups="Combat" description="Your ranged assault leaves your foe disoriented and vulnerable to your melee attack.">
+		<Benefit>
+			<p>Whenever you deal damage with a ranged attack, you gain a +4 circumstance bonus on the next melee attack roll you make against the opponent. This attack must occur before the end of your next turn.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Opportunistic Grappler" title="Opportunistic Grappler" groups="Combat" description="When someone grabs you, you can easily reach that opponent's vulnerable spots.">
+		<Benefit>
+			<p>While you are grappled (but not when you are controlling the grapple), you can attempt a dirty trick combat maneuver against the creature grappling you without provoking an attack of opportunity or taking a penalty on the combat maneuver check. If you have the Improved Dirty Trick feat, you gain a +2 bonus on combat maneuver checks to attempt such a dirty trick, and the condition the dirty trick imposes lasts for 1 round longer than normal. This bonus stacks with the bonuses granted by Improved Dirty Trick and Greater Dirty Trick feats.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Oracular Intuition" title="Oracular Intuition" groups="" description="You are highly sensitive to magic and changes in a person's demeanor.">
+		<Prerequisites>Mystery class feature</Prerequisites>
+		<Benefit>
+			<p>You get a +2 bonus on Sense Motive checks and Spellcraft checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orator" title="Orator" groups="" description="You're able to construct statements and commands that are much more convincing than their content would otherwise suggest.">
+		<Prerequisites>Skill Focus (Linguistics).</Prerequisites>
+		<Benefit>
+			<p>You can use a Linguistics check in place of a Bluff check to tell a falsehood or conceal information, in place of a Diplomacy check to change the attitude of a creature, or in place of an Intimidate check to force a creature to cooperate. You must deliver your attempt in a language the target understands.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orc Fury Style" title="Orc Fury Style" groups="Combat,Style" description="You inspire great fear in your enemies.">
+		<Prerequisites>Bullying Blow, Intimidating Prowess, Intimidate 3 ranks, weapon familiarity racial trait.</Prerequisites>
+		<Benefit>
+			<p>While wielding a greataxe, a falchion, or any melee weapon that has &apos;orc&apos; in its name, you can use the Bullying Blow feat with the first attack of a full-attack action or as part of a standard action to make one or more attacks (such as with the Cleave feat).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orc Hewer" title="Orc Hewer" groups="Combat,Dwarf" description="...">
+		<Prerequisites>Str 13, Cleave, Goblin Cleaver, Power Attack, dwarf.</Prerequisites>
+		<Benefit>
+			<p>This feat functions as Goblin Cleaver, but your additional attacks can be made against creatures your size or smaller. In addition, any such attacks that you make against humanoids (orc) gain a +2 circumstance bonus on attack rolls.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orc Rampage" title="Orc Rampage" groups="Combat" description="You effortlessly savage fearful enemies.">
+		<Prerequisites>Bullying Blow, Intimidating Prowess, Orc Fury Style, Intimidate 5 ranks, weapon familiarity racial trait.</Prerequisites>
+		<Benefit>
+			<p>While using Orc Fury Style, you gain a +1 bonus on attack rolls and damage rolls against shaken opponents, and you don&apos;t take an attack penalty when using the Bullying Blow feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orc Snarl" title="Orc Snarl" groups="Combat" description="Your attacks leave your opponent quivering in fear.">
+		<Prerequisites>Bullying Blow, Intimidating Prowess, Orc Fury Style, Orc Rampage, Intimidate 7 ranks, weapon familiarity racial trait.</Prerequisites>
+		<Benefit>
+			<p>While using Orc Fury Style, you gain a +4 bonus on saving throws against effects created by shaken foes.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Orc Weapon Expertise" title="Orc Weapon Expertise" groups="Combat, Orc" description="You have some special training in Orcish weaponry.">
+		<Prerequisites>Base attack bonus +1, orc.</Prerequisites>
+		<Benefit>
+			<p>When you take this feat, choose one of the benefits below. Whenever you wield a weapon that has &apos;orc&apos; in its name, you gain the benefit you chose so long as you are actually proficient with that weapon.</p>
+			<p>This feat has no effect if you are not proficient with the weapon you&apos;re using.<Special>
+			</Special></p><p>You can gain this feat multiple times. Each time you take this feat, you must choose a different benefit. You may only apply one of these benefits per round (chosen as a free action at the start of your turn).</p>
+		<p></p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ordered Mind" title="Ordered Mind" groups="" description="Your study of Hell's laws improves your counterspells.">
+		<Prerequisites>Caster level 7th, lawful alignment, worship of the associated deity.</Prerequisites>
+		<Benefit>
+			<p>You are able to modify more of your spells to use as counterspells. The DC of the Spellcraft check you must succeed at to identify an opponent&apos;s spell is equal to 20 + the spell level of the opponent&apos;s spell (instead of 15 + the spell level), but you are able to cast as your counterspell any spell from the same school of the foe&apos;s spell (instead of the same spell). The level of the spell used to counterspell must be of a level equal to or higher than your foe&apos;s spell.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Oread Burrower" title="Oread Burrower" groups="Oread" description="...">
+		<Prerequisites>Stony Step, character level 9th, oread.</Prerequisites>
+		<Benefit>
+			<p>You gain a burrow speed equal to 1/2 your base speed. You can burrow through sand, dirt, clay, gravel, or similar materials, but not solid stone. You do not leave a hole behind, nor is your passage marked on the surface.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Oread Earth Glider" title="Oread Earth Glider" groups="Oread" description="">
+		<Prerequisites>Oread Burrower, Stony Step, character level 13th, oread.</Prerequisites>
+		<Benefit>
+			<p>You gain the earth glide universal monster ability and can use it to travel at your full base speed through sand, dirt, clay, gravel, or similar materials. If protected against fire damage, you can even burrow through lava. You can burrow through solid stone at 1/2 your base speed.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ostentatious Rager" title="Ostentatious Rager" groups="Combat" description="You can enthrall onlookers with a show of ferocious might or compel enemies to regard you as a crucial threat.">
+		<Prerequisites>Intimidate 5 ranks, rage class feature.</Prerequisites>
+		<Benefit>
+			<p>You can earn money with Intimidate by performing feats of strength and intimidation, exactly as if you were doing so with the Perform skill.</p>
+			<p>Additionally, while you&apos;re raging, if a foe would be demoralized by your Intimidate skill and the foe is not currently shaken by your intimidation, you can instead distract that foe until the beginning of your next turn.</p>
+			<p>During that time, the foe takes a -5 penalty on Perception checks that don&apos;t involve you and takes a -2 penalty to its AC against any creature other than you. These effects end early if a creature other than you attacks the foe or if you demoralize the foe and apply the shaken condition.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ostentatious Weakness" title="Ostentatious Weakness" groups="Combat, Performance" description="You use knowledge of your hated foes to please onlookers.">
+		<Prerequisites>Base attack bonus +5, favored enemy class feature.</Prerequisites>
+		<Benefit>
+			<p>When you spend a swift action to attempt a performance combat check, you may add your favored enemy bonus to the check if you&apos;re fighting a favored enemy.</p>
+			<p>Combat Trick</p>
+			<p>Note If using the optional Stamina Pool rules, the following trick may be used with this feat.</p>
+			<p>Combat Trick: You can spend 2 stamina points to select another type of favored enemy (and subtype if humanoid or outsider is chosen). For the purposes of Ostentatious Weakness, that type counts as having been chosen with the favored enemy class feature, with a bonus equal to your highest favored enemy bonus.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Osyluth Guile" title="Osyluth Guile" groups="Combat" description="You are skilled at misdirecting an opponent's attacks.">
+		<Prerequisites>Bluff 8 ranks,  Dodge.</Prerequisites>
+		<Benefit>
+			<p>While you are fighting defensively or using the total defense action, select one opponent. Add your Charisma bonus to your AC as a dodge bonus against that opponent&apos;s melee attacks until your next turn. You cannot use this feat if you cannot see the selected opponent.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Outflank" title="Outflank" groups="Combat,Teamwork" description="You look for every edge when flanking an enemy.">
+		<Prerequisites>Base attack bonus +4.</Prerequisites>
+		<Benefit>
+			<p>Whenever you and an ally who also has this feat are flanking the same creature, your flanking bonus on attack rolls increases to +4. In addition, whenever you score a critical hit against the flanked creature, it provokes an attack of opportunity from your ally.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Outslug Sprint" title="Outslug Sprint" groups="Combat" description="You can make quick, defensive movements.">
+		<Prerequisites>Int 13; Combat Expertise or brawler&apos;s cunning class feature; Lunge; Outslug Style; Outslug Weave; Weapon Focus with the chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>While using Outslug Style, you can move an additional 5 feet when making a 5-foot step.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Outslug Style" title="Outslug Style" groups="Combat,Style" description="You dart in and out of combat.">
+		<Prerequisites>Int 13; Combat Expertise or brawler&apos;s cunning class feature; Weapon Focus with the chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>Choose one weapon from the close fighter weapon group. While using this style, when you take a 5-foot step, you gain a +1 dodge bonus to AC and a +1 bonus on weapon damage rolls with the chosen weapon until the beginning of your next turn.</p>
+		</Benefit>
+		<Special>
+			<p>In addition to the chosen weapon, a character with the weapon training (close) or the brawler&apos;s close weapon mastery class feature can use Outslug Style with any close weapon.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Outslug Weave" title="Outslug Weave" groups="Combat" description="You land precise attacks from afar.">
+		<Prerequisites>Int 13; Combat Expertise or brawler&apos;s cunning class feature; Lunge; Outslug Style; Weapon Focus with the chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>While using Outslug Style, you don&apos;t take a -2 penalty to your AC when using the Lunge feat. The bonuses to AC and on weapon damage rolls that you gain from Outslug Style increase to +2.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Overhead Flip" title="Overhead Flip" groups="Combat" description="You hoist your opponent above your head before slamming him to the ground, temporarily staggering the foe.">
+		<Prerequisites>Str 13, Improved Grapple, Improved Unarmed Strike, Savage Slam, base attack bonus +9 or monk level 6th.</Prerequisites>
+		<Benefit>
+			<p>While you are using Savage Slam, if you succeed at your grapple combat maneuver check to knock your opponent prone, the opponent must succeed at a Fortitude save (DC = 10 + your base attack bonus) or be staggered for 1 round. Oozes, incorporeal creatures, and creatures that are immune to critical hits are immune to this effect.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Overwatch Style" title="Overwatch Style" groups="Combat,Style" description="You have learned to wait until your ranged attacks have the greatest effect.">
+		<Prerequisites>Precise Shot, Rapid Shot, Weapon Focus with the chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>While using this style, as a full-round action you can ready two ranged attacks with the chosen weapon, each with its own triggering event.</p>
+			<p>You take a -2 penalty on attack rolls made with these readied actions.</p>
+		</Benefit>
+		<Special>
+			<p>A character with this feat and the weapon training (bows, crossbows, or firearms) class feature can use Overwatch Style with any bow, crossbow, or firearm, respectively, in addition to the chosen weapon.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Overwatch Tactician" title="Overwatch Tactician" groups="Combat" description="You quickly prepare to react to your enemies' actions.">
+		<Prerequisites>Overwatch Style, Precise Shot, Rapid Shot, Weapon Focus with the chosen weapon.</Prerequisites>
+		<Benefit>
+			<p>While using Overwatch Style, you can ready two ranged attacks as a standard action, rather than a full-round action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Overwatch Vortex" title="Overwatch Vortex" groups="Combat" description="You are ready to respond to many more of your foes' actions.">
+		<Prerequisites>Overwatch Style, Overwatch Tactician, Precise Shot, Rapid Shot, Weapon Focus with the chosen weapon, base attack bonus +11.</Prerequisites>
+		<Benefit>
+			<p>While using the Overwatch Style, as a full-round action you can ready up to four ranged attacks, each with its own triggering event. You take a -2 penalty on attack rolls made with these readied actions.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Overwhelm" title="Overwhelm" groups="Combat,Teamwork" description="You can overwhelm large foes with sheer numbers.">
+		<Benefit>
+			<p>You are considered to be flanking an opponent if at least one ally who also has this feat is threatening that opponent and the opponent is at least two size categories larger than the larger of you or your ally, regardless of your actual positioning.</p>
+		</Benefit>
+		<Normal>
+			<p>You must be positioned opposite an ally to flank an opponent.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Overwhelming Phantom" title="Overwhelming Phantom" groups="" description="Your phantom is strong-willed, allowing it to enter and dominate other creature's minds.">
+		<Prerequisites>Phantom class feature, spiritualist level 15th.</Prerequisites>
+		<Benefit>
+			<p>Three times per day, as a standard action while it is fully manifested, your phantom can attempt to enter and take control of a living creature; doing so provokes an attack of opportunity. A creature can resist this influence with a successful Will save (DC = 1/2 the phantom&apos;s Hit Dice + the phantom&apos;s Charisma modifier). A phantom can maintain this control for 1 minute per spiritualist level you have, but the victim is allowed a new saving throw each minute.</p>
+			<p>This ability otherwise functions as greater possession.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Owl Dive" title="Owl Dive" groups="Combat" description="Your martial training helps you fly and charge through others' spaces.">
+		<Prerequisites>Dex 17, Owl Style, Owl Swoop, Skill Focus (Stealth), base attack bonus +7 or monk level 5th, Acrobatics 1 rank, Fly 1 rank, Stealth 1 rank.</Prerequisites>
+		<Benefit>
+			<p>While using Owl Style, you can use your base attack bonus in place of your ranks in Fly to determine your Fly skill bonus. You can charge through other creatures&apos; spaces, but you must make a successful Acrobatics check to move through enemy spaces, as normal. If you fail an Acrobatics check to move through an enemy&apos;s space during a charge, your charge stops just before you enter that enemy&apos;s space; if you threaten that foe, you can make your charge attack against that foe.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Owl Style" title="Owl Style" groups="Combat,Style" description="You can move with the quiet grace of an owl.">
+		<Prerequisites>Dex 13, Skill Focus (Stealth), Stealth 1 rank.</Prerequisites>
+		<Benefit>
+			<p>While using this style, you can use your base attack bonus in place of your ranks in Stealth to determine your Stealth skill modifier (as usual, this does not replace your ranks for other purposes, such as determining the effects of Skill Focus). While in this stance and using Stealth, you can charge at a -10 penalty beyond the penalty you take for using Stealth at full speed (which is typically -5).</p>
+			<p>Foes that fail their Perception checks and don&apos;t otherwise notice you (for instance, with an ability like blindsight) are denied their Dexterity bonuses to AC against all attacks you make against them during or at the end of that charge instead of just against the first attack.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Owl Swoop" title="Owl Swoop" groups="Combat" description="Your martial training helps you move with acrobatic poise.">
+		<Prerequisites>Dex 15, Owl Style, Skill Focus (Stealth), Acrobatics 1 rank, Stealth 1 rank.</Prerequisites>
+		<Benefit>
+			<p>While using Owl Style, you can use your base attack bonus in place of your ranks in Acrobatics to determine your Acrobatics skill bonus. You can attempt Acrobatics checks to move on narrow or slick surfaces and to avoid attacks of opportunity while charging, incurring the same penalties and increased DCs that you usually would apply for moving at full speed.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pack Attack" title="Pack Attack" groups="Combat,Teamwork" description="You are skilled at surrounding your enemies.">
+		<Prerequisites>Base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>When you are adjacent to an ally with this feat, the first time you melee attack an opponent, you can spend an immediate action to take a 5-foot step, even if you have otherwise moved this round.</p>
+		</Benefit>
+		<Normal>
+			<p>You can take a 5-foot step only if you have not otherwise moved in a round.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Pack Flanking" title="Pack Flanking" groups="Teamwork,Combat" description="You and your companion creature are adept at fighting together against foes.">
+		<Prerequisites>Int 13, Combat Expertise, ability to acquire an animal companion.</Prerequisites>
+		<Benefit>
+			<p>When you and your companion creature have this feat, your companion creature is adjacent to you or sharing your square, and you both threaten the same opponent, you are both considered to be flanking that opponent, regardless of your actual positioning.</p>
+		</Benefit>
+		<Normal>
+			<p>You must be positioned opposite an ally to flank an opponent.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Pack Intimidation" title="Pack Intimidation" groups="Combat,Teamwork" description="You draw on the strength of numbers and your shared convictions to intimidate your foes.">
+		<Prerequisites>Half-orc, intimidating racial trait.</Prerequisites>
+		<Benefit>
+			<p>Whenever you use the Intimidate skill to demoralize foes, you gain a +2 circumstance bonus on your check for every ally who also has this feat within 30 feet (maximum +6).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Painful Anchor" title="Painful Anchor" groups="" description="Evil outsiders take damage when they attempt to connect to other planes.">
+		<Prerequisites>Anchoring aura class feature.</Prerequisites>
+		<Benefit>
+			<p>When an evil outsider uses a calling, summoning, or teleportation effect, or any ability that physically transports a creature to or from another plane (such as blink or etherealness) within your anchoring aura, it takes damage equal to 4d8 + your Charisma modifier. This damage comes from holy power and is not subject to damage reduction, energy immunities, or energy resistances.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Painful Collision" title="Painful Collision" groups="Combat" description="You shove your opponents into each other, causing painful and damaging collisions.">
+		<Prerequisites>Str 13, Improved Bull Rush, Power Attack.</Prerequisites>
+		<Benefit>
+			<p>When you bull rush an enemy into another creature, both creatures take 1d6 points of bludgeoning damage, plus an additional 1d6 points of bludgeoning damage for every 5 feet your original target has moved as a result of your bull rush.</p>
+			<p>For instance, if you successfully bull rush a goblin 10 feet and it then collides with another goblin, both creatures would take 3d6 points of bludgeoning damage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Paired Opportunists" title="Paired Opportunists" groups="Combat,Teamwork" description="You know how to make an enemy pay for lax defenses.">
+		<Benefit>
+			<p>Whenever you are adjacent to an ally who also has this feat, you receive a +4 circumstance bonus on attacks of opportunity against creatures that you both threaten. Enemies that provoke attacks of opportunity from your ally also provoke attacks of opportunity from you so long as you threaten them (even if the situation or an ability would normally deny you the attack of opportunity). This does not allow you to take more than one attack of opportunity against a creature for a given action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Panther Claw" title="Panther Claw" groups="Combat" description="You unleash a rapid series of blows on foes that attempt to attack you when you move.">
+		<Prerequisites>Wis 15, Combat Reflexes, Improved Unarmed Strike, Panther Style.</Prerequisites>
+		<Benefit>
+			<p>While using Panther Style, you can spend a free action, instead of spending a swift action, to make a retaliatory unarmed strike. You can make a number of retaliatory unarmed strikes on your turn equal to your Wisdom modifier.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Panther Parry" title="Panther Parry" groups="Combat" description="Your vicious strikes impair your foe's ability to attack you when you move.">
+		<Prerequisites>Wis 15, Combat Reflexes, Improved Unarmed Strike, Panther Claw, Panther Style.</Prerequisites>
+		<Benefit>
+			<p>While using Panther Style, your retaliatory unarmed strikes are resolved before the triggering attacks. If your retaliatory unarmed strike deals damage to an opponent, that opponent takes a -2 penalty on attack and damage rolls with the triggering attack of opportunity.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Panther Style" title="Panther Style" groups="Combat,Style" description="You can strike back at enemies who attack you when you move.">
+		<Prerequisites>Wis 13, Combat Reflexes, Improved Unarmed Strike.</Prerequisites>
+		<Benefit>
+			<p>While using this style, when an opponent makes an attack of opportunity against you for moving through a threatened square, you can spend a swift action to make a retaliatory unarmed strike attack against that opponent. Your attack is resolved after the triggering attack of opportunity.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Paralyzing Strike" title="Paralyzing Strike" groups="Combat" description="Finding just the right pressure point, you paralyze your foe with a single hit.">
+		<Prerequisites>Dex 13, Wis 13, Improved Unarmed Strike, base attack bonus +14.</Prerequisites>
+		<Benefit>
+			<p>You must declare that you are using this feat before you make your attack roll (thus, a failed attack roll ruins the attempt). Paralyzing Strike forces a foe damaged by your unarmed attack to attempt a Fortitude saving throw (DC = 10 + 1/2 your character level + your Wisdom modifier), in addition to dealing damage normally. A defender who fails this saving throw is paralyzed for 1 round, until just before your next turn. You can attempt to use Paralyzing Strike once per day for every 4 character levels you have, but no more than once per round. Constructs, incorporeal creatures, plants, undead, and creatures that are immune to critical hits cannot be affected by this ability.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Parry Spell" title="Parry Spell" groups="" description="...">
+		<Prerequisites>Spellcraft 15 ranks, Improved Counterspell .</Prerequisites>
+		<Benefit>
+			<p>Whenever you successfully counter a spell, it returns back to its caster. This works exactly like the spell turning spell.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Parting Blast" title="Parting Blast" groups="" description="When you die, your body explodes in one final, destructive kinetic blast.">
+		<Prerequisites>Kinetic blast class feature.</Prerequisites>
+		<Benefit>
+			<p>You can accept 1 point of burn to prepare a kinetic blast that automatically triggers upon your death.</p>
+			<p>If you are killed at any point before your burn is removed, Your body instantly erupts in an explosion that deals an amount of damage equal to that of your simple blast to all creatures in a 5-foot radius. A parting blast destroys your body, which might prevent any magic that requires an intact corpse.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Parting Shot" title="Parting Shot" groups="Combat" description="You are an expert skirmisher, able to rain missiles upon your enemies whether advancing or retreating.">
+		<Prerequisites>Dex 13, Dodge, Mobility, Point Blank Shot, Shot on the Run, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>Once per encounter, when using the withdraw action, you can make a single ranged attack at any point during your movement.</p>
+		</Benefit>
+		<Normal>
+			<p>You cannot attack when using the withdraw action.</p>
+		</Normal>
+		<Special>
+			<p>Starting at 6th level, a ranger with the archery combat style may select Parting Shot as a combat style feat.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Pass For Human" title="Pass For Human" groups="" description="You're easily mistaken for a human rather than a member of your own race.">
+		<Prerequisites>Half-elf, half-orc, or halfling (see Special).</Prerequisites>
+		<Benefit>
+			<p>You receive a +10 bonus on Disguise checks to disguise yourself as a human, and do not receive the penalty for disguising yourself as a member of another race when you do so. In areas largely populated or settled by humans, you can take 10 on your Disguise check, meaning most people tend to assume you are human unless given a reason to think otherwise.</p>
+		</Benefit>
+		<Special>
+			<p>A halfling may take this feat, but must have the Childlike feat as a prerequisite. The benefits of the two feats stack.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Passing Trick" title="Passing Trick" groups="Combat" description="Slipping past a foe gives you the chance to feint.">
+		<Prerequisites>Int 13, Combat Expertise, Dodge, Improved Feint, Mobility, size Small or smaller.</Prerequisites>
+		<Benefit>
+			<p>Whenever you make a successful Acrobatics check to move through an opponent&apos;s space, you can spend a swift action to make a Bluff check against that opponent to feint in combat.</p>
+		</Benefit>
+		<Special>
+			<p>If you have the Underfoot feat and the opponent is larger than you, you gain a +2 bonus on the Bluff check this feat allows.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Patient Strike" title="Patient Strike" groups="Combat" description="Your training under the Master of Swords has taught you that a well-timed strike is worth waiting for and that patience will serve you well in the long run.">
+		<Prerequisites>Int 13.</Prerequisites>
+		<Benefit>
+			<p>You can choose to ready an attack as a full-round action instead of a standard action. When you do so, you gain a +2 bonus on your attack roll when your readied action triggers.</p>
+		</Benefit>
+		<Normal>
+			<p>Readying an attack is a standard action and doesn&apos;t grant a bonus on your attack roll.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Penetrating Stare" title="Penetrating Stare" groups="Combat" description="Your stare penetrates right through your foe's strongest mental defenses.">
+		<Prerequisites>Mesmerist level 7th, painful stare class feature.</Prerequisites>
+		<Benefit>
+			<p>When you trigger your painful stare, the damage dealt ignores 5 points of the target&apos;s damage reduction, unless that damage reduction is untyped (for example, DR 10/&#x2014;).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Penetrating Strike" title="Penetrating Strike" groups="Combat" description="Your attacks are capable of penetrating the defenses of some creatures.">
+		<Prerequisites>Weapon Focus, base attack bonus +1, 12th-level fighter, proficiency with weapon.</Prerequisites>
+		<Benefit>
+			<p>Your attacks made with weapons selected with Weapon Focus ignore up to 5 points of damage reduction. This feat does not apply to damage reduction without a type (such as DR 10/&#x2014;).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Perfect Awareness" title="Perfect Awareness" groups="Combat" description="You can set aside all irrelevant sensory information to understand your surroundings perfectly for a moment.">
+		<Prerequisites>Wis 17, Combat Meditation, Meditation Master, character level 9th.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can take 20 on a Perception check as a move action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Perfect Center" title="Perfect Center" groups="Combat" description="You can ignore almost any distraction.">
+		<Prerequisites>Wis 21, Combat Meditation, Meditation Master, character level 17th.</Prerequisites>
+		<Benefit>
+			<p>You can take 10 on any skill check or concentration check, even if it is not normally allowed due to strenuous circumstances.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Perfect Strike" title="Perfect Strike" groups="Combat" description="When wielding a monk weapon, your attacks can be extremely precise.">
+		<Prerequisites>Dex 13, Wis 13, Improved Unarmed Strike, base attack bonus +8.</Prerequisites>
+		<Benefit>
+			<p>You must declare that you are using this feat before you make your attack roll (thus a failed attack roll ruins the attempt). You must use one of the following weapons to make the attack: kama, nunchaku, quarterstaff, sai, and siangham. You can roll your attack roll twice and take the higher result. If one of these rolls is a critical threat, the other roll is used as your confirmation roll (your choice if they are both critical threats). You may attempt a perfect attack once per day for every four levels you have attained (but see Special), and no more than once per round.</p>
+		</Benefit>
+		<Special>
+			<p>A weapon master monk or zen archer monk receives Perfect Strike as a bonus feat at 1st level, even if he does not meet the prerequisites. A monk may attempt an perfect strike attack a number of times per day equal to his monk level, plus one more time per day for every four levels he has in classes other than monk.</p>
+			<p>FAQ</p>
+			<p>Can I use Perfect Strike with unarmed strikes?</p>
+			<p>As written, you can only use the feat with the specific weapons mentioned in the feat description.</p>
+			<p>So why does the feat have Improved Unarmed Strike as a prerequisite, if you can&apos;t actually use it with unarmed strikes?</p>
+			<p>Because the feat is intended to be a cool thing that monks can do, and monks get Improved Unarmed Strike automatically (barring an archetype that replaces that feat), so having Improved Unarmed Strike as a prerequisite means it&apos;s easy for monks to learn Perfect Strike but more difficult for other classes. The prerequisite could have been &apos;monk level X,&apos; but that would mean that only monks could take the feat (prohibiting even other martial arts classes or archetypes). Note that the zen archer archetype allows you to use the feat with a bow, which means there&apos;s a precedent for creating an unarmed-combat archetype that modifies the feat for use with other weapons.</p>
+			<p>[Source]</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Perfect Style" title="Perfect Style" groups="Combat,Style" description="You have an innate connection to a house of combat, and it's associated element.">
+		<Prerequisites>Wis 13, base attack bonus +5 or monk level 5th</Prerequisites>
+		<Benefit>
+			<p>When you take this feat, choose one of the following houses of combat styles; once this decision has been made it cannot be changed. While using this style, you gain a type of energy resistance based on the house you have chosen.</p>
+			<p>If you have energy resistance from a racial trait or class feature, the energy resistance gained from this style stacks. Additionally, you gain a ki pool that you can use to activate abilities of your chosen House of Perfection style. Your pool contains 1 ki point at 1st level and increases by 1 point every 4 levels thereafter. If you have a ki pool from another source, you do not gain additional ki points from this feat.</p>
+		</Benefit>
+		<Special>
+			<p>You may select Perfect Style multiple times. Each time you do so, you must select a different house to belong to.</p>
+			<p>Combat Trick</p>
+			<p>Source PPC:WMH</p>
+			<p>Note If using the optional Stamina Pool rules, the following trick may be used with this feat.</p>
+			<p>Combat Trick: You can spend up to 5 stamina points to increase the resistance granted to you by Perfect Style by 2 per stamina point spent.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Performance Weapon Mastery" title="Performance Weapon Mastery" groups="Combat" description="You wield all your weapons with the flair of a performer.">
+		<Benefit>
+			<p>You treat all weapons you are proficient in as if they had the performance weapon quality.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Performing Combatant" title="Performing Combatant" groups="Combat" description="You treat every combat as a performance, bringing flare and showmanship.">
+		<Prerequisites>Dazzling Display, any one performance feat.</Prerequisites>
+		<Benefit>
+			<p>You can make performance combat checks in any combat. When making a performance check outside of performance combat, you can pick a single performance feat to use. You automatically gain any bonus on the performance combat check the feat grants, and then you make a DC 20 performance combat check. On a success, you gain the full effect of the performance feat you chose.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pernicious Stab" title="Pernicious Stab" groups="Combat" description="Your deep strikes allow you to deliver poison efficiently when your opponent is off guard.">
+		<Prerequisites>Sneak attack +2d6.</Prerequisites>
+		<Benefit>
+			<p>When you hit an opponent with a poisoned weapon and would deal sneak attack damage, you can choose to forgo some or all of the sneak attack damage to increase the poison&apos;s chance of success. For every 2d6 points of sneak attack damage you forgo, add 1 to the saving throw DC of the poison delivered with your attack.</p>
+			<p>This increase to the poison save DC does not apply to creatures that are immune to precision damage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Persistent Spell" title="Persistent Spell" groups="Metamagic" description="You can modify a spell to become more tenacious when its targets resist its effect.">
+		<Benefit>
+			<p>Whenever a creature targeted by a persistent spell or within its area succeeds on its saving throw against the spell, it must make another saving throw against the effect. If a creature fails this second saving throw, it suffers the full effects of the spell, as if it had failed its first saving throw.</p>
+			<p>Level Increase: +2 (a persistent spell uses up a spell slot two levels higher than the spell&apos;s actual level.)Spells that do not require a saving throw to resist or lessen the spell&apos;s effect do not benefit from this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Persuasive" title="Persuasive" groups="" description="You are skilled at swaying attitudes and intimidating others into your way of thinking.">
+		<Benefit>
+			<p>You get a +2 bonus on Diplomacy and Intimidate skill checks. If you have 10 or more ranks in one of these skills, the bonus increases to +4 for that skill.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Persuasive Bribery" title="Persuasive Bribery" groups="" description="You know how to get the most out of bribes.">
+		<Prerequisites>Persuasive.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on Diplomacy checks when attempting to bribe someone and on Diplomacy or Charisma checks to bargain with a conjured creature (such as with planar ally or planar binding), in addition to any bonus granted by the bribe itself. The first time someone refuses a bribe you offer, that person&apos;s attitude toward you doesn&apos;t worsen, even if the offer would normally offend the person.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Perturbing Stare" title="Perturbing Stare" groups="Combat" description="Your stare dulls your foe's reactions.">
+		<Prerequisites>Mesmerist level 5th, painful stare class feature.</Prerequisites>
+		<Benefit>
+			<p>When you trigger your painful stare, the target must succeed at a Will save (DC = 10 + half your mesmerist level + your Charisma modifier) or lose its Dexterity modifier to AC for 1 round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pestilent" title="Pestilent" groups="" description="Your unarmed strikes and natural weapons cause extra harm to those infected with your disease.">
+		<Prerequisites>Ability to cause disease via a spell, spell-like ability, or supernatural means.</Prerequisites>
+		<Benefit>
+			<p>When you successfully use a spell, spell-like ability, or supernatural ability to cause a creature to contract a disease, you gain a +2 bonus on attack rolls with natural weapons and unarmed strikes against that creature. In addition, such attacks deal an additional 1d6 points of negative energy damage. If you have the supernatural ability to cause a single disease (such as mummy rot), you gain these bonuses against any creature that has contracted the same disease, even if it did not contract it from you.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Phalanx Formation" title="Phalanx Formation" groups="Combat" description="You are trained to use long weapons in tight formations.">
+		<Prerequisites>Base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>When you wield a reach weapon with which you are proficient, allies don&apos;t provide soft cover to opponents you attack with reach.</p>
+		</Benefit>
+		<Normal>
+			<p>Attacking a target that is beyond another creature, even an ally, can result in the target having soft cover from you.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Phantom Ally" title="Phantom Ally" groups="" description="Your phantom's strength is fueled by your own diverse experiences and abilities.">
+		<Prerequisites>Phantom class feature.</Prerequisites>
+		<Benefit>
+			<p>The abilities of your phantom are calculated as though you were 4 class levels higher, to a maximum effective spiritualist level equal to your character level.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Phantom Fighter" title="Phantom Fighter" groups="" description="Your phantom is a deadly foe of incorporeal adversaries.">
+		<Prerequisites>Phantom class feature, phantom with the magic attacks ability.</Prerequisites>
+		<Benefit>
+			<p>Your phantom&apos;s natural weapons are treated as having the ghost touch property. In addition, when you cast a touch spell to be delivered by your phantom, you can modify the spell as if you possessed the Ectoplasmic Spell metamagic feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Phantom Fortification" title="Phantom Fortification" groups="" description="Your phantom remains partly immaterial even when fully manifested in ectoplasmic form.">
+		<Prerequisites>Phantom class feature, phantom with the incorporeal flight ability.</Prerequisites>
+		<Benefit>
+			<p>Your phantom has a 50% chance of ignoring critical hits and precision-based damage when fully manifested in its ectoplasmic form, as if wearing armor with the moderate fortification special ability. This doesn&apos;t stack with other similar effects, and doesn&apos;t apply against attacks made with ghost touch weapons or weaponlike constructs made of force (such as a clenched fist, mage&apos;s sword, or spiritual weapon).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Phasestrike" title="Phasestrike" groups="Combat, Conduit" description="You strike through the Ethereal Plane so your weapon phases through obstacles, armor, and even thick hide to strike true.">
+		<Prerequisites>Knowledge (planes) 10 ranks.</Prerequisites>
+		<Benefit>
+			<p>As a move action, you can phase out one manufactured weapon or piece of ammunition you are holding. The next melee attack or thrown ranged attack you make with that weapon before the end of your turn is resolved as a touch attack and ignores cover, but does not ignore armor bonuses from force effects. You can attack through total cover this way, although you must still select the correct square for your target.</p>
+			<p>You can use this feat&apos;s benefit once per day, plus an additional time per day for every 10 ranks you have in Knowledge (planes). This feat does not function on planes that are not coterminous with the Ethereal Plane.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Piercing Grapple" title="Piercing Grapple" groups="Combat" description="You can use small but deadly weapons to restrain a foe, forcing it to choose between pain and capitulation.">
+		<Prerequisites>Dex 13, Improved Grapple, Improved Unarmed Strike, Quick Draw, Intimidate 7 ranks.</Prerequisites>
+		<Benefit>
+			<p>You can draw a light or one-handed piercing weapon and stab your opponent with it when you initiate a grapple. You take a -2 penalty on your combat maneuver check to initiate the grapple, but since you pull the weapon out as part of the grapple, you don&apos;t take the usual -4 penalty. If you succeed, you grapple your opponent as normal, and the weapon doesn&apos;t count as being in your hand either for the purposes of the -4 penalty or for dealing damage while maintaining a grapple. If your opponent successfully breaks the grapple, it takes an amount of damage equal to the base weapon damage of the weapon you used to initiate the grapple plus an additional 1d4 points of bleed damage. A successful DC 15 Heal check or any magical healing ends the bleed effect. If you choose to end the grapple, you can opt to not deal the bleed damage, but either way, your opponent still takes the base weapon damage. While maintaining this grapple, you gain a +2 circumstance bonus on all Intimidate checks made against your opponent.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Piercing Spell" title="Piercing Spell" groups="Metamagic" description="Your studies have helped you develop methods to overcome spell resistance.">
+		<Benefit>
+			<p>When you cast a piercing spell against a target with spell resistance, it treats the spell resistance of the target as 5 lower than its actual SR.</p>
+			<p>Level Increase: +1 (a piercing spell uses up a spell slot one level higher than the spell&apos;s actual level.)</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pile On" title="Pile On" groups="Combat" description="You can keep a foe shuddering in fear.">
+		<Prerequisites>Str 13, Hurtful, Power Attack.</Prerequisites>
+		<Benefit>
+			<p>Once per round when you damage a creature that is shaken, frightened, or panicked, you can choose to deal half your normal damage in order to extend the duration of its fear condition by 1 round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pin Down" title="Pin Down" groups="Combat" description="You easily block enemy escapes.">
+		<Prerequisites>Combat Reflexes, fighter level 11th.</Prerequisites>
+		<Benefit>
+			<p>Whenever an opponent you threaten takes a 5-foot step or uses the withdraw action, that opponent provokes an attack of opportunity from you. If the attack hits, you deal no damage, but the targeted creature is prevented from making the move action that granted a 5-foot step or the withdraw action and does not move.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pinning Knockout" title="Pinning Knockout" groups="Combat" description="An opponent you have pinned is easy for you to knock out.">
+		<Prerequisites>Dex 13, Greater Grapple, Improved Grapple, Improved Unarmed Strike, base attack bonus +9 or monk level 9th.</Prerequisites>
+		<Benefit>
+			<p>While you have an opponent pinned, when you succeed at a grapple combat maneuver check to deal an opponent nonlethal damage using an unarmed strike or a light or one-handed weapon, double your damage result. Any creature that is immune to critical hits is immune to the effects of this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pinning Rend" title="Pinning Rend" groups="Combat" description="You tear flesh when you damage an opponent that you have pinned.">
+		<Prerequisites>Dex 13, Greater Grapple, Improved Grapple, Improved Unarmed Strike, base attack bonus +9 or monk level 9th.</Prerequisites>
+		<Benefit>
+			<p>While you have an opponent pinned, when you succeed at a grapple combat maneuver check to deal an opponent damage using an unarmed strike or a light or one-handed weapon, that opponent also takes bleed damage equal to your unarmed strike or weapon damage dice. Any creature that is immune to critical hits is immune to the effects of this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pinpoint Jab" title="Pinpoint Jab" groups="Combat" description="You strikes land exactly where you mean them to.">
+		<Prerequisites>Improved Unarmed Strike, base attack bonus +6, ki pool or martial flexibility class feature.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action, you can expend 1 ki point or one daily use of martial flexibility to use a limited version of the targeted strike deed, targeting either hands or legs with an unarmed attack. A target who succeeds at a Fortitude save (DC = 10 + your base attack bonus) can negate the effect. When your base attack bonus reaches +11, you can instead target head or torso, which the target can negate with a Fortitude save.</p>
+			<p>When your BAB reaches +16, you can target two locations; the target must save against each effect separately.</p>
+		</Benefit>
+		<Special>
+			<p>A monk can substitute his class level for his base attack bonus for this feat&apos;s effects.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Pinpoint Poisoner" title="Pinpoint Poisoner" groups="Combat" description="You deftly use specially prepared needles to apply poison for maximum effect.">
+		<Prerequisites>Poison use class feature, Craft (alchemy) 6 ranks, Adder Strike, Improved Unarmed Strike, Two-Weapon Fighting or flurry of blows class feature.</Prerequisites>
+		<Benefit>
+			<p>When you use Adder Strike, you can instead poison up to two blowgun darts that you can then use to strike your opponent in melee. (Drawing such darts is a free action.) While holding these darts, you can spend a standard action to attack with one or a full-attack action to attack with both. Such attacks are considered melee touch attacks that deal 1d2 damage plus any bonuses you gain on your normal unarmed strike damage, and they deliver the poison. You can instead throw such darts as if they were shuriken, making your ranged attack rolls against the target&apos;s AC.</p>
+		</Benefit>
+		<Normal>
+			<p>Applying poison to a weapon or single piece of ammunition is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Pinpoint Targeting" title="Pinpoint Targeting" groups="Combat" description="You can target the weak points in your opponent's armor.">
+		<Prerequisites>Dex 19, Improved Precise Shot, Point-Blank Shot, Precise Shot, base attack bonus +16.</Prerequisites>
+		<Benefit>
+			<p>As a standard action, make a single ranged attack. The target does not gain any armor, natural armor, or shield bonuses to its Armor Class. You do not gain the benefit of this feat if you move this round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Piranha Strike" title="Piranha Strike" groups="Combat" description="You make a combination of quick strikes, sacrificing accuracy for multiple, minor wounds that prove exceptionally deadly.">
+		<Prerequisites>Weapon Finesse, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>When wielding a light weapon, you can choose to take a -1 penalty on all melee attack rolls and combat maneuver checks to gain a +2 bonus on all melee damage rolls. This bonus to damage is halved (-50%) if you are making an attack with an off-hand weapon or secondary natural weapon. When your base attack bonus reaches +4, and for every 4 points thereafter, the penalty increases by -1 and the bonus on damage rolls increases by +2. You must choose to use this feat before the attack roll, and its effects last until your next turn. The bonus damage does not apply to touch attacks or effects that do not deal hit point damage. This feat cannot be used in conjunction with the Power Attack feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Plains Nomad" title="Plains Nomad" groups="" description="You are a native of the wide and endless prairie, savanna, or steppe.">
+		<Prerequisites>Favored terrain (plains) class feature.</Prerequisites>
+		<Benefit>
+			<p>You and a mount you are riding gain a +2 bonus on Constitution checks to avoid damage and fatigue from hustling or a forced march. In plains terrain, this bonus is doubled and also applies on Survival checks to avoid getting lost, to find food and water, to protect yourself from severe weather, and to predict the weather.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Planar Heritage" title="Planar Heritage" groups="" description="You can trace your ancestry to a type of native outsider, even though you yourself are otherwise fully human.">
+		<Prerequisites>Human.</Prerequisites>
+		<Benefit>
+			<p>Choose one type of native outsider (such as ganzi).</p>
+			<p>You count as both human and that race for any effects related to race. For example, if you choose ganzi, you are considered both a human and a ganzi for the purposes of taking traits, meeting feat prerequisites, determining how spells and magic items affect you, and so on. You must have the requisite physical features to gain certain benefits, as determined by the GM (for example, you cannot gain feats that augment your tail&apos;s abilities if you do not actually have a tail).</p>
+		</Benefit>
+		<Special>
+			<p>You cannot select Planar Heritage if you already have an ability or feat (like Racial Heritage) that adjusts your heritage in this way.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Planar Hunter" title="Planar Hunter" groups="" description="After careful study of otherworldly environments, you can quickly evaluate how an outsider reacts in its home surroundings. You can use your knowledge of the outsider's native environment to guide your attacks and overcome the outsider's natural resistances.">
+		<Prerequisites>Knowledge (planes) 5 ranks, favored terrain (any plane) class feature.</Prerequisites>
+		<Benefit>
+			<p>When you are on one of the planes you&apos;ve selected as a favored terrain, you gain a +2 bonus on weapon attack rolls against outsiders native to that plane. You also ignore up to 5 points of damage reduction when making weapon attacks against outsiders native to that plane, except for damage reduction without a type (such as DR 10/&#x2014;). In addition, you gain this bonus against extraplanar creatures you encounter and identify as being from one of your planar favored terrains, such as with a successful Knowledge (planes) check, regardless of what plane you or they are on.</p>
+		</Benefit>
+		<Special>
+			<p>You may select this feat multiple times. Each time you take it, you apply it to a different qualifying favored terrain.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Planar Preservationist" title="Planar Preservationist" groups="" description="You know how to preserve and reconstitute extraplanar monsters as well as normal animals.">
+		<Prerequisites>Preservationist alchemist archetype.</Prerequisites>
+		<Benefit>
+			<p>For every summon nature&apos;s ally extract you know, you learn the equivalent summon monster spell as an extract. If you later learn other summon nature&apos;s ally extracts, you automatically learn the equivalent summon monster spell as an extract.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Planar Survivor" title="Planar Survivor" groups="" description="Your study of the nature and hazards of a diverse array of planes has prepared you for their dangers.">
+		<Prerequisites>Knowledge (planes) 3 ranks, Survival 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on Survival checks on planes other than the Material Plane and a +2 bonus on saving throws against hazards encountered in such environments.</p>
+			<p>If you have 10 or more ranks in Survival, the bonus on Survival checks increases to +4. This bonus does not stack with the bonus granted by the Self-Sufficient feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Planar Wanderer" title="Planar Wanderer" groups="" description="Your knowledge of the planes and teleportation allows you to travel with more precision.">
+		<Prerequisites>Cartogramancer, Knowledge (geography) 10 ranks, Knowledge (planes) 10 ranks, ability to cast greater teleport and plane shift.</Prerequisites>
+		<Benefit>
+			<p>When researching a plane to which you intend to plane shift, you can attempt a DC 25 Knowledge (planes) check as you cast the spell. If you succeed at the check, you&apos;re able to more precisely target your planar transport, allowing you to arrive 5d20 miles away from your intended destination instead of 5d% miles away. If you exceed the DC by 10 or more, you arrive 5d10 miles away instead, and if you exceed the DC by 20 or more, you arrive 5d6 miles away.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Planar Wild Shape" title="Planar Wild Shape" groups="" description="...">
+		<Prerequisites>Wild shape class feature, Knowledge (planes) 5 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you use wild shape to take the form of an animal, you can expend an additional daily use of your wild shape class feature to add the celestial template or fiendish template to your animal form. (Good druids must use the celestial template, while evil druids must use the fiendish template.) If your form has the celestial template and you score a critical threat against an evil creature while using your form&apos;s natural weapons, you gain a +2 bonus on the attack roll to confirm the critical hit. The same bonus applies if your form has the fiendish template and you score a critical threat against a good creature.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Planewalker's Insight" title="Planewalker's Insight" groups="" description="You are well versed in the lore of the planes and the psychology of their natives.">
+		<Benefit>
+			<p>You gain a +2 bonus on Knowledge (planes) checks and on Sense Motive checks against outsiders, and Knowledge (planes) is a class skill for you. If you have 10 or more ranks in either of these skills, the bonus for that skill increases to +4. These bonuses do not stack with those granted by the Alertness or Scholar feats.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Play to the Crowd" title="Play to the Crowd" groups="" description="You can glean the interests of others and use that information to strengthen your rhetoric.">
+		<Prerequisites>Int 19, Ironclad Logic, Diplomacy 5 ranks, Sense Motive 5 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you use Diplomacy to change the attitude of a character, you can first attempt a Sense Motive check against that NPC to get a hunch to determine whether the character is under the influence of an enchantment, to use Sense Assumptions, or to determine biases for a verbal duel. If you succeed at the Sense Motive check, you gain a +2 bonus on the Diplomacy check, and if you learned any biases for a verbal duel, you learn one additional bias of your choice. You do not worsen an NPC&apos;s attitude if you fail a Diplomacy check by 5 or more.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Point Blank Master" title="Point Blank Master" groups="Combat" description="You are adept at firing ranged weapons in close quarters.">
+		<Prerequisites>Weapon Specialization with selected ranged weapon.</Prerequisites>
+		<Benefit>
+			<p>Choose one type of ranged weapon. You do not provoke attacks of opportunity when firing the selected weapon while threatened.</p>
+		</Benefit>
+		<Normal>
+			<p>Using a ranged weapon while you are threatened provokes attacks of opportunity.</p>
+		</Normal>
+		<Special>
+			<p>Starting at 6th level, a ranger with the archery combat style may select Point Blank Master as a combat style feat, but he must have Weapon Focus instead of Weapon Specialization in the selected weapon.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Point-Blank Shot" title="Point-Blank Shot" groups="Combat" description="You are especially accurate when making ranged attacks against close targets.">
+		<Benefit>
+			<p>You get a +1 bonus on attack and damage rolls with ranged weapons at ranges of up to 30 feet.</p>
+			<p>Editor&apos;s Note</p>
+			<p>Do I add the extra damage from Point-Blank Shot to the splash damage dealt by a splash weapon?</p>
+			<p>No, the extra damage from Point-Blank Shot only applies to the target of a direct hit with a splash weapon (including direct hits from an alchemist&apos;s bomb).</p>
+			<p>[Source]</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pommel Strike Deed" title="Pommel Strike Deed" groups="Panache" description="With a surprise swipe with your pommel, you can topple a foe.">
+		<Prerequisites>Amateur Swashbuckler or panache class feature; base attack bonus +3.</Prerequisites>
+		<Benefit>
+			<p>You can spend 1 panache point to make a melee attack with the pommel of a light or one-handed piercing melee weapon as a standard action. You make this attack as if you were using the weapon normally (including any bonuses gained from the swashbuckler&apos;s finesse class feature, Weapon Finesse, or other similar feats and effects), but you deal 1d6 bludgeoning damage (or 1d4 if you are Small) instead of the weapon&apos;s normal damage. Regardless of your size, the critical threat range and critical multiplier of this attack are 20/&#xD7;2, and they are not affected by Improved Critical, the keen weapon special ability, or similar effects. If the attack hits, you can attempt a combat maneuver check to knock the target prone as a free action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Porcupine Defense" title="Porcupine Defense" groups="Combat" description="You are a threat to opponents that try to overwhelm you.">
+		<Prerequisites>Combat Expertise, Combat Reflexes, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>Whenever an opponent of at least one size category larger than yourself attempts a combat maneuver attack against you, you gain a +2 bonus on any allowed attacks of opportunity. If your opponent may make such attacks without provoking attacks of opportunity, you instead gain a +2 bonus to CMD against such maneuvers.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Position of Strength" title="Position of Strength" groups="Combat" description="You know how to press your advantage when negotiating with noncombatants.">
+		<Prerequisites>Intimidate 5 ranks.</Prerequisites>
+		<Benefit>
+			<p>As long as you are wielding one or more weapons with which you are proficient, you gain a +4 bonus on Intimidate checks against unarmed creatures, which doesn&apos;t stack with Intimidating Prowess. Additionally, if you successfully use Intimidate to demoralize an unarmed creature, that creature becomes shaken for as long as you continue to be armed and they continue not to be, to a maximum of 1 minute. Creatures with natural attacks, or whose unarmed strikes deal lethal damage, are considered to be armed for the purposes of this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Possessed Hand" title="Possessed Hand" groups="" description="You've made a peaceful and permanent bargain with a ghost, spirit, or outsider. It possesses your hand, guiding and aiding you in exchange for help in return.">
+		<Benefit>
+			<p>You attract a ghost, spirit, or outsider with personal motivations to possess your hand. This usually involves some sort of mutually beneficial pact or agreement. Your possessed hand helps you in numerous ways, but its periodic, uncontrolled antics are distracting; you take a permanent &#x2013;2 penalty on concentration checks once you gain this feat.</p>
+			<p>Any attack you make with a one-handed weapon, light weapon, unarmed strike, or natural attack with your possessed hand gains a +1 insight bonus on the attack roll and damage roll. You also gain a +1 insight bonus on Disable Device and Sleight of Hand checks. Once per day as a swift action, you can retrieve any stowed object you carry on your person, provided the object weighs no more than 5 pounds.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Potent Holy Symbol" title="Potent Holy Symbol" groups="" description="In your pious hands, your holy symbol is a shining light of faith.">
+		<Prerequisites>Good alignment, worshiper of a good deity.</Prerequisites>
+		<Benefit>
+			<p>Any round in which you use your holy symbol as a divine focus for the casting of a spell or to channel positive energy, you count as presenting a holy symbol, chanting prayers, or ringing a hand bell for the purpose of keeping vampires at bay.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Potent Surge" title="Potent Surge" groups="Mythic" description="Your surge is more potent.">
+		<Benefit>
+			<p>Whenever you use your surge ability, add 1 to your surge result.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Power Attack" title="Power Attack" groups="Combat" description="You can make exceptionally deadly melee attacks by sacrificing accuracy for strength.">
+		<Prerequisites>Str 13, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>You can choose to take a -1 penalty on all melee attack rolls and combat maneuver checks to gain a +2 bonus on all melee damage rolls. This bonus to damage is increased by half (+50%) if you are making an attack with a two-handed weapon, a one handed weapon using two hands, or a primary natural weapon that adds 1-1/2 times your Strength modifier on damage rolls. This bonus to damage is halved (-50%) if you are making an attack with an off-hand weapon or secondary natural weapon.</p>
+			<p>When your base attack bonus reaches +4, and every 4 points thereafter, the penalty increases by -1 and the bonus to damage increases by +2.</p>
+			<p>You must choose to use this feat before making an attack roll, and its effects last until your next turn. The bonus damage does not apply to touch attacks or effects that do not deal hit point damage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Powerful Shape" title="Powerful Shape" groups="" description="Your wild shapes are mighty and muscular.">
+		<Prerequisites>Wild shape class feature, druid level 8th.</Prerequisites>
+		<Benefit>
+			<p>When in wild shape, treat your size as one category larger for the purpose of calculating CMB, CMD, carrying capacity, and any size-based special attacks you use or that are used against you (such as grab, swallow whole, and trample).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Practical Kata" title="Practical Kata" groups="Combat, Combination" description="Your martial meditation extends onto the battlefield.">
+		<Prerequisites>Improved Unarmed Strike, ki pool class feature.</Prerequisites>
+		<Benefit>
+			<p>When you hit with a melee attack against an opponent you have already damaged this round, you can forgo dealing damage to instead regain 1 ki point. This feat can restore only 1 ki point every minute, to a maximum per day of 1 point for every 4 class levels you have.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Practiced Leadership" title="Practiced Leadership" groups="" description="When you and your cohort are both members of the same organization, you needn't shoulder the burden of leadership alone. By relying on the authority of your shared organization as well as your own leadership skills, your cohort demonstrates improved devotion and tactical acumen.">
+		<Prerequisites>Leadership, membership in the same organization as your cohort.</Prerequisites>
+		<Benefit>
+			<p>As long as you and your cohort maintain membership in good standing within the same organization, your cohort gains a +4 morale bonus on Will saves against enchantment spells and effects. Additionally, your cohort is treated as though she possessed the same teamwork feats you do for the purpose of determining whether you receive a bonus from your teamwork feats.</p>
+			<p>Your cohort doesn&apos;t receive any bonuses from these feats unless she actually possesses the feats. If you and your cohort belong to one of the organizations listed in this section, your cohort gains the practiced leadership benefit associated with your organization. If a benefit grants your cohort access to a spell-like ability, the caster level of the effect is 1st or equal to your cohort&apos;s caster level, whichever is higher.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Practiced Ritualist" title="Practiced Ritualist" groups="" description="You are an experienced leader among ritual casters.">
+		<Prerequisites>Knowledge (arcana, history, planes, and religion) 1 rank.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on skill checks to perform occult rituals, and on Intelligence checks to learn the method of casting an occult ritual. If you are a ritual&apos;s primary caster, the DC for saving throws against the ritual&apos;s effects is 2 higher. If the ritual has a minimum number of required secondary casters, that number is decreased by 1.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Practiced Tactician" title="Practiced Tactician" groups="" description="With only a few quick gestures and commands, you can direct others in combat.">
+		<Prerequisites>Tactician class feature.</Prerequisites>
+		<Benefit>
+			<p>You can use your tactician ability to grant allies a teamwork feat one additional time per day.</p>
+		</Benefit>
+		<Special>
+			<p>You can gain Practiced Tactician multiple times. Its effects stack.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Precipice Strike" title="Precipice Strike" groups="Combat" description="Rough mountain roads are as smooth as cobblestone to you. Enemies challenge you in your home territory at their peril.">
+		<Prerequisites>Dex 15, base attack bonus +6, half-orc.</Prerequisites>
+		<Benefit>
+			<p>When you and the target of your attack are both in difficult terrain, treat the target as if he were flat-footed.</p>
+			<p>In addition, if you attack a flat-footed enemy from a higher elevation (including while falling), you gain a +2 circumstance bonus on your attack roll.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Precise Shot" title="Precise Shot" groups="Combat" description="You are adept at firing ranged attacks into melee.">
+		<Prerequisites>Point-Blank Shot.</Prerequisites>
+		<Benefit>
+			<p>You can shoot or throw ranged weapons at an opponent engaged in melee without taking the standard -4 penalty on your attack roll.</p>
+			<p>Note: Two characters are engaged in melee if they are enemies of each other and either threatens the other.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Precise Strike" title="Precise Strike" groups="Combat,Teamwork" description="...">
+		<Prerequisites>Dex 13, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>Whenever you and an ally who also has this feat are flanking the same the creature, you deal an additional 1d6 points of precision damage with each successful melee attack. This bonus damage stacks with other sources of precision damage, such as sneak attack. This bonus damage is not multiplied on a critical hit.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Preferred Spell" title="Preferred Spell" groups="" description="You find it very easy to cast one particular spell.">
+		<Prerequisites>Spellcraft 5 ranks, Heighten Spell.</Prerequisites>
+		<Benefit>
+			<p>Choose one spell which you have the ability to cast. You can cast that spell spontaneously by sacrificing a prepared spell or spell slot of equal or higher level. You can apply any metamagic feats you possess to this spell when you cast it. This increases the minimum level of the prepared spell or spell slot you must sacrifice in order to cast it but does not affect the casting time.</p>
+		</Benefit>
+		<Special>
+			<p>You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to a different spell.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Press to the Wall" title="Press to the Wall" groups="Combat" description="You gain an advantage when your opponent can't easily retreat.">
+		<Prerequisites>Step Up, base attack bonus +3.</Prerequisites>
+		<Benefit>
+			<p>If you are the only character threatening an opponent, you can treat solid, immovable objects that occupy a square (such as columns, tree trunks, and walls) and are adjacent to that opponent as allies threatening the opponent when determining whether you flank the foe.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Primal Kineticist" title="Primal Kineticist" groups="" description="When primal magic surrounds you, you can channel it to transform the nature of your kinetic blasts.">
+		<Prerequisites>Kineticist level 1st.</Prerequisites>
+		<Benefit>
+			<p>When using a simple kinetic blast in an area where primal magic is either predominant or very common, you can accept 1 point of burn to cause your blast to become one of the following simple blasts instead. Roll 1d10 to determine the simple blast: 1 = air, 2 = cold, 3 = earth, 4 = electric, 5 = fire, 6 = gravity*, 7 = negative*, 8 = telekinetic, 9 = water, 10 = wood*. You can apply any of your form or substance infusions that are allowed as choices for the random blast, accepting the typical burn cost.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Primal Strike" title="Primal Strike" groups="Combat" description="You have learned to draw primal magic through your body to befuddle your enemies.">
+		<Prerequisites>Wis 17, Improved Unarmed Strike, base attack bonus +8.</Prerequisites>
+		<Benefit>
+			<p>Before making an attack roll, you can declare a primal strike. If you do and the attack hits, it deals damage normally and your target must attempt a Fortitude saving throw (DC = 10 + half your character level + your Wisdom modifier). A target who fails this saving throw is confused for 1 round. If you are in an area of primal magic, the confused condition lasts for 1d4 rounds. You can attempt a primal strike attack once per day for every 4 character levels you have (see Special below if you have monk levels), but no more than once per round. A primal strike is a mind-affecting compulsion effect.</p>
+		</Benefit>
+		<Special>
+			<p>If you have levels in the monk class, you can make a primal attack a number of times per day equal to your monk level, plus one additional time per day for every 4 levels you have in classes other than monk, though still no more than once per round.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Prodigy" title="Prodigy" groups="" description="You are naturally skilled at arts, professions, and the acquisition of knowledge.">
+		<Benefit>
+			<p>Choose two Craft, Perform, or Profession skills in any combination (two Craft skills, a Craft skill and a Perform skill, and so on). You receive a +2 bonus on checks with these skills. If you have 10 or more ranks in any one of these skills, the bonus increases to +4 for that skill.</p>
+		</Benefit>
+		<Special>
+			<p>You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to two new skills.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Profane Studies" title="Profane Studies" groups="" description="Your study of fiends grants you advantages when summoning or fighting them.">
+		<Prerequisites>Int 13, Knowledge (planes) 4 ranks, ability to cast a summon monster spell.</Prerequisites>
+		<Benefit>
+			<p>You gain a +5 bonus on Knowledge (planes) checks involving evil outsiders. Additionally, when you cast a summon monster spell to summon an evil outsider, treat your caster level as 2 levels higher for the purpose of determining the duration.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Prone Shooter" title="Prone Shooter" groups="Combat" description="While prone, you use the ground to stabilize your aim while using a crossbow or firearm.">
+		<Prerequisites>Base attack bonus +1</Prerequisites>
+		<Benefit>
+			<p>If you have been prone since the end of your last turn, the penalty to your Armor Class against melee attacks made against you is reduced to -2. In addition, the bonus to your Armor Class against ranged attacks made against you is increased to +6.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Prone Slinger" title="Prone Slinger" groups="Combat" description="Your sideways sling release allows you to launch bullets and stones even while prone.">
+		<Benefit>
+			<p>While prone, you can use a sling to make ranged attacks.</p>
+		</Benefit>
+		<Normal>
+			<p>Crossbows and firearms are the only ranged weapons that can be used while prone.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Prophetic Visionary" title="Prophetic Visionary" groups="" description="Your oracular abilities give you a glimpse into the future.">
+		<Prerequisites>Mystery class feature.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can enter a deep trance to receive a vision of the future. The trance lasts for 10 minutes, during which time you can take no other actions. If you are interrupted, you must begin again. When you come out of the trance, you know whether a particular action in the immediate future will bring good or bad results, as an augury spell with a 70% chance of success.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Protective Line" title="Protective Line" groups="Combat,Teamwork" description="Your teammates look out for you while you reload.">
+		<Prerequisites>Exotic Weapon Proficiency (firearms).</Prerequisites>
+		<Benefit>
+			<p>When you are adjacent to an ally who also has this feat, you do not provoke attacks of opportunity while loading a firearm.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Protector's Strike" title="Protector's Strike" groups="" description="You can use your smiting power to protect an ally from known evil.">
+		<Prerequisites>Base attack bonus +5, smite evil class feature.</Prerequisites>
+		<Benefit>
+			<p>When you choose the target of your smite evil ability, you also choose one creature other than you within line of sight. While your smite is in effect, the additional creature you chose gains a deflection bonus to AC equal to your Charisma modifier against attacks made by the target of the smite. This bonus ends when the smite ends. You do not gain the deflection bonus to AC normally granted by smite evil.</p>
+		</Benefit>
+		<Normal>
+			<p>While smite evil is in effect, the paladin gains a deflection bonus to her AC equal to her Charisma bonus (if any) against attacks made by the target of her smite attack.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Proxy Summoning" title="Proxy Summoning" groups="" description="Creatures you summon can act as proxies to deliver your spells to foes.">
+		<Prerequisites>Ability to cast conjuration (summoning) spells or a conjuration (summoning) spell-like ability, caster level 5th.</Prerequisites>
+		<Benefit>
+			<p>Whenever you cast a touch spell while adjacent to a creature you summoned (including an eidolon), you can have the summoned creature carry the spell&apos;s charge. Once the spell is cast, you and any creature you summon gain the share spells ability. This feat doesn&apos;t qualify you for feats or other rules options that require you to have an animal companion, familiar, or similar allied creature with the share spells ability.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychic Adept" title="Psychic Adept" groups="" description="You have honed your mind to harness psychic power.">
+		<Prerequisites>Int 11, Psychic Sensitivity.</Prerequisites>
+		<Benefit>
+			<p>You gain the ability to cast a 0-level knack from the psychic class&apos;s spell list. You can cast this spell three times per day as a spell-like ability. The caster level for this ability is equal to your character level, and the save DC is equal to 10 + your Intelligence modifier.</p>
+		</Benefit>
+		<Special>
+			<p>You can choose this feat multiple times, choosing a different knack each time.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Psychic Combatant" title="Psychic Combatant" groups="Combat" description="You are skilled at attacking opponents in psychic duels.">
+		<Prerequisites>Int 13, Psychic Sensitivity or the ability to cast psychic spells or use psychic spell-like abilities, character level 3rd.</Prerequisites>
+		<Benefit>
+			<p>You gain an extra pool of manifestation points with a number of points equal to 1/2 your character level.</p>
+			<p>You can use these points at any time during a psychic duel. When you are not participating in a psychic duel, You can spend 1 of these extra manifestation points as a swift action to gain a +1 bonus on saving throws against psychic spells until the start of your next turn, or 3 points as a swift action to gain a +2 bonus on saving throws against psychic spells until the start of your next turn.</p>
+			<p>This pool refreshes at the start of each day.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychic Defender" title="Psychic Defender" groups="" description="You are adept at defending yourself during psychic duels.">
+		<Prerequisites>Int 13, Psychic Sensitivity or the ability to cast psychic spells or use psychic spell-like abilities, character level 3rd.</Prerequisites>
+		<Benefit>
+			<p>Each time you enter a psychic duel, you gain a number of temporary hit points equal to your manifesting level (see Psychic Duels). These temporary hit points last until the end of the psychic duel.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychic Disciple" title="Psychic Disciple" groups="" description="You have opened your mind to the more advanced disciplines of basic psychic magic.">
+		<Prerequisites>Int 13, Psychic Adept, Psychic Sensitivity.</Prerequisites>
+		<Benefit>
+			<p>You gain the ability to cast a 1st-level psychic spell from the psychic class&apos;s spell list. You can cast this spell twice per day as a spell-like ability. The caster level for this ability is equal to your character level, and the save DC is equal to 11 + your Intelligence modifier.</p>
+		</Benefit>
+		<Special>
+			<p>You can take this feat multiple times, choosing a different spell each time.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Psychic Healing" title="Psychic Healing" groups="" description="The spirit finds ways to heal the body, guided by your faith.">
+		<Prerequisites>Cha 11, Psychic Sensitivity or the ability to cast psychic spells, Heal 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>As an additional use of the faith healing skill unlock, you can attempt to manipulate a creature&apos;s psychic form to heal damage to its physical form. This works as the treat deadly wounds use of the Heal skill, but also grants the creature a number of temporary hit points equal to the amount of damage healed. These temporary hit points last for 1 hour. Psychic healing doesn&apos;t require a healer&apos;s kit. A creature can benefit from psychic healing only once per day, and can&apos;t benefit from both this ability and treat deadly wounds in the same day.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychic Maestro" title="Psychic Maestro" groups="" description="You can use two occult skill unlocks more often.">
+		<Prerequisites>Psychic Sensitivity or the ability to cast psychic spells.</Prerequisites>
+		<Benefit>
+			<p>Choose two occult skill unlocks. You can use each of those one additional time per day (or per week, in the case of automatic writing). You must have at least 1 rank in the skills associated with the chosen occult skill unlocks.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychic Sensitivity" title="Psychic Sensitivity" groups="" description="You unlock the secrets of the occult world.">
+		<Benefit>
+			<p>You gain access to occult skill unlocks for any skills in which you have ranks. If you have no ranks in the appropriate skill, you can&apos;t use the occult skill unlock, even if that skill can be used untrained.</p>
+		</Benefit>
+		<Normal>
+			<p>You must have the ability to cast psychic spells in order to use occult skill unlocks.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Psychic Virtuoso" title="Psychic Virtuoso" groups="" description="You can use all of your occult skill unlocks more often and you are more talented at using them.">
+		<Prerequisites>Psychic Sensitivity or ability to cast psychic spells.</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 bonus on checks to use occult skill unlocks. If you have more than 10 ranks in the base skill, this bonus increases to +4. This bonus doesn&apos;t apply on other checks using the base skills&#x2014;only on checks for occult skill unlocks.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychovore Master" title="Psychovore Master" groups="Combat" description="When your unarmed attacks strike true. you also damage your target's mind and gain power from it.">
+		<Prerequisites>Improved Unarmed Strike, Psychovore Strike, Psychovore Style, Sense Motive 15 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you score a critical hit against the creature you are gaining a dodge bonus to AC against from Psychovore Style with your unarmed strike, that target also takes 1 point of Intelligence and Wisdom damage and you gain 2d8 temporary hit points. These temporary hit points last for 1 hour and don&apos;t stack with other temporary hit points you might gain with this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychovore Strike" title="Psychovore Strike" groups="Combat" description="You can land blows that confuse your enemies.">
+		<Prerequisites>Improved Unarmed Strike, Psychovore Style, Sense Motive 9 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you strike the creature you are gaining a dodge bonus to AC against from Psychovore Style with your unarmed strike, you can force that creature to attempt a Will saving throw (DC = 10 + 1/2 your character level + your Wisdom modifier), in addition to dealing damage normally. A creature who fails its save is confused for 1d6 rounds. You must declare that you are using this feat before you make your attack roll (thus, a failed attack roll ruins the attempt). You can use this ability a number of times per day equal to 1 + your Wisdom bonus (minimum once per day), and no more than once per round. This is a mind-affecting effect, and a creature confused in this way never attacks you.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Psychovore Style" title="Psychovore Style" groups="Combat,Style" description="You can sense the thoughts of others, allowing you to predict their movements.">
+		<Prerequisites>Improved Unarmed Strike, Sense Motive 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>When using this style, you can attempt a Sense Motive check (DC = 15 + CR of target) as a move action against a creature with an Intelligence score of 3 or higher. If you succeed, you gain a +1 dodge bonus to your AC against attacks from the target creature until you are no longer using this style. You can have this bonus against only one creature at a time: if you succeed at this Sense Motive check against another creature, you lose the bonus against the first creature. This bonus increases to +2 when you have 8 ranks in Sense Motive, and to +3 when you have 13 ranks in Sense Motive.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pummeling Bully" title="Pummeling Bully" groups="Combat" description="Your combo has the chance to trip or move your target.">
+		<Prerequisites>Improved Reposition, Improved Trip, Improved Unarmed Strike, Pummeling Style; base attack bonus +9, brawler level 5th, or monk level 5th.</Prerequisites>
+		<Benefit>
+			<p>When you use Pummeling Style to make an entire full attack or flurry of blows against a single target, if you hit with any of your attacks, you can attempt a reposition or trip combat maneuver check as a free action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pummeling Charge" title="Pummeling Charge" groups="Combat" description="Your charge ends with a mighty haymaker.">
+		<Prerequisites>Improved Unarmed Strike, Pummeling Style; base attack bonus +12, brawler level 8th, or monk level 8th.</Prerequisites>
+		<Benefit>
+			<p>You can charge and make a full attack or flurry of blows at the end of your charge as part of the charge action. You can use Pummeling Charge in this way only if all of your attacks qualify for using Pummeling Style against a single target.</p>
+		</Benefit>
+		<Normal>
+			<p>You cannot make a full attack on a charge.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Pummeling Style" title="Pummeling Style" groups="Combat,Style" description="Your unarmed strikes weave together in an effortless combo, focusing on the spots you've weakened with the last hit.">
+		<Prerequisites>Improved Unarmed Strike; base attack bonus +6, brawler&apos;s flurry class feature, or flurry of blows class feature.</Prerequisites>
+		<Benefit>
+			<p>Whenever you use a full-attack action or flurry of blows to make multiple attacks against a single opponent with unarmed strikes, total the damage from all hits before applying damage reduction. This ability works only with unarmed strikes, no matter what other abilities you might possess.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Punch Through" title="Punch Through" groups="Combat,Teamwork" description="You and your allies are adept at bypassing enemy defenses.">
+		<Prerequisites>Base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action, you may make a single attack against a target. If the attack hits and deals damage to the target, all of your allies with this feat ignore up to 5 points of damage reduction against the same target for 1 round. This feat does not apply to damage reduction without a type (such as DR 10/&#x2014;).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Punishing Kick" title="Punishing Kick" groups="Combat" description="Your kicks are so powerful you use them to push or knock back your foes.">
+		<Prerequisites>Con 13, Wis 13, Improved Unarmed Strike, base attack bonus +8.</Prerequisites>
+		<Benefit>
+			<p>You must declare that you are using this feat before you make your attack roll (thus a failed attack roll ruins the attempt). On a successful hit, the attack deals damage normally and you can choose to push your target 5 feet or attempt to knock them prone. If you decide to push the target, it is moved 5 feet directly away from you. This movement does not provoke attacks of opportunity, and the target must end this move in a safe space it can stand in. If you decide to attempt to knock the target prone, the target receives a Fortitude saving throw with a DC of 10 + 1/2 your character level + your Wisdom modifier to avoid the effect. You may attempt a punishing kick attack once per day for every four levels you have attained (but see Special), and no more than once per round.</p>
+		</Benefit>
+		<Special>
+			<p>A hungry ghost monk receives Punishing Kick as a bonus feat at 1st level, even if he does not meet the Prerequisites. A monk may attempt a punishing kick attack a number of times per day equal to his monk level, plus one more time per day for every four levels he has in classes other than monk.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Punishing Step" title="Punishing Step" groups="Combat" description="You can hurt a foe that uses a combat maneuver against you.">
+		<Prerequisites>Dex 13, Dodge.</Prerequisites>
+		<Benefit>
+			<p>Your bonus to AC from the Dodge feat increases to +2 when calculating your CMD. When a creature attempts a combat maneuver against you and fails, you gain a +2 circumstance bonus on attack rolls against that creature until the end of your next turn.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pure Faith" title="Pure Faith" groups="" description="Not only are you immune to disease, like most paladins, but you also are highly resilient to poisons.">
+		<Prerequisites>Divine health class feature.</Prerequisites>
+		<Benefit>
+			<p>You gain a +4 sacred bonus to saving throws against poison.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Purging Emesis" title="Purging Emesis" groups="" description="You learn to purge toxins by vomiting.">
+		<Prerequisites>Great Fortitude.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action that provokes attacks of opportunity, you can attempt to end an ingested poison effect by making yourself vomit. If you succeed at a new saving throw against the initial effect, you gain the nauseated condition for 1 round but end the poison effect as if you had succeeded at the requisite saving throws. Your vomiting causes one adjacent square to become slippery until your vomit is cleaned (usually taking 1 full round) or dries up (usually 1 hour). Once you use this feat, you must wait at least 1 hour and consume food or drink before you can use it again.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pursuit of Glory" title="Pursuit of Glory" groups="Combat,Teamwork" description="You know that daring deeds and heroics live forever in song, and sagas will carry your deeds into immortality.">
+		<Prerequisites>Human.</Prerequisites>
+		<Benefit>
+			<p>Whenever you start or end a charge attack in a space adjacent to an ally who also has this feat, you gain a +2 morale bonus on one attack roll you make as part of the charge. Furthermore, you can charge through a space containing an ally who also has this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Pushing Assault" title="Pushing Assault" groups="Combat" description="A strike made with a two-handed weapon can push a similar sized opponent backward.">
+		<Prerequisites>Str 15, Power Attack, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>When you hit a creature your size or smaller with a two-handed weapon attack modified by the Power Attack feat, you can choose to push the target 5 feet directly away from you instead of dealing the extra damage from Power Attack. If you score a critical hit, you can instead push the target 10 feet directly away from you. This movement does not provoke attacks of opportunities, and the target must end this move in a safe space it can stand in. You choose which effect to apply after the attack roll has been made, but before the damage is rolled.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Putrid Summons" title="Putrid Summons" groups="" description="You summon creatures whose very presence turns the stomach of your foes.">
+		<Prerequisites>Spell Focus (conjuration); ability to cast summon monster or summon nature&apos;s ally.</Prerequisites>
+		<Benefit>
+			<p>When you cast a summon monster or summon nature&apos;s ally spell, you can choose to summon a single creature that exudes a putrid odor or befouls the water surrounding it, granting it the stench universal monster ability. The duration of the sickened condition created by this stench is a number of rounds equal to the spell&apos;s level. When performing a putrid summon, you summon a creature from the next lower list than the spell you are casting. For instance, if you cast summon monster IV, you summon a creature from the summon monster III list.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quah Bond" title="Quah Bond" groups="Teamwork" description="Your bond with your totem spirit increases around others of the same quah.">
+		<Prerequisites>Totem Spirit, human.</Prerequisites>
+		<Benefit>
+			<p>If at least one ally who also has this feat is within 30 feet, double your benefits from the Totem Spirit feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quarterstaff Master" title="Quarterstaff Master" groups="Combat" description="You can wield a quarterstaff as either a two-handed or one-handed weapon.">
+		<Prerequisites>Weapon Focus (quarterstaff ), base attack bonus +5.</Prerequisites>
+		<Benefit>
+			<p>By employing a number of different stances and techniques, you can wield a quarterstaff as a one-handed weapon. At the start of your turn, you decide whether or not you are going to wield the quarterstaff as a one-handed or two-handed weapon. When you wield it as a one-handed weapon, your other hand is free, and you cannot use the staff as a double weapon. You can take the feat Weapon Specialization in the quarterstaff even if you have no levels in fighter.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quick Bull Rush" title="Quick Bull Rush" groups="Combat" description="You can barrel into your opponent and follow this with an attack.">
+		<Prerequisites>Str 13, Improved Bull Rush, Power Attack, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>On your turn, you can perform a single bull rush combat maneuver in place of one of your melee attacks. You must choose the melee attack with the highest base attack bonus to make the bull rush.</p>
+		</Benefit>
+		<Normal>
+			<p>A bull rush combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Channel" title="Quick Channel" groups="" description="Your divine energies flash with dazzling speed.">
+		<Prerequisites>Knowledge (religion) 5 ranks, channel energy class feature.</Prerequisites>
+		<Benefit>
+			<p>You may channel energy as a move action by spending 2 daily uses of that ability.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quick Dirty Trick" title="Quick Dirty Trick" groups="Combat" description="You can perpetrate a dirty trick and deliver an attack before your opponent is the wiser.">
+		<Prerequisites>Int 13, Combat Expertise, Improved Dirty Trick, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>On your turn, you can perform a single dirty trick combat maneuver in place of one of your melee attacks. You must choose the melee attack with the highest base attack bonus to make the dirty trick combat maneuver.</p>
+		</Benefit>
+		<Normal>
+			<p>A dirty trick combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Drag" title="Quick Drag" groups="Combat" description="You drag your enemy and deliver a punishing blow.">
+		<Prerequisites>Str 13, Improved Drag, Power Attack, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>On your turn, you can perform a single drag combat maneuver in place of one of your melee attacks. You must choose the melee attack with the highest base attack bonus to make the drag.</p>
+		</Benefit>
+		<Normal>
+			<p>A drag combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Draw" title="Quick Draw" groups="Combat" description="You can draw weapons faster than most.">
+		<Prerequisites>Base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>You can draw a weapon as a free action instead of as a move action. You can draw a hidden weapon (see the Sleight of Hand skill) as a move action.</p>
+			<p>A character who has selected this feat may throw weapons at his full normal rate of attacks (much like a character with a bow).</p>
+			<p>Alchemical items, potions, scrolls, and wands cannot be drawn quickly using this feat.</p>
+		</Benefit>
+		<Normal>
+			<p>Without this feat, you may draw a weapon as a move action, or (if your base attack bonus is +1 or higher) as a free action as part of movement. Without this feat, you can draw a hidden weapon as a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Favor" title="Quick Favor" groups="" description="You can quickly take advantage of your charm.">
+		<Prerequisites>Persuasive.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can decrease the time required for a Diplomacy check to gather information to 4d10 minutes when you use Diplomacy to gather information again just after you previously gathered information there (whether or not the previous attempt was successful).</p>
+		</Benefit>
+		<Normal>
+			<p>You must spend 1d4 hours to gather information using Diplomacy.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Reposition" title="Quick Reposition" groups="Combat" description="Your opponent becomes an unwitting dance partner, following your lead while you fight.">
+		<Prerequisites>Int 13, Combat Expertise, Improved Reposition, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>On your turn, you can perform a single reposition combat maneuver in place of one of your melee attacks. You must choose the melee attack with the highest base attack bonus to make the reposition.</p>
+		</Benefit>
+		<Normal>
+			<p>A reposition combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Steal" title="Quick Steal" groups="Combat" description="You are adept at relieving foes of their belongings even while you strike.">
+		<Prerequisites>Int 13, Combat Expertise, Improved Steal, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>On your turn, you can perform a single steal combat maneuver in place of one of your melee attacks. You must choose the melee attack with the highest base attack bonus to make the steal.</p>
+		</Benefit>
+		<Normal>
+			<p>A steal combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Quick Stow" title="Quick Stow" groups="Combat" description="You effortlessly stow items and sheathe weapons.">
+		<Prerequisites>Quick Draw, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>You do not provoke an attack of opportunity when sheathing a weapon, and you can combine a move action to sheathe a weapon with a regular move action. (You can both stow and draw a weapon as part of the same move action in this way.) If you have the Two-Weapon Fighting feat, you can sheathe two light or one-handed weapons in the time it would normally take to sheathe one.</p>
+			<p>You can also quickly stow items in a backpack or other container that you are wearing or carrying. When you successfully use an action to pick up an item (including when you steal an item with a successful Sleight of Hand check or steal combat maneuver check), you can stow the item as part of the same action used to acquire it. You can try to hide this object by attempting a Sleight of Hand check with a -20 penalty, opposed by the Perception check results of all opponents.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quick Study" title="Quick Study" groups="Combat" description="You can learn quickly, although you do not always retain what you learn long.">
+		<Prerequisites>Int 13, bravery +3 class feature, fighter level 10th.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can train with someone who has a combat feat you do not possess to gain that feat. You must train with that person for 8 hours and must meet the feat&apos;s prerequisites to gain it this way. You gain this feat until you learn another one using this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quick Wild Shape" title="Quick Wild Shape" groups="" description="You sacrifice power for speed in changing form.">
+		<Prerequisites>Wild shape class feature, caster level 8th.</Prerequisites>
+		<Benefit>
+			<p>You can wild shape as a move action or a swift action. However, you are limited to forms available to a druid two levels lower when changing form as a move action, or four levels lower as a swift action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quicken Blessing" title="Quicken Blessing" groups="" description="You can deliver one of your blessings with greater speed.">
+		<Prerequisites>Access to a blessing&apos;s major power, blessings class feature.</Prerequisites>
+		<Benefit>
+			<p>Choose one of your blessings that normally requires a standard action to use. You can expend two of your daily uses of blessings to deliver that blessing (regardless of whether it&apos;s a minor or major effect) as a swift action instead.</p>
+		</Benefit>
+		<Special>
+			<p>You can take this feat multiple times. Each time you do, you choose a different blessing.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Quicken Spell" title="Quicken Spell" groups="Metamagic" description="You can cast spells in a fraction of the normal time.">
+		<Benefit>
+			<p>Casting a quickened spell is a swift action. You can perform another action, even casting another spell, in the same round as you cast a quickened spell. A spell whose casting time is more than 1 full-round action cannot be quickened. [FAQ]</p>
+			<p>Level Increase: +4 (a quickened spell uses up a spell slot four levels higher than the spell&apos;s actual level.)</p>
+			<p>Casting a quickened spell doesn&apos;t provoke an attack of opportunity.</p>
+		</Benefit>
+		<Special>
+			<p>You can apply the effects of this feat to a spell cast spontaneously, so long as it has a casting time that is not more than 1 full-round action, without increasing the spell&apos;s casting time.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Quiet Death" title="Quiet Death" groups="Combat" description="You have learned to dispatch your enemies with the silence and grace of an accomplished assassin.">
+		<Prerequisites>Dex 19, Stealth 10 ranks, rogue level 10th.</Prerequisites>
+		<Benefit>
+			<p>When you ambush an enemy or enemies that are unaware of your presence, you can roll a Stealth check with a -5 penalty. The result indicates the Perception DC to hear your attacks (rather than the normal DC of -10 to hear pitched combat) until an opponent&apos;s first action, when the DC returns to -10. Other enemies present can still see the attack; Quiet Death only prevents the sounds of battle from alerting further enemies.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quillbreaker Defense" title="Quillbreaker Defense" groups="Combat" description="You know how to put armor spikes to defensive use by thrusting them into the path of an oncoming attack just in time.">
+		<Prerequisites>Proficiency with armor spikes.</Prerequisites>
+		<Benefit>
+			<p>If you are wearing armor spikes, as an immediate action when you take damage from a non-magical attack, you can give your armor spikes the broken condition to reduce the amount of damage you take by 5. If your armor spikes are already broken, they are destroyed when you take the damage. If you are wearing masterwork armor spikes, you instead reduce the damage taken by 10.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quivering Palm Adept" title="Quivering Palm Adept" groups="Combat" description="Your quivering palm strikes are more potent than most.">
+		<Prerequisites>Quivering palm class feature.</Prerequisites>
+		<Benefit>
+			<p>Add +2 to the saving throw DC against your quivering palm attacks.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Quivering Palm Versatility" title="Quivering Palm Versatility" groups="Combat" description="You can alter the way you apply a quivering palm's vibrations to an opponent's body to cause extreme pain, put it in a coma, or destroy its memories.">
+		<Prerequisites>Quivering palm class feature, base attack bonus +13.</Prerequisites>
+		<Benefit>
+			<p>After successfully using your quivering palm attack on a creature, you can produce one of the following effects instead of killing the creature, as long as you do so within a number of days equal to your monk level.</p>
+			<p>You must choose the desired effect before the quivering palm&apos;s attack roll is made. Unless the target succeeds at its Fortitude save against your quivering palm attack, it succumbs to the desired effect when you will it (a free action).</p>
+			<p>This feat is otherwise subject to all of the limits and conditions of quivering palm.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Racial Heritage" title="Racial Heritage" groups="Human" description="The blood of a non-human ancestor flows in your veins.">
+		<Prerequisites>Human.</Prerequisites>
+		<Benefit>
+			<p>Choose another humanoid race. You count as both human and that race for any effects related to race. For example, if you choose dwarf, you are considered both a human and a dwarf for the purpose of taking traits, feats, how spells and magic items affect you, and so on.</p>
+			<p>Can a human with Racial Heritage take levels in an archetype that requires you to be of a specific race?Yes, the Racial Heritage feat allows you to qualify for archetypes that have the chosen race as a requirement, assuming you still meet all of the other requirements to take levels in the archetype.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Racial Item Mastery" title="Racial Item Mastery" groups="Item Mastery" description="You can use certain magic items to fuel your innate powers.">
+		<Prerequisites>Use Magic Device 6 ranks, base Fortitude saving throw bonus +3.</Prerequisites>
+		<Benefit>
+			<p>You can focus on an item associated with your race to use a racial spell-like ability that you have without expending any uses per day from that spell-like ability. A racial spell-like ability is any spell-like ability that you have gained from a racial trait, from a feat or trait that lists your race as a prerequisite, or from a class option or archetype that is available only to members of your race. You must use an item with a spell in its construction requirement that belongs to the same school and is at least of the same level as the spell-like ability that you wish to use. You can use this feat once per day, plus an additional time per day when your base Fortitude save bonus reaches +9 and +12.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Radiant Charge" title="Radiant Charge" groups="" description="When you charge, you do so with the power of faith.">
+		<Prerequisites>Lay on hands class feature.</Prerequisites>
+		<Benefit>
+			<p>When you hit with a charge attack, you can expend all of your remaining uses of lay on hands to deal extra damage equal to 1d6 per use of lay on hands expended + your Charisma bonus. This damage comes from holy power and is not subject to damage reduction, energy immunities, or energy resistances.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rage Casting" title="Rage Casting" groups="" description="Your blood is raw and potent power, and you can burn it to empower your spells.">
+		<Prerequisites>Blood casting class feature.</Prerequisites>
+		<Benefit>
+			<p>When you cast a bloodrager spell, as a swift action you can sacrifice some of your life force to augment the spell&apos;s potency. You can opt to take up to 1d6 points of damage per spell level of the spell you are casting, choosing the amount of dice before rolling. You cannot overcome this damage in any way, and it cannot be taken from temporary hit points. For each of these damage dice you roll, the DC of the spell you are casting increases by 1.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Absorption" title="Raging Absorption" groups="" description="You can absorb hostile spell energy to refuel your continued bloodrage.">
+		<Prerequisites>Ability to cast 2nd-level bloodrager spells, bloodrage class feature.</Prerequisites>
+		<Benefit>
+			<p>While you are bloodraging, if you successfully save against a damaging arcane spell that either targets you or includes you in its area, and you take no damage from that spell, you can absorb a portion of its arcane energy to replenish your bloodrage. You regain 1 round of bloodrage for every 2 levels of the spell you successfully saved against. You cannot use this feat to regain more rounds of bloodrage each day than your daily maximum number of rounds, nor can you ever exceed your maximum number of rounds.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Blood" title="Raging Blood" groups="" description="Your blood boils with latent energy, filling you with an intense fury.">
+		<Prerequisites>Eldritch Heritage or sorcerer bloodline class feature.</Prerequisites>
+		<Benefit>
+			<p>You gain the 1st-level bloodrager bloodline power for your bloodline. In addition, you gain the ability to enter a state similar to (but less powerful than) a bloodrager&#x2018;s bloodrage. You can enter this lesser bloodrage twice per day, for up to 4 rounds. During this lesser bloodrage, you gain a +2 morale bonus to Strength and Constitution, and no morale bonus on Will saving throws. Otherwise, this benefit is the same as the bloodrage class feature.</p>
+			<p>If you have more than one bloodline, you choose the bloodline this applies to upon taking the feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Brutality" title="Raging Brutality" groups="" description="You expend some of your rage to strike your opponents with a more powerful weapon blow.">
+		<Prerequisites>Str 13, rage class feature, Power Attack, base attack bonus +12.</Prerequisites>
+		<Benefit>
+			<p>While raging and using Power Attack, you can spend 3 additional rounds of your rage as a swift action to add your Constitution bonus on damage rolls for melee attacks or thrown weapon attacks you make on your turn. If you are using the weapon two-handed, instead add 1-1/2 times your Constitution bonus. This bonus damage is not multiplied on a critical hit.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Concentration" title="Raging Concentration" groups="" description="When you are in the heat of rage, not even pain can break your concentration.">
+		<Prerequisites>Blood casting class feature.</Prerequisites>
+		<Benefit>
+			<p>While in a bloodrage, you gain a bonus on concentration checks equal to the morale bonus granted to your Constitution by the bloodrage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Deathblow" title="Raging Deathblow" groups="" description="Every killing blow gives you a surge of vitality, further fueling your rage.">
+		<Prerequisites>Greater rage class feature.</Prerequisites>
+		<Benefit>
+			<p>While raging, whenever your attack reduces an opponent of a CR greater than or equal to your character level to &#x2013;1 or fewer hit points, you gain 1 extra round of rage for that day. If that attack was a critical hit, you gain 1 additional extra round of rage for that day. Whenever you rest to renew your total number of rounds of rage per day, any extra rounds you still have from this feat are lost.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Hurler" title="Raging Hurler" groups="" description="An opponent can do little to evade your wrathful pitching of weapons and objects.">
+		<Prerequisites>Rage class feature, Throw Anything.</Prerequisites>
+		<Benefit>
+			<p>While raging, you can throw a two-handed weapon as a standard action, and you double the range increment for weapons you throw. If you also have the Quick Draw feat, you can throw two-handed weapons at your full normal rate of attacks. Further, you can pick up an unattended object that you can use as a improvised weapon within your reach as part of the attack action to throw that item.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Regeneration" title="Raging Regeneration" groups="Combat" description="Your rage pushes your ability to regenerate beyond its normal limits.">
+		<Prerequisites>Rage class ability, regeneration, troll.</Prerequisites>
+		<Benefit>
+			<p>While you are raging, fire and acid damage don&apos;t make your regeneration stop functioning on the round following the attack, and instead reduce the number of hit points regained by regeneration each round by 2 until the end of your next turn.</p>
+		</Benefit>
+		<Normal>
+			<p>Acid and fire damage cause your regeneration to stop functioning on the round following the attack.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Raging Throw" title="Raging Throw" groups="" description="You expend some of your rage to throw one opponent at another.">
+		<Prerequisites>Str 13, Con 13, rage class feature, Improved Bull Rush, Power Attack, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>While raging, when you attempt a bull rush combat maneuver, you can spend 1 additional round of your rage as a swift action to add your Constitution bonus on your combat maneuver check to the bull rush. Further, if you bull rush an opponent into a square another creature occupies or into a solid object, the opponent and the creature or object take bludgeoning damage equal to your Strength modifier + your Constitution modifier.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Raging Vitality" title="Raging Vitality" groups="" description="While raging, you are full of vigor and health.">
+		<Prerequisites>Con 15, rage class feature.</Prerequisites>
+		<Benefit>
+			<p>Whenever you are raging, the morale bonus to your Constitution increases by +2. Your rage does not end if you become unconscious. While unconscious you must still expend rounds of rage per day each round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rallying Blow" title="Rallying Blow" groups="" description="When you strike true in battle, you wash away allies' fear.">
+		<Prerequisites>Aura of courage.</Prerequisites>
+		<Benefit>
+			<p>When you confirm a critical hit against an enemy, any fear effect affecting allies within 30 feet is reduced by one step. Panicked becomes frightened, frightened becomes shaken, and shaken is removed. In addition, any ally suffering other effects from a failed save against a fear effect, such as the paralysis from a mummy&#x2018;s despair aura, receives a new save against the effect at the original DC.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ranged Disable" title="Ranged Disable" groups="" description="You can disable devices with ranged weapons.">
+		<Prerequisites>Far Shot, Point-Blank Shot, Weapon Focus, Disable Device 9 ranks.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action, you can attempt a Disable Device check with a ranged weapon you have chosen with Weapon Focus. You can use this ability against only a simple device (one that would normally take a full-round action to disable), and you can&apos;t use it if the device has any cover or concealment. This use of the ranged weapon deals no damage to the device, but it allows you to attempt a Disable Device check instead. You treat the ranged attack as if you were using tools inappropriate for the job, taking a &#x2013;4 penalty on your Disable Device check. You also apply any range penalty for the weapon to the Disable Device check, but you do not gain any bonuses that would normally apply on attack rolls on the Disable Device check.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ranged Disarm" title="Ranged Disarm" groups="Combat, Targeting" description="A well-placed shot disarms your foe.">
+Note: If you are using the optional called shots rules, attacks made with targeting feats count as called shots for the purposes of abilities or effects that modify called shots, such as the Improved Called Shot feat.
+		<Prerequisites>Dex 13, Deadly Aim, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action, you can attempt to perform a disarm combat maneuver with any ranged weapon at a -2 penalty. Add your Dexterity modifier to your CMB in place of your Strength modifier and apply range penalties to your combat maneuver check, doubling the penalties from range increments. If your target is more than 30 feet away, you take an additional -2 penalty. If the disarm attempt is successful, the target also takes damage as if you had made a successful attack with that weapon. You cannot be disarmed by failing this disarm attempt.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ranged Feint" title="Ranged Feint" groups="Combat" description="You can mislead foes about your aim with ranged attacks.">
+		<Prerequisites>Base attack bonus +2, Bluff 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>You can feint with a ranged weapon by throwing a thrown weapon or firing one arrow, bolt, bullet, or other piece of ammunition; this feint takes the same action as normal to feint, but depending on your weapon, you might have to reload or draw another weapon afterward. When you successfully use a ranged feint, you deny that enemy its Dexterity bonus to AC against your ranged attacks as well as your melee attacks for the same duration as normal. If your feints normally deny a foe its Dexterity bonus to AC against attacks other than your own, this applies only against others&apos; melee attacks.</p>
+		</Benefit>
+		<Normal>
+			<p>You can feint only with a melee weapon, and only against a creature you threaten with that weapon.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Ranged Study" title="Ranged Study" groups="" description="You can use a limited form of studied combat and studied strike with a weapon of your choice.">
+		<Prerequisites>Weapon Focus with the chosen weapon, studied combat class feature.</Prerequisites>
+		<Benefit>
+			<p>Choose one kind of ranged weapon. You gain the bonuses for studied combat with your chosen weapon and can use studied strike with your chosen weapon as long as the target of your studied strike is within 30 feet of you.</p>
+		</Benefit>
+		<Normal>
+			<p>You gain the bonuses for studied combat and can use studied strike only with melee weapons.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Ranged Trip" title="Ranged Trip" groups="Combat, Targeting" description="A shot to the leg causes your foe to fall prone.">
+Note: If you are using the optional called shots rules, attacks made with targeting feats count as called shots for the purposes of abilities or effects that modify called shots, such as the Improved Called Shot feat.
+		<Prerequisites>Dex 13, Deadly Aim, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>As a full-round action, you can attempt to perform a trip combat maneuver with any ranged weapon at a -2 penalty. Add your Dexterity modifier to your CMB in place of your Strength modifier and apply range penalties to your combat maneuver check, doubling the penalties from range increments. If your target is more than 30 feet away, you take an additional -2 penalty. If the trip attempt is successful, the target also takes damage as if you had made a successful attack with that weapon. You can&apos;t be knocked prone by failing the trip attempt.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rapid Focus Shift" title="Rapid Focus Shift" groups="" description="You can move mental focus from one implement to another more quickly than usual.">
+		<Prerequisites>Caster level 5th, mental focus class ability.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can take a full-round action to shift mental focus from one implement to another. You must be undisturbed and able to concentrate. If you take any damage during the transfer, you must succeed at a concentration check (DC = 10 + the number of points of damage taken) to complete the transfer. If you fail this check, you lose the points of mental focus instead of moving them from one implement to the other.</p>
+		</Benefit>
+		<Normal>
+			<p>Shifting focus between two implements takes 1 minute of quiet contemplation.</p>
+		</Normal>
+		<Special>
+			<p>You can take this feat multiple times. Each time you do, you gain an additional daily use of Rapid Focus Shift.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Rapid Grappler" title="Rapid Grappler" groups="Combat" description="You are a quick hand at grappling.">
+		<Prerequisites>Dex 13, Greater Grapple, Improved Grapple, Improved Unarmed Strike, base attack bonus +9 or monk level 9th.</Prerequisites>
+		<Benefit>
+			<p>Whenever you use Greater Grapple to successfully maintain a grapple as a move action, you can then spend a swift action to make a grapple combat maneuver check at a -5 penalty.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rapid Reload" title="Rapid Reload" groups="Combat" description="Choose a type of crossbow (hand, light, heavy) or a single type of one-handed or two-handed firearm that you are proficient with. You can reload such a weapon quickly.">
+		<Prerequisites>Weapon Proficiency (crossbow type chosen) or Exotic Weapon Proficiency (firearm).</Prerequisites>
+		<Benefit>
+			<p>The time required for you to reload your chosen type of weapon is reduced to a free action (for a hand or light crossbow), a move action (for heavy crossbow or one-handed firearm), or a standard action (two-handed firearm). Reloading a crossbow or firearm still provokes attacks of opportunity. If you have selected this feat for a hand crossbow or light crossbow, you may fire that weapon as many times in a full-attack action as you could attack if you were using a bow.</p>
+		</Benefit>
+		<Normal>
+			<p>A character without this feat needs a move action to reload a hand or light crossbow, a standard action to reload a one-handed firearm, or a full-round action to load a heavy crossbow or a two-handed firearm.</p>
+		</Normal>
+		<Special>
+			<p>You can gain Rapid Reload multiple times. Each time you take the feat, it applies to a new type of crossbow or a new type of firearm.</p>
+			<p>Editor&apos;s Note</p>
+			<p>How does Rapid Reload work with advanced firearms? It seems like I can reload an early firearm with alchemical cartridges and Rapid Reload faster than an advanced firearm. Are advanced firearms meant to receive an additional reload reduction for using metal cartridges? Are they meant to work differently with Rapid Reload than early firearms?</p>
+			<p>Advanced firearms do not receive an additional reload reduction for using metal cartridges; their reload speed is the one listed in the chart, and they must use metal cartridges, which don&apos;t affect the reload. Under loading a firearm, it mentions that Rapid Reload reduces the time to load a firearm in the section for rules that apply to both early and advanced firearms; however, the Rapid Reload feat doesn&apos;t break out advanced firearms separately from other firearms. It should reduce their reload speed from a move action to a free action.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Rapid Shot" title="Rapid Shot" groups="Combat" description="You can make an additional ranged attack.">
+		<Prerequisites>Dex 13, Point-Blank Shot.</Prerequisites>
+		<Benefit>
+			<p>When making a full-attack action with a ranged weapon, you can fire one additional time this round at your highest bonus. All of your attack rolls take a -2 penalty when using Rapid Shot.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rat Catcher" title="Rat Catcher" groups="Combat" description="You have a great deal of experience dealing with the subterranean pests common in cities.">
+		<Prerequisites>Knowledge (dungeoneering) 1 rank, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>You gain a +1 dodge bonus against attacks made by creatures at least two size categories smaller than yourself, and gain a +1 bonus to attack and damage rolls against such creatures. Additionally, you take only half damage from swarm attacks, and as a full-round action can make a single attack with a natural or bludgeoning weapon against an adjacent swarm. If the attack hits, you deal half damage to the target, even if the swarm is small enough to normally be immune to such attacks.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rat Stack Combat Teamwork" title="Rat Stack Combat Teamwork" groups="" description="You coordinate efficiently in tight spaces.">
+		<Prerequisites>Dex 13, swarming racial trait.</Prerequisites>
+		<Benefit>
+			<p>You can occupy the same square with up to two other creatures that also have this feat. If all participants also have the Tunnel Rat feat, up to four creatures can share the same space.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ray Shield" title="Ray Shield" groups="Combat" description="You can even deflect rays with your shield.">
+		<Prerequisites>Dex 15, Missile Shield, Spellbreaker.</Prerequisites>
+		<Benefit>
+			<p>You must be using a light, heavy, or tower shield to use this feat. Once per round when you would normally be hit with a ranged touch attack (including rays and similar magical effects), you may deflect it so that you take no damage from it. your shield suffers the full effects of the spell or effect, if applicable.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Razortusk" title="Razortusk" groups="" description="Your powerful jaws and steely teeth are deadly enough to give you a bite attack.">
+		<Prerequisites>Half-orc.</Prerequisites>
+		<Benefit>
+			<p>You can make a bite attack for 1d4 points of damage, plus your Strength modifier. You&apos;re considered proficient in this attack and can apply feats or effects appropriate to natural attacks to it. If used as part of a full attack action, the bite is considered a secondary attack and is made at your full base attack bonus &#x2013;5, and adds half your Strength modifier to damage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reach Defense" title="Reach Defense" groups="Combat" description="You are proficient at avoiding polearms and long-limbed creatures.">
+		<Prerequisites>Dex 15</Prerequisites>
+		<Benefit>
+			<p>You gain a +2 dodge bonus to armor class against attacks of opportunity from opponents that are not adjacent to you.</p>
+		</Benefit>
+		<Special>
+			<p>This feat counts as Dodge for the purposes of qualifying for the Mobility and Spring Attack feats.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Reach Spell" title="Reach Spell" groups="Metamagic" description="Your spells go farther than normal.">
+		<Benefit>
+			<p>You can alter a spell with a range of touch, close, or medium to increase its range to a higher range category, using the following order: touch, close, medium, and long.</p>
+			<p>Level Increase: Special. A reach spell uses up a spell slot one level higher than the spell&apos;s actual level for each increase in range category. For example, a spell with a range of touch increased to long range uses up a spell slot three levels higher.Spells modified by this feat that require melee touch attacks instead require ranged touch attacks.Spells that do not have a range of touch, close, or medium do not benefit from this feat.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reactive Arcane Shield" title="Reactive Arcane Shield" groups="" description="Your arcane shield responds to threats even if you're caught off guard.">
+		<Prerequisites>Arcane Shield, arcane spellcaster, caster level 12th.</Prerequisites>
+		<Benefit>
+			<p>If you are aware of an attack against you that has already been declared and you choose to use the Arcane Shield feat, the immediate action to activate the feat occurs before the attack roll against you is resolved. In addition, all adjacent allies also gain the feat&apos;s deflection bonus to AC for 1 round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reactive Healing" title="Reactive Healing" groups="" description="You can channel healing energy in response to an attack that would knock you unconscious.">
+		<Prerequisites>Quick Channel or Quicken Spell; channel energy or lay on hands class feature.</Prerequisites>
+		<Benefit>
+			<p>When the damage from an attack or an effect would reduce you to 0 or fewer hit points, you can expend one use of channel energy (of a form that would heal you) or lay on hands as an immediate action to heal yourself. The healing affects only you, even if it would normally affect others.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Read Spell Traces" title="Read Spell Traces" groups="" description="You can identify spells by the lingering traces they leave.">
+		<Benefit>
+			<p>When using identify or any spell of a higher level that normally allows you to detect the school and aura strength of an active spell, if you exceed the DC by 10 or more, you also learn the exact spell. If the spell you are using would already allow you to learn the exact spell from its aura, you can attempt to identify the spell from the traces in a lingering aura, though you take a &#x2013;10 penalty on such an attempt. When using greater detect magic to attempt to identify unique magical signatures, you receive a +2 bonus on your Knowledge (arcana) checks.</p>
+			<p>In addition, you gain a +2 bonus on saving throws against magic aura and other spells and effects that conceal a spell&apos;s true aura unless you succeed at a saving throw.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ready for Anything" title="Ready for Anything" groups="Combat" description="You never let down your guard.">
+		<Prerequisites>Alertness, Improved Initiative, Lightning Reflexes, Quick Draw, base attack bonus +6 or uncanny dodge class feature.</Prerequisites>
+		<Benefit>
+			<p>You can always act in the surprise round even if you fail a Perception check to notice foes, but you are still considered flat-footed until you take an action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ready for Battle" title="Ready for Battle" groups="" description="Your implanted trick spurs the body in battle.">
+		<Prerequisites>Mesmerist trick class feature.</Prerequisites>
+		<Benefit>
+			<p>When you implant a trick, the subject gains a +2 morale bonus on initiative checks until the trick is triggered or its duration ends.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Ready for Pain" title="Ready for Pain" groups="" description="Your implanted trick hardens the body against damage.">
+		<Prerequisites>Mesmerist trick class feature.</Prerequisites>
+		<Benefit>
+			<p>When you implant a trick, you can grant the subject DR 1/&#x2014; against nonlethal damage until the trick is triggered or its duration ends. This DR increases by 1 for every 5 mesmerist levels you possess.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Realistic Likeness" title="Realistic Likeness" groups="Kitsune" description="When you are in human form, you can take the shape of a specific individual.">
+		<Prerequisites>Kitsune.</Prerequisites>
+		<Benefit>
+			<p>You can precisely mimic the physical features of any individual you have encountered. When you use your racial change shape ability, you can attempt to take the form of an individual, granting you a +10 circumstance bonus on Disguise checks made to fool others with your impersonation.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reap the Infirm" title="Reap the Infirm" groups="Combat" description="You can use a creature's diseased state against it.">
+		<Prerequisites>Base attack bonus +3.</Prerequisites>
+		<Benefit>
+			<p>When you hit a diseased creature with a weapon attack, you deal an additional 1d6 points of damage. This is precision damage. Additionally, you gain a +2 bonus on combat maneuver checks against diseased creatures.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rebounding Leap" title="Rebounding Leap" groups="Combat" description="Your riding and lancing expertise allows you to enter and leave the saddle with great speed.">
+		<Prerequisites>Leaping lance class feature, Acrobatics 5 ranks, Ride 11 ranks.</Prerequisites>
+		<Benefit>
+			<p>When you succeed at the Acrobatics check to jump as part of your leaping lance class feature, you can remount your steed as a swift action.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rebuffing Reduction" title="Rebuffing Reduction" groups="Combat" description="Your damage reduction can turn the force of blows back on your enemies.">
+		<Prerequisites>Str 13, damage reduction, Improved Bull Rush, Power Attack, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>Whenever an opponent that is adjacent to you fails to penetrate your DR with a melee attack, you can spend an immediate action to attempt a bull rush combat maneuver against that opponent. If you succeed, you cannot move with the opponent.</p>
+		</Benefit>
+		<Normal>
+			<p>A bull rush combat maneuver is a standard action.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Recall Ammunition" title="Recall Ammunition" groups="Combat, Grit" description="You use your innate magical abilities to instantly recall a missed shot.">
+		<Prerequisites>Amateur Gunslinger feat or grit class feature, base attack bonus +9, Spellcraft 5 ranks.</Prerequisites>
+		<Benefit>
+			<p>After missing with a ranged weapon attack using a firearm, you can spend 2 grit points as an immediate action to recall the shot. If you do so, the ammunition from the missed shot is magically loaded back into the firearm and is ready to fire again immediately.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reckless Aim" title="Reckless Aim" groups="Combat" description="Your lack of regard for others proves a boon when you fire projectiles into melee.">
+		<Prerequisites>Point-Blank Shot, Precise Shot.</Prerequisites>
+		<Benefit>
+			<p>When you shoot or throw ranged weapons at an opponent engaged in melee, you can choose to take a -1 penalty to your AC and gain a +2 competence bonus on your attack roll. However, when you roll a natural 1 on a ranged attack roll made with this bonus, you automatically hit a random adjacent creature that threatens your intended target.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reckless Rage" title="Reckless Rage" groups="" description="Your boundless rage grants your blows extra strength, though at the expense of accuracy.">
+		<Prerequisites>Power Attack; rage or raging song class feature.</Prerequisites>
+		<Benefit>
+			<p>When you use Power Attack while raging or while using raging song, you take an additional &#x2013;1 penalty on melee attack rolls and combat maneuver checks, and you gain an additional +2 bonus on melee damage rolls. Modify this damage bonus appropriately based on the type of weapon you are using, as normal for Power Attack.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Recovered Rage" title="Recovered Rage" groups="" description="You regain rounds of rage or raging performance when you drop a foe.">
+		<Prerequisites>Rage or raging song class feature.</Prerequisites>
+		<Benefit>
+			<p>Whenever you reduce a foe to 0 or fewer hit points while you are raging or using raging song, you regain 1 round of rage or raging song (your choice if you have both abilities), as long as the number of Hit Dice that foe possesses are equal to or greater than 1/2 your character level. You cannot use this feat to regain more rounds of rage or raging song each day than your daily maximum number of rounds, nor can you ever exceed your maximum number of rounds.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Recruits" title="Recruits" groups="" description="Be they students, retainers, new recruits to your order, or neophyte members of your faith, you have access to a small set of dedicated servants.">
+		<Prerequisites>Cha 13, character level 5th.</Prerequisites>
+		<Benefit>
+			<p>You gain a number of cohorts (as the Leadership feat) that represent NPCs you are responsible for instructing and overseeing. You have a number of such cohorts equal to half your character level. Unlike normal cohorts, these minor cohorts must be at least 4 levels lower than your character level. Since these students must spend most of their time studying and gaining experience, you can only have one minor cohort travel with you at a time (though they all gain experience at the same rate, as those not present are assumed to be studying and growing independently). Whenever you are in a major town or city, you may exchange your current minor cohort for a different member of your recruits.</p>
+			<p>As minor cohorts are busy learning and studying the basics of their careers, those not traveling with you cannot engage in mundane or magical crafting or Profession checks. Minor cohorts not traveling with you can serve as managers for your holdings if you are using downtime rules. If a minor cohort dies, you take only a &#x2013;1 penalty to your Leadership score.</p>
+		</Benefit>
+		<Special>
+			<p>Recruits counts as the Leadership feat for purposes of prerequisites. A character cannot have both Leadership and Recruits. A character with Recruits that later qualifies for Leadership may exchange this feat for Leadership immediately upon qualifying (selecting one minor cohort to become a full cohort, while the rest move on).</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Redeemed Kobold" title="Redeemed Kobold" groups="Kobold" description="The purity you have found in the teachings of good dragonkind colors your scales and grants you confidence.">
+		<Prerequisites>Good alignment, kobold.</Prerequisites>
+		<Benefit>
+			<p>Your scales take on a metallic sheen appropriate for that of a good-aligned metallic dragon who shares any existing energy affinity you possess, or whom you have chosen to emulate. You gain a +2 circumstance bonus on Diplomacy checks when interacting with good creatures. In addition, your Charisma is considered 2 points higher for the purposes of channeling positive energy.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Redirect Attack" title="Redirect Attack" groups="Combat" description="When you dodge an attack, you can deflect it toward another opponent.">
+		<Prerequisites>Dex 15, Int 15, Dodge.</Prerequisites>
+		<Benefit>
+			<p>Once per turn, when an opponent only you threaten fails an attack against you, you can redirect the attack to target another foe. The new target must be adjacent to you and within reach of the opponent that missed you. Attempt a combat maneuver check; if the result exceeds both the Combat Maneuver Defense of the opponent who missed you and the Armor Class of the new target, the attack strikes and deals its normal damage.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Redirected Shot" title="Redirected Shot" groups="Combat, Grit" description="You can redirect your allies' poorly aimed ranged attacks with incredible accuracy.">
+		<Prerequisites>Amateur Gunslinger or the grit class feature, Deadly Aim, Point-Blank Shot, Precise Shot.</Prerequisites>
+		<Benefit>
+			<p>As long as you have at least 1 grit point, after an ally has made a ranged attack roll but before the results of the roll have been revealed, you can fire a loaded firearm at the volley as it moves toward its target, redirecting its path. Make an attack roll using your highest attack bonus, and use your result in place of your ally&apos;s original attack roll. On a successful hit, your ally&apos;s attack deals damage as normal. You may perform this action a number of times per round up to your Wisdom bonus (minimum 1).</p>
+			<p>Combat Trick</p>
+			<p>Note If using the optional Stamina Pool rules, the following trick may be used with this feat.</p>
+			<p>Combat Trick: By spending 4 stamina points, you can use this feat an additional time per round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Redistributed Might" title="Redistributed Might" groups="Combat" description="You've gained enough control over your body to translate strength into swiftness.">
+		<Prerequisites>Con 13 or Wis 13, Enhanced Morale1, Exotic Weapon Proficiency (dueling sword), Iron Will, base attack bonus +4.</Prerequisites>
+		<Benefit>
+			<p>Whenever an effect would grant you an enhancement or morale bonus to your Strength score (such as via bull&apos;s strength or a skald&apos;s inspired rage performance), you can instead apply that bonus to your Dexterity score. You make this choice when you first gain the bonus. The bonus type does not change.</p>
+			<p>1 Details for this were not available in the source material.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reflexive Interception" title="Reflexive Interception" groups="Animal Companion Feat; Combat" description="The animal can defend its master with lightning speed.">
+		<Prerequisites>Intercept Blow, base attack bonus +3, animal companion, evasion.</Prerequisites>
+		<Benefit>
+			<p>Whenever the animal companion is adjacent to its master and its master is attempts a Reflex save, the animal companion can expend an attack of opportunity as a free action, even if it isn&apos;t its turn, to attempt a Reflex save to intervene. When using this ability, the animal companion loses the benefits of evasion (and improved evasion if it has it), but if the animal companion succeeds at its saving throw, its master gains the benefit of the animal companion&apos;s evasion (or improved evasion if it has it).</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reinforce Crafting" title="Reinforce Crafting" groups="" description="Your magical creations are hardier than most.">
+		<Prerequisites>Craft Magic Arms and Armor, ability to cast make whole or mending.</Prerequisites>
+		<Benefit>
+			<p>When you craft a magic weapon, magic armor, or magic shield, you can add a fortifying element to the item.</p>
+			<p>This increases the item&apos;s total construction cost by 10%. If it&apos;s a weapon, when it becomes broken, the penalty to attack and damage rolls is reduced to &#x2013;1 (this can never reduce a broken weapon&apos;s penalty to attack and damage to 0 or a positive number). If it&apos;s a suit of armor or a shield, when it becomes broken, the bonus it grants to AC is reduced by one-quarter, rounding down. Other drawbacks of the broken condition to weapons, armor, and shields still apply as normal.</p>
+		</Benefit>
+		<Normal>
+			<p>A broken weapon imposes a &#x2013;2 penalty on attack and damage rolls. The bonus a broken suit of armor or a broken shield grants to AC is halved.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Reject Poison" title="Reject Poison" groups="" description="You are a careful poisoner, and know how to protect yourself against exposure to the ill effects of most substances.">
+		<Prerequisites>Dex 13, poison use class feature, worshiper of an evil god.</Prerequisites>
+		<Benefit>
+			<p>Whenever a creature attempts to poison you with a poison you have previously used or undergone the effects of, you have a 20% chance of naturally rejecting the poison&apos;s effects on you, negating its effects and wasting its use.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Relentless Cheer" title="Relentless Cheer" groups="Teamwork" description="Your undying optimism keeps you and your companions going even when things get rough.">
+		<Prerequisites>Halfling, fearless and halfling luck racial traits.</Prerequisites>
+		<Benefit>
+			<p>Adjacent allies who also have this feat gain a +1 morale bonus on all saving throws. This bonus increases to +3 on saving throws against fear.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Relentless Shot" title="Relentless Shot" groups="Combat" description="You keep your aim steady on a downed foe.">
+		<Prerequisites>Point-Blank Shot, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>When you successfully trip an opponent within 30 feet with a ranged attack, you threaten that opponent until your next turn. You can make attacks of opportunity against that opponent with ranged weapons.</p>
+			<p>This effect ends if you attack another target or the opponent moves from its current square.</p>
+		</Benefit>
+		<Normal>
+			<p>While wielding a ranged weapon, you threaten no squares and cannot make attacks of opportunity with that weapon.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Relic Breaker" title="Relic Breaker" groups="Combat" description="You are furious when destroying dangerous objects.">
+		<Prerequisites>Str 13, Gate Breaker, Improved Sunder, Power Attack, base attack bonus +1.</Prerequisites>
+		<Benefit>
+			<p>Whenever you sunder a held object, its bearer must succeed at a Reflex saving throw or the bearer catches on fire (taking 1d6 points of fire damage immediately, and an additional 1d6 points of fire damage each subsequent round the creature fails a Reflex saving throw). When your total Hit Dice reach 5, this damage increases by 1d6, and it increases by 1d6 every 5 levels thereafter, to a maximum of 5d6 at 20th level. The saving throw&apos;s DC is equal to 10 + 1/2 your HD + your Charisma modifier.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Remote Bomb" title="Remote Bomb" groups="" description="You can set off your delayed bombs at great distances.">
+		<Prerequisites>Delayed bomb discovery.</Prerequisites>
+		<Benefit>
+			<p>The maximum delay for your delayed bombs increases to a number of minutes equal to your level.</p>
+			<p>If you have line of effect to your delayed bomb, you may detonate it earlier than its preset time by making a DC 20 Intelligence check; the DC increases by +1 for every 10 feet of distance between you and the bomb.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rending Claws" title="Rending Claws" groups="Combat" description="Your claw attacks do greater harm to your enemy.">
+		<Prerequisites>Str 13, two claw natural weapon attacks, base attack bonus +6.</Prerequisites>
+		<Benefit>
+			<p>If you hit a creature with two claw attacks in the same turn, the second claw attack deals an additional 1d6 points of damage. This damage is precision damage and is not multiplied on a critical hit. You can use this feat once per round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rending Fury" title="Rending Fury" groups="Combat" description="You easily tear your enemies limb from limb with your natural attacks.">
+		<Prerequisites>Base attack bonus +6, rend special attack.</Prerequisites>
+		<Benefit>
+			<p>You deal rend damage if you hit with half the normal natural attacks your rend requires.</p>
+			<p>For example, a troll that has this feat can rend when it hits with one claw attack, while a girallon that has this feat must hit one target with two claw attacks to rend. You can only make this rend attack once per round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rending Swarm Combat Teamwork" title="Rending Swarm Combat Teamwork" groups="" description="Together, you and your allies tear through enemies' defenses.">
+		<Prerequisites>Dex 15, Rat Stack, swarming racial trait.</Prerequisites>
+		<Benefit>
+			<p>You gain a +1 bonus on all melee damage rolls for each allied creature you share a square with that also has this feat.</p>
+			<p>If two or more allies sharing a square have this feat and hit the same adjacent creature in a round, they tear it in different directions, dealing additional damage at the end of the round. This rend attack deals an amount of damage equal to 1d6 + the highest Strength modifier of all qualifying allies in the same square who struck the target this round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Repositioning Strike" title="Repositioning Strike" groups="Combat" description="Your critical hits can move your foes where you wish.">
+		<Prerequisites>Improved Reposition, base attack bonus +9.</Prerequisites>
+		<Benefit>
+			<p>Whenever you score a critical hit with a melee attack, you can move your opponent, in addition to the normal damage dealt by the attack. If your confirmation roll exceeds your opponent&apos;s CMD, you may move your opponent as if from the reposition combat maneuver. This does not provoke an attack of opportunity.</p>
+		</Benefit>
+		<Normal>
+			<p>You must perform a reposition combat maneuver to reposition an opponent.</p>
+		</Normal>
+		<Special>
+			<p>You can only apply the effects of one of the following feats to a given critical hit: Bull Rush Strike, Disarming Strike, Repositioning Strike, Sundering Strike, or Tripping Strike. You may choose to use this feat after you make your confirmation roll.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Researcher" title="Researcher" groups="" description="You have access to a large archive.">
+		<Prerequisites>Associate (an archive or library).</Prerequisites>
+		<Benefit>
+			<p>In any settlement that is the size of a small town or larger, you can spend 1d4 hours researching notes to gain a +4 circumstance bonus on a single Knowledge check.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Resilient Armor" title="Resilient Armor" groups="" description="When you enhance your armor or shield, you gain a measure of damage reduction.">
+		<Prerequisites>Divine bond (armor or shield), or sacred armor class feature.</Prerequisites>
+		<Benefit>
+			<p>While your armor or shield is under the effect of your divine bond or your sacred armor ability, you gain an amount of damage reduction equal to your armor&apos;s enhancement bonus (including the bonus from your divine bond or sacred armor) against the first attack to strike you in each round. An adamantine weapon overcomes this damage reduction, but any attack against you made with such a weapon does not count against this effect&apos;s duration.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Resilient Brute" title="Resilient Brute" groups="Orc/Half-Orc" description="">
+		<Prerequisites>Half-orc or orc.</Prerequisites>
+		<Benefit>
+			<p>Once per day, when a creature confirms a critical hit against you, you may treat half the damage as nonlethal damage. You cannot use this ability if you are immune to nonlethal damage. When your base attack bonus reaches +10, you may use this ability an additional time per day.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Resilient Eidolon" title="Resilient Eidolon" groups="" description="Your link with your eidolon is strong enough that it can remain with you for a short time after you fall unconscious or are killed.">
+		<Prerequisites>Eidolon class feature.</Prerequisites>
+		<Benefit>
+			<p>If you are knocked unconscious, fall asleep, or are killed, your eidolon remains for a number of rounds equal to your summoner level before it is banished. If you are brought back to consciousness before this duration expires, your eidolon is not banished. If the duration expires before you are brought back to consciousness, your eidolon is banished normally.</p>
+		</Benefit>
+		<Normal>
+			<p>An eidolon is immediately banished when its summoner is unconscious, asleep, or killed.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Resistance Mastery" title="Resistance Mastery" groups="Item Mastery" description="You can protect yourself from harm by using abjuration magic items.">
+		<Prerequisites>Use Magic Device 3 ranks, base Fortitude saving throw bonus +3.</Prerequisites>
+		<Benefit>
+			<p>Once per day, you can meditate for 10 minutes in order to use magic armor or a wondrous item that has an abjuration spell of 2nd level or higher listed in its construction requirements and that occupies a slot on your body to gain a defensive benefit. This benefit can be either a +1 resistance bonus on all saving throws or 5 points of energy resistance against one energy type (acid, cold, electricity, fire, or sonic). This benefit lasts for 24 hours.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Resisting Grappler" title="Resisting Grappler" groups="Combat" description="You are especially adept at fighting off the grabbing appendages of aberrations and other tentacled horrors.">
+		<Prerequisites>Dex 13.</Prerequisites>
+		<Benefit>
+			<p>When a creature hits you with a melee attack and attempts to use the grab ability, it provokes an attack of opportunity from you unless it has the Improved Grapple feat. If you hit the opponent with your attack, treat the damage you deal as 5 higher when calculating the penalty on the attacker&apos;s combat maneuver check to grapple you.</p>
+		</Benefit>
+		<Normal>
+			<p>Creatures using the grab ability does not provoke attacks of opportunity.</p>
+		</Normal>
+	</Bundle>
+	<Bundle id="Resolute Rager" title="Resolute Rager" groups="Orc" description="Fear passes quickly while you are raging.">
+		<Prerequisites>Orc, rage class feature.</Prerequisites>
+		<Benefit>
+			<p>While raging, when under the effect of a fear effect that allows a saving throw, you can make a new saving throw against that fear effect at the start of each of your turns before acting. If you make the new save, the fear effect ends.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Respectful Prey" title="Respectful Prey" groups="" description="You have learned to assuage monstrous predators with special offerings.">
+		<Benefit>
+			<p>A number of times per day equal to 3 + your Wisdom modifier, you can prepare a special offering.</p>
+			<p>This takes 5 minutes and at least 5 gp worth of foodstuffs, spices, and other ingredients; a prepared offering lasts 8 hours before spoiling. You can present this offering to a nonhumanoid creature (even one which doesn&apos;t normally consume food) as a standard action. The offering&apos;s ingredients must be worth at least 5 gp &#xD7; the creature&apos;s CR.</p>
+			<p>This offering improves its attitude toward you by one step unless it succeeds at a Will save (DC = 10 + 1/2 your level + your Wisdom modifier). This attitude adjustment lasts only 5 minutes unless the creature&apos;s attitude is adjusted further during that time, such as via the Diplomacy skill.</p>
+			<p>A specific creature cannot be affected by an offering made in this way more than once per 24 hours.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Restoration Mastery" title="Restoration Mastery" groups="Item Mastery" description="You can heal more than just injuries of the flesh.">
+		<Prerequisites>Heal 5 ranks, Use Magic Device 5 ranks, base Fortitude saving throw bonus +3.</Prerequisites>
+		<Benefit>
+			<p>You can cause an item that has a conjuration (healing) spell of 2nd level or higher listed in its construction requirements to cast lesser restoration. If you have 9 ranks in both Heal and Use Magic Device, you can instead cause an item that has a conjuration (healing) spell of 3rd level or higher listed in its construction requirements to cast either remove blindness/deafness or remove paralysis. You can use this feat once per day, plus an additional time per day when your base Fortitude save bonus reaches +9 and +12.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Restorative Vigor" title="Restorative Vigor" groups="Combat" description="You can recover from additional kinds of damage using your vigor.">
+		<Prerequisites>Con 15, Combat Vigor, character level 8th.</Prerequisites>
+		<Benefit>
+			<p>Your vigor pool gains 1 vigor point. Whenever you spend vigor points, you can recover from 1d3 points of ability score damage from one physical ability score (Strength, Dexterity, or Constitution) instead of regaining 1d6 hit points. You can choose separately for each vigor point spent. For example, if you spend 2 vigor points, you could regain 2d6 hit points; recover 2d3 points of ability damage from up to two physical ability scores total; or regain 1d6 hit points and recover from 1d3 points of ability damage from one physical ability score.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Returning Throw" title="Returning Throw" groups="Combat,Teamwork" description="You have turned your deadly childhood games into a tactical advantage.">
+		<Prerequisites>Point-Blank Shot, Precise Shot, Sleight of Hand 3 ranks, goblinoid subtype.</Prerequisites>
+		<Benefit>
+			<p>Whenever an ally who also has this feat makes an attack with a thrown weapon and misses the target by 4 or less, you can catch the weapon as an immediate action. Both you and your ally must be within 30 feet of the target, and you must be able to trace a line from any part of your space to any part of your ally&apos;s space so that the line passes through the target&apos;s space. As part of the action to catch the weapon, you can throw it at the target of the original attack. If your target has never seen you perform this maneuver before, it is denied its Dexterity bonus to AC against your attack. You must have at least one hand free to use this feat. You must be aware of the attack and not flat-footed.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Revelation Strike" title="Revelation Strike" groups="Combat" description="Your unarmed strike brings a revelation down upon your foe.">
+		<Prerequisites>Revelation class feature, Improved Unarmed Strike.</Prerequisites>
+		<Benefit>
+			<p>When you gain this feat, choose one revelation that you can use to affect no more than one opponent. If you make a successful unarmed strike against an opponent, in addition to dealing your unarmed strike damage, you can use a swift action to deliver the effects of the chosen revelation to that opponent. Doing so provokes no attacks of opportunity.</p>
+		</Benefit>
+		<Special>
+			<p>You can take this feat multiple times. Each time you take it, you apply it to a different qualifying revelation.</p>
+		</Special>
+	</Bundle>
+	<Bundle id="Revered Guidance" title="Revered Guidance" groups="" description="You were selected by your celestial ancestor to be a guide for a chosen people, and serve as a beacon of hope in times of despair.">
+		<Prerequisites>Aasimar, must be taken at 1st level.</Prerequisites>
+		<Benefit>
+			<p>Select one of the following creature subtypes: dwarf, elf, gnome, halfling, human, or orc. You gain a +4 racial bonus on Diplomacy checks made to influence creatures of the selected subtype.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reverse Somersault Throw" title="Reverse Somersault Throw" groups="Combat" description="You drag your opponent off balance, then use his momentum to fling him over your head.">
+		<Prerequisites>Str 13, Improved Drag, Power Attack, base attack bonus +6 or monk level 3rd.</Prerequisites>
+		<Benefit>
+			<p>When you succeed at a drag combat maneuver check, at the end of your movement, you can fall prone to launch your target over your head. If you do, you move the target of your drag combat maneuver into the space adjacent to you that is opposite its position at the end of your movement, and the target falls prone in that square or squares. You can&apos;t use this ability to move a creature into a square that is occupied by a solid object or obstacle. If there would not be enough room for the creature in its new position, the ability fails and the creature is not moved.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reverse-Feint" title="Reverse-Feint" groups="Combat, Orc" description="You can goad an opponent into attacking you in order to make your counter attack all the more powerful.">
+		<Prerequisites>Toughness, base attack bonus +1, orc.</Prerequisites>
+		<Benefit>
+			<p>As a move action, you can leave a gap in your defenses for one adjacent opponent to use. If the opponent attacks you on its next turn, it gains a +4 bonus on its attack roll. Whether or not the opponent successfully hits, you may attack it as an immediate action with a single melee attack, gaining a +2 bonus on your attack roll.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reward of Grace" title="Reward of Grace" groups="" description="When you lay on hands, divine energy ripples through you, granting you grace.">
+		<Prerequisites>Lay on hands class feature.</Prerequisites>
+		<Benefit>
+			<p>Each time you use your lay on hands ability, you gain a +1 sacred bonus on all attack rolls for 1 round.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reward of Life" title="Reward of Life" groups="" description="When you lay on hands, you are also healed.">
+		<Prerequisites>Lay on hands class feature.</Prerequisites>
+		<Benefit>
+			<p>Each time you use your lay on hands ability to heal a creature other than yourself, you heal a number of hit points equal to your Charisma bonus. This ability has no effect if you use lay on hands to harm undead.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Reward of the Faithful" title="Reward of the Faithful" groups="" description="Your intense belief in your deity allows you to benefit more from divine magic he or she provides.">
+		<Prerequisites>Knowledge (religion) 1 rank, alignment must match that of your worshiped deity.</Prerequisites>
+		<Benefit>
+			<p>Whenever you are the only target of a divine spell cast by a follower of your chosen deity other than you, the spell&apos;s caster level is treated as though it were 2 higher than it actually is. Additionally, whenever you regain hit points as a result of a worshiper of your deity other than you channeling energy or casting a cure spell, you regain 1 additional hit point per die rolled for the healing gained.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rhabdomancy" title="Rhabdomancy" groups="" description="You have mastered the art of casting sticks, rods, or arrows to uncover secrets and find lost things, gaining insight from the way these objects fall.">
+		<Prerequisites>Knowledge (nature) 3 ranks, Survival 3 ranks.</Prerequisites>
+		<Benefit>
+			<p>You can perform the dowsing occult skill unlock even if you can&apos;t use psychic magic. If you can cast psychic spells or have the Psychic Sensitivity feat, you can use dowsing one additional time per day.</p>
+			<p>Spending 1 minute casting sticks prior to attempting a Survival check grants you a +2 insight bonus on the check.</p>
+			<p>In addition, you can cast sticks or rods while casting a spell that locates a creature or object (including scrying effects) to increase the caster level of that spell by 1.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rhetorical Flourish" title="Rhetorical Flourish" groups="" description="You rapidly change topics and employ confusing rhetoric to distract people from your true intent.">
+		<Prerequisites>Cha 13, Persuasive.</Prerequisites>
+		<Benefit>
+			<p>When using the Diplomacy skill to make a request or change a creature&apos;s attitude, you can use verbal misdirection. To do so, make a Bluff check against that creature. If you succeed, you gain a +4 bonus on your next Diplomacy check against that creature if the check is made within the next minute. If you fail by 5 or more, you instead take a &#x2013;2 penalty on your next Diplomacy check against that creature.</p>
+			<p>Alternatively, you can use this feat to retry a single failed Diplomacy check against a creature. You take a &#x2013;4 penalty on your Bluff check when using Rhetorical Flourish in this way. If you succeed, rather than gaining this feat&apos;s normal bonus, you can retry your last Diplomacy check against the creature if that check was made in the past minute.</p>
+		</Benefit>
+	</Bundle>
+	<Bundle id="Rhino Charge" title="Rhino Charge" groups="Combat" description="Your charges are both violent and unpredictable.">
+		<Prerequisites>Power Attack, Improved Bull Rush, base attack bonus +5.</Prerequisites>
+		<Benefit>
+			<p>You may ready a charge, though you may only move up to your speed on the charge.</p>
+		</Benefit>
+		<Normal>
+			<p>Charging is a full-round action and allows you to move twice your speed.</p>
+		</Normal>
+	</Bundle>
+</Bundles>
