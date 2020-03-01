@@ -614,7 +614,7 @@
 		</Benefit>
 		<Special>
 			<p>You can gain Weapon Trick multiple times. Each time you take the feat, it applies to a new weapon trick option.</p>
-			<hr>
+			<hr />
 			<p>You can use these tricks only while wearing light or no armor, wielding a light or one-handed manufactured weapon in one hand, and holding nothing in your off hand.</p>
 			<p>Additional Prerequisite(s): Base attack bonus +6</p>
 			<p>As a full-round action, you can make a single attack with your weapon and attempt to perform a dirty trick, disarm, drag, reposition, or steal combat maneuver with your free hand, taking no penalties for two-weapon fighting. The combat maneuver provokes attacks of opportunities as normal, unless you have an appropriate ability or feat. You are not considered unarmed for this maneuver, but can&apos;t apply any benefits of your weapon to the combat maneuver check.</p>
@@ -630,7 +630,7 @@
 			<p>Source PPC:MAH</p>
 			<p>Additional Prerequisite(s): Improved Feint)</p>
 			<p>As a free action, you can pass a light or one-handed weapon you are wielding to your free hand. If you attempt a feint during the same round, you gain a +2 bonus on your Bluff check. Once you have used this weapon trick against a target, you can&apos;t gain the bonus against the same creature until 24 hours have passed.</p>
-			<hr>
+			<hr />
 			<p>You can use these tricks only while wielding a weapon from the polearm weapon group.</p>
 			<p>Additional Prerequisite(s): Acrobatics 1 rank, Climb 1 rank</p>
 			<p>You can take a -2 penalty on attack rolls and damage rolls until the beginning of your next turn in order to choke up on and wield a two-handed polearm sized for you in one hand, as long as you do not make attacks with your other hand.</p>
@@ -645,7 +645,7 @@
 			<p>You gain a +4 bonus on Acrobatics checks to jump, and you count as having a running start if you move at least 5 feet before jumping.</p>
 			<p>Additional Prerequisite(s): Base attack bonus +6</p>
 			<p>While taking a full-attack action with a polearm with brace, you can ready an attack with the polearm in place of your final attack. The readied attack uses the attack bonus of the attack you used to ready it.</p>
-			<hr>
+			<hr />
 			<p>You can use these tricks while wielding a ranged weapon.</p>
 			<p>Additional Prerequisite(s): Precise Shot, Snap Shot</p>
 			<p>You can distract a foe at a crucial moment, making it vulnerable to your allies&apos; abilities.</p>
@@ -653,7 +653,7 @@
 			<p>Additional Prerequisite(s): Far Shot, Precise Shot</p>
 			<p>You can cover an ally&apos;s momentary vulnerability.</p>
 			<p>You can ready an action to make a ranged attack against a foe when it makes an attack of opportunity. If your attack hits and damages the foe, the foe&apos;s attack of opportunity automatically misses its target.</p>
-			<hr>
+			<hr />
 			<p>You can use these tricks while wielding any two-handed weapon.</p>
 			<p>Additional Prerequisite(s): Cleave, Improved Vital Strike, Power Attack</p>
 			<p>When you use Cleave, you can add the additional damage from Vital Strike to both your initial and your secondary attacks. If you also have the Greater Vital Strike feat, you can instead add the damage from Improved Vital Strike to both your initial and your secondary attacks.</p>
@@ -668,7 +668,7 @@
 			<p>Capitalizing on the fear inspired by massive weapons, you can take 10 on Intimidate checks even when distracted or in combat.</p>
 			<p>Additional Prerequisite(s): Combat Expertise</p>
 			<p>While you are using the total defense action, fighting defensively, or using Combat Expertise, you gain a +1 shield bonus to AC.</p>
-			<hr>
+			<hr />
 			<p>You can use these tricks only while wielding two weapons.</p>
 			<p>Additional Prerequisite(s): Two-Weapon Defense, Two-Weapon Fighting</p>
 			<p>You can attempt a combat maneuver check to disarm a foe even if the foe has no weapons. This functions as the disarm combat maneuver. If you succeed and the foe has no weapon, you ensnare an arm of your choice, preventing your foe from using that limb until the end of your next turn. A foe can take a standard action to free its arm.</p>

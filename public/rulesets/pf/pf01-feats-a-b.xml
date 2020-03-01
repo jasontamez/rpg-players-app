@@ -1191,9 +1191,10 @@ When used cleverly, armor becomes far more than a defensive implement. Armor tri
 			<p>If the creature fails its check*, you choose whether it loses its next action or you gain a +2 bonus on all damage rolls you make against that creature for 1 round.</p>
 		</Benefit>
 	</Bundle>
-	<Bundle id="Big Game Hunter" title="Big Game Hunter" groups="Local" description="	<Benefit>">
+	<Bundle id="Big Game Hunter" title="Big Game Hunter" groups="Local" description="">
+		<Benefit>
 			<p>You gain a +1 bonus on attack rolls and a +2 bonus on weapon damage rolls against Large or larger creatures.</p>
-		
+		</Benefit>
 	</Bundle>
 	<Bundle id="Binding Throw" title="Binding Throw" groups="Combat" description="You can strike your enemy and use the blow as an opportunity to grab and hold him.">
 		<Prerequisites>Improved Grapple, Improved Trip, Improved Unarmed Strike, Ki Throw.</Prerequisites>
