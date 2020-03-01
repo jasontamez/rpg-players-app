@@ -54,6 +54,33 @@
 	<Bundle id="druid" title="Druid">
 	</Bundle>
 	<Bundle id="fighter" title="Fighter">
+		<Basics hitDie="10" startingWealthX10="5d6" startingWealthAverage="175" />
+		<ClassSkills>
+			<PfCSkill id="Fighter Class Skill: Climb" source="class" mark="Climb" />
+			<PfCSkill id="Fighter Class Skill: Craft" source="class" mark="craft_skills" />
+			<PfCSkill id="Fighter Class Skill: Handle Animal" source="class" mark="Handle Animal" />
+			<PfCSkill id="Fighter Class Skill: Intimidate" source="class" mark="Intimidate" />
+			<PfCSkill id="Fighter Class Skill: Knowledge Dungeoneering" source="class" mark="Knowledge (dungeoneering)" />
+			<PfCSkill id="Fighter Class Skill: Knowledge Engineering" source="class" mark="Knowledge (engineering)" />
+			<PfCSkill id="Fighter Class Skill: Profession" source="class" mark="profession_skills" />
+			<PfCSkill id="Fighter Class Skill: Ride" source="class" mark="Ride" />
+			<PfCSkill id="Fighter Class Skill: Survival" source="class" mark="Survival" />
+			<PfCSkill id="Fighter Class Skill: Swim" source="class" mark="Swim" />
+		</ClassSkills>
+		<Bonus to="ReflSave" fromID="Level" attribute="badSave" />
+		<Bonus to="WillSave" fromID="Level" attribute="badSave" />
+		<Bonus to="FortSave" fromID="Level" attribute="goodSave" />
+		<PoolBonus to="weaponProficiencies" value="TYPEsimple,TYPEmartial" />
+		<PoolBonus to="armorProficiencies" value="TYPElight,TYPEmedium,TYPEheavy,TYPEshield,tower shield" />
+		<Bonus to="BAB" fromID="Level" />
+		<Bonus to="skillPoints">
+			<Math>
+				<Add value="2" />
+				<Add fromID="INT" fromAtt="modifier" />
+				<Multiply fromID="Level" />
+				<AtLeast fromID="Level" />
+			</Math>
+		</Bonus>
 	</Bundle>
 	<Bundle id="monk" title="Monk">
 	</Bundle>
