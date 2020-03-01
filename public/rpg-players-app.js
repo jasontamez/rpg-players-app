@@ -1,7 +1,7 @@
-import { $a, $i, $t, $ea as $e, $listen } from "./modules/dollar-sign-module.js";
+import { $a, $i, $t, $listen } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
-import { parsePages, BasicPageObject, loadPageNamed } from "./modules/pages-module01.js";
+import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
 const xmlDir = "rulesets/",
 	modDir = "./modules/",
 	BODY = document.body,
@@ -16,10 +16,6 @@ var okToDeload = false,
 $RPG.pages.data = data;
 $RPG.pages.rawBundles = BUNDLES;
 $RPG.pages.MAIN = MAIN;
-
-
-// initialize global variables
-var	numberWords=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
 
 
 // Show the loading screen
@@ -42,29 +38,6 @@ function modifyLoadingScreen() {
 	}
 	msg.append(...arguments);
 }
-
-
-// Add rulesets to the drop-down menu
-async function findRulesets() {
-	var getter = new XMLHttpRequest();
-	// Call a parse function when the fetching is done
-	getter.addEventListener("load", function() {
-		const r = $i("rules"), options = Array.from($a("option", getter.responseXML));
-		options.forEach(function(o) {
-			var clone = o.cloneNode(true);
-			r.appendChild(clone);
-		});
-		//console.log(options);
-		modifyLoadingScreen($t("[Done!]"));
-		okToDeload = true;
-	});
-	getter.responseType = "document";
-	getter.open("GET", "/rulesets");
-	getter.send();
-}
-//modifyLoadingScreen($t("[loading rulesets]"));
-//findRulesets();
-//removeLoadingScreen();
 
 
 // Call function when ruleset drop-down list is changed
@@ -219,41 +192,6 @@ async function loadAndAssembleInfo(cls) {
 	// Remove "loading" screen
 	removeLoadingScreen();
 }
-
-
-//function recurseNodes(parent, parentTag) {
-//	var nodes = [...parent.childNodes];
-//	while(nodes.length > 0) {
-//		let node = nodes.shift(), text;
-//		if(node.nodeType === 3) {
-//			text = node.nodeValue.trim();
-//			if(parentTag === undefined) {
-//				// Skip!
-//			} else if(text !== "") {
-//				parentTag.set("text", text);
-//			}
-//		} else {
-//			let a = node.attributes, c = 0, atts = [], tag, nombre = node.nodeName, id = "";
-//			while(c < a.length) {
-//				let att = a.item(c), n = att.name, v = att.value;
-//				if(n=== "ID") {
-//					id = v;
-//				} else {
-//					atts.push([a.name, a.value])
-//				}
-//				c++;
-//			}
-//			if(nombre === "Stat") {
-//				tag = new stats.BasicStat(id, parentTag, node, atts);
-//			} else {
-//				tag = new stats.BasicIdObject(nombre, parentTag, node, atts);
-//			}
-//			//console.log(tag);
-//			recurseNodes(node, tag);
-//		}
-//	}
-//}
-
 
 async function parseModuleNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
