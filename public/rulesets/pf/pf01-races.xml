@@ -52,7 +52,7 @@
 		<Alternative id="Aquatic Ancestry" namespaces="HumanSkilled" description="Humans with deep one or skum ancestry may exhibit prominent round eyes or webbed fingers and toes." explanation="You have a racial bonus to Swim equal to half your level (min 0); you can hold your breath for twice as long as a normal human can; at 16th level, you can always take 10 on Swim checks, even when threatened or distracted">
 			<Bonus to="Swim" fromID="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
-			<Bonus to="Swim" note="situational" value="At 16th level, you can always take 10 on Swim checks, even when threatened or distracted" />
+			<Notation to="Swim" value="At 16th level, you can always take 10 on Swim checks, even when threatened or distracted" />
 		</Alternative>
 		<Alternative id="Awareness" namespaces="HumanBonusFeat" description="Humans raised within monastic traditions or communities that encourage mindfulness seem to shrug off many dangers more easily than other humans." explanation="You have a +1 racial bonus on saving throws and concentration checks">
  			<Bonus to="FortSave" value="1" type="racial" />
@@ -84,9 +84,9 @@
 			<Bonus to="Knowledge (religion)" formula="if_class_skill_then_plus_one" type="racial" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="HumanSkilled" description="Some humans spend their lives in darker places." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light; you also have Darkvision 60ft">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 			<Bonus to="darkvision" value="60" />
 		</Alternative>
 		<Alternative id="Draconic Heritage" namespaces="HumanSkilled" description="At times, a human's family history can have a dragon's power bound to the bloodline." explanation="You have Low-Light Vision, Darkvision 10ft, and can ignore the Charisma prerequisite for Eldritch Heritage and any feat that has Eldritch Heritage as a prerequisite, but you can select only the draconic bloodline with these feats">
@@ -99,7 +99,7 @@
 		</Alternative>
 		<Alternative id="Dragon Scholar" namespaces="HumanBonusFeat" description="Dragons have a long history of individual interactions with specific humans, and some humans seek to better understand this relationship." explanation="You have a +2 racial bonus on caster level checks to overcome a dragon's spell resistance and a +3 racial bonus on checks related to creatures of the dragon type">
  			<PoolBonus to="spellcastingEffects" value="+2 racial bonus on caster level checks to overcome a dragon's spell resistance" />
- 			<Bonus note="situational" to="Knowledge (arcana)" value="+3 racial bonus on checks related to creatures of the dragon type" />
+ 			<Bonus to="Knowledge (arcana)" value="3" type="racial" note="to checks related to creatures of the dragon type" />
 		</Alternative>
 		<Alternative id="Dual Talent" namespaces="HumanStat,HumanSkilled,HumanBonusFeat" description="Some humans are uniquely skilled at maximizing their natural gifts." explanation="You have a +2 bonus to any two different Stats">
 			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="2" />
@@ -123,7 +123,7 @@
 			<!-- At 1st, 8th, and 16th level, such humans gain Skill Focus in a skill of their choice as a bonus feat. -->
 		</Alternative>
 		<Alternative id="Frontier Survivor" namespaces="HumanSkilled" description="Some humans live on the outskirts of society, literally." explanation="You have a +2 racial bonus to Survival in the ruins of cities">
-			<Bonus to="Survival" value="+2 racial bonus in the ruins of cities" note="situation" />
+			<Bonus to="Survival" type="racial" value="2" note="to checks in the ruins of cities" />
 			<!-- Humans with this trait gain the Technologist feat -->
 		</Alternative>
 		<Alternative id="Giant Ancestry" namespaces="HumanSkilled" description="Humans with ogre or troll ancestry end up having hulking builds and asymmetrical features." explanation="You have +1 to your CMB and CMD, and -2 to Stealth">
@@ -145,7 +145,7 @@
 		</Alternative>
 		<Alternative id="Heart of the Mountains" namespaces="HumanSkilled,HeartOfThe,HeartOfTheMountains" description="Humans born in the mountains are skilled at negotiating heights and precipices." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
 			<Bonus to="Climb" value="2" type="racial" />
-			<Bonus to="Acrobatics" value="+2 racial bonus to move on narrow surfaces and uneven ground" note="situational" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to move on narrow surfaces and uneven ground" />
 			<PoolBonus to="miscEffects" value="You are considered acclimated to the effects of high altitude" />
 		</Alternative>
 		<Alternative id="Heart of the Sea" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSea" description="Humans born near the sea are always drawn to it." explanation="You gain Swim and Profession (sailor) as class skills, and you also have a +2 racial bonus to those skills; you can hold your breath for twice as long as a normal human can; you have a +4 racial bonus on concentration checks when attempting to cast spells underwater">
@@ -154,30 +154,33 @@
 			<Bonus to="Swim" value="2" type="racial" />
 			<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
-			<Bonus to="concentrationCheckBase" value="+4 racial bonus on concentration checks when attempting to cast spells underwater" note="situational" />
+			<Bonus to="concentrationCheckBase" value="4"  type="racial" note="to concentration checks when attempting to cast spells underwater" />
 		</Alternative>
 		<Alternative id="Heart of the Slums" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSlums" description="Humans who eke out a life in a city's teeming slums must be quick and clever." explanation="You have a +2 racial bonus to Sleight of Hand and Stealth checks, and a +4 racial bonus to Survival in urban and underground settings">
 			<Bonus to="Sleight of Hand" value="2" type="racial" />
 			<Bonus to="Stealth" value="2" type="racial" />
-			<Bonus to="Survival" value="+4 racial bonus in urban and underground settings" note="situational" />
+			<Bonus to="Survival" value="4"  type="racial" note="to checks in urban and underground settings" />
 		</Alternative>
 		<Alternative id="Heart of the Snows" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSnows" description="Humans born in chilly climes are more used to it than others." explanation="You treat cold climates as one category less severe; you have a +2 racial bonus on Fortitude saves vs the effects of cold climates, on Reflex saves vs slipping and falling, on Climb and Acrobatics checks vs slipping and falling, and in icy conditions, and to your CMD vs trip maneuvers">
 			<PoolBonus to="miscEffects" value="You treat cold climates as one category less severe" />
-			<Bonus to="FortSave" value="+2 racial bonus vs the effects of cold climates" note="situational" />
-			<Bonus to="ReflSave" value="+2 racial bonus vs slipping and falling" note="situational" />
-			<Bonus to="Climb" value="+2 racial bonus vs slipping and falling, and in icy conditions" note="situational" />
-			<Bonus to="Acrobatics" value="+2 racial bonus vs slipping and falling, and in icy conditions" note="situational" />
-			<Bonus to="CMB" value="+2 racial bonus vs trip" note="situational" />
-			<Bonus to="CMBFF" value="+2 racial bonus vs trip" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the effects of cold climates" />
+			<Bonus to="ReflSave" value="2" type="racial" note="vs slipping and falling" />
+			<Bonus to="Climb" value="2" type="racial" note="to checks vs slipping and falling" />
+			<Bonus to="Climb" value="2" type="racial" note="to checks caused by icy conditions" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to checks vs slipping and falling" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to checks caused by icy conditions" />
+			<Bonus to="CMB" value="2" type="racial" note="vs trip" />
+			<Bonus to="CMBFF" value="2" type="racial" note="vs trip" />
 		</Alternative>
 		<Alternative id="Heart of the Streets" namespaces="HumanSkilled,HeartOfThe,HeartOfTheStreets" description="Humans from bustling cities are skilled with crowds." explanation="You have a +1 dodge bonus to AC and a +1 racial bonus to Reflex saves when adjacent to at least two other allies; crowds do not count as difficult terrain for you">
-			<PoolBonus to="combatEffects" value="+1 dodge bonus when adjacent to at least two other allies" />
-			<Bonus to="ReflSave" value="+1 racial bonus when adjacent to at least two other allies" note="situational" />
+			<PoolBonus to="combatEffects" value="+1 dodge bonus to AC when adjacent to at least two other allies" />
+			<Bonus to="ReflSave" value="1" type="racial" note="when adjacent to at least two other allies" />
 			<PoolBonus to="speedEffects" value="Crowds do not count as difficult terrain for you" />
 		</Alternative>
 		<Alternative id="Heart of the Sun" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSun" description="Humans born in tropical climates are more used to it than others." explanation="You treat hot climates as one category less severe; you have a +2 racial bonuson Fortitude saves vs the effects of hot climates, and on Fortitude saves vs the poison and distraction abilities of vermin and swarms">
 			<PoolBonus to="miscEffects" value="You treat hot climates as one category less severe" />
-			<Bonus to="FortSave" value="+2 racial bonus vs the effects of hot climates, and vs the poison and distraction abilities of vermin and swarms" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the effects of hot climates" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the poison and distraction abilities of vermin and swarms" />
 		</Alternative>
 		<Alternative id="Heart of the Wilderness" namespaces="HumanSkilled,HeartOfThe,HeartOfTheWilderness" description="Humans raised in the wild learn the hard way that only the strong survive." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
 			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
@@ -220,7 +223,7 @@
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Mountains" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheMountains" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
 			<Bonus to="Climb" value="2" type="racial" />
-			<Bonus to="Acrobatics" value="+2 racial bonus to move on narrow surfaces and uneven ground" note="situational" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to move on narrow surfaces and uneven ground" />
 			<PoolBonus to="miscEffects" value="You are considered acclimated to the effects of high altitude" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Sea" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSea" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You gain Swim and Profession (sailor) as class skills, and you also have a +2 racial bonus to those skills; you can hold your breath for twice as long as a normal human can; you have a +4 racial bonus on concentration checks when attempting to cast spells underwater">
@@ -229,30 +232,33 @@
 			<Bonus to="Swim" value="2" type="racial" />
 			<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
-			<Bonus to="concentrationCheckBase" value="+4 racial bonus on concentration checks when attempting to cast spells underwater" note="situational" />
+			<Bonus to="concentrationCheckBase" value="4" type="racial" note="on concentration checks when attempting to cast spells underwater" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Slums" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSlums" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a +2 racial bonus to Sleight of Hand and Stealth checks, and a +4 racial bonus to Survival in urban and underground settings">
 			<Bonus to="Sleight of Hand" value="2" type="racial" />
 			<Bonus to="Stealth" value="2" type="racial" />
-			<Bonus to="Survival" value="+4 racial bonus in urban and underground settings" note="situational" />
+			<Bonus to="Survival" value="4" type="racial" note="in urban and underground settings" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Snows" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSnows" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You treat cold climates as one category less severe; you have a +2 racial bonus on Fortitude saves vs the effects of cold climates, on Reflex saves vs slipping and falling, on Climb and Acrobatics checks vs slipping and falling, and in icy conditions, and to your CMD vs trip maneuvers">
 			<PoolBonus to="miscEffects" value="You treat cold climates as one category less severe" />
-			<Bonus to="FortSave" value="+2 racial bonus vs the effects of cold climates" note="situational" />
-			<Bonus to="ReflSave" value="+2 racial bonus vs slipping and falling" note="situational" />
-			<Bonus to="Acrobatics" value="+2 racial bonus vs slipping and falling, and in icy conditions" note="situational" />
-			<Bonus to="Acrobatics" value="+2 racial bonus vs slipping and falling, and in icy conditions" note="situational" />
-			<Bonus to="CMB" value="+2 racial bonus vs trip" note="situational" />
-			<Bonus to="CMBFF" value="+2 racial bonus vs trip" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the effects of cold climates" />
+			<Bonus to="ReflSave" value="2" type="racial" note="vs slipping and falling" />
+			<Bonus to="Climb" value="2" type="racial" note="to checks vs slipping and falling" />
+			<Bonus to="Climb" value="2" type="racial" note="to checks caused by icy conditions" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to checks vs slipping and falling" />
+			<Bonus to="Acrobatics" value="2" type="racial" note="to checks caused by icy conditions" />
+			<Bonus to="CMB" value="2" type="racial" note="vs trip" />
+			<Bonus to="CMBFF" value="2" type="racial" note="vs trip" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Streets" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheStreets" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a +1 dodge bonus to AC and a +1 racial bonus to Reflex saves when adjacent to at least two other allies; crowds do not count as difficult terrain for you">
 			<PoolBonus to="combatEffects" value="+1 dodge bonus when adjacent to at least two other allies" />
-			<Bonus to="ReflSave" value="+1 racial bonus when adjacent to at least two other allies" note="situational" />
+			<Bonus to="ReflSave" value="1" type="racial" note="when adjacent to at least two other allies" />
 			<PoolBonus to="speedEffects" value="Crowds do not count as difficult terrain for you" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Sun" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheSun" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You treat hot climates as one category less severe; you have a +2 racial bonus on Fortitude saves vs the effects of hot climates, and on Fortitude saves vs the poison and distraction abilities of vermin and swarms">
 			<PoolBonus to="miscEffects" value="You treat hot climates as one category less severe" />
-			<Bonus to="FortSave" value="+2 racial bonus vs the effects of hot climates, and vs the poison and distraction abilities of vermin and swarms" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the effects of hot climates" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs the poison and distraction abilities of vermin and swarms" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Wilderness" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheWilderness" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
 			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
@@ -296,7 +302,7 @@
 		</Alternative>
 		<Alternative id="Silver Tongued" namespaces="HumanSkilled" description="Humans are often adept at subtle manipulation and putting even sworn foes at ease." explanation="You have a +2 bonus on Diplomacy and Bluff checks; when you use Diplomacy to shift a creature's attitude, you can shift up to three steps up rather than just two">
 			<Bonus to="Diplomacy" value="2" type="racial" />
-			<Bonus to="Diplomacy" value="When using Diplomacy to shift a creature's attitude, you can shift up to three steps up rather than just two" note="situational" />
+			<Notation to="Diplomacy" value="When using Diplomacy to shift a creature's attitude, you can shift up to three steps up rather than just two" />
 			<Bonus to="Bluff" value="2" type="racial" />
 		</Alternative>
 		<Alternative id="Social Ties" namespaces="HumanSkilled" description="Some human societies run on complex webs of favors and loyalties that canny members can intuitively exploit with relative ease." explanation="You have a +2 racial bonus on Diplomacy checks, and on any skill checks to recruit members and teams for an organization; you add a +1 racial bonus to your Leadership scores (if you gain the Leadership feat)">
@@ -314,10 +320,10 @@
 			<PoolBonus to="spellcastingEffects" value="+2 racial bonus on caster level checks against spell resistance" />
 		</Alternative>
 		<Alternative id="Wayfarer" namespaces="HumanSkilled" description="Humans maintain the largest trade networks and the farthest-reaching civilizations, putting them in contact with a huge number of cultures." explanation="You have a +2 racial bonus on Survival checks to avoid becoming lost, and on Knowledge (geography) checks, and Knowledge (local) checks; whenever you gain a rank in Linguistics, you learn two languages rather than one">
-			<Bonus to="Survival" value="+2 racial bonus to avoid becoming lost" note="situational" />
+			<Bonus to="Survival" value="2" type="racial" note="to avoid becoming lost" />
 			<Bonus to="Knowledge (geography)" value="2" type="racial" />
 			<Bonus to="Knowledge (local)" value="2" type="racial" />
-			<Bonus to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" note="situational" />
+			<Notation to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" />
 			<Bonus to="languagesKnown" fromId="Linguistics" />
 		</Alternative>
 	</Bundle>
@@ -345,7 +351,7 @@
 			<PoolBonus to="saveEffects" value="Immune to sleep effects%%%+2 racial bonus vs enchantment spells and effects" />
 		</Standard>
 		<Standard id="Elven Magic" explanation="You have a +2 racial bonus to identify the properties of magic items and on caster level checks made to overcome spell resistance" namespaces="ElfMagic">
-			<Bonus note="situational" to="Spellcraft" value="+2 racial bonus to identify the properties of magic items" />
+			<Bonus to="Spellcraft" value="2" type="racial" note="to identify the properties of magic items" />
 			<PoolBonus to="spellcastingEffects" value="You have a +2 racial bonus on caster level checks made to overcome spell resistance" />
 		</Standard>
 		<Standard id="Humanoid subtype" explanation="Humanoid (elf)" namespaces="ElfSubtype">
@@ -372,8 +378,8 @@
 			<PoolBonus to="spellcastingEffects" value="+2 racial bonus on concentration checks made to cast arcane spells defensively" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="ElfVision" description="Some elves trade visual accuity for mental and physical dexterity" explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Blended View" namespaces="ElfVision,ElfKeenSenses" description="Half-drow whose non-drow parent had low-light vision might be blessed with a legacy of versatile senses." explanation="You have Low-Light Vision and Darkvision 60ft">
 			<Bonus to="lowLightVision" value="1" />
@@ -384,7 +390,7 @@
 		</Alternative>
 		<Alternative id="Creepy" namespaces="ElfMagic" description="For some elves, their long, slender limbs and large pupils evoke not attraction, but unease in other humanoids." explanation="Non-elf humanoids take a –1 penalty on saving throws against spells you cast that cause confusion or fear; you have a +2 racial bonus on Intimidate checks to demoralize">
 			<PoolBonus to="spellcastingEffects" value="Non-elf humanoids take a –1 penalty on saving throws against spells you cast that cause confusion or fear." />
-			<Bonus to="Intimidate" value="+2 racial bonus on checks to demoralize" note="situational" />
+			<Bonus to="Intimidate" value="2" type="racial" note="on checks to demoralize" />
 		</Alternative>
 		<Alternative id="Crossbow Training" namespaces="ElfWeaponFamiliarity" description="Some elves are trained in the crossbow instead of their more traditional weapons." explanation="You can reload a light crossbow as a free action and a heavy crossbow as a move action, provided you are proficient with the weapon; if you choose the Rapid Reload feat for a heavy crossbow, you can reload the weapon as a free action">
 			<PoolBonus to="combatEffects" value="You can reload a light crossbow as a free action and a heavy crossbow as a move action, provided you are proficient with the weapon; if you choose the Rapid Reload feat for a heavy crossbow, you can reload the weapon as a free action" />
@@ -401,9 +407,9 @@
 			<PoolBonus to="spellcastingEffects" value="+1 racial bonus on caster level checks while adjacent to an ally who has been reduced to fewer than half their maximum hit points" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="ElfWeaponFamiliarity" description="Some elves hone their abilities in the shadows rather than the battlefield." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Disinterested Observer" namespaces="ElfMagic,ElfWeaponFamiliarity" description="Elves who frequently interact with shorter-lived species often come to rely on their ability to wait out such impatient races." explanation="You have a +1 racial bonus on attack rolls and skill checks made as part of readied actions in combat">
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls and skill checks made as part of readied actions in combat" />
@@ -467,8 +473,8 @@
 			<!-- When casting spells of this school, the elves can choose to have the spell leave undamaged any building or structure that would normally be affected. -->
 		</Alternative>
 		<Alternative id="Keeper of Secrets" namespaces="ElfMagic" description="Some elves seek to protect younger races from dangerous lore." explanation="You have a +2 racial bonus to Bluff and Linguistics when omitting or covering up facts, and a +1 bonus to the save DCs of enchantment spells you cast against humanoids">
-			<Bonus to="Bluff" note="situational" value="+2 racial bonus when omitting or covering up facts" />
-			<Bonus to="Linguistics" note="situational" value="+2 racial bonus when omitting or covering up facts" />
+			<Bonus to="Bluff" value="2" type="racial" note="when omitting or covering up facts" />
+			<Bonus to="Linguistics" value="2" type="racial" note="when omitting or covering up facts" />
 			<PoolBonus to="spellcastingEffects" value="+1 bonus to the save DCs of enchantment spells you cast against humanoids" />
 		</Alternative>
 		<Alternative id="Light against Darkness" namespaces="ElfMagic" description="Elves have fought against the corruption of demons since time immemorial." explanation="You have a +1 bonus on attack rolls against outsiders with the demon subtype">
@@ -508,14 +514,14 @@
 		</Alternative>
 		<Alternative id="Natural Swimmer" namespaces="ElfKeenSenses,ElfMagic" description="Some elves are natural swimmers." explanation="You have a +2 racial bonus to Swim, and you can always take 10 on a Swim check, even if distracted or endangered when swimming">
 			<Bonus type="racial" to="Swim" value="2" />
-			<Bonus to="Swim" value="You can always take 10 on a Swim check, even if distracted or endangered when swimming" note="situational" />
+			<Notation to="Swim" value="You can always take 10 on a Swim check, even if distracted or endangered when swimming" />
 		</Alternative>
 		<Alternative id="Overwhelming Magic" namespaces="ElfMagic,ElfWeaponFamiliarity" description="Some elves obsess over the fundamentals of magic, training for decades to add layers of potent spellwork before they ever begin practicing true spells. This builds a foundation that makes their magic increasingly difficult to resist." explanation="You gain Spell Focus as a bonus feat">
 			<!--These elves gain Spell Focus as a bonus feat.-->
 		</Alternative>
 		<Alternative id="Perfect" namespaces="ElfImmunities" description="The eerie beauty of some elves cannot be denied." explanation="You have a +1 racial bonus to Bluff and Diplomacy vs humanoids, and a +2 racial bonus on saves vs transmutation spells and spell-like effects">
-			<Bonus to="Bluff" value="+1 racial bonus vs humanoids" note="situational" />
-			<Bonus to="Diplomacy" value="+1 racial bonus vs humanoids" note="situational" />
+			<Bonus to="Bluff" value="1" type="racial" note="vs humanoids" />
+			<Bonus to="Diplomacy" value="1" type="racial" note="vs humanoids" />
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs transmutation spells and spell-like effects" />
 		</Alternative>
 		<Alternative id="Poison Minion" namespaces="ElfMagic,ElfWeaponFamiliarity" description="Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison. The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters." explanation="Any creature that hits you with a bite attack is immediately exposed to your poison: the save DC for this poison is equal to 10 + half your level + the your Constitution modifier; Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save">
@@ -539,7 +545,7 @@
 			<!--Spell-Like Abilities (Sp): A fetchling can use disguise self once per day as a spell-like ability. He can assume the form of any humanoid creature. A fetchling’s caster level is equal to his total Hit Dice. When a fetchling reaches 9th level in any combination of classes, he gains shadow walk (self only) as a spell-like ability usable once per day as a spell-like ability. A fetchling’s caster level is equal to his total Hit Dice. When a fetchling reaches 13th level in any combination of classes, he gains plane shift (self only, to the Shadow Plane or the Material Plane only) usable once per day as a spell-like ability. A fetchling’s caster level is equal to his total Hit Dice.-->
 		</Alternative>
 		<Alternative id="Silent Hunter" namespaces="ElfMagic" description="Elves are renowned for their subtlety and skill." explanation="You reduce the penalty for using Stealth while moving by 5 and can make Stealth checks while running at a –20 penalty (this number includes the previous -5)">
-			<Bonus to="Stealth" value="You reduce the penalty for using Stealth while moving by 5 and can make Stealth checks while running at a –20 penalty (this number includes the previous -5)" note="situational" />
+			<Notation to="Stealth" value="You reduce the penalty for using Stealth while moving by 5 and can make Stealth checks while running at a –20 penalty (this number includes the previous -5)" />
 		</Alternative>
 		<Alternative id="Slender" namespaces="ElfImmunities" description="Elves often appear unnaturally thin by other races' standards." explanation="You have a +2 racial bonus to Escape Artist, on combat maneuver checks to escape a grapple, and to CMD against grapples">
 			<Bonus type="racial" to="Escape Artist" value="2" />
@@ -547,7 +553,7 @@
 		</Alternative>
 		<Alternative id="Spirit of the Waters" namespaces="ElfWeaponFamiliarity,ElfMagic" description="Some elves have adapted to life in tune with the sea or along the reedy depths of wild rivers and lakes." explanation="You have a +4 racial bonus to Swim and can always take 10 on a Swim check, even if distracted or endangered when swimming; you can choose Aquan as a bonus language; you are proficient with the longspear, trident and net">
 			<Bonus type="racial" to="Swim" value="4" />
-			<Bonus to="Swim" value="You can always take 10 on a Swim check, even if distracted or endangered when swimming" note="situational" />
+			<Notation to="Swim" value="You can always take 10 on a Swim check, even if distracted or endangered when swimming" />
 			<PoolBonus to="bonusLanguages" value="Aquan" />
 			<PoolBonus to="weaponProficiencies" value="longspear,trident,net" />
 		</Alternative>
@@ -557,21 +563,21 @@
 			<PoolBonus to="bonusLanguages" value="Aboleth,Abyssal,Aklo,Aquan,Common,Undercommon" />
 		</Alternative>
 		<Alternative id="Urbanite" namespaces="ElfKeenSenses" description="Elves who live in cities for more than a century can grow to know the ebb and flow of social situations just as their forest-dwelling cousins know the rules of the wild" explanation="You have a +2 racial bonus to Diplomacy when gathering information, and a +2 racial bonus to Sense Motive to get a hunch about a social situation">
-			<Bonus to="Diplomacy" value="+2 racial bonus when gathering information" note="situational" />
-			<Bonus to="Sense Motive" value="+2 racial bonus to get a hunch about a social situation" note="situational" />
+			<Bonus to="Diplomacy" value="2" type="racial" note="when gathering information" />
+			<Bonus to="Sense Motive" value="2" type="racial" note="to get a hunch about a social situation" />
 		</Alternative>
 		<Alternative id="Vigilance" namespaces="ElfMagic" description="Some elves are attuned to the nature of chaos." explanation="You have a +2 dodge bonus to AC vs chaotic creatures">
 			<PoolBonus to="combatEffects" value="+2 dodge bonus to AC vs chaotic creatures" />
 		</Alternative>
 		<Alternative prerequisites="CHA,GreaterThan,12" id="Voice in the Darkness" namespaces="ElfWeaponFamiliarity" description="Characters who practice coercion and intimidation in the Underworld or on the Shadow Plane learn to do so in dim light or no light at all." explanation="You have a +2 racial bonus to Stealth and Intimidate when in dim light or darker conditions">
-			<Bonus to="Intimidate" value="+2 racial bonus when in dim light or darker conditions" note="situational" />
-			<Bonus to="Stealth" value="+2 racial bonus when in dim light or darker conditions" note="situational" />
+			<Bonus to="Intimidate" value="2" type="racial" note="when in dim light or darker conditions" />
+			<Bonus to="Stealth" value="2" type="racial" note="when in dim light or darker conditions" />
 		</Alternative>
 		<Alternative id="Woodcraft" namespaces="ElfMagic" description="Elves know the deep secrets of the wild like no others, especially secrets of the forests." explanation="You have a +1 racial bonus to Knowledge (nature) and Survival, and an additional +1 when in forest terrain">
 			<Bonus type="racial" to="Knowledge (nature)" value="1" />
-			<Bonus to="Knowledge (nature)" value="Additional +1 to racial bonus when in forest terrain" note="situational" />
+			<Bonus type="racial" to="Knowledge (nature)" value="2" note="to checks in forest terrain" />
 			<Bonus type="racial" to="Survival" value="1" />
-			<Bonus to="Survival" value="Additional +1 to racial bonus when in forest terrain" note="situational" />
+			<Bonus type="racial" to="Survival" value="2" note="to checks in forest terrain" />
 		</Alternative>
 	</Bundle>
 
@@ -627,8 +633,8 @@
 			<PoolBonus to="miscEffects" value="You can use spell trigger and spell completion items for your favored class as if one level higher (1st level if you have no levels in that class)" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="HalfElfVision" description="Some half-elves trade visual accuity for mental and physical dexterity" explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Blended View" namespaces="HalfElfVision,HalfElfMultitalented" description="Half-drow whose non-drow parent had low-light vision might be blessed with a legacy of versatile senses." explanation="You have Low-Light Vision and Darkvision 60ft">
 			<Bonus to="lowLightVision" value="1" />
@@ -641,12 +647,12 @@
 		</Alternative>
 		<Alternative id="Cold-Honed" namespaces="HalfElfImmunities" description="Half-elves can be from arctic regions." explanation="You have a +4 racial bonus to avoid nonlethal damage from cold environments and can move through natural snow and ice at your normal speed">
 			<PoolBonus to="speedEffects" value="You can move through natural snow and ice at your normal speed" />
-			<Bonus to="FortSave" value="+4 racial bonus to avoid nonlethal damage from cold environments" note="situational" />
+			<Bonus to="FortSave" value="4" type="racial" note="to avoid nonlethal damage from cold environments" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="HalfElfAdaptability" description="Some half-elves spend their lives in darker places." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Dragon Soul" namespaces="HalfElfAdaptability,HalfElfImmunities,HalfElfBlood,HalfElfSubtype" description="Some half-elves have forsaken a part of their lineage by embracing a more distant connection to dragons." explanation="You are considered an elf or a human, but not both; you count as a dragon for the purposes of effects targeting creatures by type (such as favored enemy and bane weapons); you have a +2 racial bonus on saves vs fear, sleep and paralysis effects">
 			<PoolBonusChoice to="creatureSubtypes" value="human,elf" choices="1" />
@@ -699,7 +705,7 @@
 			<Bonus to="Knowledge (local)" value="1" />
 		</Alternative>
 		<Alternative id="Jungle Affinity" namespaces="HalfElfMultitalented" description="Half-elves can be from a jungle region." explanation="You have a +4 racial bonus to Stealth when in jungle terrain, and you can move through natural difficult terrain at normal speed when in a jungle">
-			<Bonus to="Stealth" value="+4 racial bonus when in jungle terrain" note="situational" />
+			<Bonus to="Stealth" value="4" type="racial" note="when in jungle terrain" />
 			<PoolBonus to="speedEffects" value="You can move through natural difficult terrain at normal speed when in a jungle" />
 		</Alternative>
 		<Alternative id="Kindred-Raised" namespaces="HalfElfStat,HalfElfAdaptability,HalfElfImmunities,HalfElfKeenSenses,HalfElfMultitalented" description="While most think of people with one human and one elven parent when they think of half-elves, some half-elves are raised by two half-elven parents. Such half-elves feel less like outsiders, making them more confident, but less adaptable without the exposure to a human parent." explanation="You have a +2 bonus to Charisma and one other stat of your choice">
@@ -725,12 +731,12 @@
 		</Alternative>
 		<Alternative id="Round Ears" namespaces="HalfElfAdaptability,HalfElfKeenSenses,HalfElfVision" description="Sometimes half-elves are born with no obvious elven features. Their parents may even be humans with only faint traces of elven blood." explanation="You have a +4 racial bonus to Disguise to appear human, and you gain 1 additional skill point every level">
 			<Bonus to="SkillPoints" fromID="Level" />
-			<Bonus to="Disguise" value="+4 racial bonus to appear human" note="situational" />
+			<Bonus to="Disguise" value="4" type="racial" note="to appear human" />
 		</Alternative>
 		<Alternative id="Sea Legs" namespaces="HalfElfAdaptability" description="Many half-elves find their way onto the water early in their youth, whether they live with trader families, work as smugglers, or plunder alongside pirates." explanation="You have a +2 racial bonus to Swim, a +4 racial bonus to Acrobatics to move on narrow or slippery surfaces, and a +4 racial bonus to Climb on docks and ships">
 			<Bonus to="Swim" value="2" type="racial" />
-			<Bonus to="Acrobatics" value="+4 racial bonus to move on narrow or slippery surfaces" note="situational" />
-			<Bonus to="Climb" value="+4 racial bonus on docks and ships" note="situational" />
+			<Bonus to="Acrobatics" value="4" type="racial" note="to move on narrow or slippery surfaces" />
+			<Bonus to="Climb" value="4" type="racial" note="on docks and ships" />
 		</Alternative>
 		<Alternative id="Shadowhunter" namespaces="HalfElfImmunities" description="Some elves are skilled in dealing with the shadow realms." explanation="ou gain Iron Will as a bonus feat; you deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons; you have a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day)">
 			<PoolBonus to="combatEffects" value="You deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons" />
@@ -742,28 +748,28 @@
 			<PoolBonus to="speedEffects" value="You suffer no movement penalties when blinded or moving in darkness" />
 		</Alternative>
 		<Alternative id="Sociable" namespaces="HalfElfAdaptability" description="Half-elves are skilled at charming others and recovering from faux pas." explanation="If you attempt to change a creature's attitude with a Diplomacy check and fail by 5 or more, you can try to influence the creature a second time even if 24 hours have not passed">
-			<Bonus to="Diplomacy" value="If you attempt to change a creature's attitude with a Diplomacy check and fail by 5 or more, you can try to influence the creature a second time even if 24 hours have not passed" note="situational" />
+			<Notation to="Diplomacy" value="If you attempt to change a creature's attitude with a Diplomacy check and fail by 5 or more, you can try to influence the creature a second time even if 24 hours have not passed" />
 		</Alternative>
 		<Alternative id="Sophisticate" namespaces="HalfElfImmunities" description="Half-elves who strive to embody the culture in which they live develop a keen instinct for the ebb and flow of fashions, fads, and political trends." explanation="You have a +2 racial bonus to Knowledge (history and local) and can use those skills untrained">
 			<Bonus to="Knowledge (history)" value="2" type="racial" />
 			<Bonus to="Knowledge (local)" value="2" type="racial" />
-			<Bonus to="Knowledge (history)" value="You can use this skill untrained" note="situational" />
-			<Bonus to="Knowledge (local)" value="You can use this skill untrained" note="situational" />
+			<Notation to="Knowledge (history)" value="You can use this skill untrained" />
+			<Notation to="Knowledge (local)" value="You can use this skill untrained" />
 		</Alternative>
 		<Alternative id="Starchild" namespaces="HalfElfAdaptability" description="Some half-elves descend from elves who are not from this world, but rather visitors from another world, plane, or dimension." explanation="You gain Psychic Sensitivity as a bonus feat">
 			<!--gain Psychic Sensitivity as a bonus feat-->
 		</Alternative>
 		<Alternative id="Thinblood Resilience" namespaces="HalfElfImmunities" description="Half-elves from the underdark with this racial trait are accustomed to torture at the hands of their drow forebears." explanation="You have a +2 on Fortitude saves vs poison and disease, including magical diseases; you gain the poison use ability and never risk accidentally poisoning yourself">
-			<Bonus to="FortSave" value="+2 vs poison and disease, including magical diseases" note="situational" />
+			<Bonus to="FortSave" value="2" note="vs poison and disease, including magical diseases" />
 			<PoolBonus to="miscEffects" value="You gain the poison use ability and never risk accidentally poisoning yourself" />
 		</Alternative>
 		<Alternative id="Underworld Guide" namespaces="HalfElfKeenSenses" description="Those who brave the lightless tunnels below the world's surface learn to identify the dangerous phenomena that characterize the Underworld." explanation="You have a +2 bonus to Initiative and a +2 bonus on saves vs traps and hazards when underground">
 			<Bonus to="Init" value="2" />
-			<Bonus to="saveEffects" value="+2 vs traps and hazards when underground" note="situational" />
+			<Bonus to="saveEffects" value="2" note="vs traps and hazards when underground" />
 		</Alternative>
 		<Alternative prerequisites="CHA,GreaterThan,12" id="Voice in the Darkness" namespaces="HalfElfAdaptability" description="Characters who practice coercion and intimidation in the Underworld or on the Shadow Plane learn to do so in dim light or no light at all." explanation="You have a +2 racial bonus to Stealth and Intimidate when in dim light or darker conditions">
-			<Bonus to="Intimidate" value="+2 bonus when in dim light or darker conditions" note="situational" />
-			<Bonus to="Stealth" value="+2 bonus when in dim light or darker conditions" note="situational" />
+			<Bonus to="Intimidate" value="2" note="when in dim light or darker conditions" />
+			<Bonus to="Stealth" value="2" note="when in dim light or darker conditions" />
 		</Alternative>
 		<Alternative id="Wary" namespaces="HalfElfKeenSenses" description="Many half-elves have spent their long lives moving from place to place, often driven out by the hostility of others. Such experiences have made them wary of others' motivations." explanation="You have a +1 racial bonus to Bluff and Sense Motive">
 			<Bonus to="Sense Motive" value="1" type="racial" />
@@ -771,7 +777,7 @@
 		</Alternative>
 		<Alternative id="Water Child" namespaces="HalfElfAdaptability,HalfElfMultitalented" description="Some half-elves are born of elves adapted to life on or near the water." explanation="You have a +4 racial bonus to Swim, can always take 10 on a Swim check, and can choose Aquan as a bonus language due to high Intelligence">
 			<Bonus type="racial" to="Swim" value="4" />
-			<Bonus to="Swim" value="You can always take 10 on a Swim check" note="situational" />
+			<Notation to="Swim" value="You can always take 10 on a Swim check" />
 			<PoolBonus to="bonusLanguages" value="Aquan" />
 		</Alternative>
 		<Alternative id="Weapon Familiarity" namespaces="HalfElfAdaptability" description="Half-elves raised among elves often feel pitied and mistrusted by their longer-lived kin, and yet they receive training in elf weapons." explanation="You are proficient with longbows, longswords, rapiers and shortbows, and treat any weapon with 'Elven' in its name as a martial weapon">
@@ -808,10 +814,10 @@
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs poison, spells and spell-like abilities" />
 		</Standard>
 		<Standard id="Greed" explanation="You have a +2 racial bonus to determine the price of non-magical goods that contain precious metals or gemstones" namespaces="DwarfGreed">
-			<Bonus note="situational" to="Appraise" value="+2 racial bonus to determine the price of non-magical goods that contain precious metals or gemstones" />
+			<Bonus to="Appraise" value="2" type="racial" note="to determine the price of non-magical goods that contain precious metals or gemstones" />
 		</Standard>
 		<Standard id="Stonecunning" explanation="You have a +2 racial bonus to notice unusual stonework, such as traps and hidden doors located in stone walls or floors; you receive a check to notice such features whenever you pass within 10 feet of them, whether or not you're actively looking" namespaces="DwarfStonecunning">
-			<Bonus note="situational" to="Perception" value="+2 racial bonus to notice unusual stonework, such as traps and hidden doors located in stone walls or floors; you receive a check to notice such features whenever you pass within 10 feet of them, whether or not you're actively looking" />
+			<Bonus to="Perception" value="2" type="racial" note="to notice unusual stonework, such as traps and hidden doors located in stone walls or floors; you receive a check to notice such features whenever you pass within 10 feet of them, whether or not you're actively looking" />
 		</Standard>
 		<Standard id="Hatred" explanation="You have a +1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes" namespaces="DwarfHatred">
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls against humanoid creatures of the orc and goblinoid subtypes" />
@@ -833,14 +839,15 @@
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls against humanoid creatures of the elf subtype" />
 		</Alternative>
 		<Alternative id="Barrow Scholar" namespaces="DwarfStonecunning" description="Some dwarves study the undead very closely." explanation="You have a +2 racial bonus to identify undead, and you can make this attempt untrained">
-			<Bonus to="Knowledge (religion)" value="+2 racial bonus to identify undead, and you can make this attempt untrained" note="situational" />
+			<Bonus to="Knowledge (religion)" value="2" type="racial" note="to identify undead" />
+			<Notation to="Knowledge (religion)" value="You can make untrained checks to attempt to identify undead" />
 		</Alternative>
 		<Alternative id="Barrow Warden" namespaces="DwarfHatred,DwarfDefensiveTraining" description="Some dwarves train to defeat the undead." explanation="You have a +1 bonus on attack rolls vs undead and a +1 dodge bonus to AC vs undead">
 			<PoolBonus to="combatEffects" value="+1 bonus on attack rolls against undead%%%+1 dodge bonus to AC vs undead" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="DwarfStonecunning" description="Some dwarves trade knowledge of stone for more subtle knowledge." explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Breath Weapon" namespaces="DwarfStonecunning,DwarfHatred,DwarfWeaponFamiliarity,DwarfGreed" description="Dwarves with this racial trait can call upon the spirit of a sacred dragon to channel a fraction of that dragon's power." explanation="You have a dragon's breath weapon, which you can use once per day; choose fire, electricity or cold and either a 15ft cone or 20ft line: you deal 1d4 points of energy damage, plus 1d4 points of energy damage for every 2 character levels above 1st (to a maximum of 5d4 at 9th level); targets in the area can attempt a Reflex save (DC = 10 + half your level + your Constitution bonus) for half damage">
 			<PoolBonusChoice to="combatEffects" title="Choose a breath weapon">
@@ -871,9 +878,9 @@
 			<PoolBonus to="miscEffects" value="You treat the temperature as 20 degrees cooler or warmer when determining the effects of extreme heat or extreme cold environments" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="DwarfGreed,DwarfStonecunning" description="Some dwarves spend their lives learning to use the shadows to their benefit." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Dusksight" namespaces="DwarfVision,DwarfHatred" description="Some dwarves aim uncannily well in dim light." explanation="You gain Low-Light Vision; when using ranged weapons, you can reroll the miss chance granted by cover to any target in dim light and take the better of the two rolls (the miss chance for total concealment applies normally)">
 			<PoolBonus to="combatEffects" value="When using ranged weapons, you can reroll the miss chance granted by cover to any target in dim light and take the better of the two rolls (the miss chance for total concealment applies normally)" />
@@ -887,7 +894,7 @@
 		</Alternative>
 		<Alternative id="Giant Hunter" namespaces="DwarfHatred" description="Some dwarves are trained against giants." explanation="You have a +1 bonus on attack rolls against humanoids with the giant subtype, and a +2 bonus to Survival to find and follow tracks made by humanoids with the giant subtype">
 			<PoolBonus to="combatEffects" value="+1 bonus on attack rolls against humanoids with the giant subtype" />
-			<Bonus to="Survival" note="situational" value="+2 bonus to find and follow tracks made by humanoids with the giant subtype" />
+			<Bonus to="Survival" value="2" note="to find and follow tracks made by humanoids with the giant subtype" />
 		</Alternative>
 		<Alternative id="Healthy" namespaces="DwarfHardy" description="Some dwarves are exceptionally hardy against diseases and poison." explanation="You have a +2 racial bonus on saves vs disease and poison, and you need one fewer consecutive successful save (minimum 1) to be cured of diseases and poisons">
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs disease and poison, and you need one fewer consecutive successful save (minimum 1) to be cured of diseases and poisons" />
@@ -909,7 +916,8 @@
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls against any individual creature who attacked you 1 day ago or longer" />
 		</Alternative>
 		<Alternative id="Lorekeeper" namespaces="DwarfGreed" description="Dwarves keep extensive records about their history and the world around them." explanation="You have a +2 racial bonus on Knowledge (history) checks that pertain to dwarves or their enemies, and you can make these checks untrained">
-			<Bonus to="Knowledge (history)" note="situational" value="+2 racial bonus on checks that pertain to dwarves or their enemies, and you can make these checks untrained" />
+			<Bonus to="Knowledge (history)" value="2" type="racial" note="on checks that pertain to dwarves or their enemies" />
+			<Notation to="Knowledge (history)" value="You can make untrained checks that pertain to dwarves or their enemies" />
 		</Alternative>
 		<Alternative id="Low-Light Vision" namespaces="DwarfVision" description="Feyborn dwarves gain low-light vision." explanation="You have Low-Light Vision">
 			<Bonus to="lowLightVision" value="1" />
@@ -926,8 +934,8 @@
 		</Alternative>
 		<Alternative id="Mountaineer" namespaces="DwarfStability" description="Mountain dwarves are skilled at climbing and navigating narrow ledges." explanation="You are immune to altitude sickness, and you do not lose your Dexterity bonus to AC when maiking Climb or Acrobatics checks to cross narrow or slippery surfaces">
 			<PoolBonus to="miscEffects" value="You are immune to altitude sickness" />
-			<Bonus to="Acrobatics" note="situational" value="You do not lose your Dexterity bonus to AC when crossing narrow or slippery surfaces" />
-			<Bonus to="Climb" note="situational" value="You do not lose your Dexterity bonus to AC when crossing narrow or slippery surfaces" />
+			<Notation to="Acrobatics" value="You do not lose your Dexterity bonus to AC when crossing narrow or slippery surfaces" />
+			<Notation to="Climb" value="You do not lose your Dexterity bonus to AC when crossing narrow or slippery surfaces" />
 		</Alternative>
 		<Alternative id="Poison Minion" namespaces="DwarfHardy,DwarfDefensiveTraining" description="Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison. The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters." explanation="Any creature that hits you with a bite attack is immediately exposed to your poison: the save DC for this poison is equal to 10 + half your level + the your Constitution modifier; Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save">
 			<PoolBonus to="combatEffects" value="Any creature that hits you with a bite attack is immediately exposed to your poison: save DC is equal to 10 + half your level + your Constitution modifier%%%Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save" />
@@ -939,14 +947,14 @@
 			<PoolBonus to="speedEffects" value="You can ignore difficult terrain created by rubble, broken ground, or steep stairs when you take a 5-foot step" />
 		</Alternative>
 		<Alternative id="Saltbeard" namespaces="DwarfStonecunning,DwarfDefensiveTraining,DwarfHatred,DwarfGreed" description="Dwarves occasionally found iron cities along rugged seacoasts." explanation="You have a +2 bonus to Survival while at sea, have a +2 bonus to Profession (sailor), a +2 racial bonus to Appraise to determine the price of treasure found under the water, and a +1 racial bonus on attack rolls vs creatures with the aquatic or water subtype and a +2 dodge bonus to AC vs them, too">
-			<Bonus to="Survival" value="+2 bonus while at sea" note="situational" />
+			<Bonus to="Survival" value="2" note="while at sea" />
 			<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" />
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls and a +2 dodge bonus to AC against creatures with the aquatic or water subtype" />
-			<Bonus note="situational" to="Appraise" value="+2 racial bonus to determine the price of treasure found under the water" />
+			<Bonus to="Appraise" value="2" type="racial" note="to determine the price of treasure found under the water" />
 		</Alternative>
 		<Alternative id="Sense Aberration" namespaces="DwarfStonecunning" description="Some dwarves are very good at finding aberrations." explanation="You have a +2 racial bonus to Knowledge (dungeoneering) and a +2 racial bonus to Perception to notice disguised or hidden aberrations">
 			<Bonus to="Knowledge (dungeoneering)" value="2" type="racial" />
-			<Bonus to="Perception" value="+2 racial bonus to notice disguised or hidden aberrations" note="situational" />
+			<Bonus to="Perception" value="2" type="racial" note="to notice disguised or hidden aberrations" />
 		</Alternative>
 		<Alternative id="Shadowhunter" namespaces="DwarfWeaponFamiliarity" description="Some dwarves are skilled in dealing with the shadow realms." explanation="ou gain Iron Will as a bonus feat; you deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons; you have a +2 bonus on saving throws to remove negative levels, and recover physical ability damage from attacks by undead creatures at a rate of 2 points per ability score per day (rather than the normal 1 point per ability score per day)">
 			<PoolBonus to="combatEffects" value="You deal 50% weapon damage to incorporeal creatures when using non-magical weapons (including natural and unarmed attacks), as if using magic weapons" />
@@ -967,7 +975,7 @@
 		</Alternative>
 		<Alternative id="Sky Sentinel" namespaces="DwarfHatred,DwarfDefensiveTraining,DwarfStonecunning" description="As creatures with a deep affinity for the ground, dwarves are wary of attacks from above." explanation="You have a +2 bonus to Perception, a +1 racial bonus on attack rolls, and a +2 dodge bonus to AC, all vs flying creatures only; enemies on higher ground gain no attack roll bonus against you">
 			<PoolBonus to="combatEffects" value="Enemies on higher ground gain no attack roll bonus against you%%%+1 racial bonus on attack rolls vs flying creatures%%%+2 dodge bonus to AC vs flying creatures" />
-			<Bonus to="Perception" value="+2 bonus vs flying creatures" note="situational" />
+			<Bonus to="Perception" value="2" note="vs flying creatures" />
 		</Alternative>
 		<Alternative id="Spell Smasher" namespaces="DwarfHatred,DwarfDefensiveTraining" description="Dwarven families who are threatened by hostile magic-users, especially those who face duergar foes, train intently to thwart spellcasting." explanation="You have a +1 racial bonus on attack rolls against creatures in the process of casting spells or spell-like abilities">
 			<PoolBonus to="combatEffects" value="+1 racial bonus on attack rolls against creatures in the process of casting spells or spell-like abilities" />
@@ -984,7 +992,8 @@
 			<PoolBonus to="spellcastingEffects" value="You are treated as one level higher when casting spells with the earth descriptor or using granted powers of the Earth domain, the bloodline powers of the deep earth bloodline or earth elemental bloodline, and revelations of the oracle's stone mystery (you do not get early access to level-based powers)" />
 		</Alternative>
 		<Alternative id="Stubborn" namespaces="DwarfHardy" description="Dwarves are renowned for their stubbornness." explanation="You have a +2 racial bonus on Will saves vs spells and spell-like abilities of the enchantment (charm) and enchantment (compulsion) schools; if you fail such a save, you receive another save 1 round later at the same DC to prematurely end the effect (assuming it has a duration greater than 1 round); if you have a similar ability from another source (such as a rogue's slippery mind), you can only use one of these abilities per round, but can try the other on the second round if the first reroll ability fails">
-			<Bonus to="WillSave" value="+2 racial bonus vs spells and spell-like abilities of the enchantment (charm) and enchantment (compulsion) schools; if you fail such a save, you receive another save 1 round later at the same DC to prematurely end the effect (assuming it has a duration greater than 1 round); if you have a similar ability from another source (such as a rogue's slippery mind), you can only use one of these abilities per round, but can try the other on the second round if the first reroll ability fails" note="situational" />
+			<Bonus to="WillSave" value="2" type="racial" note="vs spells and spell-like abilities of the enchantment (charm) and enchantment (compulsion) schools" />
+			<Notation to="WillSave" value="If you fail a save vs a spell or spell-like ability of the enchanment (charm or compulsion) schools, you receive another save 1 round later at the same DC to prematurely end the effect (assuming it has a duration greater than 1 round); if you have a similar ability from another source (such as a rogue's slippery mind), you can only use one of these abilities per round, but can try the other on the second round if the first reroll ability fails" />
 		</Alternative>
 		<Alternative id="Surface Survivalist" namespaces="DwarfVision" description="Some dwarves have dwelt very long above ground." explanation="You treat either hot or cold climates (your choice) as one step less severe, and you treat wind conditions (when determining whether or not you are checked or blown away) as one step less severe">
 			<PoolBonusChoice to="miscEffects" title="Choose an environment">
@@ -1008,13 +1017,13 @@
 			<PoolBonus to="combatEffects" value="You take 1 less point of hit point damage, ability damage, or ability drain (minimum 1) from bleed and blood drain; you can attempt Heal checks to staunch your bleeding as a swift action each round" />
 		</Alternative>
 		<Alternative prerequisites="CHA,GreaterThan,12" id="Voice in the Darkness" namespaces="DwarfStonecunning" description="Characters who practice coercion and intimidation in the Underworld or on the Shadow Plane learn to do so in dim light or no light at all." explanation="You have a +2 racial bonus to Stealth and Intimidate when in dim light or darker conditions">
-			<Bonus to="Intimidate" value="+2 bonus when in dim light or darker conditions" note="situational" />
-			<Bonus to="Stealth" value="+2 bonus when in dim light or darker conditions" note="situational" />
+			<Bonus to="Intimidate" value="2" note="when in dim light or darker conditions" />
+			<Bonus to="Stealth" value="2" note="when in dim light or darker conditions" />
 		</Alternative>
 		<Alternative id="Xenophobic" namespaces="DwarfLanguages,DwarfBonusLanguages" description="Isolationist dwarves despise non-dwarven humanoids." explanation="You have a +1 bonus against mind-affecting effects, except for fear effects; you learn one language for every two ranks in Linguistics instead of every rank; You can speak Dwarven, and cannot take bonus languages from a high Intelligence score">
 			<PoolBonusSelect to="languages" value="Dwarven" />
-			<Bonus to="saveEffects" value="+1 bonus against mind-affecting effects, except for fear effects" note="situational" />
-			<Bonus to="Linguistics" value="You learn one language for every two ranks in Linguistics instead of every rank" note="situational" />
+			<Bonus to="saveEffects" value="1" note="against mind-affecting effects, except for fear effects" />
+			<Notation to="Linguistics" value="You learn one language for every two ranks in Linguistics instead of every rank" />
 			<Bonus to="languagesKnown" fromId="Linguistics" attribute="half_negative" />
 		</Alternative>
 		<Alternative id="Wanderer" namespaces="DwarfHardy" description="Some dwarves have a type of wanderlust." explanation="You always treat Climb and Swim as class skills">
@@ -1024,8 +1033,9 @@
 		</Alternative>
 		<Alternative id="Wyrmscourged" namespaces="DwarfHatred,DwarfDefensiveTraining,DwarfStonecunning" description="Some dwarves train to fight and overcome dragons." explanation="You have a +1 bonus on attack rolls and a +2 dodge bonus to AC vs dragons; you have a +2 bonus on saves vs the extraordinary, supernatural, and spell-like abilities of dragons; you have a +2 racial bonus on Knowledge (arcana) checks to identify dragons, and you can make these checks untrained">
 			<PoolBonus to="combatEffects" value="+1 bonus on attack rolls and a +2 dodge bonus to AC vs dragons" />
-			<Bonus to="saveEffects" value="+2 bonus vs the extraordinary, supernatural, and spell-like abilities of dragons" note="situational" />
-			<Bonus to="Knowledge (arcana)" value="+2 racial bonus to identify dragons, and you can make these checks untrained" note="situational" />
+			<Bonus to="saveEffects" value="2" note="vs the extraordinary, supernatural, and spell-like abilities of dragons" />
+			<Bonus to="Knowledge (arcana)" value="2" type="racial" note="to identify dragons" />
+			<Notation to="Knowledge (arcana)" value="You can make checks to identify dragons untrained" />
 		</Alternative>
 	</Bundle>
 
@@ -1090,8 +1100,8 @@
 			<BonusChoice to="perform_skills" type="racial" value="2" choices="1" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="GnomeVision" description="Some gnomes trade visual accuity for mental and physical dexterity" explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Blended View" namespaces="GnomeVision,GnomeKeenSenses" description="Half-drow whose non-drow parent had low-light vision might be blessed with a legacy of versatile senses." explanation="You have Low-Light Vision and Darkvision 60ft">
 			<Bonus to="lowLightVision" value="1" />
@@ -1120,9 +1130,9 @@
 			<Bonus to="darkvision" value="60" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="GnomeWeaponFamiliarity" description="Some gnomes spend their lives learning to use the shadows to their benefit." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Dirty Trickster" namespaces="GnomeKeenSenses,GnomeDefensiveTraining,GnomeHatred" description="All gnomes love pranks, but some specialize in those improvised during battle." explanation="You have a +2 racial bonus on dirty trick combat maneuvers, and you need not meet the Intelligence requirement to select Combat Expertise, Improved Dirty Trick, and any feat with Improved Dirty Trick as a prerequisite">
 			<PoolBonus to="combatEffects" value="+2 racial bonus on dirty trick combat maneuvers" />
@@ -1171,7 +1181,7 @@
 		<Alternative id="Gift of Tongues" namespaces="GnomeDefensiveTraining,GnomeHatred" description="Gnomes love languages and learning about those they meet." explanation="You have a +2 bonus to Bluff and Diplomacy, and whenever you gain a rank in Linguistics, you learn two languages instead of one">
 			<Bonus to="Bluff" value="2" />
 			<Bonus to="Diplomacy" value="2" />
-			<Bonus to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" note="situational" />
+			<Notation to="Linguistics" value="Whenever you gain a rank in Linguistics, you learn two languages instead of one" />
 			<Bonus to="languagesKnown" fromId="Linguistics" />
 		</Alternative>
 		<Alternative id="Inquisitive" namespaces="GnomeObsessive,GnomeKeenSenses" description="Gnomes have a knack for being in places they shouldn't be." explanation="You have a +2 racial bonus to Disable Device and Escape Artist">
@@ -1185,8 +1195,9 @@
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs fear effects" />
 		</Alternative>
 		<Alternative id="Knack with Poison" namespaces="GnomeIllusion,GnomeObsessive" description="Some gnomes have an instinctive understanding of poisons and their uses." explanation="You have a +2 racial bonus on Fortitude saves vs poison, or +4 racial bonus if you accidentally poison yourself when applying or readying poison; you have a +2 racial bonus on Craft (alchemy) to make poison">
-			<Bonus to="FortSave" value="+2 racial bonus vs poison, or +4 racial bonus if you accidentally poison yourself when applying or readying poison" note="situational" />
-			<Bonus to="Craft (alchemy)" multi="craft_skills" sub="alchemy" value="+2 racial bonus to make poison" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs poison" />
+			<Bonus to="FortSave" value="4" type="racial" note="if you accidentally poison yourself when applying or readying poison" />
+			<Bonus to="Craft (alchemy)" multi="craft_skills" sub="alchemy" value="2" type="racial" note="to make poison" />
 		</Alternative>
 		<Alternative id="Magical Linguist" namespaces="GnomeIllusion,GnomeMagic" description="Gnomes study languages in both their mundane and supernatural manifestations." explanation="You have a +1 bonus to the DC of spells you cast with the language-dependent descriptor, or that create glyphs, symbols, or other magical writings; you have a +2 racial bonus on saves vs spells with the language-dependent descriptor, or that create glyphs, symbols, or other magical writings; if you have a Charisma score of 11 or higher then you also gain the following spell-like abilities: 1/day—arcane mark, comprehend languages, message, read magic: the caster level for these effects is equal to your character level">
 			<PoolBonus to="spellcastingEffects" value="+1 to the DC of spells you cast with the language-dependent descriptor, or that create glyphs, symbols, or other magical writings" />
@@ -1199,10 +1210,10 @@
 			<!--They are treated as proficient with any weapon they have personally crafted.-->
 		</Alternative>
 		<Alternative id="Nature Affinity" namespaces="GnomeKeenSenses" description="Some gnomes are physically built to handle the dangers of the wild." explanation="You have a +2 racial bonus on Fortitude saves vs diseases and poisons inflicted by fey, plants, and forest-related hazards">
-			<Bonus to="FortSave" value="+2 racial bonus vs diseases and poisons inflicted by fey, plants, and forest-related hazards" note="situational" />
+			<Bonus to="FortSave" value="2" type="racial" note="vs diseases and poisons inflicted by fey, plants, and forest-related hazards" />
 		</Alternative>
 		<Alternative id="Nosophobia" namespaces="GnomeObsessive" description="Some gnomes are paranoid about catching disease." explanation="You have a +4 bonus on Fortitude saves vs disease and poison, including magical diseases">
-			<Bonus to="FortSave" value="+4 bonus vs disease and poison, including magical diseases" note="situational" />
+			<Bonus to="FortSave" value="4" note="vs disease and poison, including magical diseases" />
 		</Alternative>
 		<Alternative id="Poison Minion" namespaces="GnomeIllusion,GnomeMagic,GnomeDefensiveTraining" description="Drow sometimes augment their slaves and frontline warriors by making them toxic, causing their bodies to internally produce mawbane poison. The resulting poisonous creature makes a potent weapon in the effort to discourage neighboring monsters." explanation="Any creature that hits you with a bite attack is immediately exposed to your poison: the save DC for this poison is equal to 10 + half your level + the your Constitution modifier; Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save">
 			<PoolBonus to="combatEffects" value="Any creature that hits you with a bite attack is immediately exposed to your poison: save DC is equal to 10 + half your level + your Constitution modifier%%%Mawbane Poison—ingested; save Fortitude as above; frequency 1/round for 4 rounds; effect 1d2 Constitution damage; cure 1 save" />
@@ -1225,14 +1236,14 @@
 			<PoolBonus to="spellcastingEffects" value="+1 to caster level when casting spells with the darkness, light or shadow descriptor" />
 		</Alternative>
 		<Alternative id="Sound Mimicry" namespaces="GnomeWeaponFamiliarity" description="Gnomes sometimes show skill at imitating sounds and voices." explanation="You have a +4 racial bonus on Bluff checks to mimic sounds (including accents and speech patterns) you have listened to for at least 10 minutes; listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check">
-			<Bonus to="Bluff" value="+4 racial bonus on checks to mimic sounds (including accents and speech patterns) you have listened to for at least 10 minutes; listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check" note="situational" />
+			<Bonus to="Bluff" value="4" type="racial" note="on checks to mimic sounds (including accents and speech patterns) you have listened to for at least 10 minutes; listeners unfamiliar with a particular sound take a –4 penalty on the Sense Motive check" />
 		</Alternative>
 		<Alternative id="Stalker" namespaces="GnomeDefensiveTraining,GnomeHatred,GnomeObsessive" description="Some gnomes become obsessed with specific individuals." explanation="1/day: You can observe a creature for 10 minutes, then gain a +1 bonus on Bluff, Knowledge, Perception, Sense Motive, and Survival checks against that creature, as well as a +1 bonus on weapon attack and damage rolls against that creature; these bonuses last for 1 day">
 			<PoolBonus to="miscEffects" value="1/day: You can observe a creature for 10 minutes, then gain a +1 bonus on Bluff, Knowledge, Perception, Sense Motive, and Survival checks against that creature, as well as a +1 bonus on weapon attack and damage rolls against that creature; these bonuses last for 1 day" />
 		</Alternative>
 		<Alternative id="Student of the City" namespaces="GnomeObsessive" description="Gnomes of the city learn all they can from newcomers and tend to make contacts in all quarters." explanation="You have a +2 racial bonus to Knowledge (local) and you can use this skill to gather information in place of Diplomacy">
 			<Bonus to="Knowledge (local)" value="2" type="racial" />
-			<Bonus to="Knowledge (local)" value="You can use this skill to gather information in place of Diplomacy" note="situational" />
+			<Notation to="Knowledge (local)" value="You can use this skill to gather information in place of Diplomacy" />
 		</Alternative>
 		<Alternative id="Utilitarian Magic" namespaces="GnomeMagic" description="Some gnomes develop practical magic to assist them with their obsessive projects." explanation="You have a +1 bonus to the DC of any saving throws against transmutation spells you cast; if you have an Intelligence score of 11 or higher, you also gain the following spell-like abilities 1/day—mage hand, open/close, prestidigitation, and unseen servant: the DC for these spells is equal to 10 + the spell's level + your Intelligence modifier">
 			<PoolBonus to="spellcastingEffects" value="+1 to the DC of any saving throws against transmutation spells you cast" />
@@ -1296,15 +1307,15 @@
 		</Alternative>
 		<Alternative id="Acquisitive" namespaces="HalflingKeenSenses" description="Some halflings are good at sizing up treaure." explanation="You have a +2 racial bonus on Appraise checks, and an additional +2 (racial bonus) when used to determine the most valuable item visible in a treasure hoard">
 			<Bonus to="Appraise" value="2" type="racial" />
-			<Bonus to="Appraise" value="additional +2 (racial bonus) when used to determine the most valuable item visible in a treasure hoard" note="situational" />
+			<Bonus to="Appraise" value="4" type="racial" note="to determine the most valuable item visible in a treasure hoard" />
 		</Alternative>
 		<Alternative id="Attentive" namespaces="HalflingKeenSenses" description="Some halflings pick up on subtle cues others may miss." explanation="You have a +2 bracial bonus to Sense Motive, and an additional +2 (racial bonus) to notice when someone is enchanted or possessed">
 			<Bonus to="Sense Motive" value="2" type="racial" />
-			<Bonus to="Sense Motive" value="additional +2 (racial bonus) to notice when someone is enchanted or possessed" note="situational" />
+			<Bonus to="Sense Motive" value="4" type="racial" note="to notice when someone is enchanted or possessed" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="HalflingWeaponFamiliarity" description="Some halflings trade visual accuity for mental and physical dexterity" explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Blessed" namespaces="HalflingFearless" description="Some halflings can shrug off curses and hexes." explanation="You have a +2 racial bonus on saves vs curse effects and hexes (stacks with Halfling Luck)">
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs curse effects and hexes (stacks with Halfling Luck)" />
@@ -1322,11 +1333,11 @@
 			<PoolBonus to="speedEffects" value="When affected by a fear effect, your base speed increases by 10 feet" />
 		</Alternative>
 		<Alternative id="Creepy Doll" namespaces="HalflingSureFooted,HalflingKeenSenses" description="Glassy eyes and porcelain skin make some halflings look more like dolls than living creatures." explanation="If you cease moving and pretend to be a doll while not being observed, a successful Stealth check still allows other creatures to notice you, but they just believe you're a doll; you take no size penalty on Intimidate checks against larger humanoids">
-			<Bonus to="Stealth" value="If you cease moving and pretend to be a doll while not being observed, a successful Stealth check still allows other creatures to notice you, but they just believe you're a doll" note="situational" />
-			<Bonus to="Intimidate" value="You take no size penalty on Intimidate checks against larger humanoids" note="situational" />
+			<Notation to="Stealth" value="If you cease moving and pretend to be a doll while not being observed, a successful Stealth check still allows other creatures to notice you, but they just believe you're a doll" />
+			<Notation to="Intimidate" value="You take no size penalty on Intimidate checks against larger humanoids" />
 		</Alternative>
 		<Alternative id="Danger Detection" namespaces="HalflingKeenSenses" description="Some halflings are constantly on the lookout for danger." explanation="You have a +4 racial bonus to notice a creature using Stealth, a weapon being drawn, or a hidden trap (or similar signs of danger, subject to the GM's discretion)">
-			<Bonus to="Perception" value="+4 racial bonus to notice a creature using Stealth, a weapon being drawn, or a hidden trap (or similar signs of danger, subject to the GM's discretion)" note="situational" />
+			<Bonus to="Perception" value="4" type="racial" note="to notice a creature using Stealth, a weapon being drawn, or a hidden trap (or similar signs of danger, subject to the GM's discretion)" />
 		</Alternative>
 		<Alternative id="Deep Jungle" namespaces="HalflingSureFooted,HalflingWeaponFamiliarity,HalflingLanguages" description="Some reclusive halfling tribes flourish in tropical locales." explanation="You have a +2 racial bonus to Survival; you speak Halfling; you are proficient in the blowgun; you have the poison use ability (you never risk poisoning yourself accidentally)">
 			<PoolBonusSelect to="languages" value="Halfling" />
@@ -1335,9 +1346,9 @@
 			<PoolBonus to="miscEffects" value="You have the poison use ability (you never risk poisoning yourself accidentally)" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="HalflingWeaponFamiliarity" description="Some halflings spend their lives learning to use the shadows to their benefit." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Driven Worker" namespaces="HalflingSureFooted" description="Many halfling families have developed techniques to accomplish work faster and more efficiently, whether to contribute to the community or to please overbearing masters." explanation="You have a +4 racial bonus to a Craft, Perform or Profession skill of your choice">
 			<BonusChoice to="craft_skills,perform_skills,profession_skills" type="racial" value="4" choices="1" />
@@ -1369,8 +1380,9 @@
 			<PoolBonus to="combatEffects" value="Jinx: As a standard action, you can target a creature within 30ft, who gets a Will save to resist (DC = 10 + 1/2 your level + your Charisma modifier); if your target makes this saving throw, it is immune to your jinx ability for 24 hours; a jinxed creature takes a –1 penalty on all saving throws, and the jinx lasts for 24 hours or until you attempt to use your jinx again%%%Your jinx is a supernatural ability, is not mind-affecting, does not allow spell resistance, and can affect any kind of creature not immune to luck effects" />
 		</Alternative>
 		<Alternative id="Human Shadow" namespaces="HalflingKeenSenses,HalflingSureFooted" description="Halflings seem to pop up wherever humans are found, in part because they actively support and move with human explorers, settlers, and travelers without drawing attention to themselves." explanation="You have a +2 racial bonus to Stealth and Sleight of Hand when within 30ft of a human; you can use Stealth to hide behind creatures at least one size category larger than you, without any other source of concealment or cover">
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when within 30ft of a human%%%You can use Stealth to hide behind creatures at least one size category larger than you, without any other source of concealment or cover" />
-			<Bonus to="Sleight of Hand" note="situational" value="+2 racial bonus when within 30ft of a human" />
+			<Bonus to="Stealth" value="2" type="racial" note="when within 30ft of a human" />
+			<Notation to="Stealth" value= "You can use Stealth to hide behind creatures at least one size category larger than you, without any other source of concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" type="racial" note="when within 30ft of a human" />
 		</Alternative>
 		<Alternative id="Ingratiating" namespaces="HalflingKeenSenses,HalflingSureFooted" description="Halflings often survive at the whims of larger, more aggressive races. Because of this, they go out of their way to make themselves more useful, or at least entertaining, to larger folk." explanation="You have a +2 racial bonus to a Perform skill of your choice, a +2 bonus on Craft and Profession checks, and Perform skills are always class skills for you">
 			<BonusChoice to="perform_skills" type="racial" value="2" choices="1" />
@@ -1435,15 +1447,15 @@
 			<PoolBonus to="miscEffects" value="Allies within 60ft of you who are the same size category as you gain a +1 luck bonus vs fear effects" />
 		</Alternative>
 		<Alternative id="Swift as Shadows" namespaces="HalflingSureFooted" description="Halflings possess incredible stealth even while moving through obstructed areas." explanation="YYou reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10">
-			<Bonus to="Stealth" note="situational" value="You reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10" />
+			<Notation to="Stealth" value="You reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10" />
 		</Alternative>
 		<Alternative id="Underfoot" namespaces="HalflingLuck" description="Halflings must train hard to effectively fight bigger opponents." explanation="You have a +1 dodge bonus to AC against foes larger than you and a +1 bonus on Reflex saves vs trample attacks">
 			<PoolBonus to="combatEffects" value="+1 dodge bonus to AC against foes larger than you" />
-			<Bonus to="ReflSave" note="situational" value="+1 bonus vs trample attacks" />
+			<Bonus to="ReflSave" value="1" note="vs trample attacks" />
 		</Alternative>
 		<Alternative id="Underfoot Dodger" namespaces="HalflingWeaponFamiliarity,HalflingFearless" description="City-dwelling halflings are adept at handling crowds." explanation="You have a +5 bonus on Acrobatics checks to move through the spaces of larger foes, and you do not treat crowd squares as difficult terrain">
 			<PoolBonus to="speedEffects" value="You do not treat crowd squares as difficult terrain" />
-			<Bonus to="Acrobatics" note="situational" value="+5 bonus to move through the spaces of larger foes" />
+			<Bonus to="Acrobatics" value="5" note="to move through the spaces of larger foes" />
 		</Alternative>
 		<Alternative id="Unfettered" namespaces="HalflingLuck,HalflingKeenSenses" description="Former slips liberated from slavery train to ensure they will never be slaves again." explanation="You have a +4 racial bonus to Escape Artist, a +2 racial bonus to CMD against grapples, and on combat maneuver checks to escape a grapple, and a +2 racial bonus on saves vs effects that cause the entangled condition">
 			<Bonus to="Escape Artist" type="racial" value="4" />
@@ -1513,9 +1525,11 @@
 			<PoolBonus to="weaponMartial" value="whip,net" />
 		</Alternative>
 		<Alternative id="Behind the Veil" namespaces="HalfOrcIntimidating" description="Some half-orcs trade visual accuity for mental and physical dexterity" explanation="You have a +2 bonus on Bluff and Sleight of Hand checks while benefiting from concealment or cover">
-			<Bonus to="Bluff" value="+2 bonus while benefiting from concealment or cover" note="situational" />
-			<Bonus to="Sleight of Hand" value="+2 bonus while benefiting from concealment or cover" note="situational" />
+			<Bonus to="Bluff" value="2" note="while benefiting from concealment or cover" />
+			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
+			<PoolBonus to="combatEffects" value="Attacks against you in dim light have a 50% miss chance instead of the normal 20% miss chance; you do not gain total concelmeant, you are just harder to hit" />
 			<!--also gaining the shadow blending fetchling racial trait-->
+			<!--Shadow Blending (Su): Attacks against a fetchling in dim light have a 50% miss chance instead of the normal 20% miss chance. This ability does not grant total concealment; it just increases the miss chance.-->
 		</Alternative>
 		<Alternative id="Bestial" namespaces="HalfOrcFerocity" description="The orc blood of some half-orcs manifests in the form of particularly prominent orc features, exacerbating their bestial appearances but improving their already keen senses." explanation="You have a +2 racial bonus to Perception">
 			<Bonus to="Perception" type="racial" value="2" />
@@ -1525,7 +1539,7 @@
 		</Alternative>
 		<Alternative id="Cavewight" namespaces="HalfOrcIntimidating" description="Some half-orcs live far below the surface, seeking freedom in winding cave complexes." explanation="You have a +1 racial bonus on Knowledge (dungeoneering) checks, and a +1 racial bonus on Survival checks made underground">
 			<Bonus to="Knowledge (dungeoneering)" type="racial" value="1" />
-			<Bonus to="Survival" value="+1 racial bonus to checks made underground" note="situational" />
+			<Bonus to="Survival" value="1" type="racial" note="to checks made underground" />
 		</Alternative>
 		<Alternative id="Chain Fighter" namespaces="HalfOrcWeaponFamiliarity" description="Some half-orcs have escaped from slavery and reforged the chains of their imprisonment into deadly weapons." explanation="You are proficient in the flail and heavy flail, and treat the dire flail and spiked chain as martial weapons">
 			<PoolBonus to="weaponProficiencies" value="flail,heavy flail" />
@@ -1540,9 +1554,9 @@
 			<PoolBonus to="combatEffects" value="You gain a +10-foot racial bonus to speed while charging" />
 		</Alternative>
 		<Alternative id="Dimdweller" namespaces="HalfOrcWeaponFamiliarity" description="Some half-orcs spend their lives learning to use the shadows to their benefit." explanation="You have a +2 racial bonus to Intimidate, Perception and Stealth when benefitting from concealment or full concealment due to darkness or dim light">
-			<Bonus to="Intimidate" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Perception" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
-			<Bonus to="Stealth" note="situational" value="+2 racial bonus when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Intimidate" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Perception" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
+			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Divided Attention" namespaces="HalfOrcFerocity,HalfOrcIntimidating" description="Half-orcs must learn to divide their attention among multiple threats to stay alive, since both humans and orcs often attempt to put them in their place." explanation="You have a +1 dodge bonus to AC vs foes flanking you">
 			<PoolBonus to="combatEffects" value="+1 dodge bonus to AC vs foes flanking you" />
@@ -1558,8 +1572,8 @@
 			<Bonus to="lowLightVision" value="1" />
 		</Alternative>
 		<Alternative id="Evader" namespaces="HalfOrcIntimidating" description="Some half-orcs are adept at finding their way underground." explanation="You have a +5 racial bonus on Survival checks to avoid becoming lost underground, and a +1 racial bonus to Stealth when underground">
-			<Bonus to="Survival" note="situational" value="+5 racial bonus to avoid becoming lost underground" />
-			<Bonus to="Stealth" note="situational" value="+1 racial bonus when underground" />
+			<Bonus to="Survival" value="5" type="racial" note="to avoid becoming lost underground" />
+			<Bonus to="Stealth" value="1" type="racial" note="when underground" />
 		</Alternative>
 		<Alternative id="Fey Magic" namespaces="HalfOrcFerocity" description="Some half-orcs have fey ancestry or some other close ties to the fey, manifesting in magical abilities." explanation="You have a +1 bonus to the DC of enchantment (compulsion) spells you cast; if you have a Charisma score of 11 or higher, you gain these spell-like abilities: 1/day: charm person, dancing lights, entangle and prestidigitation; the caster level of these spells is equal to your character level; the DC for these spells is 10 + the spell level + your Charisma modifier">
 			<PoolBonus to="spellcastingEffects" value="+1 to the DC of enchantment (compulsion) spells you cast" />
@@ -1573,7 +1587,7 @@
 			<Bonus to="Climb" type="racial" value="2" />
 		</Alternative>
 		<Alternative id="Gatecrasher" namespaces="HalfOrcFerocity" description="Many half-orcs revel in acts of wanton destruction." explanation="You have a +2 racial bonus on Strength checks to break objects and on sunder combat maneuvers">
-			<Bonus to="STR" note="situational" value="+2 racial bonus to break objects" />
+			<Bonus to="STR" value="2" type="racial" note="to break objects" />
 			<PoolBonus to="combatEffects" value="+2 racial bonus on sunder combat maneuvers" />
 		</Alternative>
 		<Alternative id="Hatred" namespaces="HalfOrcFerocity,HalfOrcIntimidating" description="Half-orcs raised among orcs must prove themselves against their people's enemies." explanation="You have a +1 racial bonus to attack humanoids of the dwarf, elf and human subtypes">
@@ -1583,15 +1597,15 @@
 			<Bonus to="SkillPoints" fromID="Level" />
 		</Alternative>
 		<Alternative id="Inured" namespaces="HalfOrcFerocity" description="Half-orcs raised by orcs often become desensitized to the violence around them." explanation="You have a +4 bonus on Will saves vs sanity damage caused by encountering monsters, extreme violence, or death">
-			<Bonus to="WillSave" note="situational" value="+4 bonus vs sanity damage caused by encountering monsters, extreme violence, or death" />
+			<Bonus to="WillSave" value="4" note="vs sanity damage caused by encountering monsters, extreme violence, or death" />
 		</Alternative>
 		<Alternative id="Low-Light Vision" namespaces="HalfOrcVision" description="Feyborn half-orcs see better in the day than the night." explanation="You have Low-Light Vision">
 			<Bonus to="lowLightVision" value="1" />
 		</Alternative>
 		<Alternative id="Monstrous Sympathy" namespaces="HalfOrcFerocity,HalfOrcIntimidating" description="Some half-orcs know how monsters think." explanation="You have a +2 racial bonus on Bluff, Diplomacy and Sense Motive vs evil creatures">
-			<Bonus to="Bluff" note="situational" value="+2 racial bonus vs evil creatures" />
-			<Bonus to="Diplomacy" note="situational" value="+2 racial bonus vs evil creatures" />
-			<Bonus to="Sense Motive" note="situational" value="+2 racial bonus vs evil creatures" />
+			<Bonus to="Bluff" value="2" type="racial" note="vs evil creatures" />
+			<Bonus to="Diplomacy" value="2" type="racial" note="vs evil creatures" />
+			<Bonus to="Sense Motive" value="2" type="racial" note="vs evil creatures" />
 		</Alternative>
 		<Alternative id="Orc Atavism" namespaces="HalfOrcBlood,HalfOrcFerocity,HalfOrcIntimidating,HalfOrcStat" description="Some half-orcs have much stronger orc blood than human blood." explanation="You have a +2 bonus to Strength, a -2 penalty to Intelligence, Wisdom or Charisma (your choice), and you count as an orc (but not human) for the purposes of effects related to race; you gain the Ferocity ability: You remain conscious and can continue fighting even at negative hit points; you are still staggered, lose 1hp per round, and die when your negative hit points equal your Constitution score">
 			<Bonus to="STR" value="2" />
@@ -1600,9 +1614,16 @@
 			<PoolBonus to="combatEffects" value="Ferocity: You remain conscious and can continue fighting even at negative hit points; you are still staggered, lose 1hp per round, and die when your negative hit points equal your Constitution score" />
 		</Alternative>
 		<Alternative id="Overlooked Mastermind" namespaces="HalfOrcFerocity,HalfOrcIntimidating,HalfOrcWeaponFamiliarity" description="Some half-orcs use half-orcs' brutish stereotypes to their advantage, causing others to underestimate their intelligence and scheming." explanation="You have a +2 racial bonus to Bluff, Diplomacy and Sense Motive, which increases to +4 vs humanoids; in addition, you have an additional +2 to feign ignorance with Bluff, and to intercept secret messages with Sense Motive">
-			<Bonus to="Bluff" note="situational" value="You have a +2 racial bonus%%%You have an additional +2 vs humanoids%%%You have an additional +2 to feign ignorance" />
-			<Bonus to="Diplomacy" note="situational" value="You have a +2 racial bonus%%%You have an additional +2 vs humanoids" />
-			<Bonus to="Sense Motive" note="situational" value="You have a +2 racial bonus%%%You have an additional +2 vs humanoids%%%You have an additional +2 to intercept secret messages" />
+			<Bonus to="Bluff" value="2" type="racial" />
+			<Bonus to="Bluff" value="4" type="racial" note="vs humanoids" />
+			<Bonus to="Bluff" value="4" type="racial" note="to feign ignorance" />
+			<Bonus to="Bluff" value="6" type="racial" note="to feign ignorance to humanoids" />
+			<Bonus to="Diplomacy" value="2" type="racial" />
+			<Bonus to="Diplomacy" value="4" type="racial" note="vs humanoids" />
+			<Bonus to="Sense Motive" value="2" type="racial" />
+			<Bonus to="Sense Motive" value="4" type="racial" note="vs humanoids" />
+			<Bonus to="Sense Motive" value="4" type="racial" note="to intercept secret messages" />
+			<Bonus to="Sense Motive" value="6" type="racial" note="to intercept secret messages from humanoids" />
 		</Alternative>
 		<Alternative id="Pain Tolerance" namespaces="HalfOrcFerocity,HalfOrcIntimidating" description="Some half-orcs have an increased tolerance for pain." explanation="You have a +2 racial bonus on saves vs spells and spell-like effects with the pain descriptor; you have DR 1/- vs nonlethal damage">
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs spells and spell-like effects with the pain descriptor" />
@@ -1631,7 +1652,9 @@
 		</Alternative>
 		<Alternative id="Scavenger" namespaces="HalfOrcIntimidating" description="Some half-orcs eke out a leaving picking over the garbage heaps of society, and must learn to separate rare finds from the inevitable dross." explanation="You have a +2 racial bonus to Appraise, and a +2 racial bonus to Perception to find hidden objects (including traps and secret doors), determine whether food is spoiled, or identify a potion by taste">
 			<Bonus to="Appraise" value="2" type="racial" />
-			<Bonus to="Perception" value="+2 racial bonus to find hidden objects (including traps and secret doors), determine whether food is spoiled, or identify a potion by taste" note="situational" />
+			<Bonus to="Perception" value="2" type="racial" note="to find hidden objects (including traps and secret doors)" />
+			<Bonus to="Perception" value="2" type="racial" note="to determine whether food is spoiled" />
+			<Bonus to="Perception" value="2" type="racial" note="to identify a potion by taste" />
 		</Alternative>
 		<Alternative id="Sea Raider" namespaces="HalfOrcVision" description="Half-orcs frequently take up sailing as pirates, raiders, and fishers, where they are known as tenacious fighters." explanation="You have a +2 racial bonus Profession (sailor) and on Craft checks to repair ships; you have a +1 racial bonus on damage rolls against foes and objects in or on top of the water">
 			<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" />
@@ -1679,8 +1702,8 @@
 			<PoolBonus to="combatEffects" value="+1 racial bonus to CMD to avoid being grappled" />
 		</Alternative>
 		<Alternative prerequisites="CHA,GreaterThan,12" id="Voice in the Darkness" namespaces="HalfOrcIntimidating" description="Characters who practice coercion and intimidation in the Underworld or on the Shadow Plane learn to do so in dim light or no light at all." explanation="You have a +2 racial bonus to Stealth and Intimidate when in dim light or darker conditions">
-			<Bonus to="Intimidate" value="+2 bonus when in dim light or darker conditions" note="situational" />
-			<Bonus to="Stealth" value="+2 bonus when in dim light or darker conditions" note="situational" />
+			<Bonus to="Intimidate" value="2" note="when in dim light or darker conditions" />
+			<Bonus to="Stealth" value="2" note="when in dim light or darker conditions" />
 		</Alternative>
 		<Alternative id="Warded Skin" namespaces="HalfOrcFerocity" description="Some half-orcs seem to have divine protection." explanation="You have SR of 6 + your level, but only against divine magic; divine spells cast by demon worshippers have a 10% failure chance">
 			<PoolBonus to="saveEffects" value="You have SR of 6 + your level, but only against divine magic%%%Divine spells cast by demon worshippers have a 10% failure chance" />
