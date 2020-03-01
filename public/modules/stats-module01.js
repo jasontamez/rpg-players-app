@@ -489,7 +489,7 @@ Str.prototype.type = Str;
 //   o.removeBonus(stringUniqueName, stringTypeOfBonus, ?stringNotation)
 //
 // o.getModifiedValue(?context)
-//   Each non-situation bonus is grouped by type
+//   Each non-notated bonus is grouped by type
 //   The highest positive and lowest negative values per type are added to the value
 //     IF "insight" has bonuses (and penalties) equal to [1, 2, -2, 3, -1]
 //     THEN only 3 and -2 are used, for a total of +1
@@ -499,7 +499,7 @@ export class IntBonusable extends Int {
 	constructor(id, parent, node, atts) {
 		super(id, parent, node, atts);
 		this.bonuses = new Map();
-		this.notes = new Map();
+		this.bonuses.set("", new Map());
 	}
 	get(prop, context = this.defaultContext) {
 		if(prop === "modifiedValue") {
@@ -509,31 +509,32 @@ export class IntBonusable extends Int {
 	}
 	getModifiedValue(context = this.defaultContext) {
 		// get unmodified-by-step value
-		var total = this.atts.get("value"),
-			t = this;
+		var t = this,
+			total = t.atts.get("value"),
+			bonuses = t.bonuses.get("") || new Map();
 		// go through all bonuses
-		this.bonuses.forEach(function(type) {
-			var bonuses = [0];
+		bonuses.forEach(function(type) {
+			var b = [0];
 			type.forEach(function(value) {
 				var v = value;
 				if(value instanceof SpecialGrabber) {
 					v = value.grabValue(context);
 				}
-				bonuses.push(v);
+				b.push(v);
 			});
 			if(t.multistackable.indexOf(type) !== 1) {
-				total += bonuses.reduce((acc, vv) => acc + vv, 0);
+				total += b.reduce((acc, vv) => acc + vv, 0);
 			} else {
-				total += Math.max(...bonuses) + Math.min(...bonuses);
+				total += Math.max(...b) + Math.min(...b);
 			}
 		});
-		total = this.getWithStep(total);
-		return this.type.converter(total);
+		total = t.getWithStep(total);
+		return t.type.converter(total);
 	}
 	registerBonusTag(nombre, id, att, atts) {
-		var tag,
-			type = atts.type,
-			notation = atts.note;
+		var type = atts.type,
+			notation = atts.note,
+			tag;
 		if(id === "this") {
 			tag = SelfReference.getReference(att, undefined, undefined, []);
 		} else {
@@ -543,35 +544,62 @@ export class IntBonusable extends Int {
 		return nombre;
 	}
 	addBonus(nombre, type, bonus, notation = undefined) {
-		var prop, bonuses;
-		if(notation !== undefined) {
-			type = notation;
-			prop = this.notes;
-		} else {
-			prop = this.bonuses;
+		var noteGroup, typeGroup;
+		// Blank notation should change into the empty string
+		if(notation === undefined) {
+			notation = "";
 		}
+		// Ditto for a blank type
 		if(!type || type.constructor !== String) {
 			type = "";
 		}
-		bonuses = prop.get(type) || new Map();
-		bonuses.set(nombre, bonus);
-		prop.set(type, bonuses);
+		// Get noteGroup = everything previously saved that has the same notation
+		noteGroup = this.bonuses.get(notation) || new Map();
+		// Get typeGroup = everything within that notation with the same type
+		typeGroup = noteGroup.get(type) || new Map();
+		// Save this new bonus to typeGroup
+		typeGroup.set(nombre, bonus);
+		// Save the altered typeGroup to noteGroup
+		noteGroup.set(type, typeGroup);
+		// Save noteGroup to the stat
+		this.bonuses.set(notation, noteGroup);
 	}
-	removeBonus(nombre, type, notation = false) {
-		var prop, bonuses;
-		if(notation !== false) {
-			type = notation;
-			prop = this.notes;
-		} else {
-			prop = this.bonuses;
+	removeBonus(nombre, type, notation = undefined) {
+		var noteGroup, typeGroup;
+		// Blank notation should change into the empty string
+		if(notation === undefined) {
+			notation = "";
 		}
-		bonuses = prop.get(type);
-		if(bonuses !== undefined) {
-			bonuses.delete(nombre);
-			if(bonuses.size > 0) {
-				prop.set(type, bonuses);
+		// Ditto for a blank type
+		if(!type || type.constructor !== String) {
+			type = "";
+		}
+		// Get noteGroup = everything previously saved that has the same notation
+		noteGroup = this.bonuses.get(notation);
+		// Check that we actually have anything!
+		if(noteGroup !== undefined) {
+			// Get typeGroup = everything within that notation with the same type
+			typeGroup = noteGroup.get(type);
+			// Check that we actually have anything!
+			if(typeGroup !== undefined) {
+				// Delete given bonus
+				typeGroup.delete(nombre);
+				// See if anything's left in typeGroup
+				if(typeGroup.size > 0) {
+					// Save typeGroup to noteGroup
+					noteGroup.set(notation, typeGroup);
+				} else {
+					// If nothing left in typeGroup, delete it from noteGroup
+					noteGroup.delete(notation);
+				}
+			}
+			// See if anything's left in noteGroup
+			if(noteGroup.size > 0) {
+				// Save noteGroup to stat
+				this.bonuses.set(notation, noteGroup);
 			} else {
-				prop.delete(type);
+				// If nothing left, delete noteGroup from stat
+				this.bonuses.delete(notation);
 			}
 		}
 	}
