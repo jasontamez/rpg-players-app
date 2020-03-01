@@ -483,10 +483,10 @@ Str.prototype.type = Str;
 //   IntBonusable.converter("123.5") => 124
 // Register bonuses:
 //   o.registerBonusTag(stringUniqueName, stringStatID, stringAttribute, [attribute pairs])
-//         (attribute pairs may contain type => stringTypeOfBonus)
+//         (attribute pairs may contain type => stringTypeOfBonus, note => stringNotation)
 //   o.addBonus(stringUniqueName, stringTypeOfBonus, integerBonus, ?stringNotation)
-//         ('notation' describes the situation where the bonus applies)
 //   o.removeBonus(stringUniqueName, stringTypeOfBonus, ?stringNotation)
+//         ('notation' describes the situation where the bonus applies)
 //
 // o.getModifiedValue(?context)
 //   Each non-notated bonus is grouped by type
@@ -495,6 +495,13 @@ Str.prototype.type = Str;
 //     THEN only 3 and -2 are used, for a total of +1
 //   HOWEVER if o.multistackable contains "insight", then
 //     all the bonuses would be used, for a total of +3
+//
+// o.getModifiedValueByNotation(stringNotation, ?context)
+//   As .getModifiedValue but also includes bonuses for stringNotation
+//
+// o.getAllModifiedValues(?context)
+//   Returns an array of bonuses in the format [integerBonus, stringNotation]
+//   Bonuses are calculated based on type as in .getModifiedValue above
 export class IntBonusable extends Int {
 	constructor(id, parent, node, atts) {
 		super(id, parent, node, atts);
@@ -530,6 +537,51 @@ export class IntBonusable extends Int {
 		});
 		total = t.getWithStep(total);
 		return t.type.converter(total);
+	}
+	static getBonusesByType(stat, context, notation = "", all = new Map()) {
+		// Internal method for getting a Map of type arrays
+		var notemap = stat.bonuses.get(notation) || new Map();
+		notemap.forEach(function(map, type) {
+			var b = all.get(type) || [0];
+			map.forEach(function(value) {
+				var v = value;
+				if(value instanceof SpecialGrabber) {
+					v = value.grabValue(context);
+				}
+				b.push(v);
+			});
+			all.set(type, b);
+		});
+		return all;
+	}
+	getModifiedValueByNotation(
+		notation,
+		context = this.defaultContext,
+		total = this.atts.get("value"),
+		all = IntBonusable.getBonusesByType(this, context)
+	) {
+		var t = this;
+		all = IntBonusable.getBonusesByType(t, context, notation, all);
+		all.forEach(function(b, type) {
+			if(t.multistackable.indexOf(type) !== 1) {
+				total += b.reduce((acc, vv) => acc + vv, 0);
+			} else {
+				total += Math.max(...b) + Math.min(...b);
+			}
+		});
+		total = t.getWithStep(total);
+		return t.type.converter(total);
+	}
+	getAllModifiedValues(context = this.defaultContext) {
+		var t = this,
+			value = t.atts.get("value"),
+			all = [["", t.getModifiedValue(context)]],
+			basics = IntBonusable.getBonusesByType(t, context, ""),
+			notes = Array.from(this.bonuses.values()).filter(v => v !== "");
+		notes.forEach(function(note) {
+			all.push([note, this.getModifiedValueByNotation(note, context, value, new Map(basics))]);
+		});
+		return all;
 	}
 	registerBonusTag(nombre, id, att, atts) {
 		var type = atts.type,
