@@ -12,36 +12,6 @@ var $RPG = window["$RPG"],
 $RPG.formulae = FormulaeObject;
 $RPG.stats = InformationObject;
 
-// Parsing functions, specialized for this module instead of taken from parsing-logging.js
-function paarseAttributesToObject(node) {
-	var a = node.attributes, c = 0, atts = {};
-	while(c < a.length) {
-		let att = a.item(c), key = att.name, value = att.value, converter = InformationObject.converters[key];
-		if (converter !== undefined) {
-			atts[key] = converter(value);
-		} else {
-			atts[key] = value;
-		}
-		c++;
-	}
-	return atts;
-}
-function paarseIdAndAttributesToArray(node) {
-	let a = node.attributes, c = 0, atts = [], id = "";
-	while(c < a.length) {
-		let att = a.item(c), n = att.name, v = att.value, converter = InformationObject.converters[n];
-		if(n === "id") {
-			id = v;
-		} else if (converter !== undefined) {
-			atts.push([n, converter(v)]);
-		} else {
-			atts.push([n, v]);
-		}
-		c++;
-	}
-	return [id, ...atts];
-}
-
 
 // Define a class for XML Stat tags
 //   o = new BasicStatObject(parentTag || undefined, xmlNode, [attribute pairs])
@@ -1552,22 +1522,6 @@ InformationObject.getTypeObject = function(type, fallback) {
 };
 InformationObject.defaultTypeObject = Str;
 
-//
-//
-//
-//
-//
-//
-// Probably don't need this any more
-InformationObject.converters = {
-	userEditable: function(input) { return input === "true"; },
-	type: InformationObject.getTypeObject
-};
-//
-//
-//
-//
-
 
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
@@ -1600,22 +1554,6 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 		} else if (InformationObject.TagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
 			InformationObject.TagHandlers[nombre](node, currentNode, currentTag);
-		//} else if (node.children.length > 0) {
-		//  // This node has children: create a BasicIdObject for it and parse recursively
-		//  let atts = parseIdAndAttributesToArray(node),
-		//    id = atts.shift(),
-		//    allAtts = ancestorAtts.concat(atts),
-		//    tag = new BasicIdObject(nombre, id, parent, node, allAtts),
-		//    newAncestry = ancestry.slice();
-		//  // Add ancestry if needed
-		//  if(currentTag !== undefined) {
-		//    newAncestry.push([currentNode, currentTag]);
-		//  }
-		//  siblings.push(tag);
-		//  parseStatNodes(node, tag, newAncestry, allAtts);
-		//} else {
-		//  // This is a simple text node: it will become a property of this node
-		//  props.push([nombre, node.textContent]);
 		} else {
 			// This is an unknown tag
 			logError(node, "Unknown tag enountered: " + nombre);
@@ -1863,24 +1801,6 @@ InformationObject.TagHandlers = {
 InformationObject.comparators = {
 	If: If
 }
-
-
-
-//separate script?
-//separate script?
-//separate script?
-//separate script?
-InformationObject.BundleTagHandlers = {
-	Bonus: parseBonusBundle
-};
-export function parseBonusBundle() {
-	
-}
-//separate script?
-//separate script?
-//separate script?
-//separate script?
-
 
 
 
