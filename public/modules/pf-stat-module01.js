@@ -1,6 +1,8 @@
 import { IntBonusable, BasicStat, MultiStat, BasicIdObject, SpecialGrabber, StatReference, SelfReference, TF, Formula } from "./stats-module01.js";
 import { logErrorNode as logError, parseAttributesToObject } from "./parsing-logging.js"
 
+var $RPG = window["$RPG"];
+
 
 // This stat represents the size of the character
 //   o = new PfSize(stringID, parentTag || undefined, xmlNode, [attribute pairs])
@@ -76,25 +78,82 @@ PfSize.prototype.type = PfSize;
 
 // This stat holds information about spellcasting and spell-like abilities
 //   o = new PfSpells(stringID, parentTag || undefined, xmlNode, [attribute pairs])
-//     attributes should include maxSpellLevel, or else it's set to 9
+//     attributes should include the following:
+//       maxSpellLevel, an integer, defaulting to 9
+//       minSpellLevel, an integer, either 1 or 0 (the default)
+//       spellcastingStat, a string representing the spellcaster's base stat, defaulting to INT
 //   o.spells is a Map with keys from 0..maxSpellLevel, each containing an
 //     empty Map
 export class PfSpells extends BasicStat {
 	constructor(id, parent, node, atts) {
-		var max, s = 0, map = new Map();
+		var map = new Map(),
+			s, max, min, stat;
 		super(id, parent, node, atts);
+    // max spell level
+		min = Number(this.atts.get("minSpellLevel")) ? 1 : 0;
+		this.atts.set("minSpellLevel", min);
+    // min spell level
 		max = this.atts.get("maxSpellLevel") || 9;
 		max = parseInt(Number(max));
 		this.atts.set("maxSpellLevel", max);
+    // populate this.spells in preparation for spells known
+    s = min;
 		while(s <= max) {
 			map.set(s, new Map());
 			s++;
 		}
 		this.spells = map;
+    // spellcasting stat
+    stat = BasicIdObject.getById(this.atts.get("spellcastingStat")) || BasicIdObject.getById("INT");
+    this.atts.set("spellcastingStat", stat);
+    // spellcasting slots
 	}
 }
 PfSpells.prototype.type = PfSpells;
 
+// 1: - - - 0 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4 : ranger and paladin 1-4
+//    - - - - - - 0 1 1 1 1 2 2 2 2 3 3 3 3 4
+//    - - - - - - - - - 0 1 1 1 1 2 2 2 2 3 3
+// 4: - - - - - - - - - - - - 0 1 1 1 1 2 2 3
+
+// 0: 3 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 : magus 0-6
+//    1 2 3 3 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 : bard (infinite 0-level spells), inquisitor and summoner 1-6
+//    - - - 1 2 3 3 4 4 4 4 5 5 5 5 5 5 5 5 5
+// 5: - - - - - - - - - - - - 1 2 3 3 4 4 5 5
+// 6: - - - - - - - - - - - - - - - 1 2 3 4 5
+
+// 1: 3 4 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 : oracle and sorcerer 1-9 (infinite 0-level uses)
+//    - - - 3 4 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+//    - - - - - 3 4 5 6 6 6 6 6 6 6 6 6 6 6 6
+// 9: - - - - - - - - - - - - - - - - - 3 4 6
+
+// 0: 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 : cleric, witch, druid and wizard 0-9
+//    1 2 2 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4   (note that cleric gets bonus domain spell per spell level 1-9)
+//    - - 1 2 2 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4
+// 8: - - - - - - - - - - - - - - 1 2 2 3 3 4
+// 9: - - - - - - - - - - - - - - - - 1 2 3 4
+
+//Level 	0th 	1st 	2nd 	3rd 	4th 	5th 	6th Bard spells known
+//1st 	4 	2 	— 	— 	— 	— 	—
+//2nd 	5 	3 	— 	— 	— 	— 	—
+//3rd 	6 	4 	— 	— 	— 	— 	—
+//4th 	6 	4 	2 	— 	— 	— 	—
+//5th 	6 	4 	3 	— 	— 	— 	—
+//6th 	6 	4 	4 	— 	— 	— 	—
+//7th 	6 	5 	4 	2 	— 	— 	—
+//8th 	6 	5 	4 	3 	— 	— 	—
+//9th 	6 	5 	4 	4 	— 	— 	—
+//10th 	6 	5 	5 	4 	2 	— 	—
+//11th 	6 	6 	5 	4 	3 	— 	—
+//12th 	6 	6 	5 	4 	4 	— 	—
+//13th 	6 	6 	5 	5 	4 	2 	—
+//14th 	6 	6 	6 	5 	4 	3 	—
+//15th 	6 	6 	6 	5 	4 	4 	—
+//16th 	6 	6 	6 	5 	5 	4 	2
+//17th 	6 	6 	6 	6 	5 	4 	3
+//18th 	6 	6 	6 	6 	5 	4 	4
+//19th 	6 	6 	6 	6 	5 	5 	4
+//20th 	6 	6 	6 	6 	6 	5 	5
 
 // This stat holds information about skills, specifically handling class skills
 //   o = new PfSpkill(stringID, parentTag || undefined, xmlNode)
@@ -223,7 +282,7 @@ export class PfSkill extends IntBonusable {
 		var cs = this.classSkillMarkings,
 			newSources = [];
 		tf = TF.converter(tf);
-		// Check to see if this ID was used before, and therefore need to be overwritten
+		// Check to see if this ID was used before, and therefore needs to be overwritten
 		if(cs.every(function(trio, i) {
 			var [n, s, v] = trio;
 			// Found a match!
@@ -337,7 +396,7 @@ export function parseBonusPfSkillRank(node, parentNode, parentTag) {
 	var atts = parseAttributesToObject(node),
 		target = atts.to,
 		formula = atts.formula,
-		fromID = atts.getFromId,
+		fromID = atts.fromId,
 		value = atts.value,
 		limited = !TF.converter(atts.unlimited),
 		att, nombre, tag;
@@ -348,7 +407,7 @@ export function parseBonusPfSkillRank(node, parentNode, parentTag) {
 	if(!(target instanceof PfSkill)) {
 		return logError(node, "BONUSPFSKILLRANK: \"" + target + "\" is not a skill or does not exist");
 	} else if(value === undefined && fromID === undefined && formula === undefined) {
-		return logError(node, "BONUSPFSKILLRANK: missing required \"value\", \"getFromId\" or \"formula\" parameter");
+		return logError(node, "BONUSPFSKILLRANK: missing required \"value\", \"fromId\" or \"formula\" parameter");
 	}
  	att = atts.attribute;
 	if(att === undefined) {
@@ -387,15 +446,23 @@ function parsePfCSkillChoice() {
 	
 }
 
-export const exports = [
-	["type", "PfSize", PfSize],
-	["type", "PfSpells", PfSpells],
-	["type", "PfSkill", PfSkill],
-	["StatTagHandlers", "PfCSkill", parsePfCSkill],
+//export const exports = [
+//	["type", "PfSize", PfSize],
+//	["type", "PfSpells", PfSpells],
+//	["type", "PfSkill", PfSkill],
+//	["StatTagHandlers", "PfCSkill", parsePfCSkill],
+//
+//					// should the above be a bundletaghandler? ////////////////////////////////////////////////
+//
+//
+//	["BundleTagHandlers", "BonusPfSkillRank", parseBonusPfSkillRank],
+//	["BundleTagHandlers", "BonusPfCSkillChoice", parsePfCSkillChoice]
+//];
+export const exports = [];
 
-					// should the above be a bundletaghandler? ////////////////////////////////////////////////
-
-
-	["BundleTagHandlers", "BonusPfSkillRank", parseBonusPfSkillRank],
-	["BundleTagHandlers", "BonusPfCSkillChoice", parsePfCSkillChoice]
-];
+$RPG.stats.type.PfSize = PfSize;
+$RPG.stats.type.PfSpells = PfSpells;
+$RPG.stats.type.PfSkill = PfSkill;
+$RPG.stats.StatTagHandlers.PfCSkill = parsePfCSkill;
+$RPG.stats.BundleTagHandlers.BonusPfSkillRank = parseBonusPfSkillRank;
+$RPG.stats.BundleTagHandlers.BonusPfCSkillChoice = parsePfCSkillChoice;
