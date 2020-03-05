@@ -37,6 +37,7 @@ var $RPG = {
 		var args = Array.from(arguments),
 			obj = this,
 			prev = "$RPG.",
+			err = new Error(),
 			strings;
 		if(args.length < 2
 			|| !((strings = args.shift()) instanceof Array)
