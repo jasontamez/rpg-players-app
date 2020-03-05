@@ -3,10 +3,12 @@ export function logErrorNode(node, msg) {
 	console.log(msg);
 	console.log(node);
 	console.log(node.outerHTML);
+	console.trace();
 }
 
 export function logErrorText(msg) {
 	console.log(msg);
+	console.trace();
 }
 
 // Returns the attributes of NODE as an {object}
