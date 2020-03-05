@@ -1025,10 +1025,10 @@ export class Equation extends SpecialGrabber {
 		return Math.floor(total);
 	}
 	static AtMost(total, n) {
-		return Math.min(total);
+		return Math.min(total, n);
 	}
 	static AtLeast(total, n) {
-		return Math.max(total);
+		return Math.max(total, n);
 	}
 }
 
@@ -1764,7 +1764,7 @@ export function parseAttribute(node, parentNode, parentTag) {
 		parseStatNodes(node, tag);
 	} else {
 		// Node contains text that must be set as our value
-		tag.set("value", node.textContent);
+		tag.set("value", node.textContent.trim());
 	}
 	// Save this attribute node
 	//console.log([nombre, tag]);

@@ -273,10 +273,10 @@ export function parseInputHidden(node, filler) {
 function loadInputHidden(appendTo, unit) {
 	var stat = unit.stat,
 		atts = {},
-		tagClass = atts.tagClass,
 		sep = stat.separator || ",",
-		temp, i, CL;
+		tagClass, temp, i, CL;
 	Object.assign(atts, unit.atts);
+	tagClass = atts.tagClass;
 	if(tagClass !== undefined) {
 		delete atts.tagClass;
 		tagClass = tagClass.split(" ");
@@ -605,7 +605,12 @@ export function loadBundleItem(appTo, item, id, object) {
 			e;
 		// Get any HTML attributes for the element
 		a.forEach(function(att) {
-			if(att !== "filter" && att !== "tag" && att !== "text") {
+			switch(att) {
+				case "filter":
+				case "tag":
+				case "text":
+					break;
+				default:
 					atts[att] = item[att];
 			}
 		});
@@ -853,8 +858,7 @@ export function resetThenNavigate(e) {
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var id = input.dataset.stat,
-			stat = BasicIdObject.getById(id),
-			starting;
+			stat = BasicIdObject.getById(id);
 		if(stat === undefined) {
 			errors.push([input, id]);
 			return logError(input, "Stat \"" + id + "\" not found (data-stat)");

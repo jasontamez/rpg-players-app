@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RuleSet name="pf" title="Pathfinder" description="Pathfinder Roleplaying Game">
+<RuleSet name="pf01" title="Pathfinder" description="Pathfinder Roleplaying Game">
 	<Modules>
 		<Module type="stats" src="pf-stat-module01.js" />
 		<Module type="pages" src="pf-page-module01.js" />
@@ -156,6 +156,7 @@
 							<Subtract fromID="this" />
 							<Divide value="2" />
 							<Floor />
+							<AtLeast value="0" />
 						</Math>
 					</Attribute>
 				</Stat>
