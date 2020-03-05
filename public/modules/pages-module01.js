@@ -70,12 +70,12 @@ var $RPG = window["$RPG"],
 		bundleItemFilters: {},
 		pageFilters: {},
  	  subLoaders: {
-	 	  page: [],
-		 	bundle: [
+	 	  fromPage: [],
+		 	fromBundle: [
 				[item => (item.ITEM !== undefined), loadBundleItem]        
  	    ],
-	 	  bundleItem: [
-		 	  [i => (i.ITEM !== undefined), loadBundleItem]
+	 	  fromBundleItem: [
+		 	  [item => (item.ITEM !== undefined), loadBundleItem]
 			],
  	  }
 	};
@@ -547,7 +547,7 @@ export function loadBundle(appendTo, unit) {
 	chosen.forEach(function(tag) {
 		tag.forEach(function(object, id) {
 			// object.att ...
-			parseDeepHTMLArray(tempDiv, contents, InformationObject.subLoaders.bundle, id, object);
+			parseDeepHTMLArray(tempDiv, contents, InformationObject.subLoaders.fromBundle, id, object);
 		});
 	});
 	if(filter !== undefined) {
@@ -606,13 +606,13 @@ export function loadBundleItem(appTo, item, id, object) {
 		// Get any HTML attributes for the element
 		a.forEach(function(att) {
 			if(att !== "filter" && att !== "tag" && att !== "text") {
-				atts[att] = item[att];
+					atts[att] = item[att];
 			}
 		});
 		// Create the element
 		e = $e(tag, atts, text || "");
 		// Parse any contents
-		parseDeepHTMLArray(e, item.contents, InformationObject.subLoaders.bundleItem, id, object);
+		parseDeepHTMLArray(e, item.contents, InformationObject.subLoaders.fromBundleItem, id, object);
 		// Return the element
 		return e;
 	}
@@ -747,7 +747,7 @@ export function loadPage(page, subPage) {
 		}
 	}
 	// parse the page into tempDiv
-	parseDeepHTMLArray(tempDiv, page.html, InformationObject.subLoaders.page);
+	parseDeepHTMLArray(tempDiv, page.html, InformationObject.subLoaders.fromPage);
 	// filter if necessary
 	if(filter !== undefined) {
 		let f = InformationObject.pageFilters[filter];
@@ -777,7 +777,7 @@ export function loadPageFromButton() {
 // button = this
 export function calculateFromPage() {
 	var MAIN = InformationObject.MAIN,
-		parent = this.parentNode,
+		padre = this.parentNode,
 		d = this.dataset,
 		which = d.which,
 		targets = [],
@@ -791,15 +791,15 @@ export function calculateFromPage() {
 		, MAIN);
 	} else {
 		// Look up chain until we find a statContainer node, or hit the main node
-		while(!parent.classList.contains("statContainer")) {
-			let p = parent.parentNode;
+		while(!padre.classList.contains("statContainer")) {
+			let p = padre.parentNode;
 			if(p === MAIN) {
 				break;
 			}
-			parent = p;
+			padre = p;
 		}
 		// Look for all Stats
-		targets = $a("input.Stat,select[data-stat]", parent);
+		targets = $a("input.Stat,select[data-stat]", padre);
 	}
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
@@ -825,7 +825,7 @@ export function calculateThenNavigate(e) {
 // button = this
 export function resetThenNavigate(e) {
 	var MAIN = InformationObject.MAIN,
-		parent = this.parentNode,
+		padre = this.parentNode,
 		d = this.dataset,
 		which = d.which,
 		targets = [],
@@ -839,17 +839,17 @@ export function resetThenNavigate(e) {
 		, MAIN);
 	} else {
 		// Look up chain until we find a statContainer node, or hit the main node
-		while(!parent.classList.contains("statContainer")) {
-			let p = parent.parentNode;
+		while(!padre.classList.contains("statContainer")) {
+			let p = padre.parentNode;
 			if(p === MAIN) {
 				break;
 			}
-			parent = p;
+			padre = p;
 		}
 		// Look for all Stats
-		targets = $a("input.Stat,select[data-stat]", parent);
+		targets = $a("input.Stat,select[data-stat]", padre);
 	}
-	console.log(targets);
+	//console.log(targets);
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var id = input.dataset.stat,

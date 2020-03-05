@@ -428,7 +428,7 @@ function pfArchetypeNamespace(appendTo, nodeObj, itemObj, id) {
 		//d.avoidNamespaces = avoids;
 	//}
 	// Parse any contents
-	parseDeepHTMLArray(o, nodeObj.contents, $Pages.subLoaders.bundleItem, id, itemObj);
+	parseDeepHTMLArray(o, nodeObj.contents, $Pages.subLoaders.fromBundleItem, id, itemObj);
 	// Return object
 	return o;
 }
@@ -478,7 +478,7 @@ $Pages.pageTemplates.PfSkillsAdjust = templatePfSkillsAdjust;
 $Pages.pageFilters.PfArchetypePicker = pfArchetypePicker;
 $Pages.bundleItemFilters.PfNamespace = pfArchetypeNamespace;
 
-$Pages.subLoaders.bundle.push([pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
+$Pages.subLoaders.fromBundle.push([pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
 $Pages.handlers.ADDTOPOOL = parseAddToPool;
 
 //BasicPageObject.pageTemplates.PfRacialTraits = templatePfRacialTraits,

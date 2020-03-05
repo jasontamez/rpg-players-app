@@ -38,8 +38,8 @@ var $RPG = window["$RPG"];
 //   o.get("flyModifierText") => "-8"
 //   o.get("stealthModifierText") => "-16"
 export class PfSize extends IntBonusable {
-	constructor(id, parent, node, atts) {
-		super(id, parent, node, atts);
+	constructor(id, padre, node, atts) {
+		super(id, padre, node, atts);
 		this.set("minValue", 0);
 		this.set("maxValue", 8);
 		this.set("value", 4);
@@ -85,28 +85,28 @@ PfSize.prototype.type = PfSize;
 //   o.spells is a Map with keys from 0..maxSpellLevel, each containing an
 //     empty Map
 export class PfSpells extends BasicStat {
-	constructor(id, parent, node, atts) {
+	constructor(id, padre, node, atts) {
 		var map = new Map(),
 			s, max, min, stat;
-		super(id, parent, node, atts);
-    // max spell level
+		super(id, padre, node, atts);
+		// max spell level
 		min = Number(this.atts.get("minSpellLevel")) ? 1 : 0;
 		this.atts.set("minSpellLevel", min);
-    // min spell level
+		// min spell level
 		max = this.atts.get("maxSpellLevel") || 9;
 		max = parseInt(Number(max));
 		this.atts.set("maxSpellLevel", max);
-    // populate this.spells in preparation for spells known
-    s = min;
+		// populate this.spells in preparation for spells known
+		s = min;
 		while(s <= max) {
 			map.set(s, new Map());
 			s++;
 		}
 		this.spells = map;
-    // spellcasting stat
-    stat = BasicIdObject.getById(this.atts.get("spellcastingStat")) || BasicIdObject.getById("INT");
-    this.atts.set("spellcastingStat", stat);
-    // spellcasting slots
+		// spellcasting stat
+		stat = BasicIdObject.getById(this.atts.get("spellcastingStat")) || BasicIdObject.getById("INT");
+		this.atts.set("spellcastingStat", stat);
+		// spellcasting slots
 	}
 }
 PfSpells.prototype.type = PfSpells;
@@ -167,9 +167,9 @@ PfSpells.prototype.type = PfSpells;
 //   o.removeClassSkillMark("unique_name_of_class_skill_granter")
 //     the final mark given to the skill will determine if it is a class skill (true) or not (false)
 export class PfSkill extends IntBonusable {
-	constructor(id, parent, node, atts = []) {
+	constructor(id, padre, node, atts = []) {
 		//var siblings = PfSkill.getSkillsBySource(source) || [];
-		super(id, parent, node, [["startingValue", 0], ["minValue", 0], ["source", []]]);
+		super(id, padre, node, [["startingValue", 0], ["minValue", 0], ["source", []]]);
 		this.classSkillMarkings = [];
 		this.rankBonusesLimited = new Map();
 		this.rankBonusesUnlimited = new Map();

@@ -18,9 +18,9 @@ $RPG.stats = InformationObject;
 //   o.set("property", value)
 //   o.get("property") => value
 export class BasicStatObject {
-	constructor(parent, node, atts) {
+	constructor(padre, node, atts) {
 		let a = new Map();
-		this.parent = parent;
+		this.parent = padre;
 		this.node = node;
 		atts.forEach(function(prop) {
 			a.set(prop[0], prop[1]);
@@ -31,10 +31,10 @@ export class BasicStatObject {
 	}
 	get(prop, context = this.defaultContext) {
 		var found = this.atts.get(prop),
-			parent = this.parent, c = 1;
+			padre = this.parent, c = 1;
 		// if found is undefined, check parents
-		if(found === undefined && parent !== undefined) {
-			found = parent.get(prop, context);
+		if(found === undefined && padre !== undefined) {
+			found = padre.get(prop, context);
 		}
 		while(found instanceof BasicStatObject) {
 			if (found instanceof SpecialGrabber) {
@@ -58,8 +58,8 @@ export class BasicStatObject {
 //   BasicIdObject.getById("stringID") => o
 export class BasicIdObject extends BasicStatObject {
 	// ID of tag (or ""), parent of tag (or undefined), any other attributes of the tag
-	constructor(id, parent, node, atts) {
-		super(parent, node, atts);
+	constructor(id, padre, node, atts) {
+		super(padre, node, atts);
 		if(id === null) {
 			id = "unidentified object " + BasicIdObject.counter.toString();
 			BasicIdObject.counter++;
@@ -81,8 +81,8 @@ BasicIdObject.counter = 1;
 // This is a dummy object that does nothing on its own,
 //   but its children will define their own grabValue function
 export class SpecialGrabber extends BasicStatObject {
-	constructor(parent, node, atts) {
-		super(parent, node, atts);
+	constructor(padre, node, atts) {
+		super(padre, node, atts);
 	}
 	grabValue() {
 		return undefined;
@@ -94,10 +94,10 @@ export class SpecialGrabber extends BasicStatObject {
 //   o = new Attribute(parentTag, xmlNode, [attribute pairs], stringName)
 // <Attribute> tag
 export class Attribute extends BasicStatObject {
-	constructor(parent, node, atts, nombre) {
-		super(parent, node, atts);
+	constructor(padre, node, atts, nombre) {
+		super(padre, node, atts);
 		this.name = nombre;
-		this.defaultContext = parent;
+		this.defaultContext = padre;
 	}
 }
 
@@ -106,11 +106,11 @@ export class Attribute extends BasicStatObject {
 //   o = new BasicIdObject(stringID || null, parentTag || undefined, xmlNode, [attribute pairs])
 // BasicStat.converter(value) => value
 export class BasicStat extends BasicIdObject {
-	constructor(id, parent, node, atts) {
+	constructor(id, padre, node, atts) {
 		var i;
 		//console.log("Making id-" + id);
 		//console.log(atts);
-		super(id, parent, node, atts);
+		super(id, padre, node, atts);
 		i = this.atts;
 		if(!i.has("startingValue") && this.get("startingValue") === undefined) {
 			i.set("startingValue", null);
@@ -128,8 +128,8 @@ BasicStat.prototype.type = BasicStat;
 //   o = SelfReference.getReference(stringProperty, parentTag || undefined, xmlNode, [attribute pairs])
 //   o.grabValue(context) => context.get("stringProperty")
 export class SelfReference extends SpecialGrabber {
-	constructor(property, parent, node, atts) {
-		super(parent, node, atts);
+	constructor(property, padre, node, atts) {
+		super(padre, node, atts);
 		this.property = property;
 		SelfReference.refs.set(property, this);
 	}
@@ -138,12 +138,12 @@ export class SelfReference extends SpecialGrabber {
 		//console.log(["SR-this-context", this, context]);
 		return context.get(this.property);
 	}
-	static getReference(property, parent, node, atts) {
+	static getReference(property, padre, node, atts) {
 		var test = SelfReference.refs.get(property);
 		if(test !== undefined) {
 			return test;
 		}
-		return new SelfReference(property, parent, node, atts);
+		return new SelfReference(property, padre, node, atts);
 	}
 }
 SelfReference.refs = new Map();
@@ -153,8 +153,8 @@ SelfReference.refs = new Map();
 //   o = StatReference.getReference(stringIDofStat, stringProperty, parentTag || undefined, xmlNode, [attribute pairs])
 //   o.grabValue() => BasicIdObject.getById("stringIdofStat").get("stringProperty")
 export class StatReference extends SelfReference {
-	constructor(statStr, property, parent, node, atts) {
-		super(statStr + "->" + property, parent, node, atts);
+	constructor(statStr, property, padre, node, atts) {
+		super(statStr + "->" + property, padre, node, atts);
 		this.reference = statStr;
 		this.property = property;
 	}
@@ -167,12 +167,12 @@ export class StatReference extends SelfReference {
 		}
 		return reference.get(this.property);
 	}
-	static getReference(statStr, property, parent, node, atts) {
+	static getReference(statStr, property, padre, node, atts) {
 		var test = SelfReference.refs.get(statStr + "->" + property);
 		if(test !== undefined) {
 			return test;
 		}
-		return new StatReference(statStr, property, parent, node, atts);
+		return new StatReference(statStr, property, padre, node, atts);
 	}
 }
 
@@ -184,9 +184,9 @@ export class StatReference extends SelfReference {
 //   o.makeStatBasic(name, title, description) => new statType(id_based_on_name, ...)
 //   MultiStat.getById(stringID) => o
 export class MultiStat extends BasicIdObject {
-	constructor(id, parent, node, type, atts) {
+	constructor(id, padre, node, type, atts) {
 		var i;
-		super(id, parent, node, atts);
+		super(id, padre, node, atts);
 		i = this.atts;
 		i.has("idPre") || i.set("idPre", "_");
 		i.has("idPost") || i.set("idPost", "");
@@ -294,9 +294,9 @@ MultiStat.allIDs = new Map();
 //         (attribute pairs may contain startingValue, minValue, maxValue, stepValue, stepAdjust)
 //   Num.converter("123.5") => 123.5
 export class Num extends BasicStat {
-	constructor(id, parent, node, atts) {
+	constructor(id, padre, node, atts) {
 		var i, t;
-		super(id, parent, node, atts);
+		super(id, padre, node, atts);
 		i = this.atts;
 		t = this;
 		Num.numericProperties.forEach(function(nv) {
@@ -386,8 +386,8 @@ Num.prototype.type = Num;
 //   Int.converter("123.4") => 123
 //   Int.converter("123.5") => 124
 export class Int extends Num {
-	constructor(id, parent, node, atts) {
-		super(id, parent, node, atts);
+	constructor(id, padre, node, atts) {
+		super(id, padre, node, atts);
 	}
 	set(prop, v) {
 		var min, max, num;
@@ -432,9 +432,9 @@ Int.prototype.type = Int;
 //     o.set("value", "four") => (success)
 //     o.get("value") => "four"
 export class Str extends BasicStat {
-	constructor(id, parent, node, atts) {
+	constructor(id, padre, node, atts) {
 		var i;
-		super(id, parent, node, atts);
+		super(id, padre, node, atts);
 		i = this.atts;
 		if(i.has("validator")) {
 			this.set("validator", i.get("validator"));
@@ -503,8 +503,8 @@ Str.prototype.type = Str;
 //   Returns an array of bonuses in the format [integerBonus, stringNotation]
 //   Bonuses are calculated based on type as in .getModifiedValue above
 export class IntBonusable extends Int {
-	constructor(id, parent, node, atts) {
-		super(id, parent, node, atts);
+	constructor(id, padre, node, atts) {
+		super(id, padre, node, atts);
 		this.bonuses = new Map();
 		this.bonuses.set("", new Map());
 	}
@@ -667,8 +667,8 @@ IntBonusable.prototype.multistackable = ["", "dodge"];
 //   TF.converter("123.5") => true
 //   TF.converter("0") => false
 export class TF extends IntBonusable {
-	constructor(id, parent, node, atts) {
-		super(id, parent, node, atts);
+	constructor(id, padre, node, atts) {
+		super(id, padre, node, atts);
 		this.bonuses = [];
 		this.notes = new Map();
 	}
@@ -782,9 +782,9 @@ TF.prototype.type = TF;
 //   Pool.converter([array]) => [array]
 //   Pool.converter(value) => [value]
 export class Pool extends BasicStat {
-	constructor(id, parent, node, type, atts) {
+	constructor(id, padre, node, type, atts) {
 		var i;
-		super(id, parent, node, atts);
+		super(id, padre, node, atts);
 		i = this.atts;
 		if(i.has("minSelection")) {
 			this.set("minSelection", i.get("minSelection"));
@@ -929,14 +929,14 @@ Pool.prototype.type = Pool;
 //
 // o.grabValue(?context) => the result of the equation
 export class Equation extends SpecialGrabber {
-	constructor(amount, parent, node, atts) {
-		//console.log([amount, parent, node, atts]);
-		super(parent, node, atts);
+	constructor(amount, padre, node, atts) {
+		//console.log([amount, padre, node, atts]);
+		super(padre, node, atts);
 		this.math = [];
-		//console.log([this, amount, parent, node, atts]);
+		//console.log([this, amount, padre, node, atts]);
 		this.startingAmount = this.get("type").converter(amount);
 	}
-	static constructEquation(parent, node) {
+	static constructEquation(padre, node) {
 		var atts = parseAttributesToObject(node),
 			amount = atts.amount,
 			type = atts.type,
@@ -947,7 +947,7 @@ export class Equation extends SpecialGrabber {
 			delete atts.amount;
 		}
 		if(type === undefined) {
-			type = parent.get("type") || Num;
+			type = padre.get("type") || Num;
 		}
 		if(typeof type === "string") {
 			type = InformationObject.getTypeObject(type, Num);
@@ -956,7 +956,7 @@ export class Equation extends SpecialGrabber {
 			type = Num;
 		}
 		atts.type = type;
-		tag = new Equation(amount, parent, node, parseObjectToArray(atts));
+		tag = new Equation(amount, padre, node, parseObjectToArray(atts));
 		[...node.children].forEach( step => tag.addStep(step) );
 		return tag;
 	}
@@ -1040,8 +1040,8 @@ export class Equation extends SpecialGrabber {
 //   o.grabValue(context) => the result of the if/then/else tree
 //      NOTE that context is mandatory
 export class If extends SpecialGrabber {
-	constructor(parent, node, atts, intype, outtype, operation) {
-		super(parent, node, atts);
+	constructor(padre, node, atts, intype, outtype, operation) {
+		super(padre, node, atts);
 		this.inType = intype;
 		this.outType = outtype;
 		this.operation = operation || "AND";
@@ -1049,20 +1049,20 @@ export class If extends SpecialGrabber {
 		this.then = [];
 		this.else = [];
 	}
-	static constructIfThenElse(parent, node) {
+	static constructIfThenElse(padre, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
 			outtype = atts.outType,
 			operation = (atts.operation || "AND"),
 			tag;
 		if(intype === undefined) {
-			intype = InformationObject.getTypeObject(parent.get("inType"), Num);
+			intype = InformationObject.getTypeObject(padre.get("inType"), Num);
 		} else {
 			intype = InformationObject.getTypeObject(intype, Num);
 			delete atts.inType;
 		}
 		if(outtype === undefined) {
-			outtype = InformationObject.getTypeObject(parent.get("inType") || parent.get("type"), Str);
+			outtype = InformationObject.getTypeObject(padre.get("inType") || padre.get("type"), Str);
 		} else {
 			outtype = InformationObject.getTypeObject(outtype, Str);
 			delete atts.outType;
@@ -1072,7 +1072,7 @@ export class If extends SpecialGrabber {
 		} else {
 			delete atts.operation;
 		}
-		tag = new If(parent, node, parseObjectToArray(atts), intype, outtype, operation);
+		tag = new If(padre, node, parseObjectToArray(atts), intype, outtype, operation);
 		//console.log("Constructing IF");
 		[...node.children].forEach(function(step) {
 			//console.log(step);
@@ -1086,7 +1086,7 @@ export class If extends SpecialGrabber {
 				case "Then":
 				case "Else":
 					//console.log("Then/Else");
-					tag.addThenElse(step, nombre, outtype, parent, node);
+					tag.addThenElse(step, nombre, outtype, padre, node);
 					//console.log([nombre.toUpperCase(), tag[nombre.toLowerCase()]]);
 					break;
 				default:
@@ -1141,7 +1141,7 @@ export class If extends SpecialGrabber {
 		}
 		this.comparison.push([nombre, literalFlag, amount]);
 	}
-	addThenElse(node, nombre, outtype, parent, pNode) {
+	addThenElse(node, nombre, outtype, padre, pNode) {
 		var amount = null,
 			converter = outtype.converter;
 		if(node.hasAttribute("value")) {
@@ -1159,8 +1159,8 @@ export class If extends SpecialGrabber {
 		//} else if (node.children.length > 0) {
 		} else if (node.getAttribute("use") === "Math") {
 			//amount = new Attribute(nombre, outtype);
-			amount = Equation.constructEquation(parent, node, [["type", outtype]]);
-			//amount = new BasicStatObject(parent, pNode, [["type", outtype]]);
+			amount = Equation.constructEquation(padre, node, [["type", outtype]]);
+			//amount = new BasicStatObject(padre, pNode, [["type", outtype]]);
 			//console.log(["ATTRIBUTE", nombre, outtype]);
 			//parseStatNodes(node, amount);
 		} else {
@@ -1279,8 +1279,8 @@ export class If extends SpecialGrabber {
 //   o.grabValue(context) => the result of the do/while loop
 //      NOTE that context is mandatory
 export class Do extends SpecialGrabber {
-	constructor(parent, node, atts, intype, outtype, input, output) {
-		super(parent, node, atts);
+	constructor(padre, node, atts, intype, outtype, input, output) {
+		super(padre, node, atts);
 		this.inType = intype;
 		this.outType = outtype;
 		this.input = intype.converter("");
@@ -1290,10 +1290,10 @@ export class Do extends SpecialGrabber {
 		this.operation = "AND";
 		this.whiile = [];
 	}
-	static constructDo(parent, node) {
+	static constructDo(padre, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
-			outtype = InformationObject.getTypeObject(atts.outType || parent.get("outType") || parent.get("type"), Str),
+			outtype = InformationObject.getTypeObject(atts.outType || padre.get("outType") || padre.get("type"), Str),
 			input = atts.input,
 			output = atts.output,
 			modIn = $a("ModifyInput", node),
@@ -1309,7 +1309,7 @@ export class Do extends SpecialGrabber {
 		}
 		// Find intype
 		if(intype === undefined) {
-			intype = InformationObject.getTypeObject(parent.get("inType"), Num);
+			intype = InformationObject.getTypeObject(padre.get("inType"), Num);
 		} else {
 			intype = InformationObject.getTypeObject(intype, Num);
 			delete atts.inType;
@@ -1317,14 +1317,14 @@ export class Do extends SpecialGrabber {
 		inconv = intype.converter;
 		// Find outtype
 		if(outtype === undefined) {
-			outtype = InformationObject.getTypeObject(parent.get("inType") || parent.get("type"), Str);
+			outtype = InformationObject.getTypeObject(padre.get("inType") || padre.get("type"), Str);
 		} else {
 			outtype = InformationObject.getTypeObject(outtype, Str);
 			delete atts.outType;
 		}
 		outconv = outtype.converter;
 		// Create Do tag
-		tag = new Do(parent, node, [], intype, outtype);
+		tag = new Do(padre, node, [], intype, outtype);
 		// Check Input
 		if(input !== undefined) {
 			input = intype.converter(input);
