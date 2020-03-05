@@ -2,7 +2,8 @@ import { $a, $i, $t, $listen } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
 import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
-const xmlDir = "rulesets/",
+import { PlayerObject } from "./modules/data-module01.js";
+const xmlDir = "./rulesets/",
 	modDir = "./modules/",
 	BODY = document.body,
 	MAIN = $i("mainGrid");
@@ -17,6 +18,9 @@ $RPG.pages.data = data;
 $RPG.pages.rawBundles = BUNDLES;
 $RPG.pages.MAIN = MAIN;
 
+// Character/player creation
+var PO = new PlayerObject("id"),
+	Char = PO.makeCharacter("pf01");
 
 // Show the loading screen
 function showLoadingScreen() {
