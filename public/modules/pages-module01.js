@@ -80,7 +80,7 @@ var $RPG = window["$RPG"],
  	  }
 	};
 
-$RPG.pages = InformationObject;
+$RPG.ADD("pages", InformationObject);
 
 
 // Parse an array of <Page> objects

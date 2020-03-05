@@ -460,9 +460,9 @@ function parsePfCSkillChoice() {
 //];
 export const exports = [];
 
-$RPG.stats.type.PfSize = PfSize;
-$RPG.stats.type.PfSpells = PfSpells;
-$RPG.stats.type.PfSkill = PfSkill;
-$RPG.stats.StatTagHandlers.PfCSkill = parsePfCSkill;
-$RPG.stats.BundleTagHandlers.BonusPfSkillRank = parseBonusPfSkillRank;
-$RPG.stats.BundleTagHandlers.BonusPfCSkillChoice = parsePfCSkillChoice;
+$RPG.ADD("stats", "type", "PfSize", PfSize);
+$RPG.ADD("stats", "type", "PfSpells", PfSpells);
+$RPG.ADD("stats", "type", "PfSkill", PfSkill);
+$RPG.ADD("stats", "StatTagHandlers", "PfCSkill", parsePfCSkill);
+$RPG.ADD("stats", "BundleTagHandlers", "BonusPfSkillRank", parseBonusPfSkillRank);
+$RPG.ADD("stats", "BundleTagHandlers", "BonusPfCSkillChoice", parsePfCSkillChoice);

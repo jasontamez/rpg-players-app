@@ -470,16 +470,15 @@ export function loadAddToPool(appTo, item, id, object) {
 export const exports = [];
 
 
-$Pages.pageTemplates.PfRacialTraits = templatePfRacialTraits;
-$Pages.pageTemplates.PfStats = templatePfStats;
-$Pages.pageTemplates.PfClassArchetypes = templatePfClassArchetypes;
-$Pages.pageTemplates.PfClassChoices = templatePfClassChoices;
-$Pages.pageTemplates.PfSkillsAdjust = templatePfSkillsAdjust;
-$Pages.pageFilters.PfArchetypePicker = pfArchetypePicker;
-$Pages.bundleItemFilters.PfNamespace = pfArchetypeNamespace;
-
-$Pages.subLoaders.fromBundle.push([pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
-$Pages.handlers.ADDTOPOOL = parseAddToPool;
+$RPG.ADD("pages", "pageTemplates", "PfRacialTraits", templatePfRacialTraits);
+$RPG.ADD("pages", "pageTemplates", "PfStats", templatePfStats);
+$RPG.ADD("pages", "pageTemplates", "PfClassArchetypes", templatePfClassArchetypes);
+$RPG.ADD("pages", "pageTemplates", "PfClassChoices", templatePfClassChoices);
+$RPG.ADD("pages", "pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust);
+$RPG.ADD("pages", "pageFilters", "PfArchetypePicker", pfArchetypePicker);
+$RPG.ADD("pages", "bundleItemFilters", "PfNamespace", pfArchetypeNamespace);
+$RPG.PUSH(["subLoaders", "fromBundle"], [pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
+$RPG.ADD("pages", "handlers", "ADDTOPOOL", parseAddToPool);
 
 //BasicPageObject.pageTemplates.PfRacialTraits = templatePfRacialTraits,
 //BasicPageObject.pageTemplates.PfStats = templatePfStats,

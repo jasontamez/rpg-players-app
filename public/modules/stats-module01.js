@@ -8,9 +8,10 @@ export var record = [];
 
 var $RPG = window["$RPG"],
 	InformationObject = {},
-	FormulaeObject = {};
-$RPG.formulae = FormulaeObject;
-$RPG.stats = InformationObject;
+	FormulaeObject = {},
+	BundleTagHandlers = {};
+$RPG.ADD("formulae", FormulaeObject);
+$RPG.ADD("stats", InformationObject);
 
 
 // Define a class for XML Stat tags
@@ -1904,10 +1905,11 @@ InformationObject.TagHandlers = {
 	BasicIdObject: parseGroup
 };
 
+InformationObject.BundleTagHandlers = {};
+
 InformationObject.comparators = {
 	If: If
 }
-
 
 
 

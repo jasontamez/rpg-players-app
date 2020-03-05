@@ -3,7 +3,7 @@ import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArra
 
 var $RPG = window["$RPG"],
 	InformationObject = {};
-$RPG.data = InformationObject;
+$RPG.ADD("data", InformationObject);
 
 
 // Define a class for character objects
