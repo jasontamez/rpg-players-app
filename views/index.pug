@@ -34,11 +34,7 @@ html
     #loading
       div Please wait...
       #loading-message
-    script(src='rpg-players-app.js' type='module')
-    script.
-      // Set up a global variable for use in the module system
-      window["$RPG"] = {};
-    |
-    |
+    script(src='rpg-players-app.js')
+    script(src='rpg-players-module.js' type='module')
   |
   |
