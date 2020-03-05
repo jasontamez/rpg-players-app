@@ -56,6 +56,10 @@ var $RPG = {
 			return new TypeError(prev + " is not an Array");
 		}
 		obj.push(...args);
+		this.log.push(prev + " pushed new value(s) :: " + (err.lineNumber
+			? err.fileName + ':' + err.lineNumber + ":1" // add arbitrary column value for chrome linking
+			: this.extractLineNumberFromStack(err.stack)
+		));
 	},
 	extractLineNumberFromStack: function (stack) {
         /// <summary>
