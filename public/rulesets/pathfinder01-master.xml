@@ -394,7 +394,7 @@
 						<ADDTOPOOL id="racialTraits" selected="true" />
 					</BUNDLE>
 				</div>
-				<BUTTON type="resetNavigation" which="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" nextPage="page3">Continue</BUTTON>
+				<BUTTON type="resetNavigation" whichClass="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" whichClass="Archetype" choicePage="SPECIFIC RACIAL TRAITS" nextPage="CLASSES">Continue</BUTTON>
 			</Block>
 			<Block class="flex-vertical">
 				<header>Alternates</header>
@@ -415,16 +415,16 @@
 				<p>Click on an alternate racial trait to see its benefits.<br />Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
 			</Block>
 		</Page>
-		<Page id="page3" class="flex-vertical">
-			<Block>
-				<Block template="PfStats" />
+		<Page id="CLASSES" class="flex-vertical">
+			<Block class="flex-vertical">
+				<header>Class Selection</header>
 				<ol start="4">
-					<li><label>Choose a class: <CHOOSE category="classes" saveTo="class" /></label></li>
+					<li><label>Choose a class: <CHOOSE category="class" saveTo="class" /></label></li>
 				</ol>
-				<BUTTON type="navigation" nextPage="page4">Continue</BUTTON>
+				<BUTTON type="calcNav" nextPage="ARCHETYPES">Continue</BUTTON>
 			</Block>
 		</Page>
-		<Page id="page4" class="flex-vertical">
+		<Page id="ARCHETYPES" class="flex-vertical">
 			<Block template="PfClassArchetypes" contents="append">
 				<BUTTON type="navigation" nextPage="page5">Continue</BUTTON>
 			</Block>

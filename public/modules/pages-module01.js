@@ -43,19 +43,19 @@ var $RPG = window["$RPG"],
 			},
 			calculation: {
 				mandatoryProps: [],
-				datasetProps: [["which", "toCalc"]],
+				datasetProps: [["whichClass", "whichId", "separator", "toCalc"]],
 				defaultText: "Calculate",
 				listenFunc: calculateFromPage
 			},
 			calcNav: {
 				mandatoryProps: ["nextPage"],
-				datasetProps: ["nextPage", "which", "haltable"],
+				datasetProps: ["nextPage", "choicePage", "whichClass", "whichId", "separator", "haltable"],
 				defaultText: "Save and Continue",
 				listenFunc: calculateThenNavigate
 			},
 			resetNavigation: {
 				mandatoryProps: ["nextPage"],
-				datasetProps: ["nextPage", "which", "haltable"],
+				datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
 				defaultText: "Go Back",
 				listenFunc: resetThenNavigate
 			},
@@ -779,21 +779,21 @@ export function loadPageFromButton() {
 }
 
 
-// button = this
-export function calculateFromPage() {
-	var MAIN = InformationObject.MAIN,
-		padre = this.parentNode,
-		d = this.dataset,
-		which = d.which,
-		targets = [],
-		errors = [];
+// This bit of code gets reused a lot, so it's spun off into its own function
+function getTargetsFromButton(button, padre = button.parentNode, MAIN = InformationObject.MAIN) {
+	var d = button.dataset,
+	sep = d.separator || " ",
+	which = d.whichClass,
+	whichID = d.whichId;
 	if(which) {
 		// Look for all Stats with the specified classes
 		targets = $a(
-			which.split(" ")
+			which.split(sep)
 				.map(w => "input.Stat." + w + ",select[data-stat]." + w)
 				.join(",")
 		, MAIN);
+	} else if(whichID) {
+		targets = $a(whichID.split(sep).map(w => "#" + w).join(","), MAIN);
 	} else {
 		// Look up chain until we find a statContainer node, or hit the main node
 		while(!padre.classList.contains("statContainer")) {
@@ -806,14 +806,24 @@ export function calculateFromPage() {
 		// Look for all Stats
 		targets = $a("input.Stat,select[data-stat]", padre);
 	}
+	return targets;
+}
+
+
+// button = this
+// Set stats to the values present on the page
+export function calculateFromPage() {
+	var targets = getTargetsFromButton(this),
+		choices = [];
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var id = input.dataset.stat,
 			stat = BasicIdObject.getById(id),
 			value = input.value;
 		if(stat === undefined) {
-			errors.push([input, id]);
 			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
+		} else if(stat instanceof Pool) {
+			return;
 		}
 		return stat.set("value", value);
 	});
@@ -822,38 +832,18 @@ export function calculateFromPage() {
 
 // button = this
 export function calculateThenNavigate(e) {
-	calculateFromPage.bind(this).call();
+	var loadPageArgs = calculateFromPage.bind(this).call();
+	if(loadPageArgs) {
+		return loadPage(...loadPageArgs);
+	}
 	loadPageFromButton.bind(this).call();
 }
 
 
 // button = this
 export function resetThenNavigate(e) {
-	var MAIN = InformationObject.MAIN,
-		padre = this.parentNode,
-		d = this.dataset,
-		which = d.which,
-		targets = [],
+	var targets = getTargetsFromButton(this),
 		errors = [];
-	if(which) {
-		// Look for all Stats with the specified classes
-		targets = $a(
-			which.split(" ")
-				.map(w => "input.Stat." + w + ",select[data-stat]." + w)
-				.join(",")
-		, MAIN);
-	} else {
-		// Look up chain until we find a statContainer node, or hit the main node
-		while(!padre.classList.contains("statContainer")) {
-			let p = padre.parentNode;
-			if(p === MAIN) {
-				break;
-			}
-			padre = p;
-		}
-		// Look for all Stats
-		targets = $a("input.Stat,select[data-stat]", padre);
-	}
 	//console.log(targets);
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
