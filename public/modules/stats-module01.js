@@ -118,6 +118,13 @@ export class BasicStat extends BasicIdObject {
 		if(!i.has("value")) {
 			i.set("value", this.get("startingValue"));
 		}
+		this.notations = new Set();
+	}
+	addNote(note) {
+		return this.notations.add(note);
+	}
+	removeNote(note) {
+		return this.notations.delete(note);
 	}
 }
 BasicStat.converter = function(input) { return input; }
@@ -1808,6 +1815,24 @@ export function parseBonus(node, parentNode, parentTag) {
 }
 
 
+export function parseNotation(node, parentNode, parentTag) {
+	var atts, fromID, att, note, formula;
+	if(!(parentTag instanceof BasicStat)) {
+		return logError(node, "NOTATION used within a non-Stat type");
+	}
+	atts = parseAttributesToObject(node);
+	note = atts.value;
+	if(note === undefined) {
+		// If no note as a value, use the inner text as the note, instead
+		note = node.textContent.trim();
+	}
+	if(!note) {
+		return logError(node, "NOTATION missing \"value\" parameter or inner text content");
+	}
+	parentTag.addNotation(note);
+}
+
+
 //<BonusChoice>
 
 
@@ -1867,6 +1892,7 @@ InformationObject.StatTagHandlers = {
 	If: parseIf,
 	Do: parseDo,
 	Bonus: parseBonus,
+	Notation: parseNotation,
 	Pool: parsePool,
 	Item: parsePoolItem
 };
