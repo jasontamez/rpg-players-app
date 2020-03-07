@@ -147,6 +147,7 @@ export function parseInput(node, filler) {
 function loadInput(appendTo, unit) {
 	var stat = unit.stat,
 		atts = {},
+		d = [],
 		temp, i;
 	Object.assign(atts, unit.atts);
 	switch(stat.type) {
@@ -170,10 +171,28 @@ function loadInput(appendTo, unit) {
 			logError(unit.node, "INPUT: Stat id=\"" + unit.id + "\" is not of a user-definable type.");
 			return null;
 	}
+	$RPG.pages.inputDatasetProps.forEach(function(p) {
+		if(p instanceof Array) {
+			let pr = p[0], f = p[1], test = atts[pr];
+			if(test !== undefined) {
+				d.push([pr, f(test)]);
+				delete atts[pr];
+			}
+		} else {
+			let test = atts[p];
+			if(test !== undefined) {
+				d.push([p, test]);
+				delete atts[p];
+			}
+		}
+	});
 	atts.value = stat.get("value");
 	i = $e("input", atts);
 	i.classList.add("Stat");
-	i.dataset.stat = unit.id;
+	d.push(["stat", unit.id]);
+	d.forEach(function(p) {
+		i.dataset[p[0]] = p[1];
+	});
 	// Ignore unit.contents
 	appendTo.append(i);
 	return null;
@@ -215,6 +234,7 @@ function loadInputHidden(appendTo, unit) {
 	var stat = unit.stat,
 		atts = {},
 		sep = stat.separator || ",",
+		d = [],
 		tagClass, temp, i, CL;
 	Object.assign(atts, unit.atts);
 	tagClass = atts.tagClass;
@@ -239,12 +259,29 @@ function loadInputHidden(appendTo, unit) {
 			return null;
 	}
 	atts.type = "hidden";
+	$RPG.pages.inputDatasetProps.forEach(function(p) {
+		if(p instanceof Array) {
+			let pr = p[0], f = p[1], test = atts[pr];
+			if(test !== undefined) {
+				d.push([pr, f(test)]);
+				delete atts[pr];
+			}
+		} else {
+			let test = atts[p];
+			if(test !== undefined) {
+				d.push([p, test]);
+				delete atts[p];
+			}
+		}
+	});
 	i = $e("input", atts);
 	CL = i.classList;
 	CL.add("Stat");
 	tagClass.forEach(c => CL.add(c));
-	i.dataset.stat = unit.id;
-	i.dataset.separator = sep;
+	d.push(["stat", unit.id], ["separator", sep]);
+	d.forEach(function(p) {
+		i.dataset[p[0]] = p[1];
+	});
 	// Ignore unit.contents
 	appendTo.append(i);
 	return null;
@@ -344,24 +381,6 @@ export function parseChoose(node) {
 	return selectObject;
 }
 
-
-//  InformationObject.bundles = {
-//    categoryName: Map(
-//      bundleName => {
-//        title: "Title",
-//        tagName: Map(
-//          id => {
-//            namespaces => [],
-//            kids => [kids],
-//            att => att...
-//          }
-//        ),
-//        separator: string,
-//        allTags: Set (tagName, tagName...),
-//        allNamespaces: Set [maybe don't use this, just assume Standard is chosen and don't duplicate other namespaces already chosen?]
-//      }
-//    )
-//  }
 
 //<BUNDLE category="x" ?show="Tag"></BUNDLE>
 export function loadBundle(appendTo, unit) {
@@ -573,7 +592,7 @@ function parseBundle(node, filler) {
 		deferred: true,
 		atts: atts,
 		node: node,
-		raw: InformationObject.rawBundles.get(cat),
+		raw: raw.get(cat),
 		loader: loadBundle,
 		contents: filler.slice()
 	};
@@ -590,13 +609,13 @@ function parseItem(node, filler) {
 }
 
 
-// loadPageNamed(string pageName, ?boolean subPage, ?object sharedObject)
-export function loadPageNamed(pageName, subPage) {
+// loadPageNamed(string pageName, ?object sharedObject)
+export function loadPageNamed(pageName) {
 	var page = BasicPageObject.getById(pageName);
 	if(page === undefined) {
 		return logErrorText("There is no page with the id \"" + pageName + "\"");
 	}
-	loadPage(page, subPage);
+	loadPage(page);
 }
 
 
@@ -633,7 +652,7 @@ export function parseDeepHTMLArray() {
 			} else if(unit.deferred === true) {
 				// Deferred object
 				// unit should be changed into a node or valid array by the passed-in loader, or changed to null.
-				unit = unit.loader(appendTo, unit);
+				unit = unit.loader(appendTo, unit, ...args);
 			} else {
 				// Must be an array : [parentNode, [children]]
 				// Get parent of next group
@@ -671,11 +690,12 @@ export function parseDeepHTMLArray() {
 
 
 // Does the heavy lifting of displaying a new page
-export function loadPage(page, subPage) {
-	var MAIN = InformationObject.MAIN,
-		filter = page.atts.get("filter"),
+export function loadPage(page) {
 	var $RP = $RPG.pages,
 		MAIN = $RP.MAIN,
+		atts = page.atts,
+		filter = atts.get("filter"),
+		subPage = TF.converter(atts.get("subpage")),
 		tempDiv = $e("div");
 	// If we're not a subpage, clear out all previous info on-screen
 	if(!subPage) {
@@ -705,9 +725,8 @@ export function loadPage(page, subPage) {
 // button = this
 export function loadPageFromButton() {
 	var d = this.dataset,
-		to = d.nextPage,
-		subPage = TF.converter(d.subpage);
-	return loadPageNamed(to, subPage);
+		to = d.nextPage;
+	return loadPageNamed(to);
 }
 
 
@@ -716,7 +735,8 @@ function getTargetsFromButton(button, padre = button.parentNode, MAIN = $RPG.pag
 	var d = button.dataset,
 		sep = d.separator || " ",
 		which = d.whichClass,
-	whichID = d.whichId;
+		whichID = d.whichId,
+		targets;
 	if(which) {
 		// Look for all Stats with the specified classes
 		targets = $a(
@@ -745,29 +765,26 @@ function getTargetsFromButton(button, padre = button.parentNode, MAIN = $RPG.pag
 // button = this
 // Set stats to the values present on the page
 export function calculateFromPage() {
-	var targets = getTargetsFromButton(this),
-		choices = [];
+	var targets = getTargetsFromButton(this);
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
-		var id = input.dataset.stat,
+		var d = input.dataset,
+			id = d.stat,
+			ss = d.selfSaving,
 			stat = BasicIdObject.getById(id),
 			value = input.value;
 		if(stat === undefined) {
 			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
-		} else if(stat instanceof Pool) {
-			return;
+		} else if(ss !== "true") {
+			stat.set("value", value);
 		}
-		return stat.set("value", value);
 	});
 }
 
 
 // button = this
 export function calculateThenNavigate(e) {
-	var loadPageArgs = calculateFromPage.bind(this).call();
-	if(loadPageArgs) {
-		return loadPage(...loadPageArgs);
-	}
+	calculateFromPage.bind(this).call();
 	loadPageFromButton.bind(this).call();
 }
 
