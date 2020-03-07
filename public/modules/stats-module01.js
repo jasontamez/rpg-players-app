@@ -833,7 +833,14 @@ export class Pool extends BasicStat {
 		return this.values.get(title);
 	}
 	hasItem(title) {
-		return this.values.get(title) !== undefined;
+		return this.values.has(title);
+	}
+	getItems() {
+		// Returns an array of all objects
+		var arr = [];
+		this.values.forEach(o => arr.push(o));
+		return arr;
+		//return Array.from(this.values).map(o => o[1]);
 	}
 	hasItemSelected(title) {
 		var i = this.values.get(title);
@@ -843,7 +850,7 @@ export class Pool extends BasicStat {
 		return i.selected;
 	}
 	addSelection() {
-		var args = [...arguments],
+		var args = Array.from(arguments),
 			values = this.values,
 			selection = this.getSelection(),
 			size = selection.size,
@@ -1942,7 +1949,7 @@ $RPG.ADD("stats", {
 		if(c !== undefined) {
 			// If so, return it
 			return c;
-	}
+		}
 		// Otherwise, return Str or other specified default
 		return fallback || $RPG.stats.defaultTypeObject;
 	},
