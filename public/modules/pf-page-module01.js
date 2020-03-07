@@ -53,7 +53,6 @@ function addArchetype(event) {
 		namespaces = d.namespaces.split(sep),
 		standard = $q(".standardAbilities"),
 		alt = $q(".alternateAbilities"),
-		error = [],
 		input = $q("input.Archetype"),
 		pool;
 	// Ignore invalidated abilities
