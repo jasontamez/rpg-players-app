@@ -1,9 +1,8 @@
 // Import parsing and logging
 import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
 
-var $RPG = window["$RPG"],
-	InformationObject = {};
-$RPG.ADD("data", InformationObject);
+var $RPG = window["$RPG"];
+
 
 
 // Define a class for character objects
@@ -38,6 +37,7 @@ export class PlayerObject {
 	//getById
 }
 
-InformationObject.player = PlayerObject;
-InformationObject.character = CharacterObject;
-
+$RPG.ADD("data", {
+	player: PlayerObject,
+	character: CharacterObject
+});

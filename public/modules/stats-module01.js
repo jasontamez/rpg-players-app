@@ -6,12 +6,8 @@ import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArra
 // temp variable to log all objects created
 export var record = [];
 
-var $RPG = window["$RPG"],
-	InformationObject = {},
-	FormulaeObject = {},
-	BundleTagHandlers = {};
-$RPG.ADD("formulae", FormulaeObject);
-$RPG.ADD("stats", InformationObject);
+var $RPG = window["$RPG"];
+
 
 
 // Define a class for XML Stat tags
@@ -948,6 +944,7 @@ export class Equation extends SpecialGrabber {
 		var atts = parseAttributesToObject(node),
 			amount = atts.amount,
 			type = atts.type,
+			$RS = $RPG.stats,
 			tag;
 		if(amount === undefined) {
 			amount = "";
@@ -958,9 +955,9 @@ export class Equation extends SpecialGrabber {
 			type = padre.get("type") || Num;
 		}
 		if(typeof type === "string") {
-			type = InformationObject.getTypeObject(type, Num);
+			type = $RS.getTypeObject(type, Num);
 		}
-		if(type === InformationObject.type.Typeless) {
+		if(type === $RS.type.Typeless) {
 			type = Num;
 		}
 		atts.type = type;
@@ -1062,17 +1059,18 @@ export class If extends SpecialGrabber {
 			intype = atts.inType,
 			outtype = atts.outType,
 			operation = (atts.operation || "AND"),
+			$RS = $RPG.stats,
 			tag;
 		if(intype === undefined) {
-			intype = InformationObject.getTypeObject(padre.get("inType"), Num);
+			intype = $RS.getTypeObject(padre.get("inType"), Num);
 		} else {
-			intype = InformationObject.getTypeObject(intype, Num);
+			intype = $RS.getTypeObject(intype, Num);
 			delete atts.inType;
 		}
 		if(outtype === undefined) {
-			outtype = InformationObject.getTypeObject(padre.get("inType") || padre.get("type"), Str);
+			outtype = $RS.getTypeObject(padre.get("inType") || padre.get("type"), Str);
 		} else {
-			outtype = InformationObject.getTypeObject(outtype, Str);
+			outtype = $RS.getTypeObject(outtype, Str);
 			delete atts.outType;
 		}
 		if(operation === undefined) {
@@ -1301,7 +1299,8 @@ export class Do extends SpecialGrabber {
 	static constructDo(padre, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
-			outtype = InformationObject.getTypeObject(atts.outType || padre.get("outType") || padre.get("type"), Str),
+			$RS = $RPG.stats,
+			outtype = $RS.getTypeObject(atts.outType || padre.get("outType") || padre.get("type"), Str),
 			input = atts.input,
 			output = atts.output,
 			modIn = $a("ModifyInput", node),
@@ -1317,17 +1316,17 @@ export class Do extends SpecialGrabber {
 		}
 		// Find intype
 		if(intype === undefined) {
-			intype = InformationObject.getTypeObject(padre.get("inType"), Num);
+			intype = $RS.getTypeObject(padre.get("inType"), Num);
 		} else {
-			intype = InformationObject.getTypeObject(intype, Num);
+			intype = $RS.getTypeObject(intype, Num);
 			delete atts.inType;
 		}
 		inconv = intype.converter;
 		// Find outtype
 		if(outtype === undefined) {
-			outtype = InformationObject.getTypeObject(padre.get("inType") || padre.get("type"), Str);
+			outtype = $RS.getTypeObject(padre.get("inType") || padre.get("type"), Str);
 		} else {
-			outtype = InformationObject.getTypeObject(outtype, Str);
+			outtype = $RS.getTypeObject(outtype, Str);
 			delete atts.outType;
 		}
 		outconv = outtype.converter;
@@ -1587,28 +1586,6 @@ export class Do extends SpecialGrabber {
 }
 
 
-InformationObject.type = {
-	Typeless: BasicStat,
-	Num: Num,
-	Int: Int,
-	Str: Str,
-	IntBonusable: IntBonusable,
-	Pool: Pool,
-	TF: TF
-};
-
-// A function to handle Type attributes
-InformationObject.getTypeObject = function(type, fallback) {
-	var c = InformationObject.type[type];
-	// Is this a valid type?
-	if(c !== undefined) {
-		// If so, return it
-		return c;
-	}
-	// Otherwise, return Str or other specified default
-	return fallback || InformationObject.defaultTypeObject;
-};
-InformationObject.defaultTypeObject = Str;
 
 
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
@@ -1621,14 +1598,15 @@ export function parseStats(nodelist) {
 
 
 export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.children]) {
+	var $RS = $RPG.stats;
 	// Get kids of the parent
 	// Go through each child
 	while(nodes.length > 0) {
 		let node = nodes.shift(),
 			nombre = node.nodeName;
-		if(InformationObject.preprocessTags[nombre] !== undefined) {
+		if($RS.preprocessTags[nombre] !== undefined) {
 			// This node will be changed by a preprocessor
-			let info = InformationObject.preprocessTags[nombre](node, currentNode, currentTag);
+			let info = $RS.preprocessTags[nombre](node, currentNode, currentTag);
 			if(info === null) {
 				// Something bad happened: skip this node
 				continue;
@@ -1636,12 +1614,12 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 			// Use the returned value as the new node
 			node = info;
 		}
-		if(InformationObject.StatTagHandlers[nombre] !== undefined) {
+		if($RS.StatTagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
-			InformationObject.StatTagHandlers[nombre](node, currentNode, currentTag);
-		} else if (InformationObject.TagHandlers[nombre] !== undefined) {
+			$RS.StatTagHandlers[nombre](node, currentNode, currentTag);
+		} else if ($RS.TagHandlers[nombre] !== undefined) {
 			// This node has a special handler: use it
-			InformationObject.TagHandlers[nombre](node, currentNode, currentTag);
+			$RS.TagHandlers[nombre](node, currentNode, currentTag);
 		} else {
 			// This is an unknown tag
 			logError(node, "Unknown tag enountered: " + nombre);
@@ -1668,7 +1646,7 @@ export function parseStat(node, parentNode, parentTag) {
 			type = parentTag.get("type");
 		}
 	}
-	type = InformationObject.getTypeObject(type, Str);
+	type = $RPG.stats.getTypeObject(type, Str);
 	tag = new type(id, parentTag, node, atts);
 	parseStatNodes(node, tag);
 }
@@ -1693,7 +1671,7 @@ export function parseMultiStat(node, parentNode, parentTag) {
 		// Use inherited value
 		type = parentTag.get("type");
 	}
-	type = InformationObject.getTypeObject(type, Str);
+	type = $RPG.stats.getTypeObject(type, Str);
 	tag = new MultiStat(id, parentTag, node, type, atts);
 	parseStatNodes(node, tag);
 }
@@ -1748,7 +1726,7 @@ export function parseAttribute(node, parentNode, parentTag) {
 		delete atts.attribute;
 	}
 	type = atts.type;
-	atts.type = InformationObject.getTypeObject(type, InformationObject.type.Typeless);
+	atts.type = $RPG.stats.getTypeObject(type, $RPG.stats.type.Typeless);
 	tag = new Attribute(parentTag, node, parseObjectToArray(atts), nombre);
 	if(fromID !== undefined) {
 		// Copy from other attribute
@@ -1850,10 +1828,10 @@ export function parsePool(node, parentNode, parentTag) {
 			console.log([node, parentNode, parentTag]);
 			type = Str;
 		} else {
-			type = InformationObject.getTypeObject(parentTag.get("type"), Str);
+			type = $RPG.stats.getTypeObject(parentTag.get("type"), Str);
 		}
 	} else {
-		type = InformationObject.getTypeObject(type, Str);
+		type = $RPG.stats.getTypeObject(type, Str);
 	}
 	tag = new Pool(id, parentTag, node, type, parseObjectToArray(atts));
 	parseStatNodes(node, tag);
@@ -1885,31 +1863,6 @@ function parsePoolItem(node, parentNode, parentTag) {
 //<PoolBonusChoice to="combatEffects" title="Choose a breath weapon">
 
 
-InformationObject.StatTagHandlers = {
-	Group: parseGroup,
-	Stat: parseStat,
-	MultiStat: parseMultiStat,
-	Math: parseMath,
-	If: parseIf,
-	Do: parseDo,
-	Bonus: parseBonus,
-	Notation: parseNotation,
-	Pool: parsePool,
-	Item: parsePoolItem
-};
-
-InformationObject.preprocessTags = {};
-
-InformationObject.TagHandlers = {
-	Attribute: parseAttribute,
-	BasicIdObject: parseGroup
-};
-
-InformationObject.BundleTagHandlers = {};
-
-InformationObject.comparators = {
-	If: If
-}
 
 
 
@@ -1965,101 +1918,57 @@ export function parseFormula(node) {
 	if(overwrite) {
 		delete atts.overwrite;
 	}
-	atts.type = InformationObject.getTypeObject(type, InformationObject.type.Typeless);
+	atts.type = $RPG.stats.getTypeObject(type, $RPG.stats.type.Typeless);
 	tag = new Formula(node, nombre, parseObjectToArray(atts));
 	parseStatNodes(node, tag);
 }
 
-InformationObject.formula = Formula;
 
-
-
-
-export async function parseDeferredPools(nodelist) {
-	while(nodelist.length > 0) {
-		let node = nodelist.shift(),
-			atts = parseAttributesToObject(node),
-			id = atts.for,
-			src = atts.src,
-			pool;
-		if(id === undefined) {
-			return logError(node, "DEFERRED-POOL ITEMS: missing required \"for\" parameter");
-		}
-		pool = BasicIdObject.getById(id);
-		if(pool === undefined) {
-			return logError(node, "DEFERRED-POOL ITEMS: cannot find a Pool with id \"" + id + "\"");
-		} else if (pool.type !== Pool) {
-			return logError(node, "DEFERRED-POOL ITEMS: id \"" + id + "\" is not a Pool");
-		} else if (src === undefined) {
-			node.querySelectorAll("DeferredItem").forEach( n => parseDeferredItem(n, pool) );
-		} else {
-			await grabDeferredItems(src)
-				.then( poolDoc => Array.from($a("DeferredItem", poolDoc)).forEach( n => parseDeferredItem(n, pool) ) )
-				.catch(function(err) {
-					logError(node, err.statusText);
-					console.log(err);
-				});
-		}
+$RPG.ADD("formulae", {});
+$RPG.ADD("stats", {
+	type: {
+		Typeless: BasicStat,
+		Num: Num,
+		Int: Int,
+		Str: Str,
+		IntBonusable: IntBonusable,
+		Pool: Pool,
+		TF: TF
+	},
+	// A function to handle Type attributes
+	getTypeObject: function(type, fallback) {
+		var c = $RPG.stats.type[type];
+		// Is this a valid type?
+		if(c !== undefined) {
+			// If so, return it
+			return c;
 	}
-
-}
-
-
-function parseDeferredItem(node, pool) {
-	var atts = parseAttributesToObject(node),
-		id = atts.id,
-		theseKids, info, item;
-	if(pool === undefined) {
-		pool = BasicIdObject.getById(atts.poolID);
-		delete atts.poolID;
+		// Otherwise, return Str or other specified default
+		return fallback || $RPG.stats.defaultTypeObject;
+	},
+	defaultTypeObject: Str,
+	formula: Formula,
+	StatTagHandlers: {
+		Group: parseGroup,
+		Stat: parseStat,
+		MultiStat: parseMultiStat,
+		Math: parseMath,
+		If: parseIf,
+		Do: parseDo,
+		Bonus: parseBonus,
+		Notation: parseNotation,
+		Pool: parsePool,
+		Item: parsePoolItem
+	},
+	preprocessTags: {},
+	TagHandlers: {
+		Attribute: parseAttribute,
+		BasicIdObject: parseGroup
+	},
+	BundleTagHandlers: {},
+	comparators: {
+		If: If
 	}
-	if(id === undefined || pool === undefined) {
-		return logError(node, "DEFERRED-ITEM: missing required \"poolID\" and/or \"id\" parameters");
-	}
-	delete atts.id;
-	atts = parseObjectToArray(atts);
-	info = pool.get("deferred items");
-	theseKids = Array.from(node.children);
-	if(info !== undefined) {
-		// category found
-		item = info.get(id);
-		if(item !== undefined) {
-			// id found - should already be an array
-			let kids = item.get("kids");
-			item.set("kids", kids.concat(theseKids));
-		} else {
-			// id not found
-			item = new Map();
-			item.set("kids", theseKids);
-		}
-	} else {
-		// category not found
-		item = new Map([["kids", theseKids]]);
-		info = new Map([[id, item]]);
-	}
-	atts.forEach(pair => item.set(pair[0], pair[1]));
-	info.set(id, item);
-	pool.set("deferred items", info);
-}
+});
 
-
-function grabDeferredItems(location) {
-	return new Promise(function(resolve, reject) {
-		// Create AJAX fetcher
-		var getter = new XMLHttpRequest();
-		getter.open("GET", InformationObject.xmlDir + location);
-		// Call a parse function when the fetching is done
-		getter.onload = function() {
-			if (this.status >= 200 && this.status < 300) {
-				resolve(getter.responseXML);
-			} else {
-				reject({
-					status: this.status,
-					statusText: getter.statusText
-				});
-			}
-		};
-		getter.send();
-	});
-}
 

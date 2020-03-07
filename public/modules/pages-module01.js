@@ -21,66 +21,7 @@ export class BasicPageObject {
 BasicPageObject.allIDs = new Map();
 
 
-var $RPG = window["$RPG"],
-	InformationObject = {
-		pageTemplates: {},
-		bundles: {},
-		handlers: {
-			Block: parseBlock,
-			INPUT: parseInput,
-			"INPUT-HIDDEN": parseInputHidden,
-			CHOOSE: parseChoose,
-			BUTTON: parseButton,
-			BUNDLE: parseBundle,
-			ITEM: parseItem
-		},
-		buttonTypes: {
-			navigation: {
-				mandatoryProps: ["nextPage"],
-				datasetProps: ["nextPage"],
-				defaultText: "Next",
-				listenFunc: loadPageFromButton
-			},
-			calculation: {
-				mandatoryProps: [],
-				datasetProps: [["whichClass", "whichId", "separator", "toCalc"]],
-				defaultText: "Calculate",
-				listenFunc: calculateFromPage
-			},
-			calcNav: {
-				mandatoryProps: ["nextPage"],
-				datasetProps: ["nextPage", "choicePage", "whichClass", "whichId", "separator", "haltable"],
-				defaultText: "Save and Continue",
-				listenFunc: calculateThenNavigate
-			},
-			resetNavigation: {
-				mandatoryProps: ["nextPage"],
-				datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
-				defaultText: "Go Back",
-				listenFunc: resetThenNavigate
-			},
-			closeSub: {
-				mandatoryProps: ["subpage"],
-				datasetProps: ["subpage"],
-				defaultText: "Close",
-				listenFunc: loadPageFromButton
-			}
-		},
-		bundleFilters: {},
-		bundleItemFilters: {},
-		pageFilters: {},
- 	  subLoaders: {
-	 	  fromPage: [],
-		 	fromBundle: [
-				[item => (item.ITEM !== undefined), loadBundleItem]        
- 	    ],
-	 	  fromBundleItem: [
-		 	  [item => (item.ITEM !== undefined), loadBundleItem]
-			],
- 	  }
-	};
-
-$RPG.ADD("pages", InformationObject);
+var $RPG = window["$RPG"];
 
 
 // Parse an array of <Page> objects
@@ -134,7 +75,7 @@ export function recursePageNodes(node) {
 			}
 		});
 	}
-	handle = InformationObject.handlers[nombre];
+	handle = $RPG.pages.handlers[nombre];
 	if (handle !== undefined) {
 		// Get the html from the handler
 		return handle(node, filler);
@@ -158,7 +99,7 @@ export function parseBlock(node, filler) {
 		let div = $e("div", atts);
 		//div.append(...filler);
 		return filler.length > 0 ? [div, filler] : div;
-	} else if ((format = InformationObject.pageTemplates[temp]) === undefined) {
+	} else if ((format = $RPG.pages.pageTemplates[temp]) === undefined) {
 		logError(node, "BLOCK: template \"" + temp + "\" is not defined");
 		return null;
 	}
@@ -314,7 +255,7 @@ function loadInputHidden(appendTo, unit) {
 export function parseButton(node, filler) {
 	var atts = parseAttributesToObject(node),
 		type = atts.type,
-		buttonType = InformationObject.buttonTypes[type],
+		buttonType = $RPG.pages.buttonTypes[type],
 		button, listener, data, d;
 	if(type === undefined) {
 		logError(node, "BUTTON: missing required \"type\" parameter");
@@ -379,7 +320,7 @@ export function parseChoose(node) {
 	//<CHOOSE category="race" />
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		bundles = InformationObject.rawBundles,
+		bundles = $RPG.pages.rawBundles,
 		saveTo = atts.saveTo,
 		selectObject;
 	if(cat === undefined) {
@@ -424,7 +365,8 @@ export function parseChoose(node) {
 
 //<BUNDLE category="x" ?show="Tag"></BUNDLE>
 export function loadBundle(appendTo, unit) {
-	var BUNDLES = InformationObject.bundles,
+	var	$RP = $RPG.pages,
+		BUNDLES = $RP.bundles,
 		node = unit.node,
 		atts = {},
 		contents = unit.contents,
@@ -484,19 +426,7 @@ export function loadBundle(appendTo, unit) {
 				namespaces = namespaces.split(separator);
 				obj = {
 					namespaces: namespaces,
-					kids: Array.from(node.children)
-					//
-					//
-					//
-					//
-					// KIDS NEED TO BE PARSED FOR BONUSES!!!
-					// KIDS NEED TO BE PARSED FOR BONUSES!!!
-					// KIDS NEED TO BE PARSED FOR BONUSES!!!
-					// KIDS NEED TO BE PARSED FOR BONUSES!!!
-					//
-					//
-					//
-					//
+					kids: k
 				};
 				delete atts.id;
 				delete atts.namespaces;
@@ -547,11 +477,11 @@ export function loadBundle(appendTo, unit) {
 	chosen.forEach(function(tag) {
 		tag.forEach(function(object, id) {
 			// object.att ...
-			parseDeepHTMLArray(tempDiv, contents, InformationObject.subLoaders.fromBundle, id, object);
+			parseDeepHTMLArray(tempDiv, contents, $RP.subLoaders.fromBundle, id, object);
 		});
 	});
 	if(filter !== undefined) {
-		let f = InformationObject.bundleFilters[filter];
+		let f = $RP.bundleFilters[filter];
 		if(f === undefined) {
 			logError(node, "BUNDLE: filter \"" + filter + "\" does not exist");
 		} else {
@@ -578,7 +508,7 @@ export function loadBundleItem(appTo, item, id, object) {
 	var filter = item.filter,
 		tag, text;
 	if(filter !== undefined) {
-		let f = InformationObject.bundleItemFilters[filter];
+		let f = $RPG.pages.bundleItemFilters[filter];
 		if(f === undefined) {
 			logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist");
 		} else {
@@ -617,7 +547,7 @@ export function loadBundleItem(appTo, item, id, object) {
 		// Create the element
 		e = $e(tag, atts, text || "");
 		// Parse any contents
-		parseDeepHTMLArray(e, item.contents, InformationObject.subLoaders.fromBundleItem, id, object);
+		parseDeepHTMLArray(e, item.contents, $RPG.pages.subLoaders.fromBundleItem, id, object);
 		// Return the element
 		return e;
 	}
@@ -630,7 +560,7 @@ export function loadBundleItem(appTo, item, id, object) {
 function parseBundle(node, filler) {
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		raw = InformationObject.rawBundles;
+		raw = $RPG.pages.rawBundles;
 	if(cat === undefined) {
 		logError(node, "BUNDLE: missing required \"category\" parameter");
 		return null;
@@ -744,6 +674,8 @@ export function parseDeepHTMLArray() {
 export function loadPage(page, subPage) {
 	var MAIN = InformationObject.MAIN,
 		filter = page.atts.get("filter"),
+	var $RP = $RPG.pages,
+		MAIN = $RP.MAIN,
 		tempDiv = $e("div");
 	// If we're not a subpage, clear out all previous info on-screen
 	if(!subPage) {
@@ -752,10 +684,10 @@ export function loadPage(page, subPage) {
 		}
 	}
 	// parse the page into tempDiv
-	parseDeepHTMLArray(tempDiv, page.html, InformationObject.subLoaders.fromPage);
+	parseDeepHTMLArray(tempDiv, page.html, $RP.subLoaders.fromPage);
 	// filter if necessary
 	if(filter !== undefined) {
-		let f = InformationObject.pageFilters[filter];
+		let f = $RP.pageFilters[filter];
 		if(f === undefined) {
 			logError(page.node, "PAGE: filter \"" + filter + "\" does not exist");
 		} else if(f(tempDiv, page) === false) {
@@ -780,10 +712,10 @@ export function loadPageFromButton() {
 
 
 // This bit of code gets reused a lot, so it's spun off into its own function
-function getTargetsFromButton(button, padre = button.parentNode, MAIN = InformationObject.MAIN) {
+function getTargetsFromButton(button, padre = button.parentNode, MAIN = $RPG.pages.MAIN) {
 	var d = button.dataset,
-	sep = d.separator || " ",
-	which = d.whichClass,
+		sep = d.separator || " ",
+		which = d.whichClass,
 	whichID = d.whichId;
 	if(which) {
 		// Look for all Stats with the specified classes
@@ -860,3 +792,64 @@ export function resetThenNavigate(e) {
 	// Load new page
 	loadPageFromButton.bind(this).call();
 }
+
+
+$RPG.ADD("pages", {
+	pageTemplates: {},
+	bundles: {},
+	handlers: {
+		Block: parseBlock,
+		INPUT: parseInput,
+		"INPUT-HIDDEN": parseInputHidden,
+		CHOOSE: parseChoose,
+		BUTTON: parseButton,
+		BUNDLE: parseBundle,
+		ITEM: parseItem
+	},
+	inputDatasetProps: [["selfSaving", TF.converter], "postLoader"],
+	inputPostLoaders: {},
+	buttonTypes: {
+		navigation: {
+			mandatoryProps: ["nextPage"],
+			datasetProps: ["nextPage"],
+			defaultText: "Next",
+			listenFunc: loadPageFromButton
+		},
+		calculation: {
+			mandatoryProps: [],
+			datasetProps: [["whichClass", "whichId", "separator", "toCalc"]],
+			defaultText: "Calculate",
+			listenFunc: calculateFromPage
+		},
+		calcNav: {
+			mandatoryProps: ["nextPage"],
+			datasetProps: ["nextPage", "choicePage", "whichClass", "whichId", "separator", "haltable"],
+			defaultText: "Save and Continue",
+			listenFunc: calculateThenNavigate
+		},
+		resetNavigation: {
+			mandatoryProps: ["nextPage"],
+			datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
+			defaultText: "Go Back",
+			listenFunc: resetThenNavigate
+		},
+		closeSub: {
+			mandatoryProps: ["toClose"],
+			datasetProps: ["toClose"],
+			defaultText: "Close",
+			listenFunc: loadPageFromButton
+		}
+	},
+	bundleFilters: {},
+	bundleItemFilters: {},
+	pageFilters: {},
+	subLoaders: {
+		fromPage: [],
+		fromBundle: [
+			[item => (item.ITEM !== undefined), loadBundleItem]        
+		],
+		fromBundleItem: [
+			[item => (item.ITEM !== undefined), loadBundleItem]
+		],
+   }
+});
