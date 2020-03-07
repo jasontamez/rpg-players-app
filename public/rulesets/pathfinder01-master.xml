@@ -381,7 +381,7 @@
 		</Page>
 		<Page id="RACIAL TRAITS" filter="PfArchetypePicker" pfArchetypePickerID="racialTraits">
 			<Block class="flex-vertical">
-				<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" />
+				<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" selfSaving="true" postLoader="" />
 				<header>Racial Traits</header>
 				<div class="standardAbilities selectableContent">
 					<BUNDLE category="race" show="Standard">
@@ -394,7 +394,7 @@
 						<ADDTOPOOL id="racialTraits" selected="true" />
 					</BUNDLE>
 				</div>
-				<BUTTON type="resetNavigation" whichClass="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" whichClass="Archetype" choicePage="SPECIFIC RACIAL TRAITS" nextPage="CLASSES">Continue</BUTTON>
+				<BUTTON type="resetNavigation" which="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcNav" which="racialTraits" nextPage="RACIAL TRAITS CHOICES">Continue</BUTTON>
 			</Block>
 			<Block class="flex-vertical">
 				<header>Alternates</header>
@@ -414,6 +414,8 @@
 				</div>
 				<p>Click on an alternate racial trait to see its benefits.<br />Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
 			</Block>
+		</Page>
+		<Page id="RACIAL TRAITS CHOICES" class="subPage">
 		</Page>
 		<Page id="CLASSES" class="flex-vertical">
 			<Block class="flex-vertical">
