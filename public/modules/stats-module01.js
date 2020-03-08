@@ -817,6 +817,9 @@ export class Pool extends BasicStat {
 		}
 		return super.get(prop, context);
 	}
+	empty() {
+		this.values = new Map();
+	}
 	addItem(title, value, selected = false) {
 		var o = {
 			value: this.itemType.converter(value),
