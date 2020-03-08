@@ -1,6 +1,6 @@
-import { $ec, $ea as $e, $listen, $a, $q, $i } from "./dollar-sign-module.js";
+import { $ec, $ea as $e, $listen, $a, $q } from "./dollar-sign-module.js";
 import { logErrorNode as logError, parseAttributesToObject, logErrorText } from "./parsing-logging.js";
-import { parseDeepHTMLArray, loadBundleItem } from "./pages-module01.js";
+import { parseDeepHTMLArray } from "./pages-module01.js";
 import { BasicIdObject, Pool, TF } from "./stats-module01.js";
 
 var $RPG = window["$RPG"],
@@ -366,8 +366,7 @@ function pfArchetypePicker(html, unit) {
 		}
 		// Check the hidden-input and update options if necessary.
 		if(i !== null) {
-			let stat = i.dataset.stat,
-				val = i.value.split(i.dataset.separator),
+			let val = i.value.split(i.dataset.separator),
 				standard = new Set(),
 				alt = new Set(),
 				ids = Array.from($a(".standardAbilities .id")),
@@ -517,29 +516,4 @@ $RPG.ADD("pages", "pagePreloaders", "PfArchetypeChoices", PfArchetypeChoicesPrel
 $RPG.PUSH(["subLoaders", "fromBundle"], [pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
 $RPG.ADD("pages", "handlers", "ADDTOPOOL", parseAddToPool);
 
-//BasicPageObject.pageTemplates.PfRacialTraits = templatePfRacialTraits,
-//BasicPageObject.pageTemplates.PfStats = templatePfStats,
-//BasicPageObject.pageTemplates.PfClassArchetypes = templatePfClassArchetypes,
-//BasicPageObject.pageTemplates.PfClassChoices = templatePfClassChoices,
-//BasicPageObject.pageTemplates.PfSkillsAdjust = templatePfSkillsAdjust
-
-//new PageTemplate("templatePfRacialTraits", function() {
-//	return $e("div", {}, "Racial Traits");
-//});
-
-//new PageTemplate("templatePfStats", function() {
-//	return $e("div", {}, "Stats");
-//});
-
-//new PageTemplate("templatePfClassArchetypes", function() {
-//	return $e("div", {}, "Class Archetypes");
-//});
-
-//new PageTemplate("templatePfClassChoices", function() {
-//	return $e("div", {}, "Class Choice");
-//});
-
-//new PageTemplate("templatePfSkillsAdjust", function() {
-//	return $e("div", {}, "Skills Adjust");
-//});
 
