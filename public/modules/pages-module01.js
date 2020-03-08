@@ -695,8 +695,35 @@ export function loadPage(page) {
 		MAIN = $RP.MAIN,
 		atts = page.atts,
 		filter = atts.get("filter"),
+		preloader = atts.get("preloader"),
 		subPage = TF.converter(atts.get("subpage")),
+		html = page.html,
 		tempDiv = $e("div");
+	// Run through a preloader if needed
+	if(preloader !== undefined) {
+		let p = $RP.pagePreloaders[preloader];
+		if(p !== undefined) {
+			let preloaded = p(page, html);
+			if(preloaded) {
+				let ph = preloaded.html,
+					psp = preloaded.subPage,
+					pf = preloaded.filter,
+					prr = preloaded.reroute;
+				if(prr) {
+					return loadPageNamed(prr);
+				}
+				if(ph) {
+					html = ph;
+				}
+				if(psp) {
+					subPage = psp;
+				}
+				if(pf) {
+					filter = pf;
+				}
+			}
+		}
+	}
 	// If we're not a subpage, clear out all previous info on-screen
 	if(!subPage) {
 		while(MAIN.firstChild !== null) {
@@ -704,7 +731,7 @@ export function loadPage(page) {
 		}
 	}
 	// parse the page into tempDiv
-	parseDeepHTMLArray(tempDiv, page.html, $RP.subLoaders.fromPage);
+	parseDeepHTMLArray(tempDiv, html, $RP.subLoaders.fromPage);
 	// filter if necessary
 	if(filter !== undefined) {
 		let f = $RP.pageFilters[filter];
@@ -860,6 +887,7 @@ $RPG.ADD("pages", {
 	bundleFilters: {},
 	bundleItemFilters: {},
 	pageFilters: {},
+	pagePreloaders: {},
 	subLoaders: {
 		fromPage: [],
 		fromBundle: [
