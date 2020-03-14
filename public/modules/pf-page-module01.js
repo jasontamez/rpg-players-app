@@ -466,7 +466,7 @@ export function loadAddToPool(appTo, item, id, object) {
 
 
 
-function PfArchetypePreloader(page, html) {
+function PfArchetypePreloader(page) {
 	var id = page.atts.get("pfArchetypeID");
 	if(id) {
 		let stat = BasicIdObject.getById(id);
@@ -483,23 +483,6 @@ function PfArchetypePreloader(page, html) {
 
 
 
-function PfArchetypeChoicesPreloader(page, html) {
-	var id = page.atts.get("pfArchetypeID");
-	if(id) {
-		let stat = BasicIdObject.getById(id);
-		if(stat === undefined) {
-			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" does not exist");
-		} else if(!(stat instanceof Pool)) {
-			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" is not a Pool");
-		} else {
-			// load chosen Abilities
-			return {reroute: "CLASSES"}; // test reroute
-		}
-	}
-	return false;
-}
-
-
 
 export const exports = [];
 
@@ -512,7 +495,6 @@ $RPG.ADD("pages", "pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust);
 $RPG.ADD("pages", "pageFilters", "PfArchetypePicker", pfArchetypePicker);
 $RPG.ADD("pages", "bundleItemFilters", "PfNamespace", pfArchetypeNamespace);
 $RPG.ADD("pages", "pagePreloaders", "PfArchetype", PfArchetypePreloader);
-$RPG.ADD("pages", "pagePreloaders", "PfArchetypeChoices", PfArchetypeChoicesPreloader);
 $RPG.PUSH(["subLoaders", "fromBundle"], [pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
 $RPG.ADD("pages", "handlers", "ADDTOPOOL", parseAddToPool);
 

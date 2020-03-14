@@ -695,7 +695,7 @@ export function loadPage(page) {
 	if(preloader !== undefined) {
 		let p = $RP.pagePreloaders[preloader];
 		if(p !== undefined) {
-			let preloaded = p(page, html);
+			let preloaded = p(page);
 			if(preloaded) {
 				let ph = preloaded.html,
 					psp = preloaded.subpage,
@@ -949,6 +949,7 @@ function maxChooserChoices(e) {
 
 
 $RPG.ADD("pages", {
+	BasicPageObject: BasicPageObject,
 	pageTemplates: {},
 	bundles: {},
 	handlers: {
