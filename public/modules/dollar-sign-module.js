@@ -52,8 +52,8 @@ export function $t(text) {
 	return document.createTextNode(text);
 }
 // add event listeners - click and enter
-export function $listen(element, func) {
-	element.addEventListener("click", func);
+export function $listen(element, func, event = "click") {
+	element.addEventListener(event, func);
 	//element.addEventListener("keydown", ev => ev.keyCode === 13 && func.bind(ev.currentTarget, ev).call());
 	// Apparently, hitting Enter while a button is selected will fire a click event
 }
