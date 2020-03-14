@@ -117,10 +117,10 @@ export class BasicStat extends BasicIdObject {
 		}
 		this.notations = new Set();
 	}
-	addNote(note) {
+	addNotation(note) {
 		return this.notations.add(note);
 	}
-	removeNote(note) {
+	removeNotation(note) {
 		return this.notations.delete(note);
 	}
 }
@@ -270,6 +270,8 @@ export class MultiStat extends BasicIdObject {
 			}
 		} else if (titlePre !== undefined && titlePost !== undefined) {
 			atts.push(["title", String(titlePre) + title + String(titlePost)]);
+		} else {
+			atts.push(["title", title]);
 		}
 		// Check for description
 		if(description === undefined) {
@@ -280,6 +282,8 @@ export class MultiStat extends BasicIdObject {
 			}
 		} else if (descPre !== undefined && descPost !== undefined) {
 			atts.push(["description", String(descPre) + description + String(descPost)]);
+		} else {
+			atts.push(["description", description]);
 		}
 		// Make Stat
 		newStat = new this.type(id, this, undefined, atts);
@@ -787,7 +791,7 @@ TF.prototype.type = TF;
 //   Pool.converter(value) => [value]
 export class Pool extends BasicStat {
 	constructor(id, padre, node, type, atts) {
-		var i;
+		var i, vs;
 		super(id, padre, node, atts);
 		i = this.atts;
 		if(i.has("minSelection")) {
@@ -798,6 +802,15 @@ export class Pool extends BasicStat {
 		}
 		this.itemType = type;
 		this.values = new Map();
+		vs = this.atts.get("value");
+		if(vs) {
+			let sep = this.atts.get("separator") || Pool.defaultSeparator,
+				t = this;
+			this.atts.delete("value");
+			vs.split(sep).forEach(function(v) {
+				t.addItem(v, v, false);
+			});
+		}
 	}
 	set(prop, v) {
 		if(prop === "value" || prop === "startingValue") {
@@ -824,7 +837,7 @@ export class Pool extends BasicStat {
 		var o = {
 			value: this.itemType.converter(value),
 			title: title,
-			selected: selected
+			selected: TF.converter(selected)
 		};
 		this.values.set(title, o);
 	}
@@ -927,6 +940,7 @@ export class Pool extends BasicStat {
 		return selection;
 	}
 }
+Pool.defaultSeparator = ",";
 Pool.converter = function(value, convObj = Str) {
 	if(value.constructor !== Array) {
 		value = [value];
@@ -1069,18 +1083,18 @@ export class If extends SpecialGrabber {
 			intype = atts.inType,
 			outtype = atts.outType,
 			operation = (atts.operation || "AND"),
-			$RS = $RPG.stats,
+			$RSgTO = $RPG.stats.getTypeObject,
 			tag;
 		if(intype === undefined) {
-			intype = $RS.getTypeObject(padre.get("inType"), Num);
+			intype = $RSgTO(padre.get("inType"), Num);
 		} else {
-			intype = $RS.getTypeObject(intype, Num);
+			intype = $RSgTO(intype, Num);
 			delete atts.inType;
 		}
 		if(outtype === undefined) {
-			outtype = $RS.getTypeObject(padre.get("inType") || padre.get("type"), Str);
+			outtype = $RSgTO(padre.get("inType") || padre.get("type"), Str);
 		} else {
-			outtype = $RS.getTypeObject(outtype, Str);
+			outtype = $RSgTO(outtype, Str);
 			delete atts.outType;
 		}
 		if(operation === undefined) {
@@ -1247,7 +1261,7 @@ export class If extends SpecialGrabber {
 				value = testing.filter(v => v).length === 1;
 				break;
 			case "OR":
-				value = !testing.every(v => !v);
+				value = testing.some(v => v);
 				break;
 			case "AND":
 			default:
@@ -1280,7 +1294,7 @@ export class If extends SpecialGrabber {
 		return !String(value).includes(String(test));
 	}
 	static Has(value, test) {
-		return !value.every( item => item !== test );
+		return value.some( item => item === test );
 	}
 	static DoesNotHave(value, test) {
 		return value.every( item => item !== test );
@@ -1309,8 +1323,8 @@ export class Do extends SpecialGrabber {
 	static constructDo(padre, node) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
-			$RS = $RPG.stats,
-			outtype = $RS.getTypeObject(atts.outType || padre.get("outType") || padre.get("type"), Str),
+			$RSgTO = $RPG.stats.getTypeObject,
+			outtype = $RSgTO(atts.outType || padre.get("outType") || padre.get("type"), Str),
 			input = atts.input,
 			output = atts.output,
 			modIn = $a("ModifyInput", node),
@@ -1326,17 +1340,17 @@ export class Do extends SpecialGrabber {
 		}
 		// Find intype
 		if(intype === undefined) {
-			intype = $RS.getTypeObject(padre.get("inType"), Num);
+			intype = $RSgTO(padre.get("inType"), Num);
 		} else {
-			intype = $RS.getTypeObject(intype, Num);
+			intype = $RSgTO(intype, Num);
 			delete atts.inType;
 		}
 		inconv = intype.converter;
 		// Find outtype
 		if(outtype === undefined) {
-			outtype = $RS.getTypeObject(padre.get("inType") || padre.get("type"), Str);
+			outtype = $RSgTO(padre.get("inType") || padre.get("type"), Str);
 		} else {
-			outtype = $RS.getTypeObject(outtype, Str);
+			outtype = $RSgTO(outtype, Str);
 			delete atts.outType;
 		}
 		outconv = outtype.converter;
@@ -1468,13 +1482,13 @@ export class Do extends SpecialGrabber {
 		} else {
 			tag.operation = "AND";
 		}
-		if(![...whiile.children].every(function(item) {
+		if([...whiile.children].some(function(item) {
 			var nombre = item.nodeName,
 				amount = null,
 				grabValueFlag = false;
 			if(If[nombre] === undefined) {
 				temp = nombre;
-				return false;
+				return true;
 			}
 			if(node.hasAttribute("value")) {
 				// Element has value attribute
@@ -1494,7 +1508,7 @@ export class Do extends SpecialGrabber {
 				amount = inconv(node.textContent);
 			}
 			tag.whiile.push([nombre, grabValueFlag, amount]);
-			return true;
+			return false;
 		})) {
 			return logError(node, "WHILE: invalid tag \"" + temp + "\" inside its While tag.");
 		} else if (tag.whiile.length === 0) {
@@ -1566,7 +1580,7 @@ export class Do extends SpecialGrabber {
 				retVal = results.every(v => v);
 				break;
 			case "OR":
-				retVal = !results.every(v => !v);
+				retVal = results.some(v => v);
 				break;
 			case "XOR":
 				retVal = results.filter(v => v).length === 1;
@@ -1789,7 +1803,7 @@ export function parseBonus(node, parentNode, parentTag) {
 	if(nombre === undefined) {
 		nombre = "Bonus from " + fromID + "." + att;
 	} else {
-		delete atts.id;  
+		delete atts.id;
 	}
 	if (formula !== undefined) {
 		//addBonus(nombre, type, bonus, notation = undefined)
@@ -1867,10 +1881,6 @@ function parsePoolItem(node, parentNode, parentTag) {
 }
 
 
-//<PoolBonus>
-//<PoolBonusSelect>
-//<PoolBonusChoice>
-//<PoolBonusChoice to="combatEffects" title="Choose a breath weapon">
 
 
 
@@ -1958,6 +1968,7 @@ $RPG.ADD("stats", {
 	},
 	defaultTypeObject: Str,
 	formula: Formula,
+	preprocessTags: {},
 	StatTagHandlers: {
 		Group: parseGroup,
 		Stat: parseStat,
@@ -1970,12 +1981,10 @@ $RPG.ADD("stats", {
 		Pool: parsePool,
 		Item: parsePoolItem
 	},
-	preprocessTags: {},
 	TagHandlers: {
 		Attribute: parseAttribute,
 		BasicIdObject: parseGroup
 	},
-	BundleTagHandlers: {},
 	comparators: {
 		If: If
 	}
