@@ -16,6 +16,15 @@ export class CharacterObject {
 		this.ruleset = ruleset;
 		this.data = new Map();
 	}
+	get(dataName) {
+		return this.data.get(dataName);
+	}
+	set(dataName, data) {
+		return this.data.set(dataName, data);
+	}
+	has(dataName) {
+		return this.data.has(dataName);
+	}
 	//getById?
 }
 
