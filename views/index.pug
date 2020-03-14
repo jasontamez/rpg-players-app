@@ -20,7 +20,7 @@ html
     |
     header#welcome Welcome
     div#mainGrid
-      div(class='start')
+      div.start
         p Choose a RuleSet:
           |
           |
@@ -31,9 +31,10 @@ html
             - })
         p
           button#loadInfo Recurse!
-    #loading
+    div#overlay.overlay
+    div#loading.overlay
       div Please wait...
-      #loading-message
+      div#loading-message
     script(src='rpg-players-app.js')
     script(src='rpg-players-module.js' type='module')
   |
