@@ -416,6 +416,7 @@
 			</Block>
 		</Page>
 		<Page id="RACIAL TRAITS CHOICES" preloader="bundleChoices" filter="bundleChoices" overlay="true">
+			<hr />
 			<div class="buttons"><BUTTON type="closeOverlay" toClose=".racialTraitsChooser">Go Back</BUTTON> <BUTTON type="calcNav" which="racialTraits" nextPage="CLASSES">Continue</BUTTON></div>
 		</Page>
 		<Page id="CLASSES" class="flex-vertical">

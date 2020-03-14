@@ -22,7 +22,7 @@
 	--header-bg: #00000060;
 	--shadow: #000;
 	--shadow-lighter: #00000090;
-	--overlay-bg: #0009;
+	--overlay-bg: #143642aa;
 
 }
 
@@ -278,11 +278,18 @@ body .overlay {
 /* Overlay */
 
 body #overlay {
+	flex-flow: row wrap;
 }
 body.overlayActive #overlay {
 	opacity: 1;
 	transition: opacity 0.5s ease-out;
 	pointer-events: auto;
+}
+body #overlay hr {
+	width: 100%;
+	color: transparent;
+	border: none;
+	margin: 0;
 }
 body #overlay .chooser {
 	border-width: 0.2rem 0 0 0;
@@ -307,7 +314,7 @@ body #overlay .buttons {
 	border-radius: 0.5em;
 	background: var(--sub-bg);
 	padding: 0.5em 1em;
-	margin: 1em;
+	margin: 0 1em 1em;
 	box-shadow: 0.5rem 0.4rem 0.5rem 0 var(--shadow);
 	max-width: calc(50vw - 5em);
 }
