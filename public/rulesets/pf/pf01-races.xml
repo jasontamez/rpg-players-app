@@ -5,13 +5,13 @@
 			<Bonus to="Feats" value="1" />
 		</Standard>
 		<Standard id="Skilled" explanation="You gain +1 skill point every level" namespaces="HumanSkilled">
-			<Bonus to="SkillPoints" fromID="Level" />
+			<Bonus to="SkillPoints" fromId="Level" />
 		</Standard>
 		<Standard id="Normal speed" explanation="Speed: 30ft" namespaces="HumanSpeed">
 			<Bonus to="landSpeed" value="30" />
 		</Standard>
 		<Standard id="Stat Bonus" explanation="+2 Bonus to any stat" namespaces="HumanStat">
-			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" title="Choose a stat to receive a +2 bonus" />
 		</Standard>
 		<Standard id="Languages Known" explanation="You speak Common" namespaces="HumanLanguages">
 			<PoolBonusSelect to="languages" value="Common" />
@@ -46,11 +46,11 @@
 			<PoolBonus to="weaponMartial" value="TYPEhalfling" />
 		</Alternative>
 		<Alternative id="Alchemically Enhanced" namespaces="HumanStat,HumanBonusFeat" description="Some humans use alchemical or scientific enhancements to push their bodies beyond the limits of nature. However, doing so comes at a significant price." explanation="You have a +3 bonus to any stat; you have a -2 penalty on saving throws vs poison">
-			<BonusChoice to="STR,DEX,CON," value="3" choices="1" type="racial" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="3" choices="1" title="Choose which stat to receive a +3 bonus" type="racial" />
  			<PoolBonus to="saveEffects" value="-2 vs poison" type="racial" />
 		</Alternative>
 		<Alternative id="Aquatic Ancestry" namespaces="HumanSkilled" description="Humans with deep one or skum ancestry may exhibit prominent round eyes or webbed fingers and toes." explanation="You have a racial bonus to Swim equal to half your level (min 0); you can hold your breath for twice as long as a normal human can; at 16th level, you can always take 10 on Swim checks, even when threatened or distracted">
-			<Bonus to="Swim" fromID="Level" fromAtt="halfLevel" type="racial" />
+			<Bonus to="Swim" fromId="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
 			<Notation to="Swim" value="At 16th level, you can always take 10 on Swim checks, even when threatened or distracted" />
 		</Alternative>
@@ -102,7 +102,7 @@
  			<Bonus to="Knowledge (arcana)" value="3" type="racial" note="to checks related to creatures of the dragon type" />
 		</Alternative>
 		<Alternative id="Dual Talent" namespaces="HumanStat,HumanSkilled,HumanBonusFeat" description="Some humans are uniquely skilled at maximizing their natural gifts." explanation="You have a +2 bonus to any two different Stats">
-			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="2" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="2" title="Choose two stats to receive +2 bonuses" />
 		</Alternative>
 		<Alternative id="Eye for Talent" namespaces="HumanBonusFeat" description="Humans have great intuition for hidden potential." explanation="You have a +2 racial bonus to Sense Motive; in addition, when you acquire an animal companion, bonded mount, cohort, or familiar, that creature gains a +2 bonus to one ability score of your choice">
 			<Bonus to="Sense Motive" value="2" type="racial" />
@@ -140,7 +140,7 @@
 			<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 		</Alternative>
 		<Alternative id="Heart of the Fields" namespaces="HumanSkilled,HeartOfThe,HeartOfTheFields" description="Humans born in rural areas are used to hard labor." explanation="You gain half your level (min 0) as a racial bonus to a Craft or Profession skill of your choice; 1/day: you may ignore an effect that would cause you to become fatigued or exhausted">
-			<BonusChoice to="craft_skills,profession_skills" fromID="Level" fromAtt="halfLevel" type="racial" choices="1" />
+			<BonusChoice to="craft_skills,profession_skills" fromId="Level" fromAtt="halfLevel" type="racial" choices="1" />
 			<PoolBonus to="miscEffects" value="1/day: you may ignore an effect that would cause you to become fatigued or exhausted" />
 		</Alternative>
 		<Alternative id="Heart of the Mountains" namespaces="HumanSkilled,HeartOfThe,HeartOfTheMountains" description="Humans born in the mountains are skilled at negotiating heights and precipices." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
@@ -154,12 +154,12 @@
 			<Bonus to="Swim" value="2" type="racial" />
 			<Bonus to="Profession (sailor)" multi="profession_skills" sub="sailor" value="2" type="racial" />
 			<PoolBonus to="combatEffects" value="You can hold your breath for twice as long as a normal human can" />
-			<Bonus to="concentrationCheckBase" value="4"  type="racial" note="to concentration checks when attempting to cast spells underwater" />
+			<Bonus to="concentrationCheckBase" value="4" type="racial" note="to concentration checks when attempting to cast spells underwater" />
 		</Alternative>
 		<Alternative id="Heart of the Slums" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSlums" description="Humans who eke out a life in a city's teeming slums must be quick and clever." explanation="You have a +2 racial bonus to Sleight of Hand and Stealth checks, and a +4 racial bonus to Survival in urban and underground settings">
 			<Bonus to="Sleight of Hand" value="2" type="racial" />
 			<Bonus to="Stealth" value="2" type="racial" />
-			<Bonus to="Survival" value="4"  type="racial" note="to checks in urban and underground settings" />
+			<Bonus to="Survival" value="4" type="racial" note="to checks in urban and underground settings" />
 		</Alternative>
 		<Alternative id="Heart of the Snows" namespaces="HumanSkilled,HeartOfThe,HeartOfTheSnows" description="Humans born in chilly climes are more used to it than others." explanation="You treat cold climates as one category less severe; you have a +2 racial bonus on Fortitude saves vs the effects of cold climates, on Reflex saves vs slipping and falling, on Climb and Acrobatics checks vs slipping and falling, and in icy conditions, and to your CMD vs trip maneuvers">
 			<PoolBonus to="miscEffects" value="You treat cold climates as one category less severe" />
@@ -183,7 +183,7 @@
 			<Bonus to="FortSave" value="2" type="racial" note="vs the poison and distraction abilities of vermin and swarms" />
 		</Alternative>
 		<Alternative id="Heart of the Wilderness" namespaces="HumanSkilled,HeartOfThe,HeartOfTheWilderness" description="Humans raised in the wild learn the hard way that only the strong survive." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
-			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
+			<Bonus to="Survival" fromId="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="+5 racial bonus on Constitution checks to stabilize when dying%%%Add half your level to your CON score to determine the negative hp necessary to kill you" />
 		</Alternative>
 		<Alternative id="Heroic" namespaces="HumanBonusFeat" description="Some humans are born heroes." explanation="In campaigns that use the optional hero point system, each time you gain a level, you gain 2 hero points instead of 1; if you take the Blood of Heroes feat, you gain 3 hero points each level instead of 2">
@@ -199,7 +199,7 @@
 		</Alternative>
 		<Alternative id="Industrious" namespaces="HumanSkilled" description="Humans are known for their drive and work ethic." explanation="You have a +2 racial bonus on concentration checks and on one Craft or Profession skill of your choice">
 			<Bonus to="concentrationCheckBase" value="2" type="racial" />
-			<BonusChoice to="craft_skills,profession_skills" value="2" type="racial" />
+			<BonusChoice to="craft_skills,profession_skills" value="2" type="racial" choices="1" />
 		</Alternative>
 		<Alternative id="Innovative" namespaces="HumanSkilled" description="Humans have come to shape the world because they are inveterate innovators." explanation="You have a +2 racial bonus on Knowledge (arcana) and Spellcraft checks to independently research spells, create magic items you have never encountered before, and identify unique magical effects; you have a +2 racial bonus on Charisma-based skill checks to persuade others to adopt a new ideology or further the cause of discovery and progress">
 			<PoolBonus to="skillEffects" value="+2 racial bonus on Knowledge (arcana) and Spellcraft checks to independently research spells, create magic items you have never encountered before, and identify unique magical effects%%%+2 racial bonus on Charisma-based skill checks to persuade others to adopt a new ideology or further the cause of discovery and progress" />
@@ -218,7 +218,7 @@
 			<PfCSkill id="Human: Heart of the Fey1" source="racial trait" mark="Perception" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Fields" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheFields" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You gain half your level (min 0) as a racial bonus to a Craft or Profession skill of your choice; 1/day: you may ignore an effect that would cause you to become fatigued or exhausted">
-			<BonusChoice to="craft_skills,profession_skills" fromID="Level" fromAtt="halfLevel" type="racial" choices="1" />
+			<BonusChoice to="craft_skills,profession_skills" fromId="Level" fromAtt="halfLevel" type="racial" choices="1" />
 			<PoolBonus to="miscEffects" value="1/day: you may ignore an effect that would cause you to become fatigued or exhausted" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Mountains" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheMountains" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a +2 racial bonus to Climb, a +2 racial bonus to Acrobatics to move on narrow surfaces and uneven ground, and you are considered acclimated to the effects of high altitude">
@@ -261,7 +261,7 @@
 			<Bonus to="FortSave" value="2" type="racial" note="vs the poison and distraction abilities of vermin and swarms" />
 		</Alternative>
 		<Alternative id="Mixed Heritage: Heart of the Wilderness" namespaces="HumanBonusFeat" avoidNamespaces="HeartOfTheWilderness" requiresNamespaces="HeartOfThe" description="Often human civilization is defined by more than one characteristic. This grants you a second 'Heart of the...' trait." explanation="You have a racial bonus equal to half your level (min 0) to Survival and to your Constitution score to determine the negative hp necessary to kill you; you have a +5 racial bonus on Constitution checks to stabilize when dying">
-			<Bonus to="Survival" fromID="Level" fromAtt="halfLevel" type="racial" />
+			<Bonus to="Survival" fromId="Level" fromAtt="halfLevel" type="racial" />
 			<PoolBonus to="combatEffects" value="+5 racial bonus on Constitution checks to stabilize when dying%%%Add half your level to your CON score to determine the negative hp necessary to kill you" />
 		</Alternative>
 		<Alternative id="One of the Multitude" namespaces="HumanSkilled" description="City-dwelling humans are skilled at blending in with the busy multitudes of the city." explanation="You gain a +1 racial bonus on Bluff, Diplomacy, Disguise, Sleight of Hand, and Stealth checks when within 10 feet of at least two other humanoids; you gain a +1 racial bonus on attacks of opportunity made while flanking">
@@ -436,7 +436,7 @@
 			<PoolBonus to="weaponMartial" value="katana,kusarigama,wakizashi" />
 		</Alternative>
 		<Alternative id="Elemental Resistance" namespaces="ElfImmunities" description="Elves who dwell in the most extreme environments, from arctic wastelands to volcanic plains, develop natural resistance to the dangers of their homelands over the course of a few generations." explanation="You have 5 points of resistance vs Acid, Cold, Fire or Electricity (your choice)">
-			<BonusChoice to="AcidResist,ColdResist,FireResist,ElecResist" value="5" choices="1" />
+			<BonusChoice to="AcidResist,ColdResist,FireResist,ElecResist" value="5" choices="1" title="Choose a type of energy resistance" />
 		</Alternative>
 		<Alternative id="Elven Arrogance" namespaces="ElfLanguages,ElfBonusLanguages,ElfImmunities" description="Some elves are so convinced of elven superiority, or else otherwise so xenophobic, that they have difficulty seeing the point in communicating with 'lesser' races." explanation="You are immune to sleep effects, and have a +2 racial bonus on saves vs enchantment spells and effects, increasing to +3 against effects from non-elf humanoids; you speak Elven; if you have bonus languages due to high Intelligence, you can choose from Celestial, Draconic or Sylvan">
 			<PoolBonus to="saveEffects" value="Immune to sleep effects%%%+2 racial bonus vs enchantment spells and effects%%%Racial bonus vs enchantments increases to +3 against such effects from non-elf humanoids" />
@@ -593,7 +593,7 @@
 			<Bonus type="racial" to="Perception" value="2" />
 		</Standard>
 		<Standard id="Stat" explanation="+2 Bonus to any stat" namespaces="HalfElfStat">
-			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" title="Choose a stat to receive a +2 bonus" />
 		</Standard>
 		<Standard id="Languages Known" explanation="You speak Common and Elven" namespaces="HalfElfLanguages">
 			<Bonus to="languagesKnown" value="1" />
@@ -655,7 +655,7 @@
 			<Bonus to="Stealth" type="racial" value="2" note="when benefitting from concealment or full concealment due to darkness or dim light" />
 		</Alternative>
 		<Alternative id="Dragon Soul" namespaces="HalfElfAdaptability,HalfElfImmunities,HalfElfBlood,HalfElfSubtype" description="Some half-elves have forsaken a part of their lineage by embracing a more distant connection to dragons." explanation="You are considered an elf or a human, but not both; you count as a dragon for the purposes of effects targeting creatures by type (such as favored enemy and bane weapons); you have a +2 racial bonus on saves vs fear, sleep and paralysis effects">
-			<PoolBonusChoice to="creatureSubtypes" value="human,elf" choices="1" />
+			<PoolBonusChoice to="creatureSubtypes" value="human,elf" choices="1" title="Choose your primary heritage" />
 			<PoolBonus to="miscEffects" value="You count as a dragon for the purposes of effects targeting creatures by type (such as favored enemy and bane weapons)" />
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs fear, sleep and paralysis effects" />
 		</Alternative>
@@ -710,7 +710,7 @@
 		</Alternative>
 		<Alternative id="Kindred-Raised" namespaces="HalfElfStat,HalfElfAdaptability,HalfElfImmunities,HalfElfKeenSenses,HalfElfMultitalented" description="While most think of people with one human and one elven parent when they think of half-elves, some half-elves are raised by two half-elven parents. Such half-elves feel less like outsiders, making them more confident, but less adaptable without the exposure to a human parent." explanation="You have a +2 bonus to Charisma and one other stat of your choice">
 			<Bonus to="CHA" value="2" />
-			<BonusChoice to="STR,DEX,CON,INT,WIS" value="2" choices="1" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS" value="2" choices="1" title="Choose a stat to receive a +2 bonus" />
 		</Alternative>
 		<Alternative id="Mismatched" namespaces="HalfElfKeenSenses,HalfElfVision" description="Rather than having bodily and facial features that are a blend of elven and human, or tending towards one parent or the other, a rare few half-elves have a strange combination of features. They have noticeable mismatched eyes and ears, as well as uneven limbs." explanation="You have a -2 penalty to Reflex saves, but a +4 racial bonus to Initiative">
 			<Bonus to="ReflSave" value="-2" />
@@ -730,7 +730,7 @@
 			<PoolBonus to="skillEffects" value="+2 racial bonus on untrained skill checks" />
 		</Alternative>
 		<Alternative id="Round Ears" namespaces="HalfElfAdaptability,HalfElfKeenSenses,HalfElfVision" description="Sometimes half-elves are born with no obvious elven features. Their parents may even be humans with only faint traces of elven blood." explanation="You have a +4 racial bonus to Disguise to appear human, and you gain 1 additional skill point every level">
-			<Bonus to="SkillPoints" fromID="Level" />
+			<Bonus to="SkillPoints" fromId="Level" />
 			<Bonus to="Disguise" value="4" type="racial" note="to appear human" />
 		</Alternative>
 		<Alternative id="Sea Legs" namespaces="HalfElfAdaptability" description="Many half-elves find their way onto the water early in their youth, whether they live with trader families, work as smugglers, or plunder alongside pirates." explanation="You have a +2 racial bonus to Swim, a +4 racial bonus to Acrobatics to move on narrow or slippery surfaces, and a +4 racial bonus to Climb on docks and ships">
@@ -850,7 +850,7 @@
 			<Bonus to="Sleight of Hand" value="2" note="while benefiting from concealment or cover" />
 		</Alternative>
 		<Alternative id="Breath Weapon" namespaces="DwarfStonecunning,DwarfHatred,DwarfWeaponFamiliarity,DwarfGreed" description="Dwarves with this racial trait can call upon the spirit of a sacred dragon to channel a fraction of that dragon's power." explanation="You have a dragon's breath weapon, which you can use once per day; choose fire, electricity or cold and either a 15ft cone or 20ft line: you deal 1d4 points of energy damage, plus 1d4 points of energy damage for every 2 character levels above 1st (to a maximum of 5d4 at 9th level); targets in the area can attempt a Reflex save (DC = 10 + half your level + your Constitution bonus) for half damage">
-			<PoolBonusChoice to="combatEffects" title="Choose a breath weapon">
+			<PoolBonusChoice to="combatEffects" title="Choose a breath weapon" choices="1">
 				<Item title="15ft cone of fire" value="1/day:you can make a supernatural breath attack in a 15ft cone, dealing 1d4 points of fire damage, plus 1d4 points of fire damage for every 2 character levels above 1st (to a maximum of 5d4 at 9th level); targets in the area can attempt a Reflex save (DC = 10 + half your level + your Constitution bonus) for half damage" />
 				<Item title="15ft cone of electricity" value="1/day:you can make a supernatural breath attack in a 15ft cone, dealing 1d4 points of electricity damage, plus 1d4 points of electricity damage for every 2 character levels above 1st (to a maximum of 5d4 at 9th level); targets in the area can attempt a Reflex save (DC = 10 + half your level + your Constitution bonus) for half damage" />
 				<Item title="15ft cone of cold" value="1/day:you can make a supernatural breath attack in a 15ft cone, dealing 1d4 points of cold damage, plus 1d4 points of cold damage for every 2 character levels above 1st (to a maximum of 5d4 at 9th level); targets in the area can attempt a Reflex save (DC = 10 + half your level + your Constitution bonus) for half damage" />
@@ -924,7 +924,7 @@
 		</Alternative>
 		<Alternative id="Magic Resistant" namespaces="DwarfHardy" description="Some of the older dwarven clans are particularly resistant to magic." explanation="You have a –2 penalty on all concentration checks made in relation to arcane spells, but you have SR equal to 5 + your character level">
 			<Bonus to="SR" value="5" />
-			<Bonus to="SR" fromID="Level" />
+			<Bonus to="SR" fromId="Level" />
 			<PoolBonus to="spellcastingEffects" value="–2 penalty on all concentration checks made in relation to arcane spells" />
 		</Alternative>
 		<Alternative id="Minesight" namespaces="DwarfVision" description="Some dwarves have greater darkvision, but suffer in bright light." explanation="You have Darkvision 90ft; you have a –2 penalty on saving throws against effects with the light descriptor, and are automatically dazzled in bright light">
@@ -996,7 +996,7 @@
 			<Notation to="WillSave" value="If you fail a save vs a spell or spell-like ability of the enchanment (charm or compulsion) schools, you receive another save 1 round later at the same DC to prematurely end the effect (assuming it has a duration greater than 1 round); if you have a similar ability from another source (such as a rogue's slippery mind), you can only use one of these abilities per round, but can try the other on the second round if the first reroll ability fails" />
 		</Alternative>
 		<Alternative id="Surface Survivalist" namespaces="DwarfVision" description="Some dwarves have dwelt very long above ground." explanation="You treat either hot or cold climates (your choice) as one step less severe, and you treat wind conditions (when determining whether or not you are checked or blown away) as one step less severe">
-			<PoolBonusChoice to="miscEffects" title="Choose an environment">
+			<PoolBonusChoice to="miscEffects" title="Choose an environment" choices="1">
 				<Item title="hot climates" value="You treat hot climates as one step less severe" />
 				<Item title="cold climates" value="You treat cold climates as one step less severe" />
 			</PoolBonusChoice>
@@ -1109,7 +1109,7 @@
 		</Alternative>
 		<Alternative id="Bond to the Land" namespaces="GnomeHatred,GnomeDefensiveTraining" description="Some gnomes have strong ties to specific kinds of terrain, as a holdover from their fey origins." explanation="Choose a specific terrain: you have a +2 dodge bonus to AC while within that terrain">
 			<!--These gnomes gain a +2 dodge bonus to AC when in a specific terrain type selected from the ranger list of favored terrains. This choice is made at character creation, and cannot be changed. This racial trait replaces defensive training and hatred.-->
-			<PoolBonusChoice to="combatEffects" title="Choose a specific terrain (you will have a +2 dodge bonus to AC within that specific terrain)">
+			<PoolBonusChoice to="combatEffects" title="Choose a specific terrain (you will have a +2 dodge bonus to AC within that specific terrain)" choices="1">
 				<Item title="Cold" value="You have a +2 dodge bonus to AC when in cold terrain" />
 				<Item title="Desert" value="You have a +2 dodge bonus to AC when in desert terrain" />
 				<Item title="Forest" value="You have a +2 dodge bonus to AC when in forest terrain" />
@@ -1149,7 +1149,7 @@
 		</Alternative>
 		<Alternative id="Explorer" namespaces="GnomeHatred,GnomeObsessive" description="Many gnomes are obsessed with seeing as much of the world as possible, rather than perfecting some specific talent or vocation." explanation="You have a +2 racial bonus to Climb and one Knowledge skill of your choice">
 			<Bonus to="Climb" value="2" type="racial" />
-			<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choice="1" type="racial" />
+			<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choices="1" type="racial" />
 		</Alternative>
 		<Alternative id="Fairy Catcher" namespaces="GnomeKeenSenses,GnomeDefensiveTraining,GnomeHatred" description="Some gnomes are especially sensitive to the presence of fey." explanation="You have a +2 racial bonus on saving throws against the spells, spell-like abilities, and supernatural abilities of fey (this bonus stacks with the bonus granted by Illusion-resistant); you have a +2 bonus on Perception, Sense Motive, and Survival checks vs fey, and on caster level checks to overcome the spell resistance of fey">
 			<PoolBonus to="saveEffects" value="+2 racial bonus on saving throws against the spells, spell-like abilities, and supernatural abilities of fey (this bonus stacks with the bonus granted by Illusion-resistant)" />
@@ -1176,7 +1176,7 @@
 		</Alternative>
 		<Alternative id="Fey-Tongued" namespaces="GnomeMagic" description="Some gnomes' innate magic is more in tune with the feywild." explanation="You add +1 to the DC of any saving throws against illusion spells you cast; if you have a Charisma score of 11 or higher, you also gain the following spell-like abilities: 1/day—haunted fey aspect, ghost sound, prestidigitation, and speak with plants">
 			<PoolBonus to="spellcastingEffects" value="You add +1 to the DC of any saving throws against illusion spells you cast." />
-			<!--You gain  and speak with plants instead of dancing lights and speak with animals as spell-like abilities from the gnome magic racial trait-->
+			<!--You gain haunted fey aspect and speak with plants instead of dancing lights and speak with animals as spell-like abilities from the gnome magic racial trait-->
 		</Alternative>
 		<Alternative id="Gift of Tongues" namespaces="GnomeDefensiveTraining,GnomeHatred" description="Gnomes love languages and learning about those they meet." explanation="You have a +2 bonus to Bluff and Diplomacy, and whenever you gain a rank in Linguistics, you learn two languages instead of one">
 			<Bonus to="Bluff" value="2" />
@@ -1413,7 +1413,7 @@
 			<!--Halflings with this racial trait also begin play with the ability to speak Common, Halfling, and any one other language of their choice-->
 		</Alternative>
 		<Alternative id="Practicality" namespaces="HalflingSureFooted,HalflingFearless" description="Halflings value hard work and common sense." explanation="You have a +2 bonus to Sense Motive, and a +2 bonus to a Craft or Profession skill of your choice; you have a +2 bonus on saves vs illusions">
-			<BonusChoice to="craft_skills,profession_skills" value="2" choices="1" />
+			<BonusChoice to="craft_skills,profession_skills" value="2" choices="1" title="Choose a Craft or Profession skill for a +2 bonus" />
 			<Bonus to="Sense Motive" value="2" />
 			<PoolBonus to="saveEffects" value="+2 bonus vs illusions" />
 		</Alternative>
@@ -1487,7 +1487,7 @@
 			<Bonus to="landSpeed" value="30" />
 		</Standard>
 		<Standard id="Stat Bonus" explanation="+2 bonus to any stat" namespaces="HalfOrcStat">
-			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" />
+			<BonusChoice to="STR,DEX,CON,INT,WIS,CHA" value="2" choices="1" title="Choose a stat to receive a +2 bonus" />
 		</Standard>
 		<Standard id="Languages known" explanation="You speak Common and Orc" namespaces="HalfOrcLanguages">
 			<Bonus to="languagesKnown" value="1" />
@@ -1594,7 +1594,7 @@
 			<PoolBonus to="combatEffects" value="+1 racial bonus to attack humanoids of the dwarf, elf and human subtypes" />
 		</Alternative>
 		<Alternative id="Human-Raised" namespaces="HalfOrcFerocity,HalfOrcWeaponFamiliarity" description="Some half-orcs raised as humans lack their cousins' ferocity and training in orc weapons, but pick up a bit of their human parents' skills." explanation="You gain 1 extra skill point every level">
-			<Bonus to="SkillPoints" fromID="Level" />
+			<Bonus to="SkillPoints" fromId="Level" />
 		</Alternative>
 		<Alternative id="Inured" namespaces="HalfOrcFerocity" description="Half-orcs raised by orcs often become desensitized to the violence around them." explanation="You have a +4 bonus on Will saves vs sanity damage caused by encountering monsters, extreme violence, or death">
 			<Bonus to="WillSave" value="4" note="vs sanity damage caused by encountering monsters, extreme violence, or death" />
@@ -1609,7 +1609,7 @@
 		</Alternative>
 		<Alternative id="Orc Atavism" namespaces="HalfOrcBlood,HalfOrcFerocity,HalfOrcIntimidating,HalfOrcStat" description="Some half-orcs have much stronger orc blood than human blood." explanation="You have a +2 bonus to Strength, a -2 penalty to Intelligence, Wisdom or Charisma (your choice), and you count as an orc (but not human) for the purposes of effects related to race; you gain the Ferocity ability: You remain conscious and can continue fighting even at negative hit points; you are still staggered, lose 1hp per round, and die when your negative hit points equal your Constitution score">
 			<Bonus to="STR" value="2" />
-			<BonusChoice to="INT,WIS,CHA" value="-2" choices="1" />
+			<BonusChoice to="INT,WIS,CHA" value="-2" choices="1" title="Choose a stat for your -2 penalty" />
 			<PoolBonus to="miscEffects" value="You count as an orc (but not human) for the purposes of effects related to race" />
 			<PoolBonus to="combatEffects" value="Ferocity: You remain conscious and can continue fighting even at negative hit points; you are still staggered, lose 1hp per round, and die when your negative hit points equal your Constitution score" />
 		</Alternative>
@@ -1680,7 +1680,7 @@
 			<!--gain Endurance as a bonus feat-->
 		</Alternative>
 		<Alternative id="Skilled" namespaces="HalfOrcVision" description="Second- and third-generation half-orcs often favor their human heritage more than their orc heritage." explanation="You gain 1 extra skill point every level">
-			<Bonus to="SkillPoints" fromID="Level" />
+			<Bonus to="SkillPoints" fromId="Level" />
 		</Alternative>
 		<Alternative id="Smog Sight" namespaces="HalfOrcVision" description="Half-orcs can learn to see through less-than-clear air" explanation="You can see double the normal range in dense fog and smoke (including magic effects like obscuring mist) and ignore concealment from smoke or fog for targets within 5 feet">
 			<PoolBonus to="senseEffects" value="You can see double the normal range in dense fog and smoke (including magic effects like obscuring mist) and ignore concealment from smoke or fog for targets within 5 feet" />

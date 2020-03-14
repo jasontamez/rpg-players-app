@@ -338,7 +338,7 @@
 			<Pool id="speedEffects" title="Movement Effects" />
 			<Pool id="senseEffects" title="Sense Effects" />
 			<Pool id="miscEffects" title="Skill Effects" />
-			<Pool id="archetypes" title="Archetypes" />
+			<Pool id="archetypes" title="Archetypes" type="Typeless" />
 			<Pool id="racialTraits" title="Racial Traits" type="Typeless" />
 		</Group>
 		<Stat id="spellLikeAbilities" type="PfSpells" title="Spell-Like Abilities" />
