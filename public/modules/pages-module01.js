@@ -1,6 +1,7 @@
-import { $a, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
+import { $i, $a, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
 import { BasicIdObject, Int, Str, IntBonusable, Num, TF, Pool } from "./stats-module01.js";
+import { parseBundledInfo } from "./bundles-module01.js";
 
 // Define a class for XML tags
 export class BasicPageObject {
@@ -436,7 +437,6 @@ export function loadBundle(appendTo, unit) {
 					namespaces = atts.namespaces,
 					tagName = node.nodeName,
 					kidmap = o[tagName] || new Map(),
-					k = Array.from(node.children),
 					obj;
 				if(id === undefined || namespaces === undefined) {
 					logError(node, "BUNDLE: category \"" + cat + "\", tag \"" + tagName + "\" missing id and/or namespaces parameters");
@@ -445,7 +445,7 @@ export function loadBundle(appendTo, unit) {
 				namespaces = namespaces.split(separator);
 				obj = {
 					namespaces: namespaces,
-					kids: k
+					node: node
 				};
 				delete atts.id;
 				delete atts.namespaces;
@@ -609,16 +609,6 @@ function parseItem(node, filler) {
 }
 
 
-// loadPageNamed(string pageName, ?object sharedObject)
-export function loadPageNamed(pageName) {
-	var page = BasicPageObject.getById(pageName);
-	if(page === undefined) {
-		return logErrorText("There is no page with the id \"" + pageName + "\"");
-	}
-	loadPage(page);
-}
-
-
 // parseDeepHTMLArray(appendTo, deepArray, ?optionalChecks = [], ...?optional arguments)
 export function parseDeepHTMLArray() {
 	var args = Array.from(arguments),
@@ -693,10 +683,12 @@ export function parseDeepHTMLArray() {
 export function loadPage(page) {
 	var $RP = $RPG.pages,
 		MAIN = $RP.MAIN,
+		OVERLAY = $RP.OVERLAY,
 		atts = page.atts,
 		filter = atts.get("filter"),
 		preloader = atts.get("preloader"),
-		subPage = TF.converter(atts.get("subpage")),
+		subpage = TF.converter(atts.get("subpage")),
+		overlay = TF.converter(atts.get("overlay")),
 		html = page.html,
 		tempDiv = $e("div");
 	// Run through a preloader if needed
@@ -706,7 +698,8 @@ export function loadPage(page) {
 			let preloaded = p(page, html);
 			if(preloaded) {
 				let ph = preloaded.html,
-					psp = preloaded.subPage,
+					psp = preloaded.subpage,
+					po = preloaded.overlay,
 					pf = preloaded.filter,
 					prr = preloaded.reroute;
 				if(prr) {
@@ -716,7 +709,10 @@ export function loadPage(page) {
 					html = ph;
 				}
 				if(psp) {
-					subPage = psp;
+					subpage = psp;
+				}
+				if(po) {
+					overlay = po;
 				}
 				if(pf) {
 					filter = pf;
@@ -724,11 +720,23 @@ export function loadPage(page) {
 			}
 		}
 	}
-	// If we're not a subpage, clear out all previous info on-screen
-	if(!subPage) {
+	// If we're not a subpage or overlay, clear out all previous info on-screen
+	if(!subpage && !overlay) {
 		while(MAIN.firstChild !== null) {
 			MAIN.firstChild.remove();
 		}
+	}
+	// If an overlay is active, clear it
+	if(OVERLAY.firstChild !== null) {
+		document.body.classList.remove("overlayActive");
+		while(OVERLAY.firstChild !== null) {
+			OVERLAY.firstChild.remove();
+		}
+	}
+	// If we're an overlay, append to OVERLAY instead of MAIN and add overlayActive class
+	if(overlay) {
+		MAIN = OVERLAY;
+		document.body.classList.add("overlayActive");
 	}
 	// parse the page into tempDiv
 	parseDeepHTMLArray(tempDiv, html, $RP.subLoaders.fromPage);
@@ -746,6 +754,16 @@ export function loadPage(page) {
 	while(tempDiv.firstChild !== null) {
 		MAIN.append(tempDiv.firstChild);
 	}
+}
+
+
+// loadPageNamed(string pageName, ?object sharedObject)
+export function loadPageNamed(pageName) {
+	var page = BasicPageObject.getById(pageName);
+	if(page === undefined) {
+		return logErrorText("There is no page with the id \"" + pageName + "\"");
+	}
+	loadPage(page);
 }
 
 
@@ -801,11 +819,13 @@ export function calculateFromPage() {
 			stat = BasicIdObject.getById(id),
 			value = input.value;
 		if(stat === undefined) {
-			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
+			logError(input, "Stat \"" + id + "\" not found (data-stat)");
+			return false;
 		} else if(ss !== "true") {
 			stat.set("value", value);
 		}
 	});
+	return true;
 }
 
 
@@ -813,6 +833,34 @@ export function calculateFromPage() {
 export function calculateThenNavigate(e) {
 	calculateFromPage.bind(this).call();
 	loadPageFromButton.bind(this).call();
+}
+
+
+// button = this
+export function calculateBundle(e) {
+	var targets = getTargetsFromButton(this),
+		bundles = [],
+		d = this.dataset,
+		x, choices;
+	// Calculate values
+	if(calculateFromPage.bind(this).call()) {
+		// Look at the inputs and selects
+		targets.forEach(function(input) {
+			var id = input.dataset.stat,
+				stat = BasicIdObject.getById(id);
+			if(stat === undefined) {
+				// Error message already sent
+				return;
+			} else if (stat instanceof Pool) {
+				bundles = bundles.concat(stat.getSelectionValues().map( o => o.node ));
+			}
+		});
+		choices = parseBundledInfo(bundles);
+		if(choices > 0) {
+			return loadPageNamed(d.calcPage);
+		}
+	}
+	loadPageNamed(d.noCalc);
 }
 
 
@@ -836,6 +884,68 @@ export function resetThenNavigate(e) {
 	// Load new page
 	loadPageFromButton.bind(this).call();
 }
+
+
+// button = this
+export function closeOverlay(e) {
+	var overlay = $i("overlay");
+	while(overlay.firstChild !== null) {
+		overlay.firstChild.remove();
+	}
+	document.body.classList.remove("overlayActive");
+}
+
+
+
+export function bundleChoicesPreloader(page) {
+	var html = page.html.slice(),
+		$RB = $RPG.bundles.pageHandlers;
+	$RPG.bundles.choicesToBeMade.forEach(function(o) {
+		var h = $RB[o.type](o);
+		if(h !== false) {
+			if(h instanceof Array) {
+				html = h.concat(html);
+			} else {
+				html.unshift(h);
+			}
+		}
+	});
+	return {
+		html: html,
+	};
+}
+
+
+
+export function bundleChoicesFilter(html, unit) {
+	$a(".chooser", html).forEach(function(c) {
+		var ch = [Int.converter(c.dataset.choices)];
+		if(ch > 1) {
+			let i = Array.from($a("input", c)),
+				f = maxChooserChoices.bind(ch.concat(i));
+			i.forEach(inp => $listen(inp, f, "input"));
+		}
+	});
+}
+
+
+// this = array [integerNumberOfChoices, ...all input objects]
+function maxChooserChoices(e) {
+	var i = this.slice(),
+		n = i.shift(),
+		selected = i.reduce((acc, x) => acc += (x.checked ? 1 : 0), 0);
+	if(selected > n) {
+		i.every(function(x) {
+			if(x.checked) {
+				x.checked = false;
+				return false;
+			}
+			return true;
+		});
+	}
+}
+
+
 
 
 $RPG.ADD("pages", {
@@ -867,9 +977,15 @@ $RPG.ADD("pages", {
 		},
 		calcNav: {
 			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage", "choicePage", "whichClass", "whichId", "separator", "haltable"],
+			datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
 			defaultText: "Save and Continue",
 			listenFunc: calculateThenNavigate
+		},
+		calcBundle: {
+			mandatoryProps: ["calcPage", "noCalc"],
+			datasetProps: ["calcPage", "noCalc", "whichClass", "whichId", "separator", "haltable"],
+			defaultText: "Save and Continue",
+			listenFunc: calculateBundle
 		},
 		resetNavigation: {
 			mandatoryProps: ["nextPage"],
@@ -877,24 +993,34 @@ $RPG.ADD("pages", {
 			defaultText: "Go Back",
 			listenFunc: resetThenNavigate
 		},
-		closeSub: {
+		closeSubpage: {
 			mandatoryProps: ["toClose"],
 			datasetProps: ["toClose"],
 			defaultText: "Close",
 			listenFunc: loadPageFromButton
+		},
+		closeOverlay: {
+			mandatoryProps: [],
+			datasetProps: [],
+			defaultText: "Close",
+			listenFunc: closeOverlay
 		}
 	},
 	bundleFilters: {},
 	bundleItemFilters: {},
-	pageFilters: {},
-	pagePreloaders: {},
+	pageFilters: {
+		bundleChoices: bundleChoicesFilter
+	},
+	pagePreloaders: {
+		bundleChoices: bundleChoicesPreloader
+	},
 	subLoaders: {
 		fromPage: [],
 		fromBundle: [
-			[item => (item.ITEM !== undefined), loadBundleItem]        
+			[item => (item.ITEM !== undefined), loadBundleItem]
 		],
 		fromBundleItem: [
 			[item => (item.ITEM !== undefined), loadBundleItem]
 		],
-   }
+	 }
 });
