@@ -305,7 +305,7 @@ export class PfSkill extends IntBonusable {
 			// Add it
 			cs.push([id, source, tf]);
 			// Get array of sources
-			newSources = this.get("sources");
+			newSources = this.get("source");
 			if(tf) {
 				// If this is a new class skill marking, then add its source
 				newSources.push(source);
