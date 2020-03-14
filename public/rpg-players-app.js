@@ -63,22 +63,20 @@ var $RPG = {
 		));
 	},
 	extractLineNumberFromStack: function (stack) {
-        /// <summary>
-        /// Get the line/filename detail from a Webkit stack trace.  See https://stackoverflow.com/a/3806596/1037948
-        /// </summary>
-        /// <param name="stack" type="String">the stack string</param>
-
-        if(!stack) return '?'; // fix undefined issue reported by @sigod
-
-        // correct line number according to how Log().write implemented
-        var line = stack.split('\n')[2];
-        // fix for various display text
-        line = (line.indexOf(' (') >= 0
-            ? line.split(' (')[1].substring(0, line.length - 1)
-            : line.split('at ')[1]
-            );
-        return line;
-    }
+		/// <summary>
+		/// Get the line/filename detail from a Webkit stack trace.  See https://stackoverflow.com/a/3806596/1037948
+		/// </summary>
+		/// <param name="stack" type="String">the stack string</param>
+		if(!stack) return '?'; // fix undefined issue reported by @sigod
+		// correct line number according to how Log().write implemented
+		var line = stack.split('\n')[2];
+		// fix for various display text
+		line = (line.indexOf(' (') >= 0
+			? line.split(' (')[1].substring(0, line.length - 1)
+			: line.split('at ')[1]
+		);
+		return line;
+	}
 };
 
 window["$RPG"] = $RPG;
