@@ -17,6 +17,7 @@ var okToDeload = false,
 $RPG.ADD("pages", "data", data);
 $RPG.ADD("pages", "rawBundles", BUNDLES);
 $RPG.ADD("pages", "MAIN", MAIN);
+$RPG.ADD("pages", "OVERLAY", $i("overlay"));
 
 // Character/player creation
 var PO = new PlayerObject("id"),
