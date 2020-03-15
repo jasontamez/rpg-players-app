@@ -18,7 +18,9 @@ html
   body
     |
     |
-    header#welcome Welcome
+    header#title Welcome
+    |
+    |
     div#mainGrid
       div.start
         p Choose a RuleSet:
@@ -29,13 +31,23 @@ html
             - rulesets.forEach(function(filename, rulesetname) {
             option(value=filename)= rulesetname
             - })
+        |
+        |
         p
           button#loadInfo Recurse!
+    |
+    |
     div#overlay.overlay
+    |
+    |
     div#loading.overlay
       div Please wait...
       div#loading-message
+    |
+    |
     script(src='rpg-players-app.js')
+    |
+    |
     script(src='rpg-players-module.js' type='module')
-  |
-  |
+    |
+    |

@@ -365,7 +365,7 @@
 		<Resource type="stylesheet" src="pf/pf01.css" />
 	</Resources>
 	<Pages>
-		<Page id="BEGIN">
+		<Page id="BEGIN" title="Character Creation">
 			<Block class="flex-vertical statContainer">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
@@ -382,7 +382,7 @@
 				<BUTTON type="calcNav" nextPage="RACIAL TRAITS">Continue</BUTTON>
 			</Block>
 		</Page>
-		<Page id="RACIAL TRAITS" preloader="PfArchetype" filter="PfArchetypePicker" pfArchetypeID="racialTraits">
+		<Page id="RACIAL TRAITS" preloader="PfArchetype" filter="PfArchetypePicker" pfArchetypeID="racialTraits" title="Racial Traits">
 			<Block class="flex-vertical">
 				<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" selfSaving="true" />
 				<header>Racial Traits</header>
@@ -422,7 +422,7 @@
 			<hr />
 			<div class="buttons"><BUTTON type="closeOverlay" toClose=".racialTraitsChooser">Go Back</BUTTON> <BUTTON type="calcNav" which="racialTraits" nextPage="CLASSES">Continue</BUTTON></div>
 		</Page>
-		<Page id="CLASSES" class="flex-vertical">
+		<Page id="CLASSES" class="flex-vertical" title="Class Selection">
 			<Block class="flex-vertical">
 				<header>Class Selection</header>
 				<ol start="4">
@@ -431,7 +431,7 @@
 				<BUTTON type="calcNav" nextPage="ARCHETYPES">Continue</BUTTON>
 			</Block>
 		</Page>
-		<Page id="ARCHETYPES" class="flex-vertical">
+		<Page id="ARCHETYPES" class="flex-vertical" title="Archetypes">
 			<Block template="PfClassArchetypes" contents="append">
 				<BUTTON type="navigation" nextPage="page5">Continue</BUTTON>
 			</Block>

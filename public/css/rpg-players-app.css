@@ -132,7 +132,7 @@ h2 {
 header {
 	font-size: 1.5em;
 }
-#welcome {
+#title {
 	display: block;
 	grid-area: header;
 	color: var(--header-fg);
