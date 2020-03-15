@@ -67,6 +67,21 @@
 			<PfCSkill id="Fighter Class Skill: Survival" source="class" mark="Survival" />
 			<PfCSkill id="Fighter Class Skill: Swim" source="class" mark="Swim" />
 		</ClassSkills>
+		<Stats>
+			<Pool id="FighterBonusFeats" title="Fighter Bonus Feats" type="Typeless">
+				<Attribute name="maxSelectable" type="Int">
+					<Math>
+						<Add fromId="Level" />
+						<Divide value="2" />
+						<Add value="1" />
+						<Floor />
+					</Math>
+				</Attribute>
+			</Pool>
+		</Stats>
+		<!--Starting at 3rd level, a fighter learns to be more maneuverable while wearing armor. Whenever he is wearing armor, he reduces the armor check penalty by 1 (to a minimum of 0) and increases the maximum Dexterity bonus allowed by his armor by 1. Every four levels thereafter (7th, 11th, and 15th), these bonuses increase by +1 each time, to a maximum –4 reduction of the armor check penalty and a +4 increase of the maximum Dexterity bonus allowed.
+		In addition, a fighter can also move at his normal speed while wearing medium armor. At 7th level, a fighter can move at his normal speed while wearing heavy armor.-->
+		<!--Beginning at 7th level, instead of increasing the benefits provided by armor training (reducing his armor’s check penalty by 1 and increasing its maximum Dexterity bonus by 1), a fighter can choose an advanced armor training option (see Advanced Armor Training below) . If the fighter does so, he still gains the ability to move at his normal speed while wearing medium armor at 3rd level, and while wearing heavy armor at 7th level-->
 		<Bonus to="ReflSave" fromId="Level" attribute="badSave" />
 		<Bonus to="WillSave" fromId="Level" attribute="badSave" />
 		<Bonus to="FortSave" fromId="Level" attribute="goodSave" />
@@ -79,6 +94,14 @@
 				<Add fromId="INT" fromAtt="modifier" />
 				<Multiply fromId="Level" />
 				<AtLeast fromId="Level" />
+			</Math>
+		</Bonus>
+		<Bonus to="WillSave" note="vs fear">
+			<Math>
+				<Add fromId="Level" />
+				<Add value="3" />
+				<Divide value="4" />
+				<Floor />
 			</Math>
 		</Bonus>
 	</Bundle>
