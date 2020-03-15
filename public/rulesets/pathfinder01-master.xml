@@ -361,6 +361,9 @@
 		<Category name="feat" src="pf/pf01-feats-sq-t.xml" />
 		<Category name="feat" src="pf/pf01-feats-u-z.xml" />
 	</Bundles>
+	<Resources>
+		<Resource type="stylesheet" src="pf/pf01.css" />
+	</Resources>
 	<Pages>
 		<Page id="BEGIN">
 			<Block class="flex-vertical statContainer">

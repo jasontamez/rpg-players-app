@@ -1,4 +1,4 @@
-import { $a, $i, $t, $listen } from "./modules/dollar-sign-module.js";
+import { $a, $i, $t, $listen, $ea as $e } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
 import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
@@ -129,10 +129,19 @@ async function loadAndAssembleInfo(cls) {
 		body = doc.documentElement,
 //		ul = $e("ul"),
 		modules = Array.from($a("Modules Module", body)),
+		resources = Array.from($a("Resources Resource", body)),
 		c = 0,
 		l = modules.length,
+		r = resources.length,
 		nodes,
 		start;
+	modifyLoadingScreen($t("[parsing resources]"));
+	while(c < r) {
+		let node = resources[c];
+		await parseResourceNode(node);
+		c++;
+	}
+	c = 0;
 	modifyLoadingScreen($t("[parsing modules]"));
 	while(c < l) {
 		let node = modules[c];
@@ -197,6 +206,62 @@ async function loadAndAssembleInfo(cls) {
 	// Remove "loading" screen
 	removeLoadingScreen();
 }
+
+
+async function parseResourceNode(modNode) {
+	var atts = parseAttributesToObject(modNode),
+		t = atts.type,
+		resources = {
+			stylesheet: {
+				element: "link",
+				location: document.head,
+				attributes: [
+					["rel", "stylesheet"],
+					["type", "text/css"],
+					["href", "/rulesets/" + atts.src]
+				]
+			},
+			script: {
+				element: "script",
+				location: document.body,
+				attributes: [
+					["type"],
+					["src", "/rulesets/" + atts.src]
+				]
+			}
+		},
+		type = resources[t],
+		src = atts.src,
+		msg = false,
+		a = {};
+	if(t === undefined) {
+		msg = "RESOURCE: missing required parameter \"type\"";
+	} else if (src === undefined) {
+		msg = "RESOURCE: missing required parameter \"src\"";
+	} else if (type === undefined) {
+		msg = "RESOURCE: invalid resource type \"" + t + "\"";
+	}
+	if(msg) {
+		logError(modNode, msg);
+		return null;
+	}
+	type.attributes.forEach(function(pair) {
+		var p = pair.slice(),
+			att = p.shift();
+		if(p.length > 0) {
+			let v = p.shift();
+			if(v === undefined) {
+				logError(modNode, "RESOURCE: Could not set parameter \"" + att + "\"");
+				return null;
+			}
+			a[att] = v;
+		} else if(atts[att] !== undefined) {
+			a[att] = atts[att];
+		}
+	});
+	type.location.appendChild($e(type.element, a));
+}
+
 
 async function parseModuleNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
