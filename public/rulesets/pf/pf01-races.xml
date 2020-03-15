@@ -1171,7 +1171,7 @@
 			<PoolBonus to="spellcastingEffects" value="+1 to the DC of enchantment (compulsion) spells you cast" />
 			<!--Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
 		</Alternative>
-		<Alternative id="Fey Thoughts" namespaces="GnomeWeaponFamiliarity" description="Some gnomes have strong fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="YYou choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
+		<Alternative id="Fey Thoughts" namespaces="GnomeWeaponFamiliarity" description="Some gnomes have strong fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
 			<PfCSkillChoice id="Gnome: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 		</Alternative>
 		<Alternative id="Fey-Tongued" namespaces="GnomeMagic" description="Some gnomes' innate magic is more in tune with the feywild." explanation="You add +1 to the DC of any saving throws against illusion spells you cast; if you have a Charisma score of 11 or higher, you also gain the following spell-like abilities: 1/day—haunted fey aspect, ghost sound, prestidigitation, and speak with plants">
@@ -1446,7 +1446,7 @@
 			<PoolBonus to="saveEffects" value="+1 luck bonus vs fear effects" />
 			<PoolBonus to="miscEffects" value="Allies within 60ft of you who are the same size category as you gain a +1 luck bonus vs fear effects" />
 		</Alternative>
-		<Alternative id="Swift as Shadows" namespaces="HalflingSureFooted" description="Halflings possess incredible stealth even while moving through obstructed areas." explanation="YYou reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10">
+		<Alternative id="Swift as Shadows" namespaces="HalflingSureFooted" description="Halflings possess incredible stealth even while moving through obstructed areas." explanation="You reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10">
 			<Notation to="Stealth" value="You reduce the penalty for using Stealth while moving by 5, and reduce the Stealth check penalty for sniping by 10" />
 		</Alternative>
 		<Alternative id="Underfoot" namespaces="HalflingLuck" description="Halflings must train hard to effectively fight bigger opponents." explanation="You have a +1 dodge bonus to AC against foes larger than you and a +1 bonus on Reflex saves vs trample attacks">
