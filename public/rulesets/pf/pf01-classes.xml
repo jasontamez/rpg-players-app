@@ -79,9 +79,16 @@
 				</Attribute>
 			</Pool>
 		</Stats>
+		<When fromId="Level" function="EqualTo" test="3">
+		</When>
 		<!--Starting at 3rd level, a fighter learns to be more maneuverable while wearing armor. Whenever he is wearing armor, he reduces the armor check penalty by 1 (to a minimum of 0) and increases the maximum Dexterity bonus allowed by his armor by 1. Every four levels thereafter (7th, 11th, and 15th), these bonuses increase by +1 each time, to a maximum –4 reduction of the armor check penalty and a +4 increase of the maximum Dexterity bonus allowed.
-		In addition, a fighter can also move at his normal speed while wearing medium armor. At 7th level, a fighter can move at his normal speed while wearing heavy armor.-->
+			In addition, a fighter can also move at his normal speed while wearing medium armor. At 7th level, a fighter can move at his normal speed while wearing heavy armor.-->
 		<!--Beginning at 7th level, instead of increasing the benefits provided by armor training (reducing his armor’s check penalty by 1 and increasing its maximum Dexterity bonus by 1), a fighter can choose an advanced armor training option (see Advanced Armor Training below) . If the fighter does so, he still gains the ability to move at his normal speed while wearing medium armor at 3rd level, and while wearing heavy armor at 7th level-->
+		<!--Starting at 5th level, a fighter can select one group of weapons, as noted below. Whenever he attacks with a weapon from this group, he gains a +1 bonus on attack and damage rolls.
+			Every four levels thereafter (9th*, 13th, and 17th), a fighter becomes further trained in another group of weapons. He gains a +1 bonus on attack and damage rolls when using a weapon from this group. In addition, the bonuses granted by previous weapon groups increase by +1 each. For example, when a fighter reaches 9th level, he receives a +1 bonus on attack and damage rolls with one weapon group and a +2 bonus on attack and damage rolls with the weapon group selected at 5th level. Bonuses granted from overlapping groups do not stack. Take the highest bonus granted for a weapon if it resides in two or more groups.
+			A fighter also adds this bonus to any combat maneuver checks made with weapons from his group. This bonus also applies to the fighter’s Combat Maneuver Defense when defending against disarm and sunder attempts made against weapons from this group.-->
+		<!--Beginning at 9th level, instead of selecting an additional fighter weapon group, a fighter can choose an advanced weapon training option (see Advanced Weapon Training below) for one fighter weapon group that he previously selected with the weapon training class feature.-->
+		<!-- Weapon Groups: axes, heavy blades, light blades, bows, close, crossbows, double, firearms, flails, hammers, monk, natural, polearms, siege engines, spears, thrown, tribal -->
 		<Bonus to="ReflSave" fromId="Level" attribute="badSave" />
 		<Bonus to="WillSave" fromId="Level" attribute="badSave" />
 		<Bonus to="FortSave" fromId="Level" attribute="goodSave" />
