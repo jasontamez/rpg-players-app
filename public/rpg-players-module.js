@@ -45,6 +45,13 @@ function modifyLoadingScreen() {
 }
 
 
+// Set up description shower/hider
+$listen($i("more"), function(e) {
+  $i("more").classList.toggle("visible");
+  $i("description").classList.toggle("visible");
+});
+
+
 // Call function when ruleset drop-down list is changed
 $i("rules").addEventListener("change", function(e) {
 	// Save the ruleset selected

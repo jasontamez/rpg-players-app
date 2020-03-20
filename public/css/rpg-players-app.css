@@ -19,7 +19,7 @@
 	--loading-fg: #DAD2D8;
 	--loading-bg: #69140e;
 	--header-fg: #378db2;
-	--header-bg: #00000060;
+	--header-bg: #0c2229;
 	--shadow: #000;
 	--shadow-lighter: #00000090;
 	--overlay-bg: #143642aa;
@@ -28,7 +28,7 @@
 
 /* Main stuff */
 body {
-	grid-template-rows: max-content 1fr;
+	grid-template-rows: 2.5em 1fr;
 	grid-template-columns: 1fr;
 	grid-template-areas:
 		"header"
@@ -131,17 +131,53 @@ h2 {
 }
 header {
 	font-size: 1.5em;
-}
-#title {
 	display: block;
-	grid-area: header;
+}
+header#mainHeader {
+	font-size: 1rem;
 	color: var(--header-fg);
 	background-color: var(--header-bg);
 	margin: 0 0 1em 0;
-	padding: 0.5em 0 0.5em 1em;
-	min-width: calc(100% - 1em);
-	font-size: 1rem;
+	padding: 0.5em 1em;
+	min-width: calc(100% - 2em);
 	box-shadow: 0 0.25em 0.25em 0 var(--shadow-lighter);
+	cursor: default;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 2;
+}
+/*#title {
+}*/
+#more {
+	display: none;
+	cursor: help;
+	margin-left: 1em;
+}
+#more.hasDescription {
+	display: inline-block;
+	transition: all 0.25s ease-out;
+}
+#more.hasDescription.visible {
+	transform: rotate(-180deg);
+}
+#description {
+	max-height: 0;
+	overflow: hidden;
+	transition: all 0.15s ease-in;
+	text-indent: 1em;
+	font-style: italic;
+	padding: 0;
+	max-width: 60em;
+}
+#description div {
+	margin: 0.5rem 0 0.5rem 1.5em;
+}
+#description.visible {
+	max-height: 50vh;
+	transition: all 0.5s ease-out;
+	margin-top: 0.5rem;
 }
 input[type="number"] {
 	max-width: 3em;
@@ -202,6 +238,7 @@ body .overlay {
 
 body #overlay {
 	flex-flow: row wrap;
+	z-index: 5;
 }
 body.overlayActive #overlay {
 	opacity: 1;
@@ -249,6 +286,7 @@ body #loading {
 	color: var(--loading-fg);
 	font-size: 2em;
 	transition: opacity 0.5s ease-in;
+	z-index: 8;
 }
 body.loading #loading {
 	opacity: 1;
