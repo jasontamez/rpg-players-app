@@ -114,3 +114,4 @@ public/css/*.css
 !public/css/rpg-players-app.css
 views/index-old.html
 NOTES.md
+package-lock.json
