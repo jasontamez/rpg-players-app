@@ -40,7 +40,7 @@
 		</Formula>
 	</Formulae>
 	<Stats>
-		<Group id="ability_scores" type="IntBonusable" startingValue="0" minValue="0" maxValue="99">
+		<Group id="ability_scores" type="IntBonusable" startingValue="10" minValue="0" maxValue="99">
 			<Stat id="STR" title="Strength" />
 			<Stat id="DEX" title="Dexterity" />
 			<Stat id="CON" title="Constitution" />
@@ -234,7 +234,7 @@
 		<Stat id="lowLightVision" type="TF" title="Low-Light Vision" startingValue="0" />
 		<Stat id="size" type="PfSize" title="Size" startingValue="4" />
 		<Stat id="creatureType" type="Str" startingValue="humanoid" />
-		<Stat id="characterName" type="Str" startingValue="Bob" />
+		<Stat id="characterName" type="Str" startingValue="Sam" />
 <!--		<Stat id="" type="IntBonusable" title="" startingValue="0" />
 		<Stat id="" type="IntBonusable" title="" startingValue="0" />
 		<Stat id="" type="IntBonusable" title="" startingValue="0" />-->
@@ -366,6 +366,7 @@
 	</Resources>
 	<Pages>
 		<Page id="BEGIN" title="Character Creation" description="Fill in your character's name, basic stats and race, then click Continue">
+			<div class="flex-vertical statContainer">
 				<ol>
 					<li><label>Name: <INPUT id="characterName" /></label></li>
 					<li>Stats:<ul>
@@ -378,8 +379,8 @@
 					</ul></li>
 					<li><label>Choose a race: <CHOOSE category="race" saveTo="race" /></label></li>
 				</ol>
-				<BUTTON type="calcNav" nextPage="RACIAL TRAITS">Continue</BUTTON>
-			</Block>
+				<BUTTON type="calcNav" nextPage="RACIAL TRAITS" calcName="basicsAndRace">Continue</BUTTON>
+			</div>
 		</Page>
 		<Page id="RACIAL TRAITS" preloader="PfArchetype" filter="PfArchetypePicker" pfArchetypeID="racialTraits" title="Racial Traits - %characterName%">
       <Description>
@@ -400,9 +401,9 @@
 						<ADDTOPOOL id="racialTraits" selected="true" />
 					</BUNDLE>
 				</div>
-				<BUTTON type="resetNavigation" which="Archetype" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcBundle" which="racialTraits" calcPage="RACIAL TRAITS CHOICES" noCalc="CLASSES" nextPage="CLASSES">Continue</BUTTON>
-			</Block>
-			<Block class="flex-vertical">
+				<BUTTON type="navigation" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcBundle" which="racialTraits" calcPage="RACIAL TRAITS CHOICES" noCalc="CLASSES" nextPage="CLASSES" calcName="racialTraits">Continue</BUTTON>
+			</div>
+			<div class="flex-vertical">
 				<header>Alternates</header>
 				<div class="alternateAbilities selectableContent">
 					<BUNDLE category="race" show="Alternative">
@@ -419,39 +420,39 @@
 					</BUNDLE>
 				</div>
 				<p>Click on an alternate racial trait to see its benefits.<br />Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
-			</Block>
+			</div>
 		</Page>
 		<Page id="RACIAL TRAITS CHOICES" preloader="bundleChoices" filter="bundleChoices" overlay="true">
 			<hr />
-			<div class="buttons"><BUTTON type="closeOverlay" toClose=".racialTraitsChooser">Go Back</BUTTON> <BUTTON type="calcNav" which="racialTraits" nextPage="CLASSES">Continue</BUTTON></div>
+			<div class="buttons"><BUTTON type="closeOverlay" toClose=".racialTraitsChooser">Go Back</BUTTON> <BUTTON type="calcNavFromOverlay" nextPage="CLASSES" calcName="racialTraits">Continue</BUTTON></div>
 		</Page>
 		<Page id="CLASSES" class="flex-vertical" title="Class Selection">
-			<Block class="flex-vertical">
+			<div class="flex-vertical">
 				<header>Class Selection</header>
 				<ol start="4">
 					<li><label>Choose a class: <CHOOSE category="class" saveTo="class" /></label></li>
 				</ol>
-				<BUTTON type="calcNav" nextPage="ARCHETYPES">Continue</BUTTON>
-			</Block>
+				<BUTTON type="resetNavigation" nextPage="RACIAL TRAITS" resetName="racialTraits">Go Back</BUTTON> <BUTTON type="calcNav" nextPage="ARCHETYPES" calcName="class">Continue</BUTTON>
+			</div>
 		</Page>
 		<Page id="ARCHETYPES" class="flex-vertical" title="Archetypes">
-			<Block template="PfClassArchetypes" contents="append">
+			<div template="PfClassArchetypes" contents="append">
 				<BUTTON type="navigation" nextPage="page5">Continue</BUTTON>
-			</Block>
+			</div>
 		</Page>
 		<Page id="page5" class="flex-vertical">
-			<Block template="PfClassChoices" contents="append">
+			<div template="PfClassChoices" contents="append">
 				<BUTTON type="navigation" nextPage="page6">Continue</BUTTON>
-			</Block>
+			</div>
 		</Page>
 		<Page id="page6" class="flex-vertical">
-			<Block>
+			<div>
 				<ol start="5">
 					<li>Skill Ranks</li>
 				</ol>
 				<Block template="PfSkillsAdjust" />
 				<BUTTON type="navigation" nextPage="page7">Continue</BUTTON>
-			</Block>
+			</div>
 		</Page>
 	</Pages>
 	<Data>

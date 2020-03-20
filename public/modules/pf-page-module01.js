@@ -1,7 +1,7 @@
 import { $ec, $ea as $e, $listen, $a, $q } from "./dollar-sign-module.js";
 import { logErrorNode as logError, parseAttributesToObject, logErrorText } from "./parsing-logging.js";
-import { parseDeepHTMLArray } from "./pages-module01.js";
-import { BasicIdObject, Pool, TF } from "./stats-module01.js";
+import { parseDeepHTMLArray, loadPageFromButton, closeOverlay } from "./pages-module01.js";
+import { BasicIdObject, Pool, TF, IntBonusable as Int } from "./stats-module01.js";
 
 var $RPG = window["$RPG"],
 	$Pages = $RPG.pages;
@@ -473,6 +473,7 @@ function PfArchetypePreloader(page) {
 		if(stat === undefined) {
 			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" does not exist");
 		} else if(stat instanceof Pool) {
+			// Make sure the stat is empty
 			stat.empty();
 		} else {
 			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" is not a Pool");
@@ -482,6 +483,106 @@ function PfArchetypePreloader(page) {
 }
 
 
+
+function calculateChooserThenNavigate(e) {
+	var cn = this.dataset.calcName,
+		OV = $RPG.pages.OVERLAY,
+		CHAR = $RPG.current.character,
+		bonusC = $a(".bonusChoice", OV),
+		bonusP = $a(".poolBonusChoice", OV);
+	// Look at containers for BonusChoice objects
+	bonusC.forEach(function(chooser) {
+		// Container will have no. of choices and the value of the bonus, plus types and notations (if any)
+		var d = chooser.dataset,
+			choices = Int.converter(d.choices) || 1,
+			c = 0,
+			value = d.value,
+			type = d.type || "",
+			note = d.note || "";
+		// Inputs should be checkboxes or radio buttons
+		// Each will have its own stat as its value
+		Array.from($a("input", chooser)).every(function(i) {
+			var id, stat;
+			if(c >= choices) {
+				return false;
+			}
+			id = i.dataset.stat;
+			stat = CHAR.getStat(id);
+			if(stat === undefined) {
+				logError(i, "Stat \"" + id + "\" not found (data-stat)");
+			} else if (i.checked) {
+				c++;
+				stat.addBonus("archetype chooser", type, value, note);
+				CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+			}
+			return true;
+		});
+		// Only one selection per select
+		// The chosen option will have its own stat as its value
+		Array.from($a("select", chooser)).every(function(i) {
+			var stat;
+			if(c >= choices) {
+				return false;
+			}
+			stat = CHAR.getStat(i.value);
+			if(stat === undefined) {
+				logError(i, "Stat \"" + i.value + "\" not found (data-stat)");
+			} else {
+				c++;
+				stat.addBonus("archetype chooser", type, value, note);
+				CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+			}
+			return true;
+		});
+	});
+	// Look at containers for PoolBonusChoice objects
+	bonusP.forEach(function(chooser) {
+		// Container will have no. of choices and the Pool object
+		var d = chooser.dataset,
+			choices = Int.converter(d.choices) || 1,
+			values = [],
+			pool = CHAR.getStat(d.pool);
+		if(pool === undefined) {
+			logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
+			return false;
+		}
+		// Inputs will be checkboxes or radio buttons
+		// They may have titles in the dataset
+		Array.from($a("input", chooser)).every(function(i) {
+			if(values.length >= choices) {
+				return false;
+			}
+			if (i.checked) {
+				let v = i.value;
+				values.push([i.dataset.title || v, v]);
+			}
+			return true;
+		});
+		// Selects may have titles in its own dataset
+		// Child options can have their own titles to override them
+		Array.from($a("select", chooser)).every(function(i) {
+			var title, v, opts;
+			if(values.length >= choices) {
+				return false;
+			}
+			title = i.dataset.title;
+			Array.from(i.selectedOptions).every(function(sel) {
+				var v = sel.value,
+					t = sel.textContent.trim() || title || v;
+				values.push([t, v]);
+				return (values.length < choices);
+			});
+			return true;
+		});
+		values.forEach(function(value) {
+			var [id, v] = value;
+			pool.addItem(id, v, false);
+			CHAR.noteBonus(cn, Pool, pool, id, v);
+		});
+	});
+	closeOverlay();
+	loadPageFromButton.call(this, e);
+}
 
 
 export const exports = [];

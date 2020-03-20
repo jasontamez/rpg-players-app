@@ -1,6 +1,6 @@
-import { $i, $a, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
+import { $i, $a, $q, $t, $ea as $e, $listen } from "./dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
-import { BasicIdObject, Int, Str, IntBonusable, Num, TF, Pool } from "./stats-module01.js";
+import { Int, Str, IntBonusable, Num, TF, Pool } from "./stats-module01.js";
 import { parseBundledInfo } from "./bundles-module01.js";
 
 // Define a class for XML tags
@@ -45,6 +45,7 @@ export function parsePageNodes(pageNode) {
 	}
 	delete atts.id;
 	pageTag = new BasicPageObject(pageNode, id, parseObjectToArray(atts));
+	$RPG.current.pageBeingParsed = pageTag;
 	kids = Array.from(pageNode.childNodes);
 	kids.forEach(function(node) {
 		var retVal = recursePageNodes(node);
@@ -89,6 +90,24 @@ export function recursePageNodes(node) {
 }
 
 
+// <Title>text</Title>
+export function parsePageAttribute(node, filler) {
+	var n = node.nodeName;
+	$RPG.current.pageBeingParsed.set(n.charAt(0).toLowerCase() + n.slice(1), node.textContent.trim());
+	return null;
+}
+
+
+// <Description> text or HTML </Description>
+export function parseComplexPageAttribute(node, filler) {
+	var n = node.nodeName,
+		div = $e("div");
+	parseDeepHTMLArray(div, filler);
+	$RPG.current.pageBeingParsed.atts.set(n.charAt(0).toLowerCase() + n.slice(1), div);
+	return null;
+}
+
+
 // <Block template="whatever"> ... </Block>
 export function parseBlock(node, filler) {
 	var atts = parseAttributesToObject(node),
@@ -123,7 +142,7 @@ export function parseTemplate() {
 export function parseInput(node, filler) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
-		stat = BasicIdObject.getById(id),
+		stat = $RPG.current.character.getStat(id),
 		inputObject;
 	if(id === undefined) {
 		logError(node, "INPUT: missing required \"id\" parameter");
@@ -204,7 +223,7 @@ function loadInput(appendTo, unit) {
 export function parseInputHidden(node, filler) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
-		stat = BasicIdObject.getById(id),
+		stat = $RPG.current.character.getStat(id),
 		tagID = atts.tagId,
 		inputObject, CL;
 	if(id === undefined) {
@@ -358,7 +377,7 @@ export function parseChoose(node) {
 	//<CHOOSE category="race" />
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		bundles = $RPG.pages.rawBundles,
+		bundles = $RPG.bundles.raw,
 		saveTo = atts.saveTo,
 		selectObject;
 	if(cat === undefined) {
@@ -386,6 +405,7 @@ export function parseChoose(node) {
 //<BUNDLE category="x" ?show="Tag"></BUNDLE>
 export function loadBundle(appendTo, unit) {
 	var	$RP = $RPG.pages,
+		$RB = $RPG.bundles,
 		BUNDLES = $RP.bundles,
 		node = unit.node,
 		atts = {},
@@ -403,7 +423,7 @@ export function loadBundle(appendTo, unit) {
 	} else {
 		delete atts.stat;
 	}
-	statObj = BasicIdObject.getById(stat);
+	statObj = $RPG.current.character.getStat(stat);
 	if(statObj === undefined) {
 		logError(node, "BUNDLE: stat \"" + stat + "\" not found");
 		console.log([node, atts, rawcategory]);
@@ -579,7 +599,7 @@ export function loadBundleItem(appTo, item, id, object) {
 function parseBundle(node, filler) {
 	var atts = parseAttributesToObject(node),
 		cat = atts.category,
-		raw = $RPG.pages.rawBundles;
+		raw = $RPG.bundles.raw;
 	if(cat === undefined) {
 		logError(node, "BUNDLE: missing required \"category\" parameter");
 		return null;
@@ -615,7 +635,7 @@ export function parseDeepHTMLArray() {
 			appendTo = args.shift(),
 			html = args.shift().slice(),
 			held = [],
-			optionalChecks;
+			optionalChecks = [];
 	if(args.length > 0) {
 		optionalChecks = args.shift();
 	}
@@ -676,9 +696,13 @@ export function parseDeepHTMLArray() {
 			html = last[1];
 		}
 	}
+	return appendTo;
 }
 
 
+//
+//
+//
 // Does the heavy lifting of displaying a new page
 export function loadPage(page) {
 	var $RP = $RPG.pages,
@@ -690,7 +714,12 @@ export function loadPage(page) {
 		subpage = TF.converter(atts.get("subpage")),
 		overlay = TF.converter(atts.get("overlay")),
 		html = page.html,
-		tempDiv = $e("div");
+		title = atts.get("title"),
+		desc = atts.get("description"),
+		tempDiv = $e("div"),
+		T = $q("#title .text"),
+		D = $i("description"),
+		Mcl = $i("more").classList;
 	// Run through a preloader if needed
 	if(preloader !== undefined) {
 		let p = $RP.pagePreloaders[preloader];
@@ -754,6 +783,40 @@ export function loadPage(page) {
 	while(tempDiv.firstChild !== null) {
 		MAIN.append(tempDiv.firstChild);
 	}
+	// Change title
+	if(title) {
+		// Title present
+		let nonsense = "-*-jdk2k4 $#!@ 32 23eSDGA T% U&%",
+			r = title.replace(/%%/g, nonsense),
+			CHAR = $RPG.current.character;
+		title = title.replace(/%[^%]+%/g, function(stringMatched) {
+			var stat = CHAR.getStat(stringMatched.slice(1, -1));
+			if(stat === undefined) {
+				logErrorText("Page title contains reference to non-Stat \"" + stringMatched + "\"");
+				return stringMatched;
+			}
+			return stat.get("value");
+		});
+		T.textContent = title.replace(new RegExp(nonsense, "g"), "%");
+	} else {
+		// No title present - default to a default value
+		T.textContent = T.dataset.default;
+	}
+	// Clear description
+	while(D.firstChild !== null) {
+		D.firstChild.remove();
+	}
+	D.classList.remove("visible");
+	Mcl.remove("hasDescription", "visible");
+	// Set new description, if necessary
+	if(desc) {
+		if(desc.constructor === String) {
+			D.append($e("div", {}, desc));
+		} else {
+			D.append(desc.cloneNode(true));
+		}
+		Mcl.add("hasDescription");
+	}
 }
 
 
@@ -768,7 +831,7 @@ export function loadPageNamed(pageName) {
 
 
 // button = this
-export function loadPageFromButton() {
+export function loadPageFromButton(e) {
 	var d = this.dataset,
 		to = d.nextPage;
 	return loadPageNamed(to);
@@ -792,13 +855,19 @@ function getTargetsFromButton(button, padre = button.parentNode, MAIN = $RPG.pag
 	} else if(whichID) {
 		targets = $a(whichID.split(sep).map(w => "#" + w).join(","), MAIN);
 	} else {
-		// Look up chain until we find a statContainer node, or hit the main node
-		while(!padre.classList.contains("statContainer")) {
-			let p = padre.parentNode;
-			if(p === MAIN) {
-				break;
+		if(d.fromOverlay !== undefined) {
+			// Close overlay after a delay, make padre into OVERLAY
+			setTimeout(closeOverlay, 0);
+			padre = $RPG.pages.OVERLAY;
+		} else {
+			// Look up chain until we find a statContainer node, or hit the main node
+			while(!padre.classList.contains("statContainer")) {
+				let p = padre.parentNode;
+				if(p === MAIN) {
+					break;
+				}
+				padre = p;
 			}
-			padre = p;
 		}
 		// Look for all Stats
 		targets = $a("input.Stat,select[data-stat]", padre);
@@ -810,18 +879,29 @@ function getTargetsFromButton(button, padre = button.parentNode, MAIN = $RPG.pag
 // button = this
 // Set stats to the values present on the page
 export function calculateFromPage() {
-	var targets = getTargetsFromButton(this);
+	var targets = getTargetsFromButton(this),
+		cn = this.dataset.calcName,
+		$RPC = $RPG.pages.specialCalculators,
+		CHAR = $RPG.current.character;
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var d = input.dataset,
 			id = d.stat,
-			ss = d.selfSaving,
-			stat = BasicIdObject.getById(id),
-			value = input.value;
+			stat = CHAR.getStat(id),
+			sCalc;
 		if(stat === undefined) {
 			logError(input, "Stat \"" + id + "\" not found (data-stat)");
 			return false;
-		} else if(ss !== "true") {
+		} else if (sCalc = d.specialCalc) {
+			let handler = $RPC[sCalc];
+			if(handler === undefined) {
+				logError(input, "Special Calculator \"" + sCalc + "\" does not exist")
+				return false;
+			}
+			handler(input, stat, d);
+		} else if(d.selfSaving !== "true") {
+			let value = input.value;
+			CHAR.noteBonus(cn, 0, stat, stat.get("value"), value);
 			stat.set("value", value);
 		}
 	});
@@ -831,8 +911,8 @@ export function calculateFromPage() {
 
 // button = this
 export function calculateThenNavigate(e) {
-	calculateFromPage.bind(this).call();
-	loadPageFromButton.bind(this).call();
+	calculateFromPage.call(this, e);
+	loadPageFromButton.call(this, e);
 }
 
 
@@ -841,13 +921,15 @@ export function calculateBundle(e) {
 	var targets = getTargetsFromButton(this),
 		bundles = [],
 		d = this.dataset,
-		x, choices;
+		cn = d.calcName,
+		CHAR = $RPG.current.character;
 	// Calculate values
-	if(calculateFromPage.bind(this).call()) {
+	if(calculateFromPage.call(this, e)) {
+		let choices;
 		// Look at the inputs and selects
 		targets.forEach(function(input) {
 			var id = input.dataset.stat,
-				stat = BasicIdObject.getById(id);
+				stat = CHAR.getStat(id);
 			if(stat === undefined) {
 				// Error message already sent
 				return;
@@ -855,7 +937,7 @@ export function calculateBundle(e) {
 				bundles = bundles.concat(stat.getSelectionValues().map( o => o.node ));
 			}
 		});
-		choices = parseBundledInfo(bundles);
+		choices = parseBundledInfo(bundles, cn);
 		if(choices > 0) {
 			return loadPageNamed(d.calcPage);
 		}
@@ -866,13 +948,21 @@ export function calculateBundle(e) {
 
 // button = this
 export function resetThenNavigate(e) {
+	var method = this.dataset.resetName;
+	$RPG.current.character.undoBonuses(method);
+	//console.log(targets);
+	// Load new page
+	loadPageFromButton.call(this, e);
+}
+// button = this
+export function resetThenNavigateOld(e) {
 	var targets = getTargetsFromButton(this),
 		errors = [];
 	//console.log(targets);
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var id = input.dataset.stat,
-			stat = BasicIdObject.getById(id);
+			stat = $RPG.current.character.getStat(id);
 		if(stat === undefined) {
 			errors.push([input, id]);
 			return logError(input, "Stat \"" + id + "\" not found (data-stat)");
@@ -882,13 +972,15 @@ export function resetThenNavigate(e) {
 		return stat.set("value", stat.get("startingValue"));
 	});
 	// Load new page
-	loadPageFromButton.bind(this).call();
+	loadPageFromButton.call(this, e);
 }
-
+// save process in a Map
+// reset what is asked for
+// hold on to case where some elements added to a Pool were already there, so we should't delete them
 
 // button = this
 export function closeOverlay(e) {
-	var overlay = $i("overlay");
+	var overlay = $RPG.pages.OVERLAY;
 	while(overlay.firstChild !== null) {
 		overlay.firstChild.remove();
 	}
@@ -896,10 +988,10 @@ export function closeOverlay(e) {
 }
 
 
-
+//$RPG.bundles.pagePreloaders handlers should return either FALSE or an ARRAY of HTML objects
 export function bundleChoicesPreloader(page) {
 	var html = page.html.slice(),
-		$RB = $RPG.bundles.pageHandlers;
+		$RB = $RPG.bundles.pagePreloaders;
 	$RPG.bundles.choicesToBeMade.forEach(function(o) {
 		var h = $RB[o.type](o);
 		if(h !== false) {
@@ -918,7 +1010,7 @@ export function bundleChoicesPreloader(page) {
 
 
 export function bundleChoicesFilter(html, unit) {
-	$a(".chooser", html).forEach(function(c) {
+	$a(".basicChooser", html).forEach(function(c) {
 		var ch = [Int.converter(c.dataset.choices)];
 		if(ch > 1) {
 			let i = Array.from($a("input", c)),
@@ -931,13 +1023,15 @@ export function bundleChoicesFilter(html, unit) {
 
 // this = array [integerNumberOfChoices, ...all input objects]
 function maxChooserChoices(e) {
+	// Unselects checkboxes until we're at the max
 	var i = this.slice(),
 		n = i.shift(),
 		selected = i.reduce((acc, x) => acc += (x.checked ? 1 : 0), 0);
-	if(selected > n) {
+	while(selected > n) {
 		i.every(function(x) {
 			if(x.checked) {
 				x.checked = false;
+				selected--;
 				return false;
 			}
 			return true;
@@ -946,13 +1040,13 @@ function maxChooserChoices(e) {
 }
 
 
-
-
 $RPG.ADD("pages", {
 	BasicPageObject: BasicPageObject,
 	pageTemplates: {},
 	bundles: {},
 	handlers: {
+		Title: parsePageAttribute,
+		Description: parseComplexPageAttribute,
 		Block: parseBlock,
 		INPUT: parseInput,
 		"INPUT-HIDDEN": parseInputHidden,
@@ -966,31 +1060,37 @@ $RPG.ADD("pages", {
 	buttonTypes: {
 		navigation: {
 			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage"],
+			datasetProps: ["nextPage", "fromOverlay"],
 			defaultText: "Next",
 			listenFunc: loadPageFromButton
 		},
 		calculation: {
-			mandatoryProps: [],
-			datasetProps: [["whichClass", "whichId", "separator", "toCalc"]],
+			mandatoryProps: ["calcName"],
+			datasetProps: [["whichClass", "whichId", "separator", "toCalc", "calcName"]],
 			defaultText: "Calculate",
 			listenFunc: calculateFromPage
 		},
 		calcNav: {
-			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
+			mandatoryProps: ["nextPage", "calcName"],
+			datasetProps: ["nextPage", "calcName", "whichClass", "whichId", "separator", "haltable"],
 			defaultText: "Save and Continue",
 			listenFunc: calculateThenNavigate
 		},
 		calcBundle: {
-			mandatoryProps: ["calcPage", "noCalc"],
-			datasetProps: ["calcPage", "noCalc", "whichClass", "whichId", "separator", "haltable"],
+			mandatoryProps: ["calcPage", "noCalc", "calcName"],
+			datasetProps: ["calcPage", "noCalc", "calcName", "whichClass", "whichId", "separator", "haltable"],
 			defaultText: "Save and Continue",
 			listenFunc: calculateBundle
 		},
+		calcNavFromOverlay: {
+			mandatoryProps: ["calcPage", "calcName"],
+			datasetProps: ["calcPage", "calcName", "whichClass", "whichId", "separator", "haltable"],
+			defaultText: "Save and Continue",
+			listenFunc: calculateFromOverlay
+		},
 		resetNavigation: {
-			mandatoryProps: ["nextPage"],
-			datasetProps: ["nextPage", "whichClass", "whichId", "separator", "haltable"],
+			mandatoryProps: ["nextPage", "resetName"],
+			datasetProps: ["nextPage", "resetName", "whichClass", "whichId", "separator", "haltable"],
 			defaultText: "Go Back",
 			listenFunc: resetThenNavigate
 		},
@@ -1006,6 +1106,12 @@ $RPG.ADD("pages", {
 			defaultText: "Close",
 			listenFunc: closeOverlay
 		}
+	},
+	specialCalculators: {
+		bonusChoiceInput: calcBonusChoiceInput,
+		bonusChoiceSelect: calcBonusChoiceSelect,
+		poolBonusChoiceInput: calcPoolBonusChoiceInput,
+		poolBonusChoiceSelect: calcPoolBonusChoiceSelect
 	},
 	bundleFilters: {},
 	bundleItemFilters: {},
@@ -1025,3 +1131,140 @@ $RPG.ADD("pages", {
 		],
 	 }
 });
+
+
+function calcBonusChoiceInput(chooser, cn) {
+		var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		c = 0,
+		value = d.value,
+		type = d.type || "",
+		note = d.note || "";
+	// Inputs should be checkboxes or radio buttons
+	// Each will have its own stat as its value
+	Array.from($a("input", chooser)).every(function(i) {
+		var id, stat;
+		if(c >= choices) {
+			return false;
+		}
+		id = i.dataset.stat;
+		stat = CHAR.getStat(id);
+		if(stat === undefined) {
+			logError(i, "Stat \"" + id + "\" not found (data-stat)");
+		} else if (i.checked) {
+			c++;
+			stat.addBonus("archetype chooser", type, value, note);
+			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+		}
+		return true;
+	});
+}
+
+function calcBonusChoiceSelect(chooser, cn) {
+		var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		c = 0,
+		value = d.value,
+		type = d.type || "",
+		note = d.note || "";
+	// Only one selection per select
+	// The chosen option will have its own stat as its value
+	Array.from($a("select", chooser)).every(function(i) {
+		var stat;
+		if(c >= choices) {
+			return false;
+		}
+		stat = CHAR.getStat(i.value);
+		if(stat === undefined) {
+			logError(i, "Stat \"" + i.value + "\" not found (data-stat)");
+		} else {
+			c++;
+			stat.addBonus("archetype chooser", type, value, note);
+			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+		}
+		return true;
+	});
+}
+
+function calcPoolBonusChoiceInput(chooser, cn) {
+	// Container will have no. of choices and the Pool object
+	var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		values = [],
+		pool = CHAR.getStat(d.pool);
+	if(pool === undefined) {
+		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
+		return false;
+	}
+	// Inputs will be checkboxes or radio buttons
+	// They may have titles in the dataset
+	Array.from($a("input", chooser)).every(function(i) {
+		if(values.length >= choices) {
+			return false;
+		}
+		if (i.checked) {
+			let v = i.value;
+			values.push([i.dataset.title || v, v]);
+		}
+		return true;
+	});
+}
+
+function calcPoolBonusChoiceSelect(chooser, cn) {
+	// Container will have no. of choices and the Pool object
+	var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		values = [],
+		pool = CHAR.getStat(d.pool);
+	if(pool === undefined) {
+		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
+		return false;
+	}
+	// Selects may have titles in its own dataset
+	// Child options can have their own titles to override them
+	Array.from($a("select", chooser)).every(function(i) {
+		var title, v, opts;
+		if(values.length >= choices) {
+			return false;
+		}
+		title = i.dataset.title;
+		Array.from(i.selectedOptions).every(function(sel) {
+			var v = sel.value,
+				t = sel.textContent.trim() || title || v;
+			values.push([t, v]);
+			return (values.length < choices);
+		});
+		return true;
+	});
+	values.forEach(function(value) {
+		var [id, v] = value;
+		pool.addItem(id, v, false);
+		CHAR.noteBonus(cn, Pool, pool, id, v);
+	});
+}
+
+// button === this
+function calculateFromOverlay(e) {
+	var cn = this.dataset.calcName,
+		OV = $RPG.pages.OVERLAY,
+		choosers = $a(".chooser", OV),
+		$RPC = $RPG.pages.specialCalculators;
+	// Look at each chooser
+	choosers.forEach(function(chooser) {
+		var c = chooser.dataset.calculator,
+			handler;
+		if(c === undefined) {
+			return logError(chooser, "Overlay element .chooser block missing required \"calculator\" parameter");
+		} else if ((handler = $RPC[c]) === undefined) {
+			return logError(chooser, "Cannot find a calculator named \"" + c + "\"");
+		}
+		handler(chooser, cn);
+	});
+	closeOverlay();
+	this.fromOverlay = "true";
+	loadPageFromButton.call(this, e);
+}

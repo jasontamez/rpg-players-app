@@ -15,13 +15,15 @@ var okToDeload = false,
 
 // Set up global variable
 $RPG.ADD("pages", "data", data);
-$RPG.ADD("pages", "rawBundles", BUNDLES);
+$RPG.ADD("bundles", "raw", BUNDLES);
 $RPG.ADD("pages", "MAIN", MAIN);
 $RPG.ADD("pages", "OVERLAY", $i("overlay"));
 
 // Character/player creation
 var PO = new PlayerObject("id"),
 	Char = PO.makeCharacter("pf01");
+$RPG.ADD("current", "player", PO);
+$RPG.ADD("current", "character", Char);
 
 // Show the loading screen
 function showLoadingScreen() {
@@ -349,7 +351,8 @@ function parseBundle(node, category) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
 		theseKids = Array.from(node.children),
-		info, item;
+		info, item,
+    BUNDLES = $RPG.bundles.raw;
 	if(category === undefined) {
 		category = atts.category;
 		delete atts.category;

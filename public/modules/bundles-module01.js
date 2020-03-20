@@ -2,26 +2,26 @@
 import { $a, $ec, $e, $ea, $listen } from "./dollar-sign-module.js";
 // Import parsing and logging
 import { parseObjectToArray, parseAttributesToObject, logErrorNode as logError } from "./parsing-logging.js";
-import { BasicIdObject, MultiStat, Pool, Formula, Int } from "./stats-module01.js";
+import { MultiStat, Pool, Formula, Int } from "./stats-module01.js";
 
 var $RPG = window["$RPG"];
 
 
 // parseBundlesInfo(arrayNodes) => arrayObjects
 // Sets $RPG.bundles.previousBonuses with any applied bonuses, then returns choice objects
-export function parseBundledInfo(nodelist) {
+export function parseBundledInfo(nodelist, method = "parseBundles") {
 	// Parse nodes
 	var bonuses = $RPG.bundles.previousBonuses, choices = [];
 	nodelist.forEach(function(node) {
-		var b = [], c = [];
-		parseBundleNode(node).forEach(function(o) {
+		var b = [];
+		parseBundleNode(method, node).forEach(function(o) {
 			if(o.isChoice) {
 				choices.push(o);
 			} else {
-				b.push(o);
+				b = b.concat(o);
 			}
 		});
-		bonuses.set(node.id, bonuses);
+		bonuses.set(node.id, b);
 	});
 	$RPG.bundles.previousBonuses = bonuses;
 	$RPG.bundles.choicesToBeMade = choices;
@@ -33,7 +33,7 @@ export function parseBundledInfo(nodelist) {
 // Goes through children, applies bonuses found, returns any objects given
 // Non-object return values are ignored
 // Logs error if a child node doesn't have a registerd handler
-export function parseBundleNode(currentNode, nodes = [...currentNode.children]) {
+export function parseBundleNode(method, currentNode, nodes = [...currentNode.children]) {
 	var $RBT = $RPG.bundles.TagHandlers,
 		output = [];
 	// Get kids of the parent
@@ -44,7 +44,7 @@ export function parseBundleNode(currentNode, nodes = [...currentNode.children]) 
 			handler = $RBT[nombre];
 		if(handler !== undefined) {
 			// This node has a special handler: use it
-			let result = handler(node, currentNode);
+			let result = handler(node, currentNode, method);
 			// Ignore result unless it has special information
 			if(result instanceof Object) {
 				output.push(result);
@@ -67,7 +67,7 @@ export function parseBundleNode(currentNode, nodes = [...currentNode.children]) 
 //  o.stat = objectStat
 //  o.bonus = array of arguments for addBonus or registerBonusTag
 //  o.isChoice = false
-export function parseBonus(node, parentNode) {
+export function parseBonus(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		formula = atts.formula,
 		fromID = atts.fromId,
@@ -76,17 +76,20 @@ export function parseBonus(node, parentNode) {
 		value = atts.value,
 		multi = atts.multi,
 		nombre = parentNode.id,
+		CHAR = $RPG.current.character,
 		stat, bonus;
 	if(toStat === undefined) {
 		logError(node, "BONUS: missing required \"to\" parameter");
 		return false;
-	} else if ((stat = BasicIdObject.getById(toStat)) === undefined) {
+	} else if ((stat = CHAR.getStat(toStat)) === undefined) {
+	//} else if ((stat = BasicIdObject.getById(toStat)) === undefined) {
 		if(multi === undefined) {
 			logError(node, "BONUS: Stat \"" + toStat + "\" not found");
 			return false;
 		}
 		let sub = atts.sub;
-		stat = BasicIdObject.getById(multi);
+		stat = CHAR.getMultiStat(multi);
+		//stat = MultiStat.getById(multi);
 		if(stat === undefined || !(stat instanceof MultiStat)) {
 			logError(node, "BONUS: Stat \"" + toStat + "\" not found and \"" + multi + "\" not found, or not a MultiStat");
 			return false;
@@ -94,7 +97,7 @@ export function parseBonus(node, parentNode) {
 			logError(node, "BONUS: missing \"sub\" parameter for MultiStat \"" + multi + "\"");
 			return false;
 		}
-		stat = stat.makeStatBasic(sub);
+		stat = stat.makeStatBasic(sub, atts.title, atts.description, method);
 	}
 	if(fromID === undefined && formula === undefined && value === undefined) {
 		logError(node, "BONUS: missing required \"fromId\", \"formula\" or \"value\" parameter");
@@ -109,6 +112,7 @@ export function parseBonus(node, parentNode) {
 		}
 		bonus = [nombre, atts.type, f, atts.note];
 		stat.addBonus(...bonus);
+		CHAR.noteBonus(method, nombre, stat, atts.type, atts.note);
 		return {
 			type: "Bonus",
 			stat: stat,
@@ -123,8 +127,10 @@ export function parseBonus(node, parentNode) {
 		if (nombre === undefined) {
 			nombre = "Bonus via " + fromID + "." + att;
 		}
-		bonus = [nombre, fromID, att, parseObjectToArray(atts)];
+		let a = parseObjectToArray(atts);
+		bonus = [nombre, fromID, att, a];
 		stat.registerBonusTag(...bonus);
+		CHAR.noteBonus(method, nombre, stat, a.type, a.note);
 		return {
 			type: "BonusTag",
 			stat: stat,
@@ -137,6 +143,7 @@ export function parseBonus(node, parentNode) {
 	}
 	bonus = [nombre, atts.type, value, atts.note];
 	stat.addBonus(...bonus);
+	CHAR.noteBonus(method, nombre, stat, atts.type, atts.note);
 	return {
 		type: "Bonus",
 		stat: stat,
@@ -154,7 +161,7 @@ export function parseBonus(node, parentNode) {
 //  o.stat = objectStat
 //  o.note = stringNote
 //  o.isChoice = false
-export function parseNotation(node, parentNode) {
+export function parseNotation(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		note = atts.value,
 		toStat = atts.to,
@@ -162,7 +169,8 @@ export function parseNotation(node, parentNode) {
 	if (toStat === undefined) {
 		logError(node, "NOTATION: missing required \"to\" parameter");
 		return false;
-	} else if ((stat = BasicIdObject.getById(toStat)) === undefined) {
+	} else if ((stat = $RPG.current.character.getStat(toStat)) === undefined) {
+	//} else if ((stat = BasicIdObject.getById(toStat)) === undefined) {
 		logError(node, "NOTATION: Stat \"" + toStat + "\" not found");
 		return false;
 	} else if (note === undefined) {
@@ -174,6 +182,7 @@ export function parseNotation(node, parentNode) {
 		return false;
 	}
 	stat.addNotation(note);
+	$RPG.current.character.noteBonus(method, null, stat, null, note);
 	return {
 		type: "Notation",
 		stat: stat,
@@ -194,7 +203,7 @@ export function parseNotation(node, parentNode) {
 //  o.value = string representing the bonus to be awarded to chosen option(s)
 //  o.choices = string representing the number of options that need to be selected
 //  o.isChoice = true
-export function parseBonusChoice(node, parentNode) {
+export function parseBonusChoice(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		value = atts.value,
 		choices = atts.choices,
@@ -208,7 +217,8 @@ export function parseBonusChoice(node, parentNode) {
 		return false;
 	}
 	values = toStats.split(atts.separator || ",").some(function(v) {
-		let stat = BasicIdObject.getById(v);
+		let stat = $RPG.current.character.getStat(v);
+		//let stat = BasicIdObject.getById(v);
 		if(stat === undefined) {
 			logError(node, "BONUSCHOICE: cannot find a Stat named \"" + v + "\"")
 			return false;
@@ -228,6 +238,7 @@ export function parseBonusChoice(node, parentNode) {
 		title: title,
 		value: value,
 		choices: choices,
+		method: method,
 		isChoice: true
 	};
 }
@@ -244,7 +255,8 @@ export function parseBonusChoice(node, parentNode) {
 //  o.pool = objectPool
 //  o.values = array of values, each an array of "title" and "value"
 //  o.isChoice = false
-export function parsePoolBonus(node, parentNode) {
+//
+export function parsePoolBonus(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		value = atts.value,
 		toPool = atts.to,
@@ -253,11 +265,13 @@ export function parsePoolBonus(node, parentNode) {
 	if (toPool === undefined) {
 		logError(node, "POOLBONUS: missing required \"to\" parameter");
 		return false;
-	} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
+	} else if ((pool = $RPG.current.character.getStat(toPool)) === undefined || !(pool instanceof Pool)) {
+	//} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
 		logError(node, "POOLBONUS: \"" + toPool + "\" is not the name of a stat, or else isn't a Pool");
 		return false;
 	} else if (fromID !== undefined) {
-		let otherPool = BasicIdObject.getById(fromID);
+		let otherPool = $RPG.current.character.getStat(fromID);
+		//let otherPool = BasicIdObject.getById(fromID);
 		if(otherPool === undefined || !(otherPool instanceof Pool)) {
 			logError(node, "POOLBONUS: \"" + fromID + "\" is not the name of a stat, or else isn't a Pool");
 			return false;
@@ -291,7 +305,10 @@ export function parsePoolBonus(node, parentNode) {
 		return false;
 	}
 	values.forEach(function(vs) {
-		pool.addItem(vs[0] || vs[1], vs[1], false);
+		var id = vs[0] || vs[1],
+			v = vs[1];
+		pool.addItem(id, v, false);
+		$RPG.current.character.noteBonus(method, Pool, pool, id, v);
 	});
 	return {
 		type: "PoolBonus",
@@ -316,7 +333,7 @@ export function parsePoolBonus(node, parentNode) {
 //  o.values = array of possible values, each an array of "title" and "value"
 //  o.choices = undefined || string representing the number of options that need to be selected
 //  o.isChoice = true
-export function parsePoolBonusChoice(node, parentNode) {
+export function parsePoolBonusChoice(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		value = atts.value,
 		toPool = atts.to,
@@ -326,7 +343,8 @@ export function parsePoolBonusChoice(node, parentNode) {
 	if (toPool === undefined || choices === undefined) {
 		logError(node, "POOLBONUSCHOICE: missing required \"to\" and/or \"choices\" parameter");
 		return false;
-	} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
+	} else if ((pool = $RPG.current.character.getStat(toPool)) === undefined || !(pool instanceof Pool)) {
+	//} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
 		logError(node, "POOLBONUSCHOICE: \"" + toPool + "\" is not the name of a stat, or else isn't a Pool");
 		return false;
 	} else if (value === undefined) {
@@ -362,6 +380,7 @@ export function parsePoolBonusChoice(node, parentNode) {
 		title: title,
 		values: values,
 		choices: choices,
+		method: method,
 		isChoice: true
 	};
 }
@@ -375,15 +394,17 @@ export function parsePoolBonusChoice(node, parentNode) {
 //  o.pool = objectPool
 //  o.values = array of stringTitles
 //  o.isChoice = false
-export function parsePoolBonusSelect(node, parentNode) {
+export function parsePoolBonusSelect(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		value = atts.value,
 		toPool = atts.to,
-		pool, values;
+		map = new Map(),
+		values, pool;
 	if (toPool === undefined) {
 		logError(node, "POOLBONUSSELECT: missing required \"to\" parameter");
 		return false;
-	} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
+	} else if ((pool = $RPG.current.character.getStat(toPool)) === undefined || !(pool instanceof Pool)) {
+	//} else if ((pool = BasicIdObject.getById(toPool)) === undefined || !(pool instanceof Pool)) {
 		logError(node, "POOLBONUSSELECT: \"" + toPool + "\" is not the name of a stat, or else isn't a Pool");
 		return false;
 	} else if (value === undefined) {
@@ -397,15 +418,20 @@ export function parsePoolBonusSelect(node, parentNode) {
 		logError(node, "POOLBONUSSELECT: No valid values found");
 		return false;
 	} else if (!values.every(function(item) {
-		if(!pool.hasItem(item)) {
+		var v = pool.getItem(item);
+		if(v === undefined) {
 			logError(node, "POOLBONUSSELECT ITEM: Could not find an item titled \"" + item + "\"");
 			return false;
 		}
+		map.set(item, v.selected);
 		return true;
 	})) {
 		return false;
 	}
-	pool.addSelection(...values);
+	map.forEach(function(sel, val) {
+		$RPG.current.character.noteBonus(method, true, pool, val, sel);
+		pool.addSelection(val);
+	});
 	return {
 		type: "PoolBonusSelect",
 		pool: pool,
@@ -415,17 +441,18 @@ export function parsePoolBonusSelect(node, parentNode) {
 }
 
 
-
+// Returns FALSE or an ARRAY of HTML objects
 export function getBonusChoiceHTML(o) {
 	var stats = o.stats,
 		title = o.title,
 		p = $e("p", title),
 		value = Int.converter(o.value) || 1,
 		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "bonusChoice"]),
+		wrapper = $ec("div", ["chooser", "basicChooser", "bonusChoice"]),
 		d = wrapper.dataset;
 	d.value = value;
 	d.choices = choices;
+	d.method = o.method;
 	wrapper.append(p);
 	if(choices === 1) {
 		// Use a simple <select> for single-option choices
@@ -452,17 +479,18 @@ export function getBonusChoiceHTML(o) {
 }
 
 
-
+// Returns FALSE or an ARRAY of HTML objects
 export function getPoolBonusChoiceHTML(o) {
 	var values = o.values,
 		pool = o.pool,
 		title = o.title,
 		p = $e("p", title),
 		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "poolBonusChoice"]),
+		wrapper = $ec("div", ["chooser", "basicChooser", "poolBonusChoice"]),
 		d = wrapper.dataset;
 	d.pool = pool.id;
 	d.choices = choices;
+	d.method = o.method;
 	wrapper.append(p);
 	if(choices === 1) {
 		// Use a simple <select> for single-option choices
@@ -479,6 +507,7 @@ export function getPoolBonusChoiceHTML(o) {
 			var [title, value] = v,
 				label = $e("label", title),
 				box = $ea("input", {value: value, type: "checkbox"});
+			box.dataset.title = title;
 			label.prepend(box);
 			wrapper.append(label);
 		});
@@ -505,7 +534,7 @@ $RPG.ADD("bundles", {
 		PoolBonusSelect: parsePoolBonusSelect,
 		PoolBonusChoice: parsePoolBonusChoice
 	},
-	pageHandlers: {
+	pagePreloaders: {
 		BonusChoice: getBonusChoiceHTML,
 		PoolBonusChoice: getPoolBonusChoiceHTML
 	},

@@ -163,7 +163,8 @@ export class StatReference extends SelfReference {
 		this.property = property;
 	}
 	grabValue(context) {
-		var reference = BasicIdObject.getById(this.reference);
+		//var reference = BasicIdObject.getById(this.reference);
+		var reference = $RPG.current.character.getStat(this.reference);
 		//console.log(["BasicStat REFERENCE", context]);
 		if(reference === undefined) {
 			logError(this, "ERROR: unable to find BasicStat named \"" + this.reference + "\" when fetching property");
@@ -194,20 +195,27 @@ export class MultiStat extends BasicIdObject {
 		i = this.atts;
 		i.has("idPre") || i.set("idPre", "_");
 		i.has("idPost") || i.set("idPost", "");
-		this.inheritors = [];
+		this.inheritors = new Map();
 		this.inhCount = 1;
 		this.type = type;
 		MultiStat.allIDs.set(id, this);
 	}
-	makeStatFromNode(node, atts) {
+	makeStatFromNode(node, atts, method = "parseStats") {
 		var n = this.inhCount++,
 			id = this.get("idPre") + n.toString() + this.get("idPost"),
 			newStat;
 		newStat = new this.type(id, this, node, atts);
-		this.inheritors.push(newStat);
+		$RPG.current.character.addStat(method, id, newStat);
+		this.inheritors.set(id, newStat);
 		return newStat;
 	}
-	makeStatBasic(name, title, description) {
+	hasChild(n) {
+		var pre = this.get("idPre"),
+			post = this.get("idPost"),
+			id = pre + n.toString() + post;
+		return this.inheritors.has(id);
+	}
+	makeStatBasic(nombre, title, description, method = "parseStats") {
 		var n = this.inhCount++,
 			pre = this.get("idPre"),
 			post = this.get("idPost"),
@@ -217,15 +225,16 @@ export class MultiStat extends BasicIdObject {
 			newStat,
 			decrement = false;
 		// Get id
-		if(name) {
-			id = pre + name.toString() + post;
+		if(nombre) {
+			id = pre + nombre.toString() + post;
 		} else {
 			id = pre + n.toString() + post;
 			// flag in case we need to revert
 			decrement = true;
 		}
 		// Make sure this isn't a duplicate
-		if(BasicIdObject.getById(id) !== undefined) {
+		if($RPG.current.character.getStat(id) !== undefined) {
+		//if(BasicIdObject.getById(id) !== undefined) {
 			// It is
 			if(decrement) {
 				this.inhCount--;
@@ -287,7 +296,8 @@ export class MultiStat extends BasicIdObject {
 		}
 		// Make Stat
 		newStat = new this.type(id, this, undefined, atts);
-		this.inheritors.push(newStat);
+		$RPG.current.character.addStat(method, id, newStat);
+		this.inheritors.set(id, newStat);
 		return newStat;
 	}
 	static getById(id) {
@@ -618,7 +628,7 @@ export class IntBonusable extends Int {
 		// Get typeGroup = everything within that notation with the same type
 		typeGroup = noteGroup.get(type) || new Map();
 		// Save this new bonus to typeGroup
-		typeGroup.set(nombre, bonus);
+		typeGroup.set(nombre, this.type.converter(bonus));
 		// Save the altered typeGroup to noteGroup
 		noteGroup.set(type, typeGroup);
 		// Save noteGroup to the stat
@@ -711,17 +721,17 @@ export class TF extends IntBonusable {
 		}
 		return this.type.converter(base);
 	}
-	registerBonusTag(nombre, id, att, atts) {
-		var tag,
-			type = atts.type;
-		if(id === "this") {
-			tag = SelfReference.getReference(att, undefined, undefined, []);
-		} else {
-			tag = StatReference.getReference(id, att, undefined, undefined, []);
-		}
-		this.addBonus(nombre, type, tag);
-		return nombre;
-	}
+	//registerBonusTag(nombre, id, att, atts) {
+	//	var tag,
+	//		type = atts.type;
+	//	if(id === "this") {
+	//		tag = SelfReference.getReference(att, undefined, undefined, []);
+	//	} else {
+	//		tag = StatReference.getReference(id, att, undefined, undefined, []);
+	//	}
+	//	this.addBonus(nombre, type, tag);
+	//	return nombre;
+	//}
 	addBonus(nombre, type, bonus) {
 		this.bonuses.every(function(pair, i) {
 			var [n, v] = pair;
@@ -1657,7 +1667,7 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 export function parseStat(node, parentNode, parentTag) {
 	var atts = parseIdAndAttributesToArray(node),
 		id = atts.shift(), tag, type;
-	if(atts.slice().reverse().every(function(pair) {
+	if(atts.slice().every(function(pair) {
 		var [n, v] = pair;
 		if(n === "type") {
 			type = v;
@@ -1672,6 +1682,7 @@ export function parseStat(node, parentNode, parentTag) {
 	}
 	type = $RPG.stats.getTypeObject(type, Str);
 	tag = new type(id, parentTag, node, atts);
+	$RPG.current.character.addStat(id, tag);
 	parseStatNodes(node, tag);
 }
 
@@ -1697,6 +1708,7 @@ export function parseMultiStat(node, parentNode, parentTag) {
 	}
 	type = $RPG.stats.getTypeObject(type, Str);
 	tag = new MultiStat(id, parentTag, node, type, atts);
+	$RPG.current.character.addStat(id, tag);
 	parseStatNodes(node, tag);
 }
 
@@ -1726,6 +1738,7 @@ export function parseGroup(node, parentNode, parentTag) {
 	var atts = parseIdAndAttributesToArray(node),
 		id = atts.shift(),
 		tag = new BasicIdObject(id, parentTag, node, atts);
+	$RPG.current.character.addStat(id, tag);
 	parseStatNodes(node, tag);
 }
 
@@ -1805,6 +1818,7 @@ export function parseBonus(node, parentNode, parentTag) {
 	} else {
 		delete atts.id;
 	}
+	$RPG.current.character.noteBonus("parseStats", nombre, parentTag, atts.type, atts.note);
 	if (formula !== undefined) {
 		//addBonus(nombre, type, bonus, notation = undefined)
 		let f = Formula.getName(formula);
@@ -1832,6 +1846,7 @@ export function parseNotation(node, parentNode, parentTag) {
 	if(!note) {
 		return logError(node, "NOTATION missing \"value\" parameter or inner text content");
 	}
+	$RPG.current.character.noteBonus("parseStats", null, parentTag, null, note);
 	parentTag.addNotation(note);
 }
 
@@ -1858,6 +1873,7 @@ export function parsePool(node, parentNode, parentTag) {
 		type = $RPG.stats.getTypeObject(type, Str);
 	}
 	tag = new Pool(id, parentTag, node, type, parseObjectToArray(atts));
+	$RPG.current.character.addStat(id, tag);
 	parseStatNodes(node, tag);
 }
 
@@ -1877,6 +1893,7 @@ function parsePoolItem(node, parentNode, parentTag) {
 		title = value;
 	}
 	selected = atts.selected || false;
+	$RPG.current.character.noteBonus("parseStats", Pool, parentTag, title, value);
 	parentTag.addItem(title, value, selected);
 }
 
