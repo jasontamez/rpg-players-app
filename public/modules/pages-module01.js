@@ -1211,6 +1211,11 @@ function calcPoolBonusChoiceInput(chooser, cn) {
 		}
 		return true;
 	});
+	values.forEach(function(value) {
+		var [id, v] = value;
+		pool.addItem(id, v, false);
+		CHAR.noteBonus(cn, Pool, pool, id, v);
+	});
 }
 
 function calcPoolBonusChoiceSelect(chooser, cn) {
@@ -1227,7 +1232,7 @@ function calcPoolBonusChoiceSelect(chooser, cn) {
 	// Selects may have titles in its own dataset
 	// Child options can have their own titles to override them
 	Array.from($a("select", chooser)).every(function(i) {
-		var title, v, opts;
+		var title;
 		if(values.length >= choices) {
 			return false;
 		}
