@@ -617,6 +617,7 @@ export function getBonusChoiceHTML(o) {
 			sel.append(opt);
 		});
 		wrapper.append(sel);
+		d.calculator = "calcBonusChoiceSelect";
 	} else {
 		// Use checkboxes for multi-option choices
 		stats.forEach(function(s) {
@@ -627,6 +628,7 @@ export function getBonusChoiceHTML(o) {
 			label.prepend(box);
 			wrapper.append(label);
 		});
+		d.calculator = "calcBonusChoiceInput";
 	}
 	return wrapper;
 }
