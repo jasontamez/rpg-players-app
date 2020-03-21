@@ -1230,8 +1230,8 @@ $RPG.ADD("pages", {
 			listenFunc: calculateBundle
 		},
 		calcNavFromOverlay: {
-			mandatoryProps: ["calcPage", "calcName"],
-			datasetProps: ["calcPage", "calcName", "whichClass", "whichId", "separator", "haltable"],
+			mandatoryProps: ["nextPage", "calcName"],
+			datasetProps: ["nextPage", "calcName", "whichClass", "whichId", "separator", "haltable"],
 			defaultText: "Save and Continue",
 			listenFunc: calculateFromOverlay
 		},
