@@ -909,6 +909,29 @@ export function calculateFromPage() {
 }
 
 
+//button = this
+export function calculateFromOverlay(e) {
+	var cn = this.dataset.calcName,
+		OV = $RPG.pages.OVERLAY,
+		choosers = $a(".chooser", OV),
+		$RPC = $RPG.pages.specialCalculators;
+	// Look at each chooser
+	choosers.forEach(function(chooser) {
+		var c = chooser.dataset.calculator,
+			handler;
+		if(c === undefined) {
+			return logError(chooser, "Overlay element .chooser block missing required \"calculator\" parameter");
+		} else if ((handler = $RPC[c]) === undefined) {
+			return logError(chooser, "Cannot find a calculator named \"" + c + "\"");
+		}
+		handler(chooser, cn);
+	});
+	closeOverlay();
+	this.dataset.fromOverlay = "true";
+	loadPageFromButton.call(this, e);
+}
+
+
 // button = this
 export function calculateThenNavigate(e) {
 	calculateFromPage.call(this, e);
@@ -988,6 +1011,130 @@ export function closeOverlay(e) {
 }
 
 
+function calcBonusChoiceInput(chooser, cn) {
+		var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		c = 0,
+		value = d.value,
+		type = d.type || "",
+		note = d.note || "";
+	// Inputs should be checkboxes or radio buttons
+	// Each will have its own stat as its value
+	Array.from($a("input", chooser)).every(function(i) {
+		var id, stat;
+		if(c >= choices) {
+			return false;
+		}
+		id = i.dataset.stat;
+		stat = CHAR.getStat(id);
+		if(stat === undefined) {
+			logError(i, "Stat \"" + id + "\" not found (data-stat)");
+		} else if (i.checked) {
+			c++;
+			stat.addBonus("archetype chooser", type, value, note);
+			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+		}
+		return true;
+	});
+}
+
+
+function calcBonusChoiceSelect(chooser, cn) {
+		var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		c = 0,
+		value = d.value,
+		type = d.type || "",
+		note = d.note || "";
+	// Only one selection per select
+	// The chosen option will have its own stat as its value
+	Array.from($a("select", chooser)).every(function(i) {
+		var stat;
+		if(c >= choices) {
+			return false;
+		}
+		stat = CHAR.getStat(i.value);
+		if(stat === undefined) {
+			logError(i, "Stat \"" + i.value + "\" not found (data-stat)");
+		} else {
+			c++;
+			stat.addBonus("archetype chooser", type, value, note);
+			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+		}
+		return true;
+	});
+}
+
+
+function calcPoolBonusChoiceInput(chooser, cn) {
+	// Container will have no. of choices and the Pool object
+	var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		values = [],
+		pool = CHAR.getStat(d.pool);
+	if(pool === undefined) {
+		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
+		return false;
+	}
+	// Inputs will be checkboxes or radio buttons
+	// They may have titles in the dataset
+	Array.from($a("input", chooser)).every(function(i) {
+		if(values.length >= choices) {
+			return false;
+		}
+		if (i.checked) {
+			let v = i.value;
+			values.push([i.dataset.title || v, v]);
+		}
+		return true;
+	});
+	values.forEach(function(value) {
+		var [id, v] = value;
+		pool.addItem(id, v, false);
+		CHAR.noteBonus(cn, Pool, pool, id, v);
+	});
+}
+
+
+function calcPoolBonusChoiceSelect(chooser, cn) {
+	// Container will have no. of choices and the Pool object
+	var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		values = [],
+		pool = CHAR.getStat(d.pool);
+	if(pool === undefined) {
+		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
+		return false;
+	}
+	// Selects may have titles in its own dataset
+	// Child options can have their own titles to override them
+	Array.from($a("select", chooser)).every(function(i) {
+		var title;
+		if(values.length >= choices) {
+			return false;
+		}
+		title = i.dataset.title;
+		Array.from(i.selectedOptions).every(function(sel) {
+			var v = sel.value,
+				t = sel.textContent.trim() || title || v;
+			values.push([t, v]);
+			return (values.length < choices);
+		});
+		return true;
+	});
+	values.forEach(function(value) {
+		var [id, v] = value;
+		pool.addItem(id, v, false);
+		CHAR.noteBonus(cn, Pool, pool, id, v);
+	});
+}
+
+
+// button === this
 //$RPG.bundles.pagePreloaders handlers should return either FALSE or an ARRAY of HTML objects
 export function bundleChoicesPreloader(page) {
 	var html = page.html.slice(),
@@ -1131,145 +1278,3 @@ $RPG.ADD("pages", {
 		],
 	 }
 });
-
-
-function calcBonusChoiceInput(chooser, cn) {
-		var d = chooser.dataset,
-		choices = Int.converter(d.choices) || 1,
-		CHAR = $RPG.current.character,
-		c = 0,
-		value = d.value,
-		type = d.type || "",
-		note = d.note || "";
-	// Inputs should be checkboxes or radio buttons
-	// Each will have its own stat as its value
-	Array.from($a("input", chooser)).every(function(i) {
-		var id, stat;
-		if(c >= choices) {
-			return false;
-		}
-		id = i.dataset.stat;
-		stat = CHAR.getStat(id);
-		if(stat === undefined) {
-			logError(i, "Stat \"" + id + "\" not found (data-stat)");
-		} else if (i.checked) {
-			c++;
-			stat.addBonus("archetype chooser", type, value, note);
-			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
-		}
-		return true;
-	});
-}
-
-function calcBonusChoiceSelect(chooser, cn) {
-		var d = chooser.dataset,
-		choices = Int.converter(d.choices) || 1,
-		CHAR = $RPG.current.character,
-		c = 0,
-		value = d.value,
-		type = d.type || "",
-		note = d.note || "";
-	// Only one selection per select
-	// The chosen option will have its own stat as its value
-	Array.from($a("select", chooser)).every(function(i) {
-		var stat;
-		if(c >= choices) {
-			return false;
-		}
-		stat = CHAR.getStat(i.value);
-		if(stat === undefined) {
-			logError(i, "Stat \"" + i.value + "\" not found (data-stat)");
-		} else {
-			c++;
-			stat.addBonus("archetype chooser", type, value, note);
-			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
-		}
-		return true;
-	});
-}
-
-function calcPoolBonusChoiceInput(chooser, cn) {
-	// Container will have no. of choices and the Pool object
-	var d = chooser.dataset,
-		choices = Int.converter(d.choices) || 1,
-		CHAR = $RPG.current.character,
-		values = [],
-		pool = CHAR.getStat(d.pool);
-	if(pool === undefined) {
-		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
-		return false;
-	}
-	// Inputs will be checkboxes or radio buttons
-	// They may have titles in the dataset
-	Array.from($a("input", chooser)).every(function(i) {
-		if(values.length >= choices) {
-			return false;
-		}
-		if (i.checked) {
-			let v = i.value;
-			values.push([i.dataset.title || v, v]);
-		}
-		return true;
-	});
-	values.forEach(function(value) {
-		var [id, v] = value;
-		pool.addItem(id, v, false);
-		CHAR.noteBonus(cn, Pool, pool, id, v);
-	});
-}
-
-function calcPoolBonusChoiceSelect(chooser, cn) {
-	// Container will have no. of choices and the Pool object
-	var d = chooser.dataset,
-		choices = Int.converter(d.choices) || 1,
-		CHAR = $RPG.current.character,
-		values = [],
-		pool = CHAR.getStat(d.pool);
-	if(pool === undefined) {
-		logError(chooser, "Stat \"" + d.pool + "\" not found (data-stat)");
-		return false;
-	}
-	// Selects may have titles in its own dataset
-	// Child options can have their own titles to override them
-	Array.from($a("select", chooser)).every(function(i) {
-		var title;
-		if(values.length >= choices) {
-			return false;
-		}
-		title = i.dataset.title;
-		Array.from(i.selectedOptions).every(function(sel) {
-			var v = sel.value,
-				t = sel.textContent.trim() || title || v;
-			values.push([t, v]);
-			return (values.length < choices);
-		});
-		return true;
-	});
-	values.forEach(function(value) {
-		var [id, v] = value;
-		pool.addItem(id, v, false);
-		CHAR.noteBonus(cn, Pool, pool, id, v);
-	});
-}
-
-// button === this
-function calculateFromOverlay(e) {
-	var cn = this.dataset.calcName,
-		OV = $RPG.pages.OVERLAY,
-		choosers = $a(".chooser", OV),
-		$RPC = $RPG.pages.specialCalculators;
-	// Look at each chooser
-	choosers.forEach(function(chooser) {
-		var c = chooser.dataset.calculator,
-			handler;
-		if(c === undefined) {
-			return logError(chooser, "Overlay element .chooser block missing required \"calculator\" parameter");
-		} else if ((handler = $RPC[c]) === undefined) {
-			return logError(chooser, "Cannot find a calculator named \"" + c + "\"");
-		}
-		handler(chooser, cn);
-	});
-	closeOverlay();
-	this.fromOverlay = "true";
-	loadPageFromButton.call(this, e);
-}
