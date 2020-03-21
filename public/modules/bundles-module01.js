@@ -446,9 +446,10 @@ export function getBonusChoiceHTML(o) {
 	var stats = o.stats,
 		title = o.title,
 		p = $e("p", title),
+		calc = "bonusChoice",
 		value = Int.converter(o.value) || 1,
 		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "basicChooser", "bonusChoice"]),
+		wrapper = $ec("div", ["chooser", calc]),
 		d = wrapper.dataset;
 	d.value = value;
 	d.choices = choices;
@@ -464,6 +465,7 @@ export function getBonusChoiceHTML(o) {
 			sel.append(opt);
 		});
 		wrapper.append(sel);
+		d.calculator = calc + "Select";
 	} else {
 		// Use checkboxes for multi-option choices
 		stats.forEach(function(s) {
@@ -474,6 +476,7 @@ export function getBonusChoiceHTML(o) {
 			label.prepend(box);
 			wrapper.append(label);
 		});
+		d.calculator = calc + "Input";
 	}
 	return wrapper;
 }
@@ -485,8 +488,9 @@ export function getPoolBonusChoiceHTML(o) {
 		pool = o.pool,
 		title = o.title,
 		p = $e("p", title),
+		calc = "poolBonusChoice",
 		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "basicChooser", "poolBonusChoice"]),
+		wrapper = $ec("div", ["chooser", "basicChooser", calc]),
 		d = wrapper.dataset;
 	d.pool = pool.id;
 	d.choices = choices;
@@ -501,6 +505,7 @@ export function getPoolBonusChoiceHTML(o) {
 			sel.append(opt);
 		});
 		wrapper.append(sel);
+		d.calculator = calc + "Select";
 	} else {
 		// Use checkboxes for multi-option choices
 		values.forEach(function(v) {
@@ -511,6 +516,7 @@ export function getPoolBonusChoiceHTML(o) {
 			label.prepend(box);
 			wrapper.append(label);
 		});
+		d.calculator = calc + "Input";
 	}
 	return wrapper;
 }
