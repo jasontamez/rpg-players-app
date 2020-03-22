@@ -631,6 +631,10 @@ export function getBonusChoiceHTML(o) {
 		d.calculator = "calcBonusChoiceInput";
 	}
 	return wrapper;
+	//
+	//
+	// This is an EXAMPLE FUNCTION that needs to be DELETED once the func above is completed
+	//
 }
 
 
