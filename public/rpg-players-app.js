@@ -1,10 +1,43 @@
 var $RPG = {
-	log: [],
+	UNDO: new Map(),
+	LOG_UNDO: function() {
+		if($RPG.current !== undefined) {
+			let ruleset = this.current.character.ruleset,
+				undo = this.UNDO.get(ruleset) || [],
+				args = Array.from(arguments);
+			undo.unshift(args);
+			this.UNDO.set(ruleset, undo);
+		}
+	},
+	UNDO_RULESET: function(ruleset) {
+		var undo = this.UNDO.get(ruleset) || [];
+		undo.forEach(function(u) {
+			var n = u.shift(),
+				o = u.shift(),
+				p = u.shift();
+			switch(n) {
+				case "new":
+					delete o[p];
+					break;
+				case "replace":
+					o[p] = u[0];
+					break;
+				case "push":
+					o[p] = o[p].slice(0, u[0]);
+					break;
+				default:
+					return new Error("Unknown $RPG.UNDO method: " + n);
+			}
+		});
+		this.UNDO.delete(ruleset);
+	},
+	LOG: [],
 	ADD: function() {
 		var args = Array.from(arguments),
 			obj = this,
 			prev = "$RPG",
 			err = new Error(),
+			undoDone = false,
 			value, lastProp, stack;
 		if(args.length < 2) {
 			return new Error("Invalid format: $RPG.ADD(propertyName[s]..., value)");
@@ -20,34 +53,45 @@ var $RPG = {
 			if(!obj.hasOwnProperty(prop)) {
 				// Create a property as a blank object
 				obj[prop] = {};
-				this.log.push("Creating implicit property " + prev + " as a blank Object");
+				this.LOG.push("Creating implicit property " + prev + " as a blank Object");
+				if(!undoDone) {
+					this.LOG_UNDO("new", obj, prop);
+					undoDone = true;
+				}
 			}
 			obj = obj[prop];
 			if(!(obj instanceof Object)) {
 				return new TypeError(prev + " is not an Object");
 			}
 		}
+		if(!undoDone) {
+			let test = obj[lastProp];
+			if(test !== undefined) {
+				this.LOG_UNDO("replace", obj, lastProp, test);
+			} else {
+				this.LOG_UNDO("new", obj, lastProp);
+			}
+		}
 		obj[lastProp] = value;
-		this.log.push(prev + "." + lastProp + " set :: " + (err.lineNumber
-			? err.fileName + ':' + err.lineNumber + ":1" // add arbitrary column value for chrome linking
-			: this.extractLineNumberFromStack(err.stack)
-		));
+		this.LOG.push(prev + "." + lastProp + " set :: " + err.stack);
 	},
 	PUSH: function() {
 		var args = Array.from(arguments),
 			obj = this,
-			prev = "$RPG.",
+			lastObj = this,
+			prev = "$RPG",
 			err = new Error(),
-			strings;
+			prop, strings;
 		if(args.length < 2
 			|| !((strings = args.shift()) instanceof Array)
-			|| !strings.every(a => a.constructor === String)
+			|| strings.some(a => a.constructor !== String)
 		) {
-			return new TypeError("The first argument of $RPG.PUSH must be an array of Strings");
+			return new TypeError("The first argument of $RPG.PUSH must be an Array of Strings");
 		}
 		while(strings.length > 0) {
-			let prop = strings.shift();
-			obj = obj[prop];
+			prop = strings.shift();
+			lastObj = obj;
+			obj = lastObj[prop];
 			prev += "." + prop;
 			if(obj === undefined) {
 				return new TypeError(prev + " does not exist");
@@ -56,26 +100,9 @@ var $RPG = {
 		if(!(obj instanceof Array)) {
 			return new TypeError(prev + " is not an Array");
 		}
+		this.LOG_UNDO("push", lastObj, prop, obj.length);
 		obj.push(...args);
-		this.log.push(prev + " pushed new value(s) :: " + (err.lineNumber
-			? err.fileName + ':' + err.lineNumber + ":1" // add arbitrary column value for chrome linking
-			: this.extractLineNumberFromStack(err.stack)
-		));
-	},
-	extractLineNumberFromStack: function (stack) {
-		/// <summary>
-		/// Get the line/filename detail from a Webkit stack trace.  See https://stackoverflow.com/a/3806596/1037948
-		/// </summary>
-		/// <param name="stack" type="String">the stack string</param>
-		if(!stack) return '?'; // fix undefined issue reported by @sigod
-		// correct line number according to how Log().write implemented
-		var line = stack.split('\n')[2];
-		// fix for various display text
-		line = (line.indexOf(' (') >= 0
-			? line.split(' (')[1].substring(0, line.length - 1)
-			: line.split('at ')[1]
-		);
-		return line;
+		this.LOG.push(prev + " pushed new value(s) :: " + err.stack);
 	}
 };
 
