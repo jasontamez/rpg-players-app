@@ -22,8 +22,10 @@ $RPG.ADD("pages", "OVERLAY", $i("overlay"));
 // Character/player creation
 var PO = new PlayerObject("id"),
 	Char = PO.makeCharacter("pf01");
-$RPG.ADD("current", "player", PO);
-$RPG.ADD("current", "character", Char);
+$RPG.ADD("current", {
+	player: PO,
+	character: Char
+});
 
 // Show the loading screen
 function showLoadingScreen() {
@@ -49,8 +51,8 @@ function modifyLoadingScreen() {
 
 // Set up description shower/hider
 $listen($i("more"), function(e) {
-  $i("more").classList.toggle("visible");
-  $i("description").classList.toggle("visible");
+	$i("more").classList.toggle("visible");
+	$i("description").classList.toggle("visible");
 });
 
 
@@ -352,7 +354,7 @@ function parseBundle(node, category) {
 		id = atts.id,
 		theseKids = Array.from(node.children),
 		info, item,
-    BUNDLES = $RPG.bundles.raw;
+		BUNDLES = $RPG.bundles.raw;
 	if(category === undefined) {
 		category = atts.category;
 		delete atts.category;
