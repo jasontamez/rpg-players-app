@@ -117,7 +117,7 @@
 					she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's
 					character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are
 					treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
-			<PfCSkillChoice id="Human Fey Magic" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Human Fey Magic" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Focused Study" namespaces="HumanBonusFeat" description="All humans are skillful, but some, rather than being generalists, tend to specialize in a handful of skills." explanation="You gain Skill Focus as a bonus feat; you gain it again (for different skills) at 8th and 16th levels">
 			<!-- At 1st, 8th, and 16th level, such humans gain Skill Focus in a skill of their choice as a bonus feat. -->
@@ -456,7 +456,7 @@
 			<!-- You gain detect magic as a constant spell-like ability, with a caster level equal to your character level. -->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="ElfWeaponFamiliarity" description="Some elves have fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Elf: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Elf: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Fleet-Footed" namespaces="ElfKeenSenses,ElfWeaponFamiliarity" description="While all elves are naturally lithe and agile, some also are naturally speedy and have a strong desire to rush into situations rather than worrying about looking ahead." explanation="You have a +2 racial bonus to Initiative and gain Run as a bonus feat">
 			<Bonus type="racial" to="Init" value="2" />
@@ -495,7 +495,7 @@
 		</Alternative>
 		<Alternative id="Memories Beyond Death" namespaces="ElfImmunities,ElfMagic" description="Some elves are born with sensitive souls that absorb insight from others and from the spirits of the deceased." explanation="You have a +2 racial bonus on saves vs fear effects; you choose two Knowledge skills and treat them as class skills; if you take a class that grants either or both of those skills as class skills, you gain a +1 racial bonus on the overlapping skill or skills">
 			<PoolBonus to="saveEffects" value="+2 racial bonus vs fear effects" />
-			<PfCSkillChoice id="Elf: Memories Beyond Death" source="racial trait: memory" method="mark" skills="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" choice="2" />
+			<PfCSkillChoice id="Elf: Memories Beyond Death" source="racial trait: memory" marking="true" skills="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" choices="2" />
 			<Bonus to="Knowledge (arcana)" formula="if_class_skill_and_memory_racial_trait_then_plus_one" type="racial" />
 			<Bonus to="Knowledge (dungeoneering)" formula="if_class_skill_and_memory_racial_trait_then_plus_one" type="racial" />
 			<Bonus to="Knowledge (engineering)" formula="if_class_skill_and_memory_racial_trait_then_plus_one" type="racial" />
@@ -694,7 +694,7 @@
 			<!-- The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="HalfElfMultitalented" description="Some half-elves have fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Half-Elf: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Half-Elf: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Inspire Imitation" namespaces="HalfElfAdaptability" description="Some half-elves have a flair with their skills." explanation="When you succeed on a skill check, you can inspire imitators as a swift action: any ally within 30ft who witnesses the successful check and attempts the same check within the next minute gains a +2 bonus on the check as if from the aid another action">
 			<PoolBonus to="skillEffects" value="When you succeed on a skill check, you can inspire imitators as a swift action: any ally within 30ft who witnesses the successful check and attempts the same check within the next minute gains a +2 bonus on the check as if from the aid another action" />
@@ -890,7 +890,7 @@
 			<!-- The character has a mystic connection to one terrain type, selected from the ranger's favored terrain list. The character selects three 0-level druid spells and one 1st-level druid spell. If the character has a Charisma score of 11 or higher, when in the selected terrain, she gains these spells as spell-like abilities that can be cast once per day. The caster level for these effects is equal to the user's character level. The DC for the spell-like abilities is equal to 10 + the spell's level + the user's Charisma modifier. These spells are treated as being from a fey source for the purposes of the druid's resist nature's lure class feature and similar abilities. -->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="DwarfHatred" description="Some dwarves have fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Dwarf: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Dwarf: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Giant Hunter" namespaces="DwarfHatred" description="Some dwarves are trained against giants." explanation="You have a +1 bonus on attack rolls against humanoids with the giant subtype, and a +2 bonus to Survival to find and follow tracks made by humanoids with the giant subtype">
 			<PoolBonus to="combatEffects" value="+1 bonus on attack rolls against humanoids with the giant subtype" />
@@ -1090,7 +1090,7 @@
 			<PoolBonus to="weaponMartial" value="TYPEgnome" />
 		</Standard>
 		<Alternative id="Academician" namespaces="GnomeObsessive" description="Some gnomes are more academically inclined than their kin." explanation="You have a +2 bonus to any one Knowledge skill (your choice)">
-			<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choice="1" />
+			<BonusChoice to="Knowledge (arcana),Knowledge (dungeoneering),Knowledge (engineering),Knowledge (geography),Knowledge (history),Knowledge (local),Knowledge (nature),Knowledge (nobility),Knowledge (planes),Knowledge (religion)" value="2" choices="1" />
 		</Alternative>
 		<Alternative id="Architectural Ingenuity" namespaces="GnomeObsessive,GnomeKeenSenses" description="Some gnomes demonstrate incredible talent for building and adjusting structures." explanation="You have a +2 racial bonus to Knowledge (engineering) and a +2 racial bonus on Craft and Perception checks related to structures (including structural traps)">
 			<Bonus to="Knowledge (engineering)" value="2" type="racial" />
@@ -1172,7 +1172,7 @@
 			<!--Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="GnomeWeaponFamiliarity" description="Some gnomes have strong fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Gnome: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Gnome: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Fey-Tongued" namespaces="GnomeMagic" description="Some gnomes' innate magic is more in tune with the feywild." explanation="You add +1 to the DC of any saving throws against illusion spells you cast; if you have a Charisma score of 11 or higher, you also gain the following spell-like abilities: 1/day—haunted fey aspect, ghost sound, prestidigitation, and speak with plants">
 			<PoolBonus to="spellcastingEffects" value="You add +1 to the DC of any saving throws against illusion spells you cast." />
@@ -1371,7 +1371,7 @@
 			<!--You gain Run as a bonus feat-->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="HalflingFearless" description="Some halflings have fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Halfling: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Halfling: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Fleet of Foot" namespaces="HalflingSureFooted,HalflingSpeed" description="Some halflings are quicker than their kin but less cautious." explanation="Your speed is 30ft">
 			<Bonus to="landSpeed" value="30" />
@@ -1580,7 +1580,7 @@
 			<!--Additionally, if the gnome has a Charisma score of 11 or higher, she also gains the following spell-like abilities: 1/day—charm person, dancing lights, entangle, and prestidigitation. The caster level for these effects is equal to the gnome's level. The DC for these spells is equal to 10 + the spell's level + the gnome's Charisma modifier-->
 		</Alternative>
 		<Alternative id="Fey Thoughts" namespaces="HalfOrcWeaponFamiliarity" description="Some half-orcs have fey ancestry or some other close ties to the fey, manifesting as innate skills." explanation="You choose two of the following skills and always treat them as class skills: Acrobatics, Bluff, Climb, Diplomacy, Disguise, Escape Artist, Fly, Knowledge (nature), Perception, Perform (any), Sense Motive, Sleight of Hand, Stealth, Swim, or Use Magic Device">
-			<PfCSkillChoice id="Half-Orc: Fey Thoughts" source="racial trait" method="mark" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choice="2" />
+			<PfCSkillChoice id="Half-Orc: Fey Thoughts" source="racial trait" marking="true" skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" multiPickAny="perform_skills" choices="2" />
 		</Alternative>
 		<Alternative id="Forest Walker" namespaces="HalfOrcVision" description="More at home in the forests and jungles of the world, some half-orcs are well adapted to those surroundings." explanation="You have Low-Light Vision and a +2 racial bonus to Climb">
 			<Bonus to="lowLightVision" value="1" />

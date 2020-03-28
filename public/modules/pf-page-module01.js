@@ -465,7 +465,6 @@ export function loadAddToPool(appTo, item, id, object) {
 }
 
 
-
 function PfArchetypePreloader(page) {
 	var id = page.atts.get("pfArchetypeID");
 	if(id) {
@@ -473,14 +472,55 @@ function PfArchetypePreloader(page) {
 		if(stat === undefined) {
 			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" does not exist");
 		} else if(stat instanceof Pool) {
-			// Make sure the stat is empty
-			stat.empty();
+			// Make sure the stat gets emptied if we undo
+			let undo = page.atts.get("pfArchetypeCalcName");
+			if(undo === undefined) {
+				logErrorText("PAGE-PRELOADER: Page is missing \"pfArchetypeCalcName\" property for the undoing function");
+			} else {
+				$RPG.current.character.noteBonus(undo, "emptyPool", stat);
+			}
 		} else {
 			logErrorText("PAGE-PRELOADER: Stat \"" + id + "\" is not a Pool");
 		}
 	}
 	return false;
 }
+
+
+
+//
+// NEEDS TO SET CLASS SKILL, NOT BONUS
+//   markClassSkill(ID, SOURCE, TF)
+//
+function calcPfClassSkill(chooser, cn) {
+		var d = chooser.dataset,
+		choices = Int.converter(d.choices) || 1,
+		CHAR = $RPG.current.character,
+		c = 0,
+		source = d.source,
+		marking = TF.converter(d.marking);
+	// Inputs should be checkboxes or radio buttons
+	// Each will have its own stat as its value
+	Array.from($a("input", chooser)).every(function(i) {
+		var id, stat;
+		if(c >= choices) {
+			return false;
+		}
+		id = i.value;
+		stat = CHAR.getStat(id);
+		if(stat === undefined) {
+			logError(i, "Stat \"" + id + "\" not found (input.value)");
+		} else if (stat.markClassSkill === undefined) {
+			logError(i, "Stat \"" + id + "\" is not a Skill (input.value)");
+		} else if (i.checked) {
+			c++;
+			stat.markClassSkill(id, source, marking);
+			CHAR.noteBonus(cn, "pfCSkill", stat, id);
+		}
+		return true;
+	});
+}
+
 
 
 export const exports = [];
@@ -494,7 +534,9 @@ $RPG.ADD("pages", "pageTemplates", "PfSkillsAdjust", templatePfSkillsAdjust);
 $RPG.ADD("pages", "pageFilters", "PfArchetypePicker", pfArchetypePicker);
 $RPG.ADD("pages", "bundleItemFilters", "PfNamespace", pfArchetypeNamespace);
 $RPG.ADD("pages", "pagePreloaders", "PfArchetype", PfArchetypePreloader);
-$RPG.PUSH(["subLoaders", "fromBundle"], [pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
-$RPG.ADD("pages", "handlers", "ADDTOPOOL", parseAddToPool);
+$RPG.PUSH(["pages", "subLoaders", "fromBundle"], [pool => (pool.ADDTOPOOL !== undefined), loadAddToPool]);
+$RPG.ADD("pages", "TagHandlers", "ADDTOPOOL", parseAddToPool);
+
+$RPG.ADD("pages", "specialCalculators", "pfCSkillChoiceInput", calcPfClassSkill);
 
 

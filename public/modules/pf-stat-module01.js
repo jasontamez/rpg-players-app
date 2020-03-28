@@ -1,6 +1,7 @@
-import { $ec, $e, $ea } from "./dollar-sign-module.js";
+import { $ec, $e, $ea, $a } from "./dollar-sign-module.js";
 import { IntBonusable, BasicStat, MultiStat, BasicIdObject, SpecialGrabber, StatReference, SelfReference, TF, Formula } from "./stats-module01.js";
-import { logErrorNode as logError, parseAttributesToObject } from "./parsing-logging.js"
+import { logErrorNode as logError, parseAttributesToObject } from "./parsing-logging.js";
+import { appendSelectOrInputFromTags } from './bundles-module01.js';
 
 var $RPG = window["$RPG"];
 
@@ -178,9 +179,10 @@ export class PfSkill extends IntBonusable {
 		//PfSkill.sources.set(source, siblings);
 		// If the parent is a multistat, it may have preset class skill [un]markings: process any
 		atts.forEach(function(att) {
-			switch(att) {
-				case "class_skills":
-					att.forEach(this.markClassSkill(...att));
+			var n = att.shift(), v = att.shift();
+			switch(n) {
+				case "is_class_skill":
+					this.markClassSkill("started as class skill", v, true);
 			}
 		});
 	}
@@ -388,7 +390,7 @@ export function parsePfCSkill(node, parentNode, method) {
 		return null;
 	}
 	skill.markClassSkill(id, source, value);
-	$RPG.current.character.noteBonus(method, {name: "classSkillMark"}, skill, id);
+	$RPG.current.character.noteBonus(method, "pfCSkill", skill, id);
 	return {
 		type: "BonusPfCSkill",
 		stat: skill,
@@ -450,7 +452,7 @@ export function parseBonusPfSkillRank(node, parentNode, method) {
 		}
 	}
 	stat.addBonusRanks(nombre, tag, limited);
-	$RPG.current.character.noteBonus(method, {name: "rankBonuses"}, stat, nombre);
+	$RPG.current.character.noteBonus(method, "rankBonuses", stat, nombre, limited);
 	return {
 		type: "BonusPfSkillRank",
 		stat: stat,
@@ -460,7 +462,7 @@ export function parseBonusPfSkillRank(node, parentNode, method) {
 }
 
 
-//<PfCSkillChoice id="Human Fey Magic" source="racial trait" method="mark"
+//<PfCSkillChoice id="Human Fey Magic" source="racial trait" marking="true"
 //skills="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device"
 //multiPickAny="perform_skills" choice="2"
 //multiSpecifics="craft_skills,jewelry,weapons|profession_skills,barrister,sailor"/>
@@ -475,14 +477,14 @@ export function parseBonusPfSkillRank(node, parentNode, method) {
 //  o.skills = array of possible values, each one an array of [objectSkill, stringID]
 //  o.multis = array of arrays, each one containing a MultiStat object and an array of strings indicating sub-stats of that multi that may or may not exist
 //  o.multisAny = array of MultiStat objects, of which "any" sub-stat can be chosen
-//  o.marking = "mark" || "unmark"
+//  o.marking = "true" || "false"
 //  o.choices = integer representing the number of options that need to be selected
 //  o.method = string Identifier for undoing bonuses
 //  o.isChoice = true
 function parsePfCSkillChoice(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		id = atts.id,
-		marking = atts.method,
+		marking = atts.marking,
 		skillStr = atts.skills,
 		multiStrAny = atts.multiPickAny,
 		multiStr = atts.multiSpecifics,
@@ -501,14 +503,11 @@ function parsePfCSkillChoice(node, parentNode, method) {
 	} else if(possibilities.every(p => p === undefined)) {
 		logError(node, "PFCSKILLCHOICE: the tag must have at least one of the following: \"skills\", \"multis\" or \"multiPickAny\"");
 		return null;
-	} else if(marking !== "mark" && marking !== "unmark") {
-		logError(node, "PFCSKILLCHOICE: invalid value for \"method\" parameter (should be \"mark\" or \"unmark\")");
-		return null;
 	} else if(source === undefined) {
 		logError(node, "PFCSKILLCHOICE: missing required \"source\" parameter");
 		return null;
-	} else if(choices <= 0) {
-		logError(node, "PFCSKILLCHOICE: missing or non-numeric \"choices\" parameter");
+	} else if(isNaN(choices) || choices <= 0) {
+		logError(node, "PFCSKILLCHOICE: missing, negative or non-numeric \"choices\" parameter");
 		return null;
 	}
 	if(skillStr && !skillStr.split(sep).every(function(s) {
@@ -517,16 +516,16 @@ function parsePfCSkillChoice(node, parentNode, method) {
 			logError(node, "PFSKILLCHOICE: \"" + s + "\" is not a skill");
 			return false;
 		}
-		skills.push([skill, s]);
+		skills.push(skill);
 		return true;
 	})) {
 		// At least one skill was bad.
 		return null;
 	}
 	if(multiStrAny && !multiStrAny.split(sep).every(function(s) {
-		var skill = CHAR.getStat(s);
-		if(!(skill instanceof PfSkill)) {
-			logError(node, "PFSKILLCHOICE: \"" + s + "\" is not a skill");
+		var skill = CHAR.getMultiStat(s);
+		if(skill === undefined || (skill.type !== PfSkill && !(skill.type instanceof PfSkill))) {
+			logError(node, "PFSKILLCHOICE: \"" + s + "\" is not a MultiStat of a skill");
 			return false;
 		}
 		multisAny.push(skill);
@@ -539,8 +538,8 @@ function parsePfCSkillChoice(node, parentNode, method) {
 		var group = m.split(sep),
 			s = group.shift(),
 			skill = CHAR.getMultiStat(s);
-		if(skill === undefined) {
-			logError(node, "PFSKILLCHOICE: \"" + s + "\" is not a skill");
+		if(skill === undefined || (skill.type !== PfSkill && !(skill.type instanceof PfSkill))) {
+			logError(node, "PFSKILLCHOICE: \"" + s + "\" is not a MultiStat of a skill");
 			return false;
 		}
 		multis.push([skill, group]);
@@ -564,7 +563,6 @@ function parsePfCSkillChoice(node, parentNode, method) {
 	};
 }
 
-//	$RPG.current.character.noteBonus(method, {name: "classSkillChoice"}, stat, nombre);
 //  o.type = "PfCSkillChoice"
 //  o.title = string describing the choice(s) presented, such as "Choose two of the skills below to learn"
 //  o.id = stringID
@@ -572,70 +570,247 @@ function parsePfCSkillChoice(node, parentNode, method) {
 //  o.skills = array of possible values, each one an array of [objectSkill, stringID]
 //  o.multis = array of arrays, each one containing a MultiStat object and an array of strings indicating sub-stats of that multi that may or may not exist
 //  o.multisAny = array of MultiStat objects, of which "any" sub-stat can be chosen
-//  o.marking = "mark" || "unmark"
+//  o.marking = "true" || "false"
 //  o.choices = integer representing the number of options that need to be selected
 //  o.method = string Identifier for undoing bonuses
 //  o.isChoice = true
-
 function getPfCSkillChoiceHTML(o) {
+	console.log(o);
 	var title = o.title,
 		id = o.id,
 		source = o.source,
-		skills = (o.skills),
+		skills = o.skills.slice(),
 		multis = o.multis,
 		multisAny = o.multisAny,
-		method = o.marking,
+		marking = o.marking,
 		choices = o.choices,
-		wrapper = $ec("div", ["chooser", "pfCSkillChoice"]),
-		d = wrapper.dataset;
+		skillsToBe = [],
+		skillsAny = [],
+		tagName = "pfCSkillChoice",
+		wrapper = $ec("div", ["chooser", tagName]),
+		d = wrapper.dataset,
+		p = $e("p", o.title);
 	// Save ID, source, method and marking
 	d.tagId = id;
 	d.source = source;
-	d.marking = method,
+	d.marking = marking,
 	d.method = o.method;
-}
-
-// Returns FALSE or an ARRAY of HTML objects
-export function getBonusChoiceHTML(o) {
-	var stats = o.stats, $e,Int,$ec,$ea,
-		title = o.title,
-		p = $e("p", title),
-		value = Int.converter(o.value) || 1,
-		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "bonusChoice"]),
-		d = wrapper.dataset;
-	d.value = value;
-	d.choices = choices;
+	d.choices = choices.toString();
+	// Begin HTML
 	wrapper.append(p);
-	if(choices === 1) {
-		// Use a simple <select> for single-option choices
-		let sel = $e("select");
-		stats.forEach(function(s) {
-			var id = s.id,
-				title = s.get("title") || id,
-				opt = $ea("option", {value: id}, title);
-			sel.append(opt);
-		});
-		wrapper.append(sel);
-		d.calculator = "calcBonusChoiceSelect";
+	// Look for specific multis
+	// Transform 'multis' into a Map, too
+	if(multis.length > 0) {
+		let mm = multis.slice();
+		multis = new Map();
+		// mm is an array of arrays: [objectMultiStat, "substat1", "substat2" ...]
+		while(mm.length > 0) {
+			let m = mm.shift(),
+				stat = m.shift(),
+				subs = m.shift().slice(),
+				toBe = [];
+			// Look for each substat
+			subs.forEach(function(subname) {
+				var sub = stat.getChild(subname);
+				if(sub === undefined) {
+					// Does not yet exist: add to an array
+					toBe.push(subname);
+				} else {
+					// Already exists: add into 'skills'
+					skills.push(sub);
+				}
+			});
+			// Save array of nonexistent substats to multis, using the MultiStat as key
+			if(toBe.length > 0) {
+				toBe.sort(function(a, b) {
+					var x = a.toLowerCase(), y = b.toLowerCase();
+					return x > y ? 1 : (x < y ? -1 : 0);
+				});
+				multis.set(stat, toBe);
+			}
+		}
 	} else {
-		// Use checkboxes for multi-option choices
-		stats.forEach(function(s) {
-			var id = s.id,
-				title = s.get("title") || id,
-				label = $e("label", title),
-				box = $ea("input", {value: id, type: "checkbox"});
-			label.prepend(box);
-			wrapper.append(label);
+		multis = new Map();
+	}
+	// Make more HTML
+	if(multisAny.length === 0 && multis.size === 0) {
+		// If we only have regular skills, then follow the regular process
+		appendSelectOrInputFromTags(sortSkills(skills), choices, tagName, wrapper);
+	} else {
+		// We have MultiStats to deal with
+		let m = Array.from(multis.keys()),
+			a = multisAny.slice();
+		// Go through every MultiStat that can be "any" substat
+		a.forEach(function(ms) {
+			// Add it to the regular 'multis' Map as "ANY"
+			multis.set(ms, "ANY");
+			// Add it to the skills array
+			skills.push(ms);
+			// Add to any substats to the skill array
+			skills = skills.concat(Array.from(ms.inheritors.values()));
 		});
-		d.calculator = "calcBonusChoiceInput";
+		// Sort skills and multis by title into a Set (no dupes)
+		skills = new Set(sortSkills(skills.concat(a, m)));
+		// Make the HTML
+		skills.forEach(function(skill) {
+			// Reusable variables
+			var test = multis.get(skill),
+				id = skill.id,
+				title = skill.get("title") || id,
+				box = $ea("input", {value: id, type: "checkbox"});
+			if(test === undefined) {
+				// Normal skill
+				let label = $e("label", title);
+				label.prepend(box);
+				wrapper.append(label);
+			} else {
+				// Multistat
+				// <span class="multistatContainer">
+				//   <label><input type="checkbox" value="[ID]" data-multi="ANY" data-which="[INT]">[TITLE]</label>
+				//   &nbsp;(<input type="text" placeholder="[PLACEHOLDER]" data-multi="[ID]_[INT]" >)
+				// </span>
+				if (test === "ANY") {
+					// "Any" stat
+					let c = 0,
+						ph = skill.get("placeholder") || "";
+					// Add a blank input for every possible choice
+					while(c < choices) {
+						let label = $e("label", title),
+							span = $ec("span", ["multistatContainer"]),
+							bx = box.cloneNode(),
+							dx = bx.dataset,
+							i = $ea("input", {type: "text", placeholder: ph}),
+							cs;
+						c++;
+						cs = c.toString();
+						dx.multi = test;
+						i.dataset.multi = id + "_" + cs;
+						dx.which = cs;
+						//
+						//
+						// Probably should $listen to [text] and check corresponding box if has a value
+						//
+						//
+						label.prepend(bx);
+						span.append(label, String.fromCharCode(160) + "(", i, ")"); // 160 = non-breaking space
+						wrapper.append(span);
+					}
+				} else {
+					// Nonexistent multistat substat
+					// <label><input type="checkbox" value="[ID]" data-multi="[SUBSTAT]">[TITLE] ([SUBSTAT])</label>
+					// test is an alphabetized array of possible substats
+					test.forEach(function(substat) {
+						var label = $e("label", skill.makeAtt("title", test)),
+							bx = box.cloneNode();
+						bx.dataset.multi = test;
+						label.prepend(bx);
+						wrapper.append(label);
+					});
+				}
+			}
+		});
 	}
 	return wrapper;
-	//
-	//
-	// This is an EXAMPLE FUNCTION that needs to be DELETED once the func above is completed
-	//
 }
+
+
+function calcPfSkillChoiceInput(chooser, cn) {
+	// Container will have no. of choices
+	var d = chooser.dataset,
+		choices = IntBonusable.converter(d.choices) || 1,
+		source = d.source,
+		value = d.marking,
+		id = d.tagId,
+		c = 0,
+		CHAR = $RPG.current.character;
+	// Inputs should be checkboxes or radio buttons
+	// Each will have its own stat as its value
+	Array.from($a("input", chooser)).every(function(i) {
+		var sk, skill;
+		if(c >= choices) {
+			return false;
+		}
+		sk = i.value;
+		skill = CHAR.getStat(sk);
+		if(skill === undefined) {
+			logError(i, "Stat \"" + sk + "\" not found (data-stat)");
+		} else if (!(skill instanceof PfSkill)) {
+			logError(i, "Stat \"" + sk + "\" is not a Pathfinder skill");
+		} else if (i.checked) {
+			c++;
+			skill.markClassSkill(id, source, value);
+			CHAR.noteBonus(cn, "pfCSkill", skill, id);
+		}
+		return true;
+	});
+}
+
+
+function calcPfSkillChoiceSelect(chooser, cn) {
+	// Container will have no. of choices and the Pool object
+	var d = chooser.dataset,
+		choices = IntBonusable.converter(d.choices) || 1,
+		source = d.source,
+		value = d.marking,
+		id = d.tagId,
+		c = 0,
+		CHAR = $RPG.current.character;
+	// Only one selection per select
+	// The chosen option will have its own stat as its value
+	Array.from($a("select", chooser)).every(function(i) {
+		var sk, skill;
+		if(c >= choices) {
+			return false;
+		}
+		sk = i.value;
+		skill = CHAR.getStat(sk);
+		if(skill === undefined) {
+			logError(i, "Stat \"" + sk + "\" not found (data-stat)");
+		} else if (!(skill instanceof PfSkill)) {
+			logError(i, "Stat \"" + sk + "\" is not a Pathfinder skill");
+		} else if (i.checked) {
+			c++;
+			skill.markClassSkill(id, source, value);
+			CHAR.noteBonus(cn, "pfCSkill", skill, id);
+		}
+		return true;
+	});
+}
+
+
+// objectSkill, stringID
+function undoPfSkillChoice(skill, id) {
+	skill.removeClassSkillMark(id);
+}
+
+
+// objectSkill, stringName, booleanLimited
+function undoPfSkillRanks(skill, title, limited) {
+	skill.removeBonusRanks(title, limited);
+}
+
+
+function sortSkills(stats) {
+	stats.sort(function(a, b) {
+		var x, y;
+		if(a instanceof MultiStat) {
+			x = a.makeAtt("title", "zzzzzzzzzzzzzzz");
+		} else {
+			x = a.get("title") || a.id;
+		}
+		if(b instanceof MultiStat) {
+			y = b.makeAtt("title", "zzzzzzzzzzzzzzz");
+		} else {
+			y = b.get("title") || b.id;
+		}
+		x = x.toLowerCase();
+		y = y.toLowerCase();
+		return x > y ? 1 : (x < y ? -1 : 0);
+	});
+	return stats;
+}
+
+
 
 
 export const exports = [];
@@ -644,13 +819,12 @@ $RPG.ADD("stats", "type", "PfSize", PfSize);
 $RPG.ADD("stats", "type", "PfSpells", PfSpells);
 $RPG.ADD("stats", "type", "PfSkill", PfSkill);
 $RPG.ADD("stats", "StatTagHandlers", "PfCSkill", parsePfCSkill);
-$RPG.ADD("bundles", "TagHandlers", "BonusPfCSkill", parsePfCSkill);
 $RPG.ADD("bundles", "TagHandlers", "BonusPfSkillRank", parseBonusPfSkillRank);
-$RPG.ADD("bundles", "TagHandlers", "BonusPfCSkillChoice", parsePfCSkillChoice);
-$RPG.ADD("bundles", "pagePreloaders", "BonusPfCSkillChoice", getPfCSkillChoiceHTML);
+$RPG.ADD("bundles", "TagHandlers", "PfCSkill", parsePfCSkill);
+$RPG.ADD("bundles", "TagHandlers", "PfCSkillChoice", parsePfCSkillChoice);
+$RPG.ADD("bundles", "bundlePreloaders", "PfCSkillChoice", getPfCSkillChoiceHTML);
 
 // What changes the HTML into character data? I can't remember.
 
-$RPG.ADD("data", "undoBonusMethods", "rankBonuses", function () {});
-$RPG.ADD("data", "undoBonusMethods", "classSkillMark", function () {});
-$RPG.ADD("data", "undoBonusMethods", "classSkillChoice", function () {});
+$RPG.ADD("data", "undoBonusMethods", "rankBonuses", undoPfSkillRanks);
+$RPG.ADD("data", "undoBonusMethods", "pfCSkill", undoPfSkillChoice);
