@@ -1,5 +1,5 @@
 // Import query selectors
-import { $a, $ec, $e, $ea, $listen } from "./dollar-sign-module.js";
+import { $a, $ec, $e, $ea } from "./dollar-sign-module.js";
 // Import parsing and logging
 import { parseObjectToArray, parseAttributesToObject, logErrorNode as logError } from "./parsing-logging.js";
 import { MultiStat, Pool, Formula, Int } from "./stats-module01.js";
@@ -77,6 +77,7 @@ export function parseBonus(node, parentNode, method) {
 		multi = atts.multi,
 		nombre = parentNode.id,
 		CHAR = $RPG.current.character,
+		undo = "Bonus",
 		stat, bonus;
 	if(toStat === undefined) {
 		logError(node, "BONUS: missing required \"to\" parameter");
@@ -112,9 +113,9 @@ export function parseBonus(node, parentNode, method) {
 		}
 		bonus = [nombre, atts.type, f, atts.note];
 		stat.addBonus(...bonus);
-		CHAR.noteBonus(method, nombre, stat, atts.type, atts.note);
+		CHAR.noteBonus(method, undo, stat, nombre, atts.type, atts.note);
 		return {
-			type: "Bonus",
+			type: undo,
 			stat: stat,
 			bonus: bonus,
 			isChoice: false
@@ -130,9 +131,9 @@ export function parseBonus(node, parentNode, method) {
 		let a = parseObjectToArray(atts);
 		bonus = [nombre, fromID, att, a];
 		stat.registerBonusTag(...bonus);
-		CHAR.noteBonus(method, nombre, stat, a.type, a.note);
+		CHAR.noteBonus(method, undo, stat, nombre, a.type, a.note);
 		return {
-			type: "BonusTag",
+			type: undo,
 			stat: stat,
 			bonus: bonus,
 			isChoice: false
@@ -143,9 +144,9 @@ export function parseBonus(node, parentNode, method) {
 	}
 	bonus = [nombre, atts.type, value, atts.note];
 	stat.addBonus(...bonus);
-	CHAR.noteBonus(method, nombre, stat, atts.type, atts.note);
+	CHAR.noteBonus(method, undo, stat, nombre, atts.type, atts.note);
 	return {
-		type: "Bonus",
+		type: undo,
 		stat: stat,
 		bonus: bonus,
 		isChoice: false
@@ -165,6 +166,7 @@ export function parseNotation(node, parentNode, method) {
 	var atts = parseAttributesToObject(node),
 		note = atts.value,
 		toStat = atts.to,
+		undo = "Notation",
 		stat;
 	if (toStat === undefined) {
 		logError(node, "NOTATION: missing required \"to\" parameter");
@@ -182,9 +184,9 @@ export function parseNotation(node, parentNode, method) {
 		return false;
 	}
 	stat.addNotation(note);
-	$RPG.current.character.noteBonus(method, null, stat, null, note);
+	$RPG.current.character.noteBonus(method, undo, stat, note);
 	return {
-		type: "Notation",
+		type: undo,
 		stat: stat,
 		note: note,
 		isChoice: false
@@ -261,6 +263,7 @@ export function parsePoolBonus(node, parentNode, method) {
 		value = atts.value,
 		toPool = atts.to,
 		fromID = atts.fromId,
+		undo = "PoolItem",
 		pool, values;
 	if (toPool === undefined) {
 		logError(node, "POOLBONUS: missing required \"to\" parameter");
@@ -308,10 +311,10 @@ export function parsePoolBonus(node, parentNode, method) {
 		var id = vs[0] || vs[1],
 			v = vs[1];
 		pool.addItem(id, v, false);
-		$RPG.current.character.noteBonus(method, Pool, pool, id, v);
+		$RPG.current.character.noteBonus(method, undo, pool, id);
 	});
 	return {
-		type: "PoolBonus",
+		type: undo,
 		pool: pool,
 		values: values,
 		isChoice: false
@@ -399,6 +402,7 @@ export function parsePoolBonusSelect(node, parentNode, method) {
 		value = atts.value,
 		toPool = atts.to,
 		map = new Map(),
+		undo = "PoolSelection",
 		values, pool;
 	if (toPool === undefined) {
 		logError(node, "POOLBONUSSELECT: missing required \"to\" parameter");
@@ -429,11 +433,11 @@ export function parsePoolBonusSelect(node, parentNode, method) {
 		return false;
 	}
 	map.forEach(function(sel, val) {
-		$RPG.current.character.noteBonus(method, true, pool, val, sel);
+		$RPG.current.character.noteBonus(method, undo, pool, val, sel);
 		pool.addSelection(val);
 	});
 	return {
-		type: "PoolBonusSelect",
+		type: undo,
 		pool: pool,
 		values: values,
 		isChoice: false
@@ -441,20 +445,9 @@ export function parsePoolBonusSelect(node, parentNode, method) {
 }
 
 
-// Returns FALSE or an ARRAY of HTML objects
-export function getBonusChoiceHTML(o) {
-	var stats = o.stats,
-		title = o.title,
-		p = $e("p", title),
-		calc = "bonusChoice",
-		value = Int.converter(o.value) || 1,
-		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", calc]),
-		d = wrapper.dataset;
-	d.value = value;
-	d.choices = choices;
-	d.method = o.method;
-	wrapper.append(p);
+// [objectStat, ...], integerChoices, stringTagName, nodeWrapper
+export function appendSelectOrInputFromTags(stats, choices, tagName, wrapper) {
+	var output = [], d = wrapper.dataset;
 	if(choices === 1) {
 		// Use a simple <select> for single-option choices
 		let sel = $e("select");
@@ -465,7 +458,7 @@ export function getBonusChoiceHTML(o) {
 			sel.append(opt);
 		});
 		wrapper.append(sel);
-		d.calculator = calc + "Select";
+		d.calculator = tagName + "Select";
 	} else {
 		// Use checkboxes for multi-option choices
 		stats.forEach(function(s) {
@@ -476,27 +469,16 @@ export function getBonusChoiceHTML(o) {
 			label.prepend(box);
 			wrapper.append(label);
 		});
-		d.calculator = calc + "Input";
+		d.calculator = tagName + "Input";
+		wrapper.classList.add("chooserWithInputs");
 	}
-	return wrapper;
 }
 
 
-// Returns FALSE or an ARRAY of HTML objects
-export function getPoolBonusChoiceHTML(o) {
-	var values = o.values,
-		pool = o.pool,
-		title = o.title,
-		p = $e("p", title),
-		calc = "poolBonusChoice",
-		choices = Int.converter(o.choices) || 1,
-		wrapper = $ec("div", ["chooser", "basicChooser", calc]),
-		d = wrapper.dataset;
-	d.pool = pool.id;
-	d.choices = choices;
-	d.method = o.method;
-	wrapper.append(p);
-	if(choices === 1) {
+// [[stringTitle, anyValue], ...], integerChoices, stringTagName, nodeWrapper
+export function appendSelectOrInputFromPairedValues(values, choices, tagName, wrapper) {
+	var output = [], d = wrapper.dataset;
+	if(choices <= 1) {
 		// Use a simple <select> for single-option choices
 		let sel = $ec("select");
 		values.forEach(function(v) {
@@ -505,7 +487,7 @@ export function getPoolBonusChoiceHTML(o) {
 			sel.append(opt);
 		});
 		wrapper.append(sel);
-		d.calculator = calc + "Select";
+		d.calculator = tagName + "Select";
 	} else {
 		// Use checkboxes for multi-option choices
 		values.forEach(function(v) {
@@ -516,16 +498,49 @@ export function getPoolBonusChoiceHTML(o) {
 			label.prepend(box);
 			wrapper.append(label);
 		});
-		d.calculator = calc + "Input";
+		d.calculator = tagName + "Input";
+		wrapper.classList.add("chooserWithInputs");
 	}
+}
+
+
+// Returns FALSE, an HTML node, or an ARRAY of HTML nodes
+export function getBonusChoiceHTML(o) {
+	var stats = o.stats,
+		title = o.title,
+		p = $e("p", title),
+		tagName = "bonusChoice",
+		value = Int.converter(o.value) || 1,
+		choices = Int.converter(o.choices) || 1,
+		wrapper = $ec("div", ["chooser", tagName]),
+		d = wrapper.dataset;
+	d.value = value;
+	d.choices = choices;
+	d.method = o.method;
+	wrapper.append(p);
+	appendSelectOrInputFromTags(stats, choices, tagName, wrapper);
 	return wrapper;
 }
 
 
+// Returns FALSE, an HTML node, or an ARRAY of HTML nodes
+export function getPoolBonusChoiceHTML(o) {
+	var values = o.values,
+		pool = o.pool,
+		title = o.title,
+		p = $e("p", title),
+		tagName = "poolBonusChoice",
+		choices = Int.converter(o.choices) || 1,
+		wrapper = $ec("div", ["chooser", tagName]),
+		d = wrapper.dataset;
+	d.pool = pool.id;
+	d.choices = choices;
+	d.method = o.method;
+	wrapper.append(p);
+	appendSelectOrInputFromPairedValues(values, choices, tagName, wrapper);
+	return wrapper;
+}
 
-
-//<PfCSkill id="Human: Comprehensive Education" source="racial trait" mark="Knowledge (arcana)" />
-//<PfCSkillChoice id="Dwarf: Fey Thoughts" source="racial trait" mark="Acrobatics,Bluff,Climb,Diplomacy,Disguise,Escape Artist,Fly,Knowledge (nature),Perception,perform_skills,Sense Motive,Sleight of Hand,Stealth,Swim,Use Magic Device" choice="2" />
 
 
 
@@ -540,7 +555,8 @@ $RPG.ADD("bundles", {
 		PoolBonusSelect: parsePoolBonusSelect,
 		PoolBonusChoice: parsePoolBonusChoice
 	},
-	pagePreloaders: {
+	//$RPG.bundles.bundlePreloaders handlers should return either FALSE, an HTML node, or an ARRAY of HTML nodes
+	bundlePreloaders: {
 		BonusChoice: getBonusChoiceHTML,
 		PoolBonusChoice: getPoolBonusChoiceHTML
 	},

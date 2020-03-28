@@ -77,7 +77,7 @@ export function recursePageNodes(node) {
 			}
 		});
 	}
-	handle = $RPG.pages.handlers[nombre];
+	handle = $RPG.pages.TagHandlers[nombre];
 	if (handle !== undefined) {
 		// Get the html from the handler
 		return handle(node, filler);
@@ -406,7 +406,7 @@ export function parseChoose(node) {
 export function loadBundle(appendTo, unit) {
 	var	$RP = $RPG.pages,
 		$RB = $RPG.bundles,
-		BUNDLES = $RP.bundles,
+		BUNDLES = $RP.parsedBundles,
 		node = unit.node,
 		atts = {},
 		contents = unit.contents,
@@ -647,21 +647,21 @@ export function parseDeepHTMLArray() {
 				// Null element detected - skip this
 				okToAppend = false;
 				break;
-			} else if(optionalChecks.length > 0 && !optionalChecks.every(function(pair) {
+			} else if(optionalChecks.length > 0 && optionalChecks.some(function(pair) {
 				var a = pair.slice(),
 					checker = a.shift(),
 					loader = a.shift();
 				if(checker(unit)) {
 					unit = loader(appendTo, unit, ...args);
-					return false;
+					return true;
 				}
-				return true;
+				return false;
 			})) {
 				// A passed-in check was triggered, stopping the flow.
 				// unit should be changed into a node or valid array by the passed-in loader, or changed to null.
 			} else if(unit.deferred === true) {
 				// Deferred object
-				// unit should be changed into a node or valid array by the passed-in loader, or changed to null.
+				// unit should be changed into a node or valid array by the unit's loader, or changed to null.
 				unit = unit.loader(appendTo, unit, ...args);
 			} else {
 				// Must be an array : [parentNode, [children]]
@@ -786,7 +786,7 @@ export function loadPage(page) {
 	// Change title
 	if(title) {
 		// Title present
-		let nonsense = "-*-jdk2k4 $#!@ 32 23eSDGA T% U&%",
+		let nonsense = "-*-jdk2k4 $#!@ 32 23eSDGA T ~U&*",
 			r = title.replace(/%%/g, nonsense),
 			CHAR = $RPG.current.character;
 		title = title.replace(/%[^%]+%/g, function(stringMatched) {
@@ -886,22 +886,22 @@ export function calculateFromPage() {
 	// Look at the inputs and selects
 	targets.forEach(function(input) {
 		var d = input.dataset,
-			id = d.stat,
-			stat = CHAR.getStat(id),
-			sCalc;
+			sCalc, id, stat;
+		if(sCalc = d.calculator) {
+			let handler = $RPC[sCalc];
+			if(handler === undefined) {
+				logError(input, "Cannot find a calculator named \"" + sCalc + "\"")
+				return false;
+			}
+			return handler(input, cn);
+		}
+		stat = CHAR.getStat(id = d.stat);
 		if(stat === undefined) {
 			logError(input, "Stat \"" + id + "\" not found (data-stat)");
 			return false;
-		} else if (sCalc = d.specialCalc) {
-			let handler = $RPC[sCalc];
-			if(handler === undefined) {
-				logError(input, "Special Calculator \"" + sCalc + "\" does not exist")
-				return false;
-			}
-			handler(input, stat, d);
 		} else if(d.selfSaving !== "true") {
 			let value = input.value;
-			CHAR.noteBonus(cn, 0, stat, stat.get("value"), value);
+			CHAR.noteBonus(cn, "SetValue", stat, stat.get("value"));
 			stat.set("value", value);
 		}
 	});
@@ -1032,8 +1032,8 @@ function calcBonusChoiceInput(chooser, cn) {
 			logError(i, "Stat \"" + id + "\" not found (data-stat)");
 		} else if (i.checked) {
 			c++;
-			stat.addBonus("archetype chooser", type, value, note);
-			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+			stat.addBonus("player choice", type, value, note);
+			CHAR.noteBonus(cn, "Bonus", stat, "player choice", type, note);
 		}
 		return true;
 	});
@@ -1060,8 +1060,8 @@ function calcBonusChoiceSelect(chooser, cn) {
 			logError(i, "Stat \"" + i.value + "\" not found (data-stat)");
 		} else {
 			c++;
-			stat.addBonus("archetype chooser", type, value, note);
-			CHAR.noteBonus(cn, "archetype chooser", stat, type, note);
+			stat.addBonus("player choice", type, value, note);
+			CHAR.noteBonus(cn, "Bonus", stat, "player choice", type, note);
 		}
 		return true;
 	});
@@ -1094,7 +1094,7 @@ function calcPoolBonusChoiceInput(chooser, cn) {
 	values.forEach(function(value) {
 		var [id, v] = value;
 		pool.addItem(id, v, false);
-		CHAR.noteBonus(cn, Pool, pool, id, v);
+		CHAR.noteBonus(cn, "PoolItem", pool, id);
 	});
 }
 
@@ -1129,16 +1129,16 @@ function calcPoolBonusChoiceSelect(chooser, cn) {
 	values.forEach(function(value) {
 		var [id, v] = value;
 		pool.addItem(id, v, false);
-		CHAR.noteBonus(cn, Pool, pool, id, v);
+		CHAR.noteBonus(cn, "PoolItem", pool, id);
 	});
 }
 
 
 // button === this
-//$RPG.bundles.pagePreloaders handlers should return either FALSE or an ARRAY of HTML objects
+//$RPG.bundles.bundlePreloaders handlers should return either FALSE, an HTML node, or an ARRAY of HTML nodes
 export function bundleChoicesPreloader(page) {
 	var html = page.html.slice(),
-		$RB = $RPG.bundles.pagePreloaders;
+		$RB = $RPG.bundles.bundlePreloaders;
 	$RPG.bundles.choicesToBeMade.forEach(function(o) {
 		var h = $RB[o.type](o);
 		if(h !== false) {
@@ -1157,12 +1157,15 @@ export function bundleChoicesPreloader(page) {
 
 
 export function bundleChoicesFilter(html, unit) {
-	$a(".basicChooser", html).forEach(function(c) {
+	$a(".chooserWithInputs", html).forEach(function(c) {
 		var ch = [Int.converter(c.dataset.choices)];
-		if(ch > 1) {
+		if(ch[0] > 1) {
 			let i = Array.from($a("input", c)),
 				f = maxChooserChoices.bind(ch.concat(i));
-			i.forEach(inp => $listen(inp, f, "input"));
+			i.forEach(function(inp) {
+				inp.dataset.orderClicked = "0";
+				$listen(inp, f, "input");
+			});
 		}
 	});
 }
@@ -1172,17 +1175,38 @@ export function bundleChoicesFilter(html, unit) {
 function maxChooserChoices(e) {
 	// Unselects checkboxes until we're at the max
 	var i = this.slice(),
-		n = i.shift(),
-		selected = i.reduce((acc, x) => acc += (x.checked ? 1 : 0), 0);
-	while(selected > n) {
-		i.every(function(x) {
-			if(x.checked) {
-				x.checked = false;
-				selected--;
-				return false;
+		max = i.shift(),
+		newClick,
+		clicked = i.map(function(inp) {
+			var oC = inp.dataset.orderClicked;
+			if(inp.checked) {
+				if(oC === "0") {
+					newClick = inp;
+					return 0;
+				}
+				return [Number(oC), inp];
+			} else if (oC !== "0") {
+				inp.dataset.orderClicked = "0";
 			}
-			return true;
-		});
+			return 0;
+		}).filter(inp => inp !== 0),
+		selected = clicked.length;
+	// Sort from biggest (newest) to smallest (oldest)
+	clicked.sort((a, b) => b[0] - a[0]);
+	if(newClick !== undefined) {
+		let newOrder = 1;
+		if(selected > 0) {
+			newOrder = clicked[0][0] + 1;
+		}
+		newClick.dataset.orderClicked = String(newOrder);
+		clicked.unshift([newOrder, newClick]);
+		selected++;
+	}
+	while(selected > max) {
+		let undo = clicked.pop()[1];
+		undo.dataset.orderClicked = "0";
+		undo.checked = false;
+		selected--;
 	}
 }
 
@@ -1190,8 +1214,8 @@ function maxChooserChoices(e) {
 $RPG.ADD("pages", {
 	BasicPageObject: BasicPageObject,
 	pageTemplates: {},
-	bundles: {},
-	handlers: {
+	parsedBundles: {},
+	TagHandlers: {
 		Title: parsePageAttribute,
 		Description: parseComplexPageAttribute,
 		Block: parseBlock,
@@ -1203,7 +1227,6 @@ $RPG.ADD("pages", {
 		ITEM: parseItem
 	},
 	inputDatasetProps: [["selfSaving", TF.converter], "postLoader"],
-	inputPostLoaders: {},
 	buttonTypes: {
 		navigation: {
 			mandatoryProps: ["nextPage"],
@@ -1213,7 +1236,7 @@ $RPG.ADD("pages", {
 		},
 		calculation: {
 			mandatoryProps: ["calcName"],
-			datasetProps: [["whichClass", "whichId", "separator", "toCalc", "calcName"]],
+			datasetProps: ["whichClass", "whichId", "separator", "calcName"],
 			defaultText: "Calculate",
 			listenFunc: calculateFromPage
 		},
@@ -1237,7 +1260,7 @@ $RPG.ADD("pages", {
 		},
 		resetNavigation: {
 			mandatoryProps: ["nextPage", "resetName"],
-			datasetProps: ["nextPage", "resetName", "whichClass", "whichId", "separator", "haltable"],
+			datasetProps: ["nextPage", "resetName", "haltable"],
 			defaultText: "Go Back",
 			listenFunc: resetThenNavigate
 		},

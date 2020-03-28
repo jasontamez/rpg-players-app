@@ -196,13 +196,18 @@ export class MultiStat extends BasicIdObject {
 		i.has("idPre") || i.set("idPre", "_");
 		i.has("idPost") || i.set("idPost", "");
 		this.inheritors = new Map();
-		this.inhCount = 1;
+		this.inhCount = 0;
 		this.type = type;
 		MultiStat.allIDs.set(id, this);
 	}
+	makeAtt(att, n) {
+		var pre = this.get(att + "Pre") || "",
+			post = this.get(att + "Post") || "";
+		return pre + n + post;
+	}
 	makeStatFromNode(node, atts, method = "parseStats") {
 		var n = this.inhCount++,
-			id = this.get("idPre") + n.toString() + this.get("idPost"),
+			id = this.makeAtt("id", n.toString()),
 			newStat;
 		newStat = new this.type(id, this, node, atts);
 		$RPG.current.character.addStat(method, id, newStat);
@@ -210,55 +215,38 @@ export class MultiStat extends BasicIdObject {
 		return newStat;
 	}
 	hasChild(n) {
-		var pre = this.get("idPre"),
-			post = this.get("idPost"),
-			id = pre + n.toString() + post;
-		return this.inheritors.has(id);
+		return this.inheritors.has(this.makeAtt("id", n.toString()));
+	}
+	getChild(n) {
+		return this.inheritors.get(this.makeAtt("id", n.toString()));
 	}
 	makeStatBasic(nombre, title, description, method = "parseStats") {
-		var n = this.inhCount++,
-			pre = this.get("idPre"),
-			post = this.get("idPost"),
+		var n = ++this.inhCount,
 			atts = [],
 			i = this.atts,
-			id, titlePre, titlePost, descPre, descPost, t, d,
-			newStat,
-			decrement = false;
+			CHAR = $RPG.current.character,
+			id, descPre, descPost, t, d,
+			newStat;
 		// Get id
-		if(nombre) {
-			id = pre + nombre.toString() + post;
-		} else {
-			id = pre + n.toString() + post;
-			// flag in case we need to revert
-			decrement = true;
-		}
+		id = this.makeAtt("id", String(nombre || n));
 		// Make sure this isn't a duplicate
-		if($RPG.current.character.getStat(id) !== undefined) {
+		if((newStat = CHAR.getStat(id)) !== undefined) {
 		//if(BasicIdObject.getById(id) !== undefined) {
 			// It is
-			if(decrement) {
-				this.inhCount--;
-			}
-			return logErrorText("ERROR INHERITING FROM MULTISTAT: id \"" + id + "\" already exists");
+			this.inhCount--;
+			logErrorText("ERROR INHERITING FROM MULTISTAT: id \"" + id + "\" already exists");
+			return newStat;
 		}
 		// Parse atts
 		i.forEach(function(v, key) {
 			switch(key) {
 				case "idPre":
 				case "idPost":
-					// Do nothing
-					break;
 				case "titlePre":
-					titlePre = v;
-					break;
 				case "titlePost":
-					titlePost = v;
-					break;
 				case "descPre":
-					descPre = v;
-					break;
 				case "descPost":
-					descPost = v;
+					// Do nothing
 					break;
 				case "title":
 					t = v;
@@ -270,33 +258,15 @@ export class MultiStat extends BasicIdObject {
 					atts.push([key, v]);
 			}
 		});
-		// Check for title
-		if(title === undefined) {
-			if(t !== undefined) {
-				atts.push(["title", t]);
-			} else if (titlePre !== undefined && titlePost !== undefined) {
-				atts.push(["title", String(titlePre) + String(titlePost)]);
-			}
-		} else if (titlePre !== undefined && titlePost !== undefined) {
-			atts.push(["title", String(titlePre) + title + String(titlePost)]);
-		} else {
-			atts.push(["title", title]);
-		}
-		// Check for description
-		if(description === undefined) {
-			if(d !== undefined) {
-				atts.push(["description", d]);
-			} else if (descPre !== undefined && descPost !== undefined) {
-				atts.push(["description", String(descPre) + String(descPost)]);
-			}
-		} else if (descPre !== undefined && descPost !== undefined) {
-			atts.push(["description", String(descPre) + description + String(descPost)]);
-		} else {
-			atts.push(["description", description]);
-		}
+		// Save title
+		newStat = this.makeAtt("title", title || t || "");
+		newStat && atts.push(["title", newStat]);
+		// Save description
+		newStat = this.makeAtt("desc", description || d || "");
+		newStat && atts.push(["description", newStat]);
 		// Make Stat
 		newStat = new this.type(id, this, undefined, atts);
-		$RPG.current.character.addStat(method, id, newStat);
+		CHAR.addStat(method, id, newStat);
 		this.inheritors.set(id, newStat);
 		return newStat;
 	}
@@ -1708,7 +1678,7 @@ export function parseMultiStat(node, parentNode, parentTag) {
 	}
 	type = $RPG.stats.getTypeObject(type, Str);
 	tag = new MultiStat(id, parentTag, node, type, atts);
-	$RPG.current.character.addStat(id, tag);
+	$RPG.current.character.addMultiStat(id, tag);
 	parseStatNodes(node, tag);
 }
 
@@ -1818,7 +1788,7 @@ export function parseBonus(node, parentNode, parentTag) {
 	} else {
 		delete atts.id;
 	}
-	$RPG.current.character.noteBonus("parseStats", nombre, parentTag, atts.type, atts.note);
+	$RPG.current.character.noteBonus("parseStats", "Bonus", parentTag, nombre, atts.type, atts.note);
 	if (formula !== undefined) {
 		//addBonus(nombre, type, bonus, notation = undefined)
 		let f = Formula.getName(formula);
@@ -1846,7 +1816,7 @@ export function parseNotation(node, parentNode, parentTag) {
 	if(!note) {
 		return logError(node, "NOTATION missing \"value\" parameter or inner text content");
 	}
-	$RPG.current.character.noteBonus("parseStats", null, parentTag, null, note);
+	$RPG.current.character.noteBonus("parseStats", "Notation", parentTag, note);
 	parentTag.addNotation(note);
 }
 
@@ -1893,7 +1863,7 @@ function parsePoolItem(node, parentNode, parentTag) {
 		title = value;
 	}
 	selected = atts.selected || false;
-	$RPG.current.character.noteBonus("parseStats", Pool, parentTag, title, value);
+	$RPG.current.character.noteBonus("parseStats", "PoolItem", parentTag, title);
 	parentTag.addItem(title, value, selected);
 }
 

@@ -1,6 +1,5 @@
 // Import parsing and logging
 import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
-import { Pool } from "./stats-module01.js";
 
 var $RPG = window["$RPG"];
 
@@ -41,10 +40,12 @@ export class CharacterObject {
 	getMultiStat(id) {
 		return this.multistats.get(id);
 	}
-	noteBonus(id, nombre, stat, type, notation) {
-		var holder = this.bonuses.get(id) || [];
-		holder.push([nombre, stat, type, notation]);
-		//holder.set(nombre, {stat: stat, type: type, note: notation});
+	// noteBonus(anyID, stringUndoBonusFunctionName, ...any number of arguments)
+	noteBonus() {
+		var args = Array.from(arguments),
+			id = args.shift(),
+			holder = this.bonuses.get(id) || [];
+		holder.push(args);
 		this.bonuses.set(id, holder);
 		if(id === undefined) {
 			console.log(undefined);
@@ -58,36 +59,12 @@ export class CharacterObject {
 		}
 		bonuses.forEach(function(arr) {
 			var n = arr.shift(),
-				stat = arr.shift();
-			switch(n) {
-				case null:
-					// Note
-					return stat.removeNotation(arr.pop());
-				case Pool:
-					// Pool Item
-					return stat.removeItem(arr.shift());
-				case 0:
-					// Directly setting a value
-					return stat.set("value", arr.shift());
-				case true:
-					// Selecting a Pool value
-					if(!arr.pop()) {
-						stat.removeSelection(arr.shift());
-					}
-					return;
-				default:
-					if(n instanceof Object) {
-						// Customized undo method
-						let undo = $RPG.data.undoBonusMethods[n.undoMethod];
-						if(undo === undefined) {
-							logError(n, "Cannot undo \"" + n.undoMethod + "\"");
-							return;
-						}
-						return undo(n, stat, arr);
-					}
-					// Regular bonus
-					stat.removeBonus(n, arr.shift(), arr.shift());
+				undo = $RPG.data.undoBonusMethods[n];
+			if(undo === undefined) {
+				logError(n, "Cannot find undo operation \"" + n + "\"");
+				return;
 			}
+			return undo(...arr);
 		});
 		this.bonuses.delete(id);
 		return true;
@@ -116,8 +93,39 @@ export class PlayerObject {
 	//getById
 }
 
+
+function undoBonus(stat, nombre, type, notation) { //string
+	return stat.removeBonus(nombre, type, notation);
+}
+function undoNotation(stat, note) { //null
+	return stat.removeNotation(note);
+}
+function undoPoolItem(stat, item) { //Pool
+	return stat.removeItem(item);
+}
+function undoSetValue(stat, oldValue) { //0
+	return stat.set("value", oldValue);
+}
+function undoPoolSelection(stat, value, prevSelect) { //true
+	if(!prevSelect) {
+		return stat.removeSelection(value);
+	}
+	return null;
+}
+function emptyPool(stat) {
+	return stat.empty();
+}
+
+
 $RPG.ADD("data", {
 	player: PlayerObject,
 	character: CharacterObject,
-	undoBonusMethods: {}
+	undoBonusMethods: {
+		Bonus: undoBonus,
+		Notation: undoNotation,
+		PoolItem: undoPoolItem,
+		SetValue: undoSetValue,
+		PoolSelection: undoPoolSelection,
+		emptyPool: emptyPool
+	}
 });
