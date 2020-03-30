@@ -84,7 +84,7 @@ export class PlayerObject {
 	makeCharacter(ruleset) {
 		// make an ID
 		var id = "ID",
-			rs = this.rulesets.get(ruleset) || new Map();
+			rs = this.rulesets.get(ruleset) || new Map(),
 			char;
 		char = new CharacterObject(this, ruleset, id);
 		rs.set(id, char);
