@@ -363,6 +363,7 @@ function parseBundle(node, category) {
 	if(id === undefined || category === undefined) {
 		return logError(node, "BUNDLE: missing required \"id\" and/or \"category\" parameters");
 	}
+	modifyLoadingScreen($t("[parsing bundle \"" + category + "\"]"));
 	delete atts.id;
 	atts = parseObjectToArray(atts);
 	info = BUNDLES.get(category);
