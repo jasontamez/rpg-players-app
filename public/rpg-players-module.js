@@ -24,6 +24,7 @@ var PO = new PlayerObject("id"),
 	Char = PO.makeCharacter("pf01");
 $RPG.ADD("current", {
 	player: PO,
+	ruleset: "pf01",
 	character: Char
 });
 
