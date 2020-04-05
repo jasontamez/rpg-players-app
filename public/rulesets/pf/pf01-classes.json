@@ -1,0 +1,378 @@
+{
+	"ruleset": "pf01",
+	"title": "Pathfinder",
+	"description": "Pathfinder Roleplaying Game",
+	"Bundles": [
+		{
+			"id": "bard",
+			"title": "Bard",
+			"hitDie": 8,
+			"startingWealthX10": "3d6",
+			"startingWealthAverage": 105,
+			"ClassSkills": [
+				"Acrobatics",
+				"Appraise",
+				"Bluff",
+				"Climb",
+				"craft_skills",
+				"Diplomacy",
+				"Disguise",
+				"Escape Artist",
+				"Intimidate",
+				"Knowledge (arcana)",
+				"Knowledge (dungeoneering)",
+				"Knowledge (engineering)",
+				"Knowledge (geography)",
+				"Knowledge (history)",
+				"Knowledge (local)",
+				"Knowledge (nature)",
+				"Knowledge (nobility)",
+				"Knowledge (planes)",
+				"Knowledge (religion)",
+				"Linguistics",
+				"Perception",
+				"perform_skills",
+				"profession_skills",
+				"Sense Motive",
+				"Sleight of Hand",
+				"Spellcraft",
+				"Stealth",
+				"Use Magic Device"
+			],
+			"Bonuses": [
+				{
+					"to": [
+						"ReflSave",
+						"WillSave"
+					],
+					"amount": {
+						"id": "Level",
+						"attribute": "GoodSave"
+					}
+				},
+				{
+					"to": "FortSave",
+					"amount": {
+						"id": "Level",
+						"attribute": "BadSave"
+					}
+				},
+				{
+					"to": "BAB",
+					"amount": {
+						"id": "Level",
+						"attribute": "threeQuarters"
+					}
+				},
+				{
+					"to": "skillPoints",
+					"amount": [
+						"Equation",
+						["Add", 6],
+						["Add", {
+							"id": "INT",
+							"attribute": "modifier"
+						}],
+						["Multiply", {
+							"id": "Level"
+						}],
+						["AtLeast", {
+							"id": "Level"
+						}]
+					]
+				}
+			],
+			"PoolBonuses": [
+				{
+					"to": "weaponProficiencies",
+					"add": [
+						"TYPEsimple",
+						"longsword",
+						"rapier",
+						"sap",
+						"shortsword",
+						"shortbow",
+						"whip"
+					]
+				},
+				{
+					"to": "armorProficiencies",
+					"add": [
+						"TYPElight",
+						"TYPEshield"
+					]
+				}
+			]
+		},
+		{
+			"id": "barbarian",
+			"title": "Barbarian"
+		},
+		{
+			"id": "cleric",
+			"title": "Cleric"
+		},
+		{
+			"id": "druid",
+			"title": "Druid"
+		},
+		{
+			"id": "monk",
+			"title": "Monk"
+		},
+		{
+			"id": "paladin",
+			"title": "Paladin"
+		},
+		{
+			"id": "ranger",
+			"title": "Ranger"
+		},
+		{
+			"id": "rogue",
+			"title": "Rigue"
+		},
+		{
+			"id": "unchRogue",
+			"title": "Unchained Rogue"
+		},
+		{
+			"id": "sorcerer",
+			"title": "Sorcerer"
+		},
+		{
+			"id": "wizard",
+			"title": "Wizard"
+		},
+		{
+			"id": "alchemist",
+			"title": "Alchemist"
+		},
+		{
+			"id": "cavalier",
+			"title": "Cavalier"
+		},
+		{
+			"id": "gunslinger",
+			"title": "Gunslinger"
+		},
+		{
+			"id": "inquisitor",
+			"title": "Inquisitor"
+		},
+		{
+			"id": "magus",
+			"title": "Magus"
+		},
+		{
+			"id": "oracle",
+			"title": "Oracle"
+		},
+		{
+			"id": "summoner",
+			"title": "Summoner"
+		},
+		{
+			"id": "witch",
+			"title": "Witch"
+		},
+		{
+			"id": "samurai",
+			"title": "Samurai"
+		},
+		{
+			"id": "hunter",
+			"title": "Hunter"
+		},
+		{
+			"id": "bloodrager",
+			"title": "Bloodrager"
+		},
+		{
+			"id": "warpriest",
+			"title": "Warpriest"
+		},
+		{
+			"id": "shaman",
+			"title": "Shaman"
+		},
+		{
+			"id": "skald",
+			"title": "Skald"
+		},
+		{
+			"id": "slayer",
+			"title": "Slayer"
+		},
+		{
+			"id": "swashbuckler",
+			"title": "Swashbuckler"
+		},
+		{
+			"id": "shifter",
+			"title": "Shifter"
+		},
+		{
+			"id": "investigator",
+			"title": "Investigator"
+		},
+		{
+			"id": "fighter",
+			"title": "Fighter",
+			"hitDie": 10,
+			"startingWealthX10": "5d6",
+			"startingWealthAverage": 175,
+			"ClassSkills": [
+				"Climb",
+				"craft_skills",
+				"Handle Animal",
+				"Intimidate",
+				"Knowledge (dungeoneering)",
+				"Knowledge (engineering)",
+				"profession_skills",
+				"Ride",
+				"Survival",
+				"Swim"
+			],
+			"Stats": [
+				{
+					"stat": "Pool",
+					"id": "FighterBonusFeats",
+					"title": "Fighter Bonus Feats",
+					"type": "Typeless",
+					"attributes": [
+						{
+							"name": "maxSelectable",
+							"type": "Int",
+							"value": [
+								"Equation",
+								["Add", {
+									"id": "Level"
+								}],
+								["Divide", 2],
+								["Add", 1],
+								["Floor"]
+							]
+						}
+					]
+				}
+			],
+			"Bonuses": [
+				{
+					"to": [
+						"ReflSave",
+						"WillSave"
+					],
+					"amount": {
+						"id": "Level",
+						"attribute": "BadSave"
+					}
+				},
+				{
+					"to": "FortSave",
+					"amount": {
+						"id": "Level",
+						"attribute": "GoodSave"
+					}
+				},
+				{
+					"to": "BAB",
+					"amount": {
+						"id": "Level"
+					}
+				},
+				{
+					"to": "skillPoints",
+					"amount": [
+						"Equation",
+						["Add", 2],
+						["Add", {
+							"id": "INT",
+							"attribute": "modifier"
+						}],
+						["Multiply", {
+							"id": "Level"
+						}],
+						["AtLeast", {
+							"id": "Level"
+						}]
+					]
+				},
+				{
+					"to": "WillSave",
+					"note": "vs fear",
+					"amount": [
+						"Equation",
+						["Add", 2],
+						["Add", {
+							"id": "Level"
+						}],
+						["Divide", 4],
+						["Floor"]
+					]
+				}
+			],
+			"PoolBonuses": [
+				{
+					"to": "weaponProficiencies",
+					"add": [
+						"TYPEsimple",
+						"TYPEmartial"
+					]
+				},
+				{
+					"to": "armorProficiencies",
+					"add": [
+						"TYPElight",
+						"TYPEmedium",
+						"TYPEheavy",
+						"TYPEshield",
+						"tower shield"
+					]
+				}
+			]
+		}
+	],
+	"Comments": [
+		"<Bundle id=\"fighter\" title=\"Fighter\">",
+		"  <When fromId=\"Level\" function=\"EqualTo\" test=\"3\">",
+		"  </When>",
+		"  <!--Starting at 3rd level, a fighter learns to be more maneuverable while wearing",
+		"    armor. Whenever he is wearing armor, he reduces the armor check penalty by",
+		"    1 (to a minimum of 0) and increases the maximum Dexterity bonus allowed by his",
+		"    armor by 1. Every four levels thereafter (7th, 11th, and 15th), these bonuses",
+		"    increase by +1 each time, to a maximum –4 reduction of the armor check penalty",
+		"    and a +4 increase of the maximum Dexterity bonus allowed.",
+		"    In addition, a fighter can also move at his normal speed while wearing medium",
+		"    armor. At 7th level, a fighter can move at his normal speed while wearing",
+		"    heavy armor.-->",
+		"  <!--Beginning at 7th level, instead of increasing the benefits provided by armor",
+		"    training (reducing his armor’s check penalty by 1 and increasing its maximum",
+		"    Dexterity bonus by 1), a fighter can choose an advanced armor training option",
+		"    (see Advanced Armor Training below) . If the fighter does so, he still gains",
+		"    the ability to move at his normal speed while wearing medium armor at 3rd",
+		"    level, and while wearing heavy armor at 7th level-->",
+		"  <!--Starting at 5th level, a fighter can select one group of weapons, as noted",
+		"    below. Whenever he attacks with a weapon from this group, he gains a +1 bonus",
+		"    on attack and damage rolls. Every four levels thereafter (9th*, 13th, and 17th),",
+		"    a fighter becomes further trained in another group of weapons. He gains a +1",
+		"    bonus on attack and damage rolls when using a weapon from this group. In",
+		"    addition, the bonuses granted by previous weapon groups increase by +1 each.",
+		"    For example, when a fighter reaches 9th level, he receives a +1 bonus on attack",
+		"    and damage rolls with one weapon group and a +2 bonus on attack and damage",
+		"    rolls with the weapon group selected at 5th level. Bonuses granted from",
+		"    overlapping groups do not stack. Take the highest bonus granted for a weapon if",
+		"    it resides in two or more groups. A fighter also adds this bonus to any combat",
+		"    maneuver checks made with weapons from his group. This bonus also applies to",
+		"    the fighter’s Combat Maneuver Defense when defending against disarm and sunder",
+		"    attempts made against weapons from this group.-->",
+		"  <!--Beginning at 9th level, instead of selecting an additional fighter weapon",
+		"    group, a fighter can choose an advanced weapon training option (see Advanced",
+		"    Weapon Training below) for one fighter weapon group that he previously selected",
+		"    with the weapon training class feature.-->",
+		"  <!-- Weapon Groups: axes, heavy blades, light blades, bows, close, crossbows,",
+		"    double, firearms, flails, hammers, monk, natural, polearms, siege engines,",
+		"    spears, thrown, tribal -->",
+		"</Bundle>"
+	]
+}
