@@ -1,20 +1,14 @@
 {
 	"COMMENTS": [
-		"instead of ID: THIS, just assume it if there's no ID specified",
+		"We should presume 'null' is 'this' and 'value'",
 		"Formulae have no TYPE, just inType and outType"
 	],
 	"ruleset": "pf01",
 	"title": "Pathfinder",
 	"description": "Pathfinder Roleplaying Game",
 	"Modules": [
-		{
-			"module": "stats",
-			"src": "pf01-stat-module.json"
-		},
-		{
-			"module": "pages",
-			"src": "pf01-page-module.json"
-		}
+		["stats", "pf01-stat-module.json"],
+		["pages", "pf01-page-module.json"]
 	],
 	"Formulae": [
 		{
@@ -22,9 +16,7 @@
 			"formula": "If",
 			"inType": "Int",
 			"outType": "Str",
-			"start": {
-				"attribute": "modifier"
-			},
+			"start": [null, "modifier"],
 			"compare": [
 				"AND",
 				["GreaterThan", -1]
@@ -32,22 +24,16 @@
 			"then": [
 				"Equation",
 				["Add", "+"],
-				["Add", {
-					"attribute": "modifier"
-				}]
+				["Add", [null, "modifier"]]
 			],
-			"else": {
-				"attribute": "modifier"
-			}
+			"else": [null, "modifier"]
 		},
 		{
 			"name": "convert_modified_value_to_string",
 			"formula": "If",
 			"inType": "Int",
 			"outType": "Str",
-			"start": {
-				"attribute": "modifiedValue"
-			},
+			"start": [null, "modifiedValue"],
 			"compare": [
 				"AND",
 				["GreaterThan", -1]
@@ -55,22 +41,16 @@
 			"then": [
 				"Equation",
 				["Add", "+"],
-				["Add", {
-					"attribute": "modifiedValue"
-				}]
+				["Add", [null, "modifiedValue"]]
 			],
-			"else": {
-				"attribute": "modifiedValue"
-			}
+			"else": [null, "modifiedValue"]
 		},
 		{
 			"name": "if_class_skill_then_plus_one",
 			"formula": "If",
 			"inType": "Pool",
 			"outType": "Int",
-			"start": {
-				"attribute": "source"
-			},
+			"start": [null, "source"],
 			"compare": [
 				"AND",
 				["Has", "class"]
@@ -84,9 +64,7 @@
 			"formula": "If",
 			"inType": "Pool",
 			"outType": "Int",
-			"start": {
-				"attribute": "source"
-			},
+			"start": [null, "source"],
 			"compare": [
 				"AND",
 				["Has", "class"],
@@ -100,9 +78,7 @@
 			"formula": "If",
 			"inType": "Pool",
 			"outType": "Int",
-			"start": {
-				"attribute": "source"
-			},
+			"start": [null, "source"],
 			"compare": [
 				"AND",
 				["Has", "class"]
@@ -115,49 +91,41 @@
 		{
 			"name": "basic stats",
 			"attributes": [
-				{
-					"name": "modifier",
-					"value": [
-						"Equation",
-						["Add", -10],
-						["Add", {
-							"attribute": "modifiedValue"
-						}],
-						["Divide", 2],
-						["Floor"],
-						["AtLeast", -99]
-					]
-				},
-				{
-					"name": "modifierNonNegative",
-					"value": [
-						"Equation",
-						["Add", -10],
-						["Add", {
-							"attribute": "modifiedValue"
-						}],
-						["Divide", 2],
-						["Floor"],
-						["AtLeast", 0]
-					]	
-				},
-				{
-					"name": "modifierPositive",
-					"value": [
-						"Equation",
-						["Add", -10],
-						["Add", {
-							"attribute": "modifiedValue"
-						}],
-						["Divide", 2],
-						["Floor"],
-						["AtLeast", 1]
-					]	
-				},
-				{
-					"name": "modifier_text",
+				["modifier", [
+					"Equation",
+					["Add", -10],
+					["Add", [null, "modifiedValue"]],
+					["Divide", 2],
+					["Floor"],
+					["AtLeast", -99]
+				]],
+				["modifierNonNegative", [
+					"Equation",
+					["Add", -10],
+					["Add", [null, "modifiedValue"]],
+					["Divide", 2],
+					["Floor"],
+					["AtLeast", 0]
+				]],
+				["modifierPositive", [
+					"Equation",
+					["Add", -10],
+					["Add", [null, "modifiedValue"]],
+					["Divide", 2],
+					["Floor"],
+					["AtLeast", 1]
+				]],
+				["modifierNonPositive", [
+					"Equation",
+					["Add", -10],
+					["Add", [null, "modifiedValue"]],
+					["Divide", 2],
+					["Floor"],
+					["AtMost", 0]
+				]],
+				["modifier_text", {
 					"formula": "convert_modifier_to_string"
-				},
+				}],
 				["type", "IntBonusable"],
 				["startingValue", 10],
 				["minValue", 0],
@@ -167,95 +135,51 @@
 		{
 			"name": "strength-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "STR",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["STR", "modifier"]]
 			]
 		},
 		{
 			"name": "constitution-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "CON",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["CON", "modifier"]]
 			]
 		},
 		{
 			"name": "dexterity-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "DEX",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["DEX", "modifier"]]
 			]
 		},
 		{
 			"name": "intelligence-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "INT",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["INT", "modifier"]]
 			]
 		},
 		{
 			"name": "wisdom-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "WIS",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["WIS", "modifier"]]
 			]
 		},
 		{
 			"name": "charisma-based",
 			"attributes": [
-				{
-					"name": "score_mod",
-					"value": {
-						"id": "CHA",
-						"attribute": "modifier"
-					}
-				}
+				["score_mod", ["CHA", "modifier"]]
 			]
 		},
 		{
 			"name": "pure modifier",
 			"attributes": [
-				{
-					"name": "modifier",
-					"value": [
-						"Equation",
-						["Add", {
-							"attribute": "modifiedValue"
-						}],
-						["Add", {
-							"attribute": "score_mod"
-						}],
-						["AtLeast", -99]
-					]
-				},
-				{
-					"name": "modifier_text",
+				["modifier", [
+					"Equation",
+					["Add", [null, "modifiedValue"]],
+					["Add", [null, "score_mod"]],
+					["AtLeast", -99]
+				]],
+				["modifier_text", {
 					"formula": "convert_modifier_to_string"
-				}
+				}]
 			]
 		},
 		{
@@ -272,176 +196,53 @@
 				["maxValue", 99],
 				["startingValue", 0]
 			]
+		},
+		{
+			"name": "speed stats",
+			"attributes": [
+				["type", "IntBonusable"],
+				["stepValue", 5],
+				["startingValue", 0],
+				["minValue", 0]
+			]
 		}
 	],
-	"Group": [
+	"MultiStats": [
 		{
-			"Group": [
-				{
-					"Stat": [
-
-					],
-					"MultiStat": {
-						"id": "craft_skills",
-						"idPre": "Craft (",
-						"idPost": ")",
-						"titlePre": "Craft (",
-						"titlePost": ")",
-						"placeholder": "jewelry, weapons, etc",
-						"title": "Craft",
-						"background": "1"
-					},
-					"id": "intelligence_skill"
-				},
-				{
-					"MultiStat": {
-						"id": "profession_skills",
-						"idPre": "Profession (",
-						"idPost": ")",
-						"titlePre": "Profession (",
-						"titlePost": ")",
-						"placeholder": "barrister, sailor, etc",
-						"title": "Profession",
-						"background": "1"
-					},
-					"id": "wisdom_skill"
-				},
-				{
-					"MultiStat": {
-						"id": "perform_skills",
-						"idPre": "Perform (",
-						"idPost": ")",
-						"titlePre": "Perform (",
-						"titlePost": ")",
-						"placeholder": "dance, oratory, etc",
-						"title": "Perform",
-						"background": "1"
-					},
-					"id": "charisma_skill"
-				}
-			]
+			"id": "craft_skills",
+			"idPre": "Craft (",
+			"idPost": ")",
+			"titlePre": "Craft (",
+			"titlePost": ")",
+			"placeholder": "jewelry, weapons, etc",
+			"title": "Craft",
+			"type": "PfSkill",
+			"groups": ["skill", "pure modifier", "intelligence-based"],
+			"background": true
 		},
 		{
-			"Stat": [
-				{
-					"id": "landSpeed",
-					"title": "Speed"
-				},
-				{
-					"id": "flySpeed",
-					"title": "Fly Speed"
-				},
-				{
-					"id": "climbSpeed",
-					"title": "Climb Speed"
-				},
-				{
-					"id": "swimSpeed",
-					"title": "Swim Speed"
-				},
-				{
-					"id": "burrowSpeed",
-					"title": "Burrow Speed"
-				}
-			],
-			"id": "speeds",
-			"type": "IntBonusable",
-			"stepValue": "5",
-			"startingValue": "0"
+			"id": "profession_skills",
+			"idPre": "Profession (",
+			"idPost": ")",
+			"titlePre": "Profession (",
+			"titlePost": ")",
+			"placeholder": "barrister, sailor, etc",
+			"title": "Profession",
+			"type": "PfSkill",
+			"groups": ["skill", "pure modifier", "wisdom-based"],
+			"background": true
 		},
 		{
-			"Pool": [
-				{
-					"Attribute": {
-						"name": "maxSelectable",
-						"type": "Int",
-						"fromId": "languagesKnown"
-					},
-					"id": "languages",
-					"title": "Languages",
-					"fromCategory": "languages",
-					"value": "Common,Elven,Dwarven,Gnomish,Halfling,Celestial,Infernal,Abyssal,Draconic,Sylvan,Aquan,Terran,Ignan,Auran,Undercommon,Gnoll,Goblin,Giant,Orc,Aboleth,Aklo,Boggard,Cyclops,Dark Folk,D'ziriak,Drow Sign Language,Grippli,Necril,Protean,Sphinx,Tengu,Treant,Vegepygmy,Read Lips,Azlanti"
-				},
-				{
-					"id": "DR",
-					"title": "Damage Resistance"
-				},
-				{
-					"id": "bonusLanguages",
-					"title": "Bonus Language Choices"
-				},
-				{
-					"id": "creatureSubtypes",
-					"title": "Creature Subtypes"
-				},
-				{
-					"id": "armorProficiencies",
-					"title": "Armor Proficiencies"
-				},
-				{
-					"id": "weaponProficiencies",
-					"title": "Weapon Proficiencies"
-				},
-				{
-					"id": "weaponMartial"
-				},
-				{
-					"id": "favoredClassChoices",
-					"title": "Favored Class Choices",
-					"value": "bard,barbarian,cleric,druid,fighter,monk,paladin,ranger,rogue,unchRogue,sorcerer,wizard,alchemist,cavalier,gunslinger,inquisitor,magus,oracle,summoner,witch,samurai,hunter,warpriest,bloodrager,shaman,skald,slayer,swashbuckler,shifter,investigator"
-				}
-			],
-			"id": "string_pools",
-			"type": "Str",
-			"separator": ","
-		},
-		{
-			"Pool": [
-				{
-					"id": "HIDDEN VARIABLES"
-				},
-				{
-					"id": "skillEffects",
-					"title": "Skill Effects"
-				},
-				{
-					"id": "saveEffects",
-					"title": "Saving Throw Effects"
-				},
-				{
-					"id": "combatEffects",
-					"title": "Combat Effects"
-				},
-				{
-					"id": "spellcastingEffects",
-					"title": "Spellcasting Effects"
-				},
-				{
-					"id": "speedEffects",
-					"title": "Movement Effects"
-				},
-				{
-					"id": "senseEffects",
-					"title": "Sense Effects"
-				},
-				{
-					"id": "miscEffects",
-					"title": "Skill Effects"
-				},
-				{
-					"id": "archetypes",
-					"title": "Archetypes",
-					"type": "Typeless"
-				},
-				{
-					"id": "racialTraits",
-					"title": "Racial Traits",
-					"type": "Typeless"
-				}
-			],
-			"id": "string_pools_with_commas",
-			"type": "Str",
-			"separator": "%%%"
+			"id": "perform_skills",
+			"idPre": "Perform (",
+			"idPost": ")",
+			"titlePre": "Perform (",
+			"titlePost": ")",
+			"placeholder": "dance, oratory, etc",
+			"title": "Perform",
+			"type": "PfSkill",
+			"groups": ["skill", "pure modifier", "charisma-based"],
+			"background": true
 		}
 	],
 	"Stats": [
@@ -501,13 +302,10 @@
 			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
-			"Bonus": {
-				"fromId": "size",
-				"attribute": "flySkillModifier"
-			},
 			"id": "Fly",
 			"title": "Fly",
-			"groups": ["skill", "pure modifier", "dexterity-based"]
+			"groups": ["skill", "pure modifier", "dexterity-based"],
+			"Bonus": ["size", "flySkillModifier"]
 		},
 		{
 			"id": "Ride",
@@ -518,22 +316,19 @@
 			"id": "Sleight of Hand",
 			"title": "Sleight of Hand",
 			"groups": ["skill", "pure modifier", "dexterity-based"],
-			"background": "1"
+			"background": true
 		},
 		{
-			"Bonus": {
-				"fromId": "size",
-				"attribute": "stealthSkillModifier"
-			},
 			"id": "Stealth",
 			"title": "Stealth",
-			"groups": ["skill", "pure modifier", "dexterity-based"]
+			"groups": ["skill", "pure modifier", "dexterity-based"],
+			"Bonus": ["size", "stealthSkillModifier"]
 		},
 		{
 			"id": "Appraise",
 			"title": "Appraise",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Knowledge (arcana)",
@@ -549,19 +344,19 @@
 			"id": "Knowledge (engineering)",
 			"title": "Knowledge (engineering)",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Knowledge (geography)",
 			"title": "Knowledge (geography)",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Knowledge (history)",
 			"title": "Knowledge (history)",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Knowledge (local)",
@@ -577,7 +372,7 @@
 			"id": "Knowledge (nobility)",
 			"title": "Knowledge (nobility)",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Knowledge (planes)",
@@ -590,25 +385,17 @@
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
-			"Attribute": {
-				"Math": {
-					"Subtract": {
-						"fromID": "this"
-					},
-					"Divide": {
-						"value": "2"
-					},
-					"Floor": "",
-					"AtLeast": {
-						"value": "0"
-					}
-				},
-				"name": "half_negative"
-			},
 			"id": "Linguistics",
 			"title": "Linguistics",
 			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": "1"
+			"background": true,
+			"half_negative": [
+				"Equation",
+				["Subtract", null],
+				["Divide", 2],
+				["Floor"],
+				["AtLeast", 0]
+			]
 		},
 		{
 			"id": "Spellcraft",
@@ -654,7 +441,7 @@
 			"id": "Handle Animal",
 			"title": "Handle Animal",
 			"groups": ["skill", "pure modifier", "charisma-based"],
-			"background": "1"
+			"background": true
 		},
 		{
 			"id": "Intimidate",
@@ -680,908 +467,570 @@
 			"id": "WillSave",
 			"title": "Will",
 			"groups": ["pure modifier", "wisdom-based"]
+		},
+		{
+			"id": "landSpeed",
+			"title": "Speed",
+			"groups": "speed stats"
+		},
+		{
+			"id": "flySpeed",
+			"title": "Fly Speed",
+			"groups": "speed stats"
+		},
+		{
+			"id": "climbSpeed",
+			"title": "Climb Speed",
+			"groups": "speed stats"
+		},
+		{
+			"id": "swimSpeed",
+			"title": "Swim Speed",
+			"groups": "speed stats"
+		},
+		{
+			"id": "burrowSpeed",
+			"title": "Burrow Speed",
+			"groups": "speed stats"
+		},
+		{
+			"id": "Level",
+			"title": "Level",
+			"type": "Int",
+			"startingValue": 1,
+			"minValue": 1,
+			"goodSave": [
+				"Equation",
+				["Add", null],
+				["Divide", 2],
+				["Add", 2],
+				["Floor"]
+			],
+			"badSave": [
+				"Equation",
+				["Add", null],
+				["Divide", 3],
+				["Floor"]
+			],
+			"halfLevel": [
+				"Equation",
+				["Add", null],
+				["Divide", 2],
+				["Floor"]
+			],
+			"threeQuarters": [
+				"Equation",
+				["Add", null],
+				["Multiply", 3],
+				["Divide", 4],
+				["Floor"]
+			],
+			"oddLevels": [
+				"Equation",
+				["Add", 1],
+				["Add", null],
+				["Divide", 2],
+				["Floor"]
+			]
+		},
+		{
+			"id": "Init",
+			"title": "Initiative",
+			"type": "IntBonusable",
+			"startingValue": 0,
+			"minValue": -99,
+			"modifier_text": {
+				"formula": "convert_modified_value_to_string"
+			}
+		},
+		{
+			"id": "Feats",
+			"title": "Feats",
+			"type": "IntBonusable",
+			"minValue": 0,
+			"startingValue": 0
+		},
+		{
+			"id": "SkillPoints",
+			"title": "Skill Points",
+			"type": "IntBonusable",
+			"minValue": 0
+		},
+		{
+			"id": "HeroPointsPerLevel",
+			"type": "IntBonusable",
+			"startingValue": 1
+		},
+		{
+			"id": "BAB",
+			"title": "Base Attack Bonus",
+			"type": "IntBonusable",
+			"startingValue": 0,
+			"modifier_text": {
+				"formula": "convert_modified_value_to_string"
+			},
+			"full_attack_text": [
+				"Do",
+				["While", [
+					"AND",
+					["GreaterThan", 5]
+				]],
+				["Input", "Int", null],
+				["Output", "Str", null, "modifier_text"],
+				["ModifyInput", [
+					["Subtract", 5]
+				]],
+				["ModifyOutput", [
+					["Add", "/+"],
+					"AddInput"
+				]]
+			]
+		},
+		{
+			"id": "darkvision",
+			"title": "Darkvision",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "lowLightVision",
+			"title": "Low-Light Vision",
+			"type": "TF",
+			"startingValue": 0
+		},
+		{
+			"id": "size",
+			"type": "PfSize",
+			"title": "Size",
+			"startingValue": 4
+		},
+		{
+			"id": "creatureType",
+			"type": "Str",
+			"startingValue": "humanoid"
+		},
+		{
+			"id": "characterName",
+			"type": "Str",
+			"startingValue": "Sam"
+		},
+		{
+			"id": "languagesKnown",
+			"type": "IntBonusable",
+			"title": "Languages Known",
+			"startingValue": 1,
+			"Bonuses": [
+				[
+					["INT", "modifierNonNegative"],
+					["Linguistics"]
+				]
+			]
+		},
+		{
+			"id": "naturalArmor",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "dodgeBonus",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "delectionBonus",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "armorBonus",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "shieldBonus",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "hardACBonuses",
+			"type": "IntBonusable",
+			"startingValue": 0,
+			"Bonuses": [
+				{
+					"type": "natural armor",
+					"amount": [["naturalArmor"]]
+				},
+				{
+					"type": "armor",
+					"amount": [["armorBonus"]]
+				},
+				{
+					"type": "shield",
+					"amount": [["shieldBonus"]]
+				}
+			]
+		},
+		{
+			"id": "universalACBonuses",
+			"type": "IntBonusable",
+			"startingValue": 0,
+			"Bonuses": [
+				{
+					"type": "deflection",
+					"amount": [["deflectionBonus"]]
+				}
+			]
+		},
+		{
+			"id": "AC",
+			"type": "IntBonusable",
+			"title": "AC",
+			"startingValue": 10,
+			"Bonuses": [
+				{
+					"type": "dodge",
+					"amount": [["dodgeBonus"]]
+				},
+				{
+					"type": "size",
+					"amount": [["size", "sizeModifier"]]
+				},
+				[
+					["DEX", "modifier"],
+					["hardACBonuses", "modifiedValue"],
+					["universalACBonuses", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "TAC",
+			"type": "IntBonusable",
+			"title": "Touch AC",
+			"startingValue": 10,
+			"Bonuses": [
+				{
+					"type": "dodge",
+					"amount": [["dodgeBonus"]]
+				},
+				{
+					"type": "size",
+					"amount": [["size", "sizeModifier"]]
+				},
+				[
+					["DEX", "modifier"],
+					["universalACBonuses", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "FFAC",
+			"type": "IntBonusable",
+			"title": "Flat-Footed AC",
+			"startingValue": 10,
+			"Bonuses": [
+				{
+					"type": "size",
+					"amount": [["size", "sizeModifier"]]
+				},
+				[
+					["DEX", "modifierNonPositive"],
+					["hardACBonuses", "modifiedValue"],
+					["universalACBonuses", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "CMB",
+			"title": "CMB",
+			"type": "IntBonusable",
+			"startingValue": 10,
+			"statBonus": [
+				"If",
+				["inOut", "Int", "Int"],
+				["Start", ["size", null]],
+				["Compare", [
+					"AND",
+					["LessThan", 3]
+				]],
+				["Then", ["DEX", "modifier"]],
+				["Else", ["STR", "modifier"]]
+			],
+			"Bonuses": [
+				{
+					"type": "size",
+					"amount": [["size", "specialSizeModifier"]]
+				},
+				[
+					[null, "statBonus"],
+					["BAB", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "CMD",
+			"title": "CMD",
+			"type": "IntBonusable",
+			"startingValue": 10,
+			"Bonuses": [
+				{
+					"type": "size",
+					"amount": [["size", "specialSizeModifier"]]
+				},
+				{
+					"type": "dodge",
+					"amount": [["dodgeBonus"]]
+				},
+				[
+					["STR", "modifier"],
+					["DEX", "modifier"],
+					["BAB", "modifiedValue"],
+					["universalACBonuses", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "CMDFF",
+			"title": "Flat-Footed CMD",
+			"type": "IntBonusable",
+			"startingValue": 10,
+			"Bonuses": [
+				{
+					"type": "size",
+					"amount": [["size", "specialSizeModifier"]]
+				},
+				[
+					["STR", "modifier"],
+					["DEX", "modifierNonPositive"],
+					["BAB", "modifiedValue"],
+					["universalACBonuses", "modifiedValue"]
+				]
+			]
+		},
+		{
+			"id": "SR",
+			"title": "Spell Resistance",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "AcidResist",
+			"title": "Acid Resistance",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "ColdResist",
+			"title": "Cold Resistance",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "ElecResist",
+			"title": "Electricity Resistance",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "FireResist",
+			"title": "Fire Resistance",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "LeadershipScore",
+			"title": "Leadership Score",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "favoredClasses",
+			"type": "IntBonusable",
+			"startingValue": 1
+		},
+		{
+			"id": "spellLikeAbilities",
+			"type": "PfSpells",
+			"title": "Spell-Like Abilities"
+		},
+		{
+			"id": "spellsKnown",
+			"type": "PfSpells",
+			"title": "Spells Known"
+		},
+		{
+			"id": "concentrationCheckBase",
+			"type": "IntBonusable",
+			"startingValue": 0
+		},
+		{
+			"id": "race",
+			"title": "Race",
+			"type": "Str",
+			"startingValue": ""
+		},
+		{
+			"id": "class",
+			"title": "Class",
+			"type": "Str",
+			"startingValue": ""
 		}
 	],
-	"Stats-Old": {
-		"Stat": [
-			{
-				"Attribute": [
-					{
-						"Math": {
-							"Add": [
-								{
-									"fromId": "this"
-								},
-								{
-									"value": "2"
-								}
-							],
-							"Divide": {
-								"value": "2"
-							},
-							"Floor": ""
-						},
-						"name": "goodSave"
-					},
-					{
-						"Math": {
-							"Add": {
-								"fromId": "this"
-							},
-							"Divide": {
-								"value": "3"
-							},
-							"Floor": ""
-						},
-						"name": "badSave"
-					},
-					{
-						"Math": {
-							"Add": {
-								"fromId": "this"
-							},
-							"Divide": {
-								"value": "2"
-							},
-							"Floor": ""
-						},
-						"name": "halfLevel"
-					},
-					{
-						"Math": {
-							"Add": {
-								"fromId": "this"
-							},
-							"Multiply": {
-								"value": "3"
-							},
-							"Divide": {
-								"value": "4"
-							},
-							"Floor": ""
-						},
-						"name": "threeQuarters"
-					},
-					{
-						"Math": {
-							"Add": [
-								{
-									"fromId": "this"
-								},
-								{
-									"value": "1"
-								}
-							],
-							"Divide": {
-								"value": "2"
-							},
-							"Floor": ""
-						},
-						"name": "oddLevels"
-					}
-				],
-				"id": "Level",
-				"title": "Level",
-				"type": "Int",
-				"startingValue": "1",
-				"minValue": "1"
-			},
-			{
-				"Attribute": {
-					"name": "modifier_text",
-					"formula": "convert_modified_value_to_string"
-				},
-				"id": "Init",
-				"title": "Initiative",
-				"type": "IntBonusable",
-				"startingValue": "0",
-				"minValue": "-99"
-			},
-			{
-				"id": "Feats",
-				"type": "IntBonusable",
-				"title": "Feats",
-				"minValue": "0",
-				"startingValue": "0"
-			},
-			{
-				"id": "SkillPoints",
-				"type": "IntBonusable",
-				"title": "Skill Points",
-				"minValue": "0"
-			},
-			{
-				"id": "HeroPointsPerLevel",
-				"type": "IntBonusable",
-				"startingValue": "1"
-			},
-			{
-				"Attribute": [
-					{
-						"Do": {
-							"While": {
-								"GreaterThan": {
-									"value": "5"
-								},
-								"operation": "AND"
-							},
-							"Input": {
-								"fromId": "this",
-								"attribute": "value"
-							},
-							"Output": {
-								"fromId": "this",
-								"attribute": "modifier_text"
-							},
-							"ModifyInput": {
-								"add": "-5"
-							},
-							"ModifyOutput": {
-								"add": "/+",
-								"useInput": "add"
-							},
-							"inType": "Int",
-							"outType": "Str"
-						},
-						"name": "full_attack_text"
-					},
-					{
-						"name": "modifier_text",
-						"type": "Str",
-						"formula": "convert_modified_value_to_string"
-					}
-				],
-				"id": "BAB",
-				"type": "IntBonusable",
-				"title": "Base Attack Bonus",
-				"startingValue": "0"
-			},
-			{
-				"id": "darkvision",
-				"type": "IntBonusable",
-				"title": "Darkvision",
-				"startingValue": "0"
-			},
-			{
-				"id": "lowLightVision",
-				"type": "TF",
-				"title": "Low-Light Vision",
-				"startingValue": "0"
-			},
-			{
-				"id": "size",
-				"type": "PfSize",
-				"title": "Size",
-				"startingValue": "4"
-			},
-			{
-				"id": "creatureType",
-				"type": "Str",
-				"startingValue": "humanoid"
-			},
-			{
-				"id": "characterName",
-				"type": "Str",
-				"startingValue": "Sam"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "INT",
-						"attribute": "modifierNonNegative"
-					},
-					{
-						"fromId": "Linguistics"
-					}
-				],
-				"id": "languagesKnown",
-				"type": "IntBonusable",
-				"title": "Languages Known",
-				"startingValue": "1"
-			},
-			{
-				"id": "naturalArmor",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "dodgeBonus",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "delectionBonus",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "armorBonus",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "shieldBonus",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "naturalArmor",
-						"type": "natural armor"
-					},
-					{
-						"fromId": "armorBonus",
-						"type": "armor"
-					},
-					{
-						"fromId": "shieldBonus",
-						"type": "shield"
-					}
-				],
-				"id": "hardACBonuses",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"Bonus": {
-					"fromId": "deflectionBonus",
-					"type": "deflection"
-				},
-				"id": "universalACBonuses",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "DEX",
-						"attribute": "modifier"
-					},
-					{
-						"fromId": "size",
-						"attribute": "sizeModifier",
-						"type": "size"
-					},
-					{
-						"fromId": "dodgeBonus",
-						"type": "dodge"
-					},
-					{
-						"fromId": "hardACBonuses",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "universalACBonuses",
-						"attribute": "modifiedValue"
-					}
-				],
-				"id": "AC",
-				"type": "IntBonusable",
-				"title": "AC",
-				"startingValue": "10"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "DEX",
-						"attribute": "modifier"
-					},
-					{
-						"fromId": "dodgeBonus",
-						"type": "dodge"
-					},
-					{
-						"fromId": "size",
-						"attribute": "sizeModifier",
-						"type": "size"
-					},
-					{
-						"fromId": "universalACBonuses",
-						"attribute": "modifiedValue"
-					}
-				],
-				"id": "TAC",
-				"type": "IntBonusable",
-				"title": "Touch AC",
-				"startingValue": "10"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "DEX",
-						"attribute": "modifierNonPositive"
-					},
-					{
-						"fromId": "size",
-						"attribute": "sizeModifier",
-						"type": "size"
-					},
-					{
-						"fromId": "hardACBonuses",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "universalACBonuses",
-						"attribute": "modifiedValue"
-					}
-				],
-				"id": "FFAC",
-				"type": "IntBonusable",
-				"title": "Flat-footed AC",
-				"startingValue": "10"
-			},
-			{
-				"Attribute": {
-					"If": {
-						"Compare": {
-							"fromId": "size"
-						},
-						"LessThan": {
-							"value": "3"
-						},
-						"Then": {
-							"fromId": "DEX",
-							"attribute": "modifier"
-						},
-						"Else": {
-							"fromId": "STR",
-							"attribute": "modifier"
-						},
-						"inType": "Int",
-						"outType": "Int"
-					},
-					"name": "statBonus",
-					"type": "Int"
-				},
-				"Bonus": [
-					{
-						"fromId": "this",
-						"attribute": "statBonus"
-					},
-					{
-						"fromId": "BAB",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "size",
-						"attribute": "specialSizeModifier",
-						"type": "size"
-					}
-				],
-				"id": "CMB",
-				"type": "IntBonusable",
-				"title": "CMB",
-				"startingValue": "0"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "STR",
-						"attribute": "modifier"
-					},
-					{
-						"fromId": "DEX",
-						"attribute": "modifier"
-					},
-					{
-						"fromId": "BAB",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "universalACBonuses",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "size",
-						"attribute": "specialSizeModifier",
-						"type": "size"
-					},
-					{
-						"fromId": "dodgeBonus",
-						"type": "dodge"
-					}
-				],
-				"id": "CMD",
-				"type": "IntBonusable",
-				"title": "CMD",
-				"startingValue": "10"
-			},
-			{
-				"Bonus": [
-					{
-						"fromId": "STR",
-						"attribute": "modifier"
-					},
-					{
-						"fromId": "DEX",
-						"attribute": "modifierNonPositive"
-					},
-					{
-						"fromId": "BAB",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "universalACBonuses",
-						"attribute": "modifiedValue"
-					},
-					{
-						"fromId": "size",
-						"attribute": "specialSizeModifier",
-						"type": "size"
-					}
-				],
-				"id": "CMDFF",
-				"type": "IntBonusable",
-				"title": "Flat-footed CMD",
-				"startingValue": "10"
-			},
-			{
-				"id": "SR",
-				"title": "Spell Resistance",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "AcidResist",
-				"title": "Acid Resistance",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "ColdResist",
-				"title": "Cold Resistance",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "ElecResist",
-				"title": "Electricity Resistance",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "FireResist",
-				"title": "Fire Resistance",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "LeadershipScore",
-				"title": "Leadership Score",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "favoredClasses",
-				"type": "IntBonusable",
-				"startingValue": "1"
-			},
-			{
-				"id": "spellLikeAbilities",
-				"type": "PfSpells",
-				"title": "Spell-Like Abilities"
-			},
-			{
-				"id": "spellsKnown",
-				"type": "PfSpells",
-				"title": "Spells Known"
-			},
-			{
-				"id": "concentrationCheckBase",
-				"type": "IntBonusable",
-				"startingValue": "0"
-			},
-			{
-				"id": "race",
-				"title": "Race",
-				"type": "Str",
-				"startingValue": ""
-			},
-			{
-				"id": "class",
-				"title": "Class",
-				"type": "Str",
-				"startingValue": ""
-			}
-		]
-	},
-	"Bundles": {
-		"Category": [
-			{
-				"name": "race",
-				"src": "pf/pf01-races.xml"
-			},
-			{
-				"name": "class",
-				"src": "pf/pf01-classes.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-a-b.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-c-de.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-di-e.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-f-h.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-i-l.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-m.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-n-rh.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-ri-sp.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-sq-t.xml"
-			},
-			{
-				"name": "feat",
-				"src": "pf/pf01-feats-u-z.xml"
-			}
-		]
-	},
-	"Resources": {
-		"Resource": {
-			"type": "stylesheet",
-			"src": "pf/pf01.css"
-		}
-	},
-	"Pages": {
-		"Page": [
-			{
-				"div": {
-					"ol": {
-						"li": [
-							{
-								"label": {
-									"INPUT": {
-										"id": "characterName"
-									},
-									"text": "Name:"
-								}
-							},
-							{
-								"ul": {
-									"li": [
-										{
-											"label": {
-												"INPUT": {
-													"id": "STR"
-												},
-												"text": "Strength"
-											}
-										},
-										{
-											"label": {
-												"INPUT": {
-													"id": "DEX"
-												},
-												"text": "Dexterity"
-											}
-										},
-										{
-											"label": {
-												"INPUT": {
-													"id": "CON"
-												},
-												"text": "Constitution"
-											}
-										},
-										{
-											"label": {
-												"INPUT": {
-													"id": "INT"
-												},
-												"text": "Intelligence"
-											}
-										},
-										{
-											"label": {
-												"INPUT": {
-													"id": "WIS"
-												},
-												"text": "Wisdom"
-											}
-										},
-										{
-											"label": {
-												"INPUT": {
-													"id": "CHA"
-												},
-												"text": "Charisma"
-											}
-										}
-									]
-								},
-								"text": "Stats:"
-							},
-							{
-								"label": {
-									"CHOOSE": {
-										"category": "race",
-										"saveTo": "race"
-									},
-									"text": "Choose a race:"
-								}
-							}
-						]
-					},
-					"BUTTON": {
-						"type": "calcNav",
-						"nextPage": "RACIAL TRAITS",
-						"calcName": "basicsAndRace",
-						"text": "Continue"
-					},
-					"class": "flex-vertical statContainer"
-				},
-				"id": "BEGIN",
-				"title": "Character Creation",
-				"description": "Fill in your character's name, basic stats and race, then click Continue"
-			},
-			{
-				"Description": {
-					"div": [
-						"Every race has a set of standard bonuses and abilities. There are also alternate bonuses and abilities that you can select, instead.",
-						"Click or tap on an alternate ability to learn what it provides, and which standard abilities it replaces. Click on the red + to add it. It will pop up with the standard abilities. If you change your mind, click on the red X to remove it."
-					]
-				},
-				"div": [
-					{
-						"INPUT-HIDDEN": {
-							"id": "racialTraits",
-							"tagId": "racialTraits",
-							"tagClass": "Archetype",
-							"selfSaving": "true"
-						},
-						"header": "Racial Traits",
-						"div": {
-							"BUNDLE": {
-								"ITEM": {
-									"div": [
-										{
-											"span": {
-												"ITEM": {
-													"text": "id"
-												},
-												"class": "id"
-											},
-											"class": "title"
-										},
-										{
-											"div": {
-												"ITEM": {
-													"text": "explanation"
-												}
-											},
-											"class": "explanation"
-										}
-									],
-									"tag": "div",
-									"filter": "PfNamespace",
-									"class": "standard"
-								},
-								"ADDTOPOOL": {
-									"id": "racialTraits",
-									"selected": "true"
-								},
-								"category": "race",
-								"show": "Standard"
-							},
-							"class": "standardAbilities selectableContent"
-						},
-						"BUTTON": [
-							{
-								"type": "resetNavigation",
-								"resetName": "racialTraits",
-								"nextPage": "BEGIN",
-								"text": "Pick a Different Race"
-							},
-							{
-								"type": "calcBundle",
-								"which": "racialTraits",
-								"calcPage": "RACIAL TRAITS CHOICES",
-								"noCalc": "CLASSES",
-								"calcName": "racialTraits",
-								"text": "Continue"
-							}
-						],
-						"class": "flex-vertical"
-					},
-					{
-						"header": "Alternates",
-						"div": {
-							"BUNDLE": {
-								"ITEM": {
-									"div": [
-										{
-											"span": [
-												{
-													"class": "addMe btn",
-													"text": "+"
-												},
-												{
-													"class": "delMe btn",
-													"text": "x"
-												},
-												{
-													"ITEM": {
-														"text": "id"
-													},
-													"class": "id"
-												}
-											],
-											"class": "title"
-										},
-										{
-											"div": {
-												"ITEM": {
-													"text": "description"
-												}
-											},
-											"class": "description"
-										},
-										{
-											"div": {
-												"ITEM": {
-													"text": "explanation"
-												}
-											},
-											"class": "explanation"
-										}
-									],
-									"tag": "div",
-									"filter": "PfNamespace"
-								},
-								"ADDTOPOOL": {
-									"id": "racialTraits",
-									"selected": "false"
-								},
-								"category": "race",
-								"show": "Alternative"
-							},
-							"class": "alternateAbilities selectableContent"
-						},
-						"p": {
-							"br": "",
-							"text": "Click on an alternate racial trait to see its benefits.\nUse the \"+\" button to add it to your character. If you change your mind, use the \"x\" button to remove itt."
-						},
-						"class": "flex-vertical"
-					}
-				],
-				"id": "RACIAL TRAITS",
-				"preloader": "PfArchetype",
-				"filter": "PfArchetypePicker",
-				"pfArchetypeID": "racialTraits",
-				"pfArchetypeCalcName": "racialTraits",
-				"title": "Racial Traits - %characterName%"
-			},
-			{
-				"hr": "",
-				"div": {
-					"BUTTON": [
-						{
-							"type": "closeOverlay",
-							"toClose": ".racialTraitsChooser",
-							"text": "Go Back"
-						},
-						{
-							"type": "calcNavFromOverlay",
-							"nextPage": "CLASSES",
-							"calcName": "racialTraits",
-							"text": "Continue"
-						}
-					],
-					"class": "buttons"
-				},
-				"id": "RACIAL TRAITS CHOICES",
-				"preloader": "bundleChoices",
-				"filter": "bundleChoices",
-				"overlay": "true"
-			},
-			{
-				"div": {
-					"header": "Class Selection",
-					"ol": {
-						"li": {
-							"label": {
-								"CHOOSE": {
-									"category": "class",
-									"saveTo": "class"
-								},
-								"text": "Choose a class:"
-							}
-						},
-						"start": "4"
-					},
-					"BUTTON": [
-						{
-							"type": "resetNavigation",
-							"nextPage": "RACIAL TRAITS",
-							"resetName": "racialTraits",
-							"text": "Go Back"
-						},
-						{
-							"type": "calcNav",
-							"nextPage": "ARCHETYPES",
-							"calcName": "class",
-							"text": "Continue"
-						}
-					],
-					"class": "flex-vertical"
-				},
-				"id": "CLASSES",
-				"class": "flex-vertical",
-				"title": "Class Selection"
-			},
-			{
-				"div": {
-					"BUTTON": {
-						"type": "navigation",
-						"nextPage": "page5",
-						"text": "Continue"
-					},
-					"template": "PfClassArchetypes",
-					"contents": "append"
-				},
-				"id": "ARCHETYPES",
-				"class": "flex-vertical",
-				"title": "Archetypes"
-			},
-			{
-				"div": {
-					"BUTTON": {
-						"type": "navigation",
-						"nextPage": "page6",
-						"text": "Continue"
-					},
-					"template": "PfClassChoices",
-					"contents": "append"
-				},
-				"id": "page5",
-				"class": "flex-vertical"
-			},
-			{
-				"div": {
-					"ol": {
-						"li": "Skill Ranks",
-						"start": "5"
-					},
-					"Block": {
-						"template": "PfSkillsAdjust"
-					},
-					"BUTTON": {
-						"type": "navigation",
-						"nextPage": "page7",
-						"text": "Continue"
-					}
-				},
-				"id": "page6",
-				"class": "flex-vertical"
-			}
-		]
-	},
-	"Data": [
+	"Pools": [
 		{
-			"id": "firstPage",
-			"value": "BEGIN"
+			"id": "languages",
+			"title": "Languages",
+			"maxSelectable": ["Int", "languagesKnown"],
+			"startingPool": [
+				"Common",
+				"Elven",
+				"Dwarven",
+				"Gnomish",
+				"Halfling",
+				"Celestial",
+				"Infernal",
+				"Abyssal",
+				"Draconic",
+				"Sylvan",
+				"Aquan",
+				"Terran",
+				"Ignan",
+				"Auran",
+				"Undercommon",
+				"Gnoll",
+				"Goblin",
+				"Giant",
+				"Orc",
+				"Aboleth",
+				"Aklo",
+				"Boggard",
+				"Cyclops",
+				"Dark Folk",
+				"D'ziriak",
+				"Drow Sign Language",
+				"Grippli",
+				"Necril",
+				"Protean",
+				"Sphinx",
+				"Tengu",
+				"Treant",
+				"Vegepygmy",
+				"Read Lips",
+				"Azlanti"
+			]
+		},
+		{
+			"id": "DR",
+			"title": "Damage Resistance"
+		},
+		{
+			"id": "bonusLanguages",
+			"title": "Bonus Language Choices"
+		},
+		{
+			"id": "creatureSubtypes",
+			"title": "Creature Subtypes"
+		},
+		{
+			"id": "armorProficiencies",
+			"title": "Armor Proficiencies"
+		},
+		{
+			"id": "weaponProficiencies",
+			"title": "Weapon Proficiencies"
+		},
+		{
+			"id": "weaponMartial"
+		},
+		{
+			"id": "favoredClassChoices",
+			"title": "Favored Class Choices",
+			"maxSelectable": ["favoredClasses", "modifiedValue"],
+			"startingPool": [
+				"bard",
+				"barbarian",
+				"cleric",
+				"druid",
+				"fighter",
+				"monk",
+				"paladin",
+				"ranger",
+				"rogue",
+				"unchRogue",
+				"sorcerer",
+				"wizard",
+				"alchemist",
+				"cavalier",
+				"gunslinger",
+				"inquisitor",
+				"magus",
+				"oracle",
+				"summoner",
+				"witch",
+				"samurai",
+				"hunter",
+				"warpriest",
+				"bloodrager",
+				"shaman",
+				"skald",
+				"slayer",
+				"swashbuckler",
+				"shifter",
+				"investigator"
+			]
+		},
+		{
+			"id": "HIDDEN VARIABLES",
+			"itemsType": "Typeless"
+		},
+		{
+			"id": "skillEffects",
+			"title": "Skill Effects"
+		},
+		{
+			"id": "saveEffects",
+			"title": "Saving Throw Effects"
+		},
+		{
+			"id": "combatEffects",
+			"title": "Combat Effects"
+		},
+		{
+			"id": "spellcastingEffects",
+			"title": "Spellcasting Effects"
+		},
+		{
+			"id": "speedEffects",
+			"title": "Movement Effects"
+		},
+		{
+			"id": "senseEffects",
+			"title": "Sense Effects"
+		},
+		{
+			"id": "miscEffects",
+			"title": "Skill Effects"
 		}
+	],
+	"Bundles": [
+		["race", "pf/pf01-races.xml"],
+		["class", "pf/pf01-classes.xml"],
+		["feat", [
+			"pf/pf01-feats-a-b.xml",
+			"pf/pf01-feats-c-de.xml",
+			"pf/pf01-feats-di-e.xml",
+			"pf/pf01-feats-f-h.xml",
+			"pf/pf01-feats-i-l.xml",
+			"pf/pf01-feats-m.xml",
+			"pf/pf01-feats-n-rh.xml",
+			"pf/pf01-feats-ri-sp.xml",
+			"pf/pf01-feats-sq-t.xml",
+			"pf/pf01-feats-u-z.xml"
+		]]
+	],
+	"Resources": [
+		["stylesheet", "pf/pf01.css"]
+	],
+	"Data": [
+		["firstPage", "BEGIN"]
 	]
 }

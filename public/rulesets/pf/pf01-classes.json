@@ -40,52 +40,33 @@
 				"Use Magic Device"
 			],
 			"Bonuses": [
-				{
-					"to": [
-						"ReflSave",
-						"WillSave"
-					],
-					"amount": {
-						"id": "Level",
-						"attribute": "GoodSave"
-					}
-				},
-				{
-					"to": "FortSave",
-					"amount": {
-						"id": "Level",
-						"attribute": "BadSave"
-					}
-				},
-				{
-					"to": "BAB",
-					"amount": {
-						"id": "Level",
-						"attribute": "threeQuarters"
-					}
-				},
-				{
-					"to": "skillPoints",
-					"amount": [
+				[
+					["ReflSave", "WillSave"],
+					["Level", "GoodSave"]
+				],
+				[
+					"FortSave",
+					["Level", "BadSave"]
+				],
+				[
+					"BAB",
+					["Level", "threeQuarters"]
+				],
+				[
+					"skillPoints",
+					[
 						"Equation",
 						["Add", 6],
-						["Add", {
-							"id": "INT",
-							"attribute": "modifier"
-						}],
-						["Multiply", {
-							"id": "Level"
-						}],
-						["AtLeast", {
-							"id": "Level"
-						}]
+						["Add", ["INT", "modifier"]],
+						["Multiply", ["Level"]],
+						["AtLeast", ["Level"]]
 					]
-				}
+				]
 			],
 			"PoolBonuses": [
-				{
-					"to": "weaponProficiencies",
-					"add": [
+				[
+					"weaponProficiencies",
+					[
 						"TYPEsimple",
 						"longsword",
 						"rapier",
@@ -94,14 +75,14 @@
 						"shortbow",
 						"whip"
 					]
-				},
-				{
-					"to": "armorProficiencies",
-					"add": [
+				],
+				[
+					"armorProficiencies",
+					[
 						"TYPElight",
 						"TYPEshield"
 					]
-				}
+				]
 			]
 		},
 		{
@@ -234,102 +215,74 @@
 				"Survival",
 				"Swim"
 			],
-			"Stats": [
+			"Pools": [
 				{
-					"stat": "Pool",
 					"id": "FighterBonusFeats",
 					"title": "Fighter Bonus Feats",
-					"type": "Typeless",
-					"attributes": [
-						{
-							"name": "maxSelectable",
-							"type": "Int",
-							"value": [
-								"Equation",
-								["Add", {
-									"id": "Level"
-								}],
-								["Divide", 2],
-								["Add", 1],
-								["Floor"]
-							]
-						}
-					]
-				}
-			],
-			"Bonuses": [
-				{
-					"to": [
-						"ReflSave",
-						"WillSave"
-					],
-					"amount": {
-						"id": "Level",
-						"attribute": "BadSave"
-					}
-				},
-				{
-					"to": "FortSave",
-					"amount": {
-						"id": "Level",
-						"attribute": "GoodSave"
-					}
-				},
-				{
-					"to": "BAB",
-					"amount": {
-						"id": "Level"
-					}
-				},
-				{
-					"to": "skillPoints",
-					"amount": [
+					"maxSelectable": [
 						"Equation",
-						["Add", 2],
-						["Add", {
-							"id": "INT",
-							"attribute": "modifier"
-						}],
-						["Multiply", {
-							"id": "Level"
-						}],
-						["AtLeast", {
-							"id": "Level"
-						}]
-					]
-				},
-				{
-					"to": "WillSave",
-					"note": "vs fear",
-					"amount": [
-						"Equation",
-						["Add", 2],
-						["Add", {
-							"id": "Level"
-						}],
-						["Divide", 4],
+						["Add", ["Level"]],
+						["Divide", 2],
+						["Add", 1],
 						["Floor"]
 					]
 				}
 			],
+			"Bonuses": [
+				[
+					"FortSave",
+					["Level", "GoodSave"]
+				],
+				[
+					["ReflSave", "WillSave"],
+					["Level", "BadSave"]
+				],
+				[
+					"BAB",
+					["Level"]
+				],
+				[
+					"skillPoints",
+					[
+						"Equation",
+						["Add", 2],
+						["Add", ["INT", "modifier"]],
+						["Multiply", ["Level"]],
+						["AtLeast", ["Level"]]
+					]
+				],
+				[
+					"WillSave",
+					{
+						"note": "vs fear",
+						"amount": [
+							"Equation",
+							["Add", 2],
+							["Add", ["Level"]],
+							["Divide", 4],
+							["Floor"]
+							]
+					}
+				]
+			],
 			"PoolBonuses": [
-				{
-					"to": "weaponProficiencies",
-					"add": [
+				[
+					"weaponProficiencies",
+					[
 						"TYPEsimple",
 						"TYPEmartial"
 					]
-				},
-				{
-					"to": "armorProficiencies",
-					"add": [
+				],
+				[
+					"armorProficiencies",
+					[
 						"TYPElight",
 						"TYPEmedium",
 						"TYPEheavy",
 						"TYPEshield",
 						"tower shield"
 					]
-				}
+				]
 			]
 		}
 	],
