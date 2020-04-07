@@ -837,12 +837,6 @@
 			"startingValue": 0
 		},
 		{
-			"id": "LeadershipScore",
-			"title": "Leadership Score",
-			"type": "IntBonusable",
-			"startingValue": 0
-		},
-		{
 			"id": "favoredClasses",
 			"type": "IntBonusable",
 			"startingValue": 1
