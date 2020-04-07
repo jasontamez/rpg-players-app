@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Pages>
+	<Page id="BEGIN" title="Character Creation" description="Fill in your character's name, basic stats and race, then click Continue">
+		<div class="flex-vertical statContainer">
+			<ol>
+				<li><label>Name: <INPUT id="characterName" /></label></li>
+				<li>Stats:<ul>
+					<li><label><INPUT id="STR" /> Strength</label></li>
+					<li><label><INPUT id="DEX" /> Dexterity</label></li>
+					<li><label><INPUT id="CON" /> Constitution</label></li>
+					<li><label><INPUT id="INT" /> Intelligence</label></li>
+					<li><label><INPUT id="WIS" /> Wisdom</label></li>
+					<li><label><INPUT id="CHA" /> Charisma</label></li>
+				</ul></li>
+				<li><label>Choose a race: <CHOOSE category="race" saveTo="race" /></label></li>
+			</ol>
+			<BUTTON type="calcNav" nextPage="RACIAL TRAITS" calcName="basicsAndRace">Continue</BUTTON>
+		</div>
+	</Page>
+	<Page id="RACIAL TRAITS" preloader="PfArchetype" filter="PfArchetypePicker" pfArchetypeID="racialTraits" pfArchetypeCalcName="racialTraits" title="Racial Traits - %characterName%">
+      <Description>
+        <div>Every race has a set of standard bonuses and abilities. There are also alternate bonuses and abilities that you can select, instead.</div>
+        <div>Click or tap on an alternate ability to learn what it provides, and which standard abilities it replaces. Click on the red + to add it. It will pop up with the standard abilities. If you change your mind, click on the red X to remove it.</div>
+      </Description>
+		<div class="flex-vertical">
+			<INPUT-HIDDEN id="racialTraits" tagId="racialTraits" tagClass="Archetype" selfSaving="true" />
+			<header>Racial Traits</header>
+			<div class="standardAbilities selectableContent">
+				<BUNDLE category="race" show="Standard">
+					<ITEM tag="div" filter="PfNamespace" class="standard">
+						<div class="title"><span class="id"><ITEM text="id" /></span></div>
+						<div class="explanation">
+							<div><ITEM text="explanation" /></div>
+						</div>
+					</ITEM>
+					<ADDTOPOOL id="racialTraits" selected="true" />
+				</BUNDLE>
+			</div>
+			<BUTTON type="resetNavigation" resetName="racialTraits" nextPage="BEGIN">Pick a Different Race</BUTTON> <BUTTON type="calcBundle" which="racialTraits" calcPage="RACIAL TRAITS CHOICES" noCalc="CLASSES" calcName="racialTraits">Continue</BUTTON>
+		</div>
+		<div class="flex-vertical">
+			<header>Alternates</header>
+			<div class="alternateAbilities selectableContent">
+				<BUNDLE category="race" show="Alternative">
+					<ITEM tag="div" filter="PfNamespace">
+						<div class="title"><span class="addMe btn">+</span><span class="delMe btn">x</span><span class="id"><ITEM text="id" /></span></div>
+						<div class="description">
+							<div><ITEM text="description" /></div>
+						</div>
+						<div class="explanation">
+							<div><ITEM text="explanation" /></div>
+						</div>
+					</ITEM>
+					<ADDTOPOOL id="racialTraits" selected="false" />
+				</BUNDLE>
+			</div>
+			<p>Click on an alternate racial trait to see its benefits.<br />Use the "+" button to add it to your character. If you change your mind, use the "x" button to remove itt.</p>
+		</div>
+	</Page>
+	<Page id="RACIAL TRAITS CHOICES" preloader="bundleChoices" filter="bundleChoices" overlay="true">
+		<hr />
+		<div class="buttons"><BUTTON type="closeOverlay" toClose=".racialTraitsChooser">Go Back</BUTTON> <BUTTON type="calcNavFromOverlay" nextPage="CLASSES" calcName="racialTraits">Continue</BUTTON></div>
+	</Page>
+	<Page id="CLASSES" class="flex-vertical" title="Class Selection">
+		<div class="flex-vertical">
+			<header>Class Selection</header>
+			<ol start="4">
+				<li><label>Choose a class: <CHOOSE category="class" saveTo="class" /></label></li>
+			</ol>
+			<BUTTON type="resetNavigation" nextPage="RACIAL TRAITS" resetName="racialTraits">Go Back</BUTTON> <BUTTON type="calcNav" nextPage="ARCHETYPES" calcName="class">Continue</BUTTON>
+		</div>
+	</Page>
+	<Page id="ARCHETYPES" class="flex-vertical" title="Archetypes">
+		<div template="PfClassArchetypes" contents="append">
+			<BUTTON type="navigation" nextPage="page5">Continue</BUTTON>
+		</div>
+	</Page>
+	<Page id="page5" class="flex-vertical">
+		<div template="PfClassChoices" contents="append">
+			<BUTTON type="navigation" nextPage="page6">Continue</BUTTON>
+		</div>
+	</Page>
+	<Page id="page6" class="flex-vertical">
+		<div>
+			<ol start="5">
+				<li>Skill Ranks</li>
+			</ol>
+			<Block template="PfSkillsAdjust" />
+			<BUTTON type="navigation" nextPage="page7">Continue</BUTTON>
+		</div>
+	</Page>
+</Pages>

@@ -1022,7 +1022,8 @@
 		]]
 	],
 	"Resources": [
-		["stylesheet", "pf/pf01.css"]
+		["stylesheet", "pf/pf01.css"],
+		["pages", "pf/pf01-pages.xml"]
 	],
 	"Data": [
 		["firstPage", "BEGIN"]
