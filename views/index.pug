@@ -13,6 +13,7 @@ html
     link(rel='stylesheet' type='text/css' href='/css/rpg-players-app.css')
     meta(name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes')
     meta(name='theme-color' content='#dcd6da')
+    script(src='/socket.io/socket.io.js')
   |
   |
   body
@@ -38,7 +39,7 @@ html
           |
           select#rules
             option(value='x' selected) --Choose One--
-            - rulesets.forEach(function(filename, rulesetname) {
+            - rulesets.forEach(function(rulesetname, filename) {
             option(value=filename)= rulesetname
             - })
         |

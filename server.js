@@ -4,22 +4,42 @@
 // node server.js <- to start
 
 // init project
-const express = require("express");
-const fs = require('fs');
-const glob = require('glob');
-const app = express();
-const pug = require('pug');
-var rulesets = new Map();
-var debug = [];
+const express = require("express"),
+	fs = require('fs'),
+	glob = require('glob'),
+	pug = require('pug'),
+	http = require('http');
+var rulesets = new Map(),
+	debug = [],
+	app = express(),
+	server = http.createServer(app),
+	io = require("socket.io").listen(server);
 // we've started you off with Express,
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
+io.on('connection', function(socket) {
+	// when a socket connects, code here is called (if any)
+	//console.log(["Connected", socket]);
+	// we can listen for events from sockets with other .on functions
+	socket.on('get ruleset', function(ruleset, callback) {
+		// Do stuff
+		var rules = rulesets.get(ruleset);
+		if(rules === undefined) {
+			return callback(false, "Cannot find ruleset \"" + ruleset + "\"");
+		}
+		fs.readFile(__dirname + "/public/rulesets/" + ruleset + "-master.json", 'utf8', function(err, file) {
+			if(err) throw err;
+			return callback(true, JSON.parse(file));
+		});
+	});
+});
+
 
 // This section scans for "master" XML files and saves them to the map rulesets
-glob("**/*-master.xml", getRulesets);
+glob("**/*-master.json", getRulesets);
 function getRulesets(err, files) {
 	if (err) throw err;
 	debug.push("files", files);
@@ -28,6 +48,28 @@ function getRulesets(err, files) {
 	});
 }
 function parseRuleset(err, file) {
+	if (err) throw err;
+	try {
+		// Did we find anything?
+		let info = JSON.parse(file);
+		if(info.title !== undefined) {
+			// Success!
+			let fm = this.match(/^.*\/([^\/]+)-master\.json$/); // 'this' is the src, thanks to .bind()
+			rulesets.set(fm[1], info.title);
+		}
+	} catch (e) {
+		// Errors don't matter - just ignore.
+		return;
+	}
+}
+function OLD_getRulesets_xml(err, files) {
+	if (err) throw err;
+	debug.push("files", files);
+	files.forEach(function(file) {
+		fs.readFile(file, 'utf8', parseRuleset.bind(file));
+	});
+}
+function OLD_parseRuleset(err, file) {
 	if (err) throw err;
 	// Remove linebreaks, condense spaces
 	const f = file.replace(/[\n\t]/g, "").replace(/\s+/g, " "),
@@ -46,9 +88,9 @@ function parseRuleset(err, file) {
 	rulesets.set(m[1], filename);
 }
 
-
 app.get("/", function(request, response) {
 	var fn = pug.compileFile('views/index.pug', {cache: false});
+	console.log(Array.from(rulesets).map(rs => rs[1]));
 	response.send(fn({rulesets: rulesets}));
 	//response.sendFile(__dirname + "/views/index.html");
 });
@@ -99,6 +141,9 @@ app.get(["/debug", "/path/to/file.html"], function(request, response) {
 
 
 // listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
-	console.log("Your app is listening on port " + listener.address().port);
+const listener = server.listen(44088, function() {
+	console.log('Starting server on port ' + listener.address().port);
 });
+//const listener = app.listen(44088, function() {
+//	console.log("Your app is listening on port " + listener.address().port);
+//});

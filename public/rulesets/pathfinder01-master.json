@@ -3,9 +3,12 @@
 		"We should presume 'null' is 'this' and 'value'",
 		"Formulae have no TYPE, just inType and outType"
 	],
-	"ruleset": "pf01",
+	"name": "pf01",
 	"title": "Pathfinder",
 	"description": "Pathfinder Roleplaying Game",
+	"Resources": [
+		["stylesheet", "pf/pf01.css"]
+	],
 	"Modules": [
 		["stats", "pf01-stat-module.json"],
 		["pages", "pf01-page-module.json"]
@@ -1021,9 +1024,8 @@
 			"pf/pf01-feats-u-z.xml"
 		]]
 	],
-	"Resources": [
-		["stylesheet", "pf/pf01.css"],
-		["pages", "pf/pf01-pages.xml"]
+	"Pages": [
+		"pf/pf01-pages.xml"
 	],
 	"Data": [
 		["firstPage", "BEGIN"]

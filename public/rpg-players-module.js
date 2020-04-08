@@ -1,5 +1,5 @@
 import { $a, $i, $t, $listen, $ea as $e } from "./modules/dollar-sign-module.js";
-import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError } from "./modules/parsing-logging.js";
+import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError, logErrorText } from "./modules/parsing-logging.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
 import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
 import { PlayerObject } from "./modules/data-module01.js";
@@ -11,7 +11,8 @@ var okToDeload = false,
 	data = new Map(),
 	BUNDLES = new Map(),
 	AJAXstorage = new Map(),
-	$RPG = window["$RPG"];
+	$RPG = window["$RPG"],
+	socket = window["$IO"];
 
 // Set up global variable
 $RPG.ADD("pages", "data", data);
@@ -24,7 +25,6 @@ var PO = new PlayerObject("id"),
 	Char = PO.makeCharacter("pf01");
 $RPG.ADD("current", {
 	player: PO,
-	ruleset: "pf01",
 	character: Char
 });
 
@@ -58,30 +58,55 @@ $listen($i("more"), function(e) {
 
 
 // Call function when ruleset drop-down list is changed
-$i("rules").addEventListener("change", function(e) {
-	// Save the ruleset selected
-	const rules = e.currentTarget.value;
-	// Create AJAX fetcher
-	var getter = new XMLHttpRequest();
-	if(rules === "x") {
-		return;
-	}
-	// Call a parse function when the fetching is done
-	getter.addEventListener("load", function() {
-		AJAXstorage.set(rules, getter.responseXML);
-		//console.log("Info received");
-	});
-	getter.open("GET", "rulesets/" + rules + "-master.xml");
-	getter.send();
-});
+//$i("rules").addEventListener("change", function(e) {
+//	// Save the ruleset selected
+//	const rules = e.currentTarget.value;
+//	// Create AJAX fetcher
+//	var getter = new XMLHttpRequest();
+//	if(rules === "x") {
+//		return;
+//	}
+//	// Call a parse function when the fetching is done
+//	getter.addEventListener("load", function() {
+//		AJAXstorage.set(rules, getter.responseXML);
+//		//console.log("Info received");
+//	});
+//	getter.open("GET", "rulesets/" + rules + "-master.xml");
+//	getter.send();
+//});
 
 
 // Load a ruleset.
 $listen($i("loadInfo"), tryDisplayInfo);
 
+function tryDisplayInfo(event) {
+	const filename = $i("rules").value,
+		button = $i("loadInfo");
+	if(filename === "x") {
+		// Nope. Just stop everything.
+		return alert("Please select a ruleset before attempting to Load Info.");
+	}
+	$i("rules").disabled = true;
+	button.textContent = "...Loading...";
+	button.disabled = true;
+	socket.emit(
+		'get ruleset',
+		filename,
+		function(success, info) {
+			if(success) {
+				loadAndAssembleInfo(info);
+			} else {
+				alert(msg);
+				$i("rules").disabled = false;
+				button.textContent = "Load Ruleset";
+				button.disabled = false;
+			}
+		}
+	);
+}
 
 // When the button is pressed...
-function tryDisplayInfo(event, x = 0) {
+function tryDisplayInfo_OLD(event, x = 0) {
 	var asyncF,
 		cls = $i("rules").value;
 	const button = $i("loadInfo");
@@ -136,7 +161,54 @@ function tryDisplayInfo(event, x = 0) {
 }
 
 
-async function loadAndAssembleInfo(cls) {
+function loadAndAssembleInfo(info) {
+	var modules = info.Modules,
+		m = modules.length,
+		resources = info.Resources,
+		r = resources.length,
+		c = 0,
+		test;
+	// Show "loading" screen
+	showLoadingScreen();
+	// Set info to $RPG.current.ruleset
+	$RPG.ADD("current", "ruleset", info);
+	// load resources
+	modifyLoadingScreen($t("[parsing resources]"));
+	while(c < r) {
+		let [type, src] = resources[c];
+		await parseResource(type, src);
+		c++;
+	}
+	// load modules
+	c = 0;
+	modifyLoadingScreen($t("[parsing modules]"));
+	while(c < m) {
+		let [type, src] = modules[c];
+		await parseModule(type, src);
+		c++;
+	}
+	// load formulae
+	modifyLoadingScreen($t("[parsing formulae]"));
+	parseFormulae(info.Formulae || []);
+	// load stats
+	modifyLoadingScreen($t("[parsing stats]"));
+	parseStats(info.Groups, info.Stats, info.MultiStats, info.Pools);
+	// load data
+	modifyLoadingScreen($t("[parsing data]"));
+	test = info.Data || [];
+	info.Data.forEach(function(n) {
+		var [id, value] = n;
+		data.set(id, value);
+	});
+	// load bundles
+	modifyLoadingScreen($t("[parsing bundles]"));
+	test = info.Bundles || [];
+	info.Bundles.forEach(function(n) {
+		parseBundle(n);
+	});
+}
+
+async function loadAndAssembleInfo_OLD(cls) {
 	var doc = AJAXstorage.get(cls),
 		body = doc.documentElement,
 //		ul = $e("ul"),
@@ -219,7 +291,44 @@ async function loadAndAssembleInfo(cls) {
 	removeLoadingScreen();
 }
 
-
+async function parseResource(type, resource) {
+	var a = [],
+		element, where, atts;
+	switch(type) {
+		case "stylesheet":
+			element = "link";
+			where = document.head;
+			atts = [
+				["rel", "stylesheet"],
+				["type", "text/css"],
+				["href", "/rulesets/" + resource]
+			];
+			break;
+		case "script":
+			element = "script";
+			where = document.body;
+			atts = [];
+			break;
+		default:
+			logErrorText("RESOURCE: \"" + type + "\" not found");
+			return null;
+	}
+	atts.forEach(function(pair) {
+		var p = pair.slice(),
+			att = p.shift();
+		if(p.length > 0) {
+			let v = p.shift();
+			if(v === undefined) {
+				logErrorText("RESOURCE: Could not set parameter \"" + att + "\"");
+				return null;
+			}
+			a[att] = v;
+		} else if(atts[att] !== undefined) {
+			a[att] = atts[att];
+		}
+	});
+	where.appendChild($e(element, a));
+}
 async function parseResourceNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
 		t = atts.type,
@@ -274,7 +383,23 @@ async function parseResourceNode(modNode) {
 	type.location.appendChild($e(type.element, a));
 }
 
-
+async function parseModule(t, src) {
+	var ok = null;
+		type = $RPG[t];
+	if(type === undefined) {
+		logErrorText("MODULE: invalid module type \"" + t + "\"");
+		return null;
+	}
+	await import(modDir + src)
+		.then(function(info) {
+			ok = true;
+		}).catch(function(error) {
+			logError(modNode, error.message);
+			console.log(error);
+			console.log(modDir + src);
+		});
+	return ok;
+}
 async function parseModuleNode(modNode) {
 	var atts = parseAttributesToObject(modNode),
 		t = atts.type,
