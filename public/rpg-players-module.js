@@ -206,8 +206,28 @@ function loadAndAssembleInfo(info) {
 	info.Bundles.forEach(function(n) {
 		parseBundle(n);
 	});
+	// load pages
+	modifyLoadingScreen($t("[parsing pages]"));
+	info.Pages.forEach(function(src) {
+		await grabAndParseXML(src)
+			.then( parsedPages => parsePages(Array.from($a("Page"), parsedPages)) )
+			.catch(function(err) {
+				logErrorText(err.statusText);
+				console.log(err);
+			});
+	});
+	modifyLoadingScreen($t("[loading first page]"));
+	start = data.get("firstPage");
+	if(start === undefined) {
+		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
+		return;
+	}
+	loadPageNamed(start, false);
+	modifyLoadingScreen($t("[Done!]"));
+	//console.log("End");
+	// Remove "loading" screen
+	removeLoadingScreen();
 }
-
 async function loadAndAssembleInfo_OLD(cls) {
 	var doc = AJAXstorage.get(cls),
 		body = doc.documentElement,
@@ -268,7 +288,7 @@ async function loadAndAssembleInfo_OLD(cls) {
 		} else if (src === undefined) {
 			node.querySelectorAll("Bundle").forEach( n => parseBundle(n, category) );
 		} else {
-			await parseBundles(src)
+			await grabAndParseXML(src)
 				.then( bundleDoc => Array.from($a("Bundle", bundleDoc)).forEach( n => parseBundle(n, category) ) )
 				.catch(function(err) {
 					logError(node, err.statusText);
@@ -452,7 +472,7 @@ async function parseModuleNode(modNode) {
 }
 
 
-function parseBundles(location) {
+function grabAndParseXML(location) {
 	return new Promise(function(resolve, reject) {
 		// Create AJAX fetcher
 		var getter = new XMLHttpRequest();

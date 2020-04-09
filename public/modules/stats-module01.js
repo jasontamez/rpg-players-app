@@ -9,16 +9,22 @@ export var record = [];
 var $RPG = window["$RPG"];
 
 
+// Define a class for Groups
+export class Group {
+	constructor(nombre, atts) {
+		this.name = nombre;
+		this.atts = atts;
+	}
+}
+
 
 // Define a class for XML Stat tags
 //   o = new BasicStatObject(parentTag || undefined, xmlNode, [attribute pairs])
 //   o.set("property", value)
 //   o.get("property") => value
 export class BasicStatObject {
-	constructor(padre, node, atts) {
+	constructor(atts) {
 		let a = new Map();
-		this.parent = padre;
-		this.node = node;
 		atts.forEach(function(prop) {
 			a.set(prop[0], prop[1]);
 		});
@@ -55,8 +61,8 @@ export class BasicStatObject {
 //   BasicIdObject.getById("stringID") => o
 export class BasicIdObject extends BasicStatObject {
 	// ID of tag (or ""), parent of tag (or undefined), any other attributes of the tag
-	constructor(id, padre, node, atts) {
-		super(padre, node, atts);
+	constructor(id, padre, atts) {
+		super(padre, atts);
 		if(id === null) {
 			id = "unidentified object " + BasicIdObject.counter.toString();
 			BasicIdObject.counter++;
@@ -78,8 +84,8 @@ BasicIdObject.counter = 1;
 // This is a dummy object that does nothing on its own,
 //   but its children will define their own grabValue function
 export class SpecialGrabber extends BasicStatObject {
-	constructor(padre, node, atts) {
-		super(padre, node, atts);
+	constructor(padre, atts) {
+		super(padre, atts);
 	}
 	grabValue() {
 		return undefined;
@@ -91,8 +97,8 @@ export class SpecialGrabber extends BasicStatObject {
 //   o = new Attribute(parentTag, xmlNode, [attribute pairs], stringName)
 // <Attribute> tag
 export class Attribute extends BasicStatObject {
-	constructor(padre, node, atts, nombre) {
-		super(padre, node, atts);
+	constructor(padre, atts, nombre) {
+		super(padre, atts);
 		this.name = nombre;
 		this.defaultContext = padre;
 	}
@@ -103,11 +109,11 @@ export class Attribute extends BasicStatObject {
 //   o = new BasicIdObject(stringID || null, parentTag || undefined, xmlNode, [attribute pairs])
 // BasicStat.converter(value) => value
 export class BasicStat extends BasicIdObject {
-	constructor(id, padre, node, atts) {
+	constructor(id, padre, atts) {
 		var i;
 		//console.log("Making id-" + id);
 		//console.log(atts);
-		super(id, padre, node, atts);
+		super(id, padre, atts);
 		i = this.atts;
 		if(!i.has("startingValue") && this.get("startingValue") === undefined) {
 			i.set("startingValue", null);
@@ -132,8 +138,8 @@ BasicStat.prototype.type = BasicStat;
 //   o = SelfReference.getReference(stringProperty, parentTag || undefined, xmlNode, [attribute pairs])
 //   o.grabValue(context) => context.get("stringProperty")
 export class SelfReference extends SpecialGrabber {
-	constructor(property, padre, node, atts) {
-		super(padre, node, atts);
+	constructor(property, padre, atts) {
+		super(padre, atts);
 		this.property = property;
 		SelfReference.refs.set(property, this);
 	}
@@ -142,12 +148,12 @@ export class SelfReference extends SpecialGrabber {
 		//console.log(["SR-this-context", this, context]);
 		return context.get(this.property);
 	}
-	static getReference(property, padre, node, atts) {
+	static getReference(property, padre, atts) {
 		var test = SelfReference.refs.get(property);
 		if(test !== undefined) {
 			return test;
 		}
-		return new SelfReference(property, padre, node, atts);
+		return new SelfReference(property, padre, atts);
 	}
 }
 SelfReference.refs = new Map();
@@ -157,8 +163,8 @@ SelfReference.refs = new Map();
 //   o = StatReference.getReference(stringIDofStat, stringProperty, parentTag || undefined, xmlNode, [attribute pairs])
 //   o.grabValue() => BasicIdObject.getById("stringIdofStat").get("stringProperty")
 export class StatReference extends SelfReference {
-	constructor(statStr, property, padre, node, atts) {
-		super(statStr + "->" + property, padre, node, atts);
+	constructor(statStr, property, padre, atts) {
+		super(statStr + "->" + property, padre, atts);
 		this.reference = statStr;
 		this.property = property;
 	}
@@ -172,12 +178,12 @@ export class StatReference extends SelfReference {
 		}
 		return reference.get(this.property);
 	}
-	static getReference(statStr, property, padre, node, atts) {
+	static getReference(statStr, property, padre, atts) {
 		var test = SelfReference.refs.get(statStr + "->" + property);
 		if(test !== undefined) {
 			return test;
 		}
-		return new StatReference(statStr, property, padre, node, atts);
+		return new StatReference(statStr, property, padre, atts);
 	}
 }
 
@@ -189,9 +195,9 @@ export class StatReference extends SelfReference {
 //   o.makeStatBasic(name, title, description) => new statType(id_based_on_name, ...)
 //   MultiStat.getById(stringID) => o
 export class MultiStat extends BasicIdObject {
-	constructor(id, padre, node, type, atts) {
+	constructor(id, padre, type, atts) {
 		var i;
-		super(id, padre, node, atts);
+		super(id, padre, atts);
 		i = this.atts;
 		i.has("idPre") || i.set("idPre", "_");
 		i.has("idPost") || i.set("idPost", "");
@@ -282,9 +288,9 @@ MultiStat.allIDs = new Map();
 //         (attribute pairs may contain startingValue, minValue, maxValue, stepValue, stepAdjust)
 //   Num.converter("123.5") => 123.5
 export class Num extends BasicStat {
-	constructor(id, padre, node, atts) {
+	constructor(id, padre, atts) {
 		var i, t;
-		super(id, padre, node, atts);
+		super(id, padre, atts);
 		i = this.atts;
 		t = this;
 		Num.numericProperties.forEach(function(nv) {
@@ -374,8 +380,8 @@ Num.prototype.type = Num;
 //   Int.converter("123.4") => 123
 //   Int.converter("123.5") => 124
 export class Int extends Num {
-	constructor(id, padre, node, atts) {
-		super(id, padre, node, atts);
+	constructor(id, padre, atts) {
+		super(id, padre, atts);
 	}
 	set(prop, v) {
 		var min, max, num;
@@ -420,9 +426,9 @@ Int.prototype.type = Int;
 //     o.set("value", "four") => (success)
 //     o.get("value") => "four"
 export class Str extends BasicStat {
-	constructor(id, padre, node, atts) {
+	constructor(id, padre, atts) {
 		var i;
-		super(id, padre, node, atts);
+		super(id, padre, atts);
 		i = this.atts;
 		if(i.has("validator")) {
 			this.set("validator", i.get("validator"));
@@ -491,8 +497,8 @@ Str.prototype.type = Str;
 //   Returns an array of bonuses in the format [integerBonus, stringNotation]
 //   Bonuses are calculated based on type as in .getModifiedValue above
 export class IntBonusable extends Int {
-	constructor(id, padre, node, atts) {
-		super(id, padre, node, atts);
+	constructor(id, padre, atts) {
+		super(id, padre, atts);
 		this.bonuses = new Map();
 		this.bonuses.set("", new Map());
 	}
@@ -655,8 +661,8 @@ IntBonusable.prototype.multistackable = ["", "dodge"];
 //   TF.converter("123.5") => true
 //   TF.converter("0") => false
 export class TF extends IntBonusable {
-	constructor(id, padre, node, atts) {
-		super(id, padre, node, atts);
+	constructor(id, padre, atts) {
+		super(id, padre, atts);
 		this.bonuses = [];
 		this.notes = new Map();
 	}
@@ -770,9 +776,9 @@ TF.prototype.type = TF;
 //   Pool.converter([array]) => [array]
 //   Pool.converter(value) => [value]
 export class Pool extends BasicStat {
-	constructor(id, padre, node, type, atts) {
+	constructor(id, padre, type, atts) {
 		var i, vs;
-		super(id, padre, node, atts);
+		super(id, padre, atts);
 		i = this.atts;
 		if(i.has("minSelection")) {
 			this.set("minSelection", i.get("minSelection"));
@@ -937,14 +943,14 @@ Pool.prototype.type = Pool;
 //
 // o.grabValue(?context) => the result of the equation
 export class Equation extends SpecialGrabber {
-	constructor(amount, padre, node, atts) {
-		//console.log([amount, padre, node, atts]);
-		super(padre, node, atts);
+	constructor(amount, padre, atts) {
+		//console.log([amount, padre, atts]);
+		super(padre, atts);
 		this.math = [];
-		//console.log([this, amount, padre, node, atts]);
+		//console.log([this, amount, padre, atts]);
 		this.startingAmount = this.get("type").converter(amount);
 	}
-	static constructEquation(padre, node) {
+	static constructEquation(padre) {
 		var atts = parseAttributesToObject(node),
 			amount = atts.amount,
 			type = atts.type,
@@ -965,7 +971,7 @@ export class Equation extends SpecialGrabber {
 			type = Num;
 		}
 		atts.type = type;
-		tag = new Equation(amount, padre, node, parseObjectToArray(atts));
+		tag = new Equation(amount, padre, parseObjectToArray(atts));
 		[...node.children].forEach( step => tag.addStep(step) );
 		return tag;
 	}
@@ -1049,8 +1055,8 @@ export class Equation extends SpecialGrabber {
 //   o.grabValue(context) => the result of the if/then/else tree
 //      NOTE that context is mandatory
 export class If extends SpecialGrabber {
-	constructor(padre, node, atts, intype, outtype, operation) {
-		super(padre, node, atts);
+	constructor(padre, atts, intype, outtype, operation) {
+		super(padre, atts);
 		this.inType = intype;
 		this.outType = outtype;
 		this.operation = operation || "AND";
@@ -1058,7 +1064,7 @@ export class If extends SpecialGrabber {
 		this.then = [];
 		this.else = [];
 	}
-	static constructIfThenElse(padre, node) {
+	static constructIfThenElse(padre) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
 			outtype = atts.outType,
@@ -1082,7 +1088,7 @@ export class If extends SpecialGrabber {
 		} else {
 			delete atts.operation;
 		}
-		tag = new If(padre, node, parseObjectToArray(atts), intype, outtype, operation);
+		tag = new If(padre, parseObjectToArray(atts), intype, outtype, operation);
 		//console.log("Constructing IF");
 		[...node.children].forEach(function(step) {
 			//console.log(step);
@@ -1096,7 +1102,7 @@ export class If extends SpecialGrabber {
 				case "Then":
 				case "Else":
 					//console.log("Then/Else");
-					tag.addThenElse(step, nombre, outtype, padre, node);
+					tag.addThenElse(nombre, outtype, padre);
 					//console.log([nombre.toUpperCase(), tag[nombre.toLowerCase()]]);
 					break;
 				default:
@@ -1151,7 +1157,7 @@ export class If extends SpecialGrabber {
 		}
 		this.comparison.push([nombre, literalFlag, amount]);
 	}
-	addThenElse(node, nombre, outtype, padre, pNode) {
+	addThenElse(nombre, outtype, padre) {
 		var amount = null,
 			converter = outtype.converter;
 		if(node.hasAttribute("value")) {
@@ -1169,7 +1175,7 @@ export class If extends SpecialGrabber {
 		//} else if (node.children.length > 0) {
 		} else if (node.getAttribute("use") === "Math") {
 			//amount = new Attribute(nombre, outtype);
-			amount = Equation.constructEquation(padre, node, [["type", outtype]]);
+			amount = Equation.constructEquation(padre, [["type", outtype]]);
 			//amount = new BasicStatObject(padre, pNode, [["type", outtype]]);
 			//console.log(["ATTRIBUTE", nombre, outtype]);
 			//parseStatNodes(node, amount);
@@ -1289,8 +1295,8 @@ export class If extends SpecialGrabber {
 //   o.grabValue(context) => the result of the do/while loop
 //      NOTE that context is mandatory
 export class Do extends SpecialGrabber {
-	constructor(padre, node, atts, intype, outtype, input, output) {
-		super(padre, node, atts);
+	constructor(padre, atts, intype, outtype, input, output) {
+		super(padre, atts);
 		this.inType = intype;
 		this.outType = outtype;
 		this.input = intype.converter("");
@@ -1300,7 +1306,7 @@ export class Do extends SpecialGrabber {
 		this.operation = "AND";
 		this.whiile = [];
 	}
-	static constructDo(padre, node) {
+	static constructDo(padre) {
 		var atts = parseAttributesToObject(node),
 			intype = atts.inType,
 			$RSgTO = $RPG.stats.getTypeObject,
@@ -1335,7 +1341,7 @@ export class Do extends SpecialGrabber {
 		}
 		outconv = outtype.converter;
 		// Create Do tag
-		tag = new Do(padre, node, [], intype, outtype);
+		tag = new Do(padre, [], intype, outtype);
 		// Check Input
 		if(input !== undefined) {
 			input = intype.converter(input);
@@ -1595,11 +1601,54 @@ export class Do extends SpecialGrabber {
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
 
-export function parseStats(nodelist) {
+export function parseStats(groups, stats, multiStats, pools) {
 	// Parse nodes
-	nodelist.forEach( node => parseStatNodes(node, undefined) );
+	groups.forEach( group => parseGroup(group) );
+	//nodelist.forEach( node => parseStatNodes(node, undefined) );
 }
 
+export function parseGroup(group) {
+	var n = group.name,
+		a = group.attributes,
+		atts = new Map();
+	if(n === undefined) {
+		logErrorText("GROUP missing \"name\" property");
+	}
+	if(a === undefined) {
+		logErrorText("GROUP missing \"attributes\" property");
+	}
+	a.forEach(function(prop, value) {
+		// Need to set value to something else
+		var v = parsePropertyValue(value);
+		v !== undefined && atts.set(prop, v);
+	});
+}
+
+export function parsePropertyValue(value, converter) {
+	if(value === null || value === undefined) {
+		return value;
+	} else if (value.constructor === Array) {
+		// Create copy of array
+		let v = value.slice(),
+			// Isolate the first item
+			interpreter = $RPG.stats.infoHandler[v.shift()];
+		// If it matches a handler, run it. Otherwise return undefined.
+		if(interpreter === undefined) {
+			return undefined;
+		}
+		value = interpreter(v);
+	}
+	// Run converter if needed
+	return converter === undefined ? value : converter(value);
+}
+
+function parseEquation() {
+
+}
+
+function parseFormulaValue() {
+
+}
 
 export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.children]) {
 	var $RS = $RPG.stats;
@@ -1685,7 +1734,7 @@ export function parseMultiStat(node, parentNode, parentTag) {
 // these should probably set the Value property of their parent
 // Math, If, and Get should only happen directly inside a tag that wants some content
 
-export function parseMath(node, parentNode, parentTag) {
+export function parseEquation_OLD(node, parentNode, parentTag) {
 	var eq = Equation.constructEquation(parentTag, node);
 	parentTag.set("value", eq);
 }
@@ -1704,7 +1753,7 @@ export function parseDo(node, parentNode, parentTag) {
 	parentTag.set("value", doWhile);
 }
 
-export function parseGroup(node, parentNode, parentTag) {
+export function parseGroup_OLD(node, parentNode, parentTag) {
 	var atts = parseIdAndAttributesToArray(node),
 		id = atts.shift(),
 		tag = new BasicIdObject(id, parentTag, node, atts);
@@ -1879,10 +1928,9 @@ function parsePoolItem(node, parentNode, parentTag) {
 //   o = new Formula(xmlNode, stringName, [attribute pairs])
 // Formula.getName("stringName") => o
 export class Formula extends SpecialGrabber {
-	constructor(node, nombre, atts) {
-		super(undefined, node, atts, nombre);
+	constructor(nombre, atts) {
+		super(undefined, atts, nombre);
 		this.name = nombre;
-		this.node = node;
 		Formula.formulae.set(nombre, this);
 	}
 	grabValue(context) {
@@ -1903,31 +1951,41 @@ export class Formula extends SpecialGrabber {
 Formula.formulae = new Map();
 
 
-export function parseFormulae(nodelist) {
+export function parseFormulae(formulae) {
 	// Parse nodes
-	nodelist.forEach( node => parseFormula(node) );
+	formulae.forEach( f => parseFormula(f) );
 }
 
 
-export function parseFormula(node) {
-	var atts = parseAttributesToObject(node),
-		nombre = atts.name,
-		type = atts.type,
-		overwrite = TF.converter(atts.overwrite),
-		tag;
+export function parseFormula(f) {
+	var nombre = f.name,
+		overwrite = TF.converter(f.overwrite),
+		atts = [],
+		getTO = $RPG.stats.getTypeObject,
+		inType, outType;
 	if(nombre === undefined) {
-		return logError(node, "FORMULA: missing required \"name\" parameter");
+		return logErrorText("FORMULA: missing required \"name\" parameter");
 	}
-	delete atts.name;
 	if(Formula.getName(nombre) !== undefined && !overwrite) {
-		return logError(node, "FORMULA: cannot overwrite existing \"" + nombre + "\" formula without an explicit \"overwrite\" parameter");
+		return logErrorText("FORMULA: cannot overwrite existing \"" + nombre + "\" formula without an explicit \"overwrite\" parameter");
 	}
-	if(overwrite) {
-		delete atts.overwrite;
-	}
-	atts.type = $RPG.stats.getTypeObject(type, $RPG.stats.type.Typeless);
-	tag = new Formula(node, nombre, parseObjectToArray(atts));
-	parseStatNodes(node, tag);
+	Object.getOwnPropertyNames(f).forEach(function(att) {
+		switch (att) {
+			case "name":
+			case "overwrite":
+				// Ignore
+				break;
+			case "inType":
+				inType = getTO(f[att]);
+				break;
+			case "outType":
+				outType = getTO(f[att]);
+				break;
+			default:
+				atts[att] = f[att];
+		}
+	});
+	return new Formula(nombre, atts);
 }
 
 
@@ -1956,11 +2014,15 @@ $RPG.ADD("stats", {
 	defaultTypeObject: Str,
 	formula: Formula,
 	preprocessTags: {},
+	infoHandler: {
+		Equation: parseEquation,
+		Formula: parseFormulaValue
+	},
 	StatTagHandlers: {
 		Group: parseGroup,
 		Stat: parseStat,
 		MultiStat: parseMultiStat,
-		Math: parseMath,
+		Equation: parseEquation,
 		If: parseIf,
 		Do: parseDo,
 		Bonus: parseBonus,

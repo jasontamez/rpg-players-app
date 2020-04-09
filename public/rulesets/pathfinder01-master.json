@@ -126,9 +126,10 @@
 					["Floor"],
 					["AtMost", 0]
 				]],
-				["modifier_text", {
-					"formula": "convert_modifier_to_string"
-				}],
+				["modifier_text", [
+					"Formula",
+					"convert_modifier_to_string"
+				]],
 				["type", "IntBonusable"],
 				["startingValue", 10],
 				["minValue", 0],
@@ -180,9 +181,10 @@
 					["Add", [null, "score_mod"]],
 					["AtLeast", -99]
 				]],
-				["modifier_text", {
-					"formula": "convert_modifier_to_string"
-				}]
+				["modifier_text", [
+					"Formula",
+					"convert_modifier_to_string"
+				]]
 			]
 		},
 		{
@@ -542,9 +544,10 @@
 			"type": "IntBonusable",
 			"startingValue": 0,
 			"minValue": -99,
-			"modifier_text": {
-				"formula": "convert_modified_value_to_string"
-			}
+			"modifier_text": [
+				"Formula",
+				"convert_modified_value_to_string"
+			]
 		},
 		{
 			"id": "Feats",
@@ -569,9 +572,10 @@
 			"title": "Base Attack Bonus",
 			"type": "IntBonusable",
 			"startingValue": 0,
-			"modifier_text": {
-				"formula": "convert_modified_value_to_string"
-			},
+			"modifier_text": [
+				"Formula",
+				"convert_modified_value_to_string"
+			],
 			"full_attack_text": [
 				"Do",
 				["While", [
