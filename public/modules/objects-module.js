@@ -8,6 +8,7 @@ import { logErrorText as logError } from "./parsing-logging.js";
 /////// STAT OBJECTS ///////
 ////////////////////////////
 
+// Each object much define a .toJSON method that 
 
 // Define a class for Groups
 export class GroupObject {
@@ -27,9 +28,9 @@ export class GroupObject {
 }
 
 export class StatObject extends GroupObject {
-	constructor(name, atts) {
-		super(name, atts);
-		this.groups = [];
+	constructor(nombre, atts, groups = []) {
+		super(nombre, atts, groups);
+		this.groups = groups;
 	}
 	toJSON(key) {
 		var o = super(key);
@@ -40,8 +41,8 @@ export class StatObject extends GroupObject {
 }
 
 export class ReferenceObject extends StatObject {
-	constructor(obj, prop, atts = new Map()) {
-		super(obj.id, atts);
+	constructor(nombre, prop, atts = new Map(), groups = []) {
+		super(nombre, atts, groups);
 		this.prop = prop;
 	}
 	toJSON(key) {
@@ -53,9 +54,9 @@ export class ReferenceObject extends StatObject {
 	static makeReference(nombre, prop, atts = new Map()) {
 		var o = $RPG.current.character.getStatObject(nombre);
 		if(o === undefined) {
-			return undefined;
+			return null;
 		}
-		return new ReferenceObject(o, prop, atts);
+		return new ReferenceObject(nombre, prop, atts);
 	}
 }
 
@@ -103,18 +104,39 @@ export class EquationObject extends ReferenceObject {
 /////// STAT PARSERS ///////
 ////////////////////////////
 
+// These are used by JSON.parse to reconstruct objects.
 
-function restoreGroup(o) {
+// Things will get tricky when we have to reconstruct arrays of other objects...
 
+function restoreGroup(key, prop, flagged) {
+	if(key === "atts") {
+		return new Map(prop);
+	} else if (key === "parser") {
+		return undefined;
+	} else if (key === "" && !flagged) {
+		let g = $RPG.objects.stats.GroupObject;
+		return new g(prop.name, prop.atts);
+	}
+	return prop;
 }
-function restoreStat(o) {
-
+function restoreStat(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let s = $RO.stats.ReferenceObject;
+		return new s(prop.name, prop.prop, prop.atts);
+	}
+	return $RO.parser.Stat(key, prop, true);
 }
-function restoreReference(o) {
-
+function restoreReference(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let s = $RO.stats.StatObject;
+		return new s(prop.name, prop.atts);
 }
-function restoreEquation(o) {
-
+	return $RO.parser.Group(key, prop, true);
+}
+function restoreEquation(key, prop, flagged) {
+	// to-do
 }
 
 
