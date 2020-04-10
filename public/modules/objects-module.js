@@ -61,8 +61,9 @@ export class ReferenceObject extends StatObject {
 }
 
 export class EquationObject extends ReferenceObject {
-	constructor(name, atts, instructions) {
-		super(name, atts);
+	constructor(nombre, atts, groups, instructions) {
+		super(nombre, atts, groups);
+		this.instructions = instructions;
 	}
 	toJSON(key) {
 		var o = super(key);
@@ -96,6 +97,20 @@ export class EquationObject extends ReferenceObject {
 	}
 	static AtLeast(total, n) {
 		return Math.max(total, n);
+	}
+	static makeEquation(nombre, atts, groups, instructions) {
+		var i = [], e;
+		while(instructions.length > 0) {
+			let test = i.shift(),
+				t = test[0];
+			if(this.hasOwnProperty(t) && t !== "makeEquation") {
+				i.push(test);
+			} else {
+				return null;
+			}
+		}
+		e = $RPG.objects.stats.Equation;
+		return new e(nombre, atts, groups, i);
 	}
 }
 
@@ -132,7 +147,7 @@ function restoreReference(key, prop, flagged) {
 	if(key === "" && !flagged) {
 		let s = $RO.stats.StatObject;
 		return new s(prop.name, prop.atts);
-}
+	}
 	return $RO.parser.Group(key, prop, true);
 }
 function restoreEquation(key, prop, flagged) {
