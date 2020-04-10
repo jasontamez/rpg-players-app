@@ -9,13 +9,6 @@ export var record = [];
 var $RPG = window["$RPG"];
 
 
-// Define a class for Groups
-export class Group {
-	constructor(nombre, atts) {
-		this.name = nombre;
-		this.atts = atts;
-	}
-}
 
 
 // Define a class for XML Stat tags

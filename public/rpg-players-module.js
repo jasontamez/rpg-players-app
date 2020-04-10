@@ -1,5 +1,6 @@
 import { $a, $i, $t, $listen, $ea as $e } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError, logErrorText } from "./modules/parsing-logging.js";
+import "./modules/objects-module.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
 import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
 import { PlayerObject } from "./modules/data-module01.js";
