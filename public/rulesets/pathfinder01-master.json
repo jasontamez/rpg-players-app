@@ -396,7 +396,7 @@
 			"background": true,
 			"half_negative": [
 				"Equation",
-				["Subtract", null],
+				["Add", null],
 				["Divide", 2],
 				["Floor"],
 				["AtLeast", 0]
@@ -585,7 +585,7 @@
 				["Input", "Int", null],
 				["Output", "Str", null, "modifier_text"],
 				["ModifyInput", [
-					["Subtract", 5]
+					["Add", -5]
 				]],
 				["ModifyOutput", [
 					["Add", "/+"],
