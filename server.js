@@ -26,7 +26,7 @@ io.on('connection', function(socket) {
 	// we can listen for events from sockets with other .on functions
 	socket.on('get ruleset', function(ruleset, callback) {
 		// Do stuff
-		var rules = rulesets.get(ruleset);
+		var rules = rulesets.get(String(ruleset));
 		if(rules === undefined) {
 			return callback(false, "Cannot find ruleset \"" + ruleset + "\"");
 		}
