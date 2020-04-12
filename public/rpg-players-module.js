@@ -420,7 +420,7 @@ async function parseModule(t, src) {
 		.then(function(info) {
 			ok = true;
 		}).catch(function(error) {
-			logError(modNode, error.message);
+			logErrorText(error.message);
 			console.log(error);
 			console.log(modDir + src);
 		});

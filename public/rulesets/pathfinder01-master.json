@@ -10,8 +10,8 @@
 		["stylesheet", "pf/pf01.css"]
 	],
 	"Modules": [
-		["stats", "pf01-stat-module.json"],
-		["pages", "pf01-page-module.json"]
+		["stats", "pf-stat-module01.js"],
+		["pages", "pf-page-module01.js"]
 	],
 	"Formulae": [
 		{
