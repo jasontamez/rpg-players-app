@@ -61,6 +61,9 @@ export class CharacterObject {
 		this.multistats = new Map();
 		this.pools = new Map();
 		this.bonuses = new Map();
+		this.references = new Map();
+		this.crossreferences = new Map();
+	}
 	get(dataName) {
 		return this.data.get(dataName);
 	}
@@ -88,6 +91,19 @@ export class CharacterObject {
 	getPool(id) {
 		return this.pools.get(id);
 	}
+	getReference(id) {
+		return this.references.get(id);
+	}
+	addReference(id, reference) {
+		return this.references.set(id, reference);
+	}
+	addCrossReference(id, crossreference) {
+		return this.crossreferences.set(id, crossreference);
+	}
+	getCrossReference(id) {
+		return this.crossreferences.get(id);
+	}
+	// noteBonus(anyID, stringUndoBonusFunctionName, ...any number of arguments)
 	noteBonus() {
 		var args = Array.from(arguments),
 			id = args.shift(),
@@ -116,6 +132,21 @@ export class CharacterObject {
 		this.bonuses.delete(id);
 		return true;
 	}
+	toJSON(key) {
+		return {
+			player: this.player.id,
+			id: this.id,
+			ruleset: this.ruleset,
+			data: Array.from(this.data),
+			stats = Array.from(this.stats.keys()),
+			multistats = Array.from(this.multistats.keys()),
+			pools = Array.from(this.pools.keys()),
+			bonuses = Array.from(this.bonuses),
+			references = Array.from(this.references.keys()),
+			crossreferences = Array.from(this.crossreferences.keys()),
+		};
+	}
+	//getById?
 }
 
 ////////////////////////////
@@ -203,7 +234,7 @@ export class ReferenceObject extends SpecialGrabber {
 	constructor(prop, atts = new Map()) {
 		super(atts);
 		this.prop = prop;
-		ReferenceObject.references.set(prop, this);
+		$RPG.current.character.addReference(prop, this);
 	}
 	toJSON(key) {
 		var o = super(key);
@@ -215,13 +246,13 @@ export class ReferenceObject extends SpecialGrabber {
 		return context.get(this.prop, context);
 	}
 	static makeReference(prop, atts = new Map()) {
-		if(this.references.has(prop)) {
-			return this.references.get(prop);
+		var CHAR = $RPG.current.character;
+		if(CHAR.references.has(prop)) {
+			return CHAR.getReference(prop);
 		}
 		return new ReferenceObject(prop, atts);
 	}
 }
-ReferenceObject.references = new Map();
 
 // A class for values that are merely references to other Stats
 export class CrossReference extends ReferenceObject {
@@ -230,7 +261,7 @@ export class CrossReference extends ReferenceObject {
 	constructor(id, prop, atts = new Map()) {
 		super(prop, atts);
 		this.reference = id;
-		CrossReference.references.set(id + " => " + prop, this);
+		$RPG.current.character.addCrossReference(id + " => " + prop, this);
 	}
 	toJSON(key) {
 		var o = super(key);
@@ -249,14 +280,14 @@ export class CrossReference extends ReferenceObject {
 		// incomplete
 	}
 	static makeReference(id, prop, atts = new Map()) {
-		var ref = id + " => " + prop;
-		if(this.references.has(ref)) {
-			return this.references.get(ref);
+		var ref = id + " => " + prop,
+			CHAR = $RPG.current.character;
+		if(CHAR.crossreferences.has(ref)) {
+			return CHAR.getCrossReference(ref);
 		}
 		return new CrossReference(id, prop, atts);
 	}
 }
-CrossReference.references = new Map();
 
 // 
 export class EquationObject extends SpecialGrabber {
