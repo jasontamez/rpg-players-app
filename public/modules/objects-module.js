@@ -1,5 +1,3 @@
-// Import query selectors
-import { $q, $a } from "./dollar-sign-module.js";
 // Import parsing and logging
 import { logErrorText as logError } from "./parsing-logging.js";
 
