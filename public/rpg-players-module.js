@@ -3,7 +3,6 @@ import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError, 
 import "./modules/objects-module.js";
 import { parseFormulae, parseStats } from "./modules/stats-module01.js";
 import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
-import { PlayerObject } from "./modules/data-module01.js";
 const xmlDir = "./rulesets/",
 	modDir = "./modules/",
 	BODY = document.body,
@@ -13,6 +12,7 @@ var okToDeload = false,
 	BUNDLES = new Map(),
 	AJAXstorage = new Map(),
 	$RPG = window["$RPG"],
+	PlayerObject = $RPG.objects.data.player,
 	socket = window["$IO"];
 
 // Set up global variable
@@ -162,7 +162,7 @@ function tryDisplayInfo_OLD(event, x = 0) {
 }
 
 
-function loadAndAssembleInfo(info) {
+async function loadAndAssembleInfo(info) {
 	var modules = info.Modules,
 		m = modules.length,
 		resources = info.Resources,
@@ -209,14 +209,19 @@ function loadAndAssembleInfo(info) {
 	});
 	// load pages
 	modifyLoadingScreen($t("[parsing pages]"));
-	info.Pages.forEach(function(src) {
+	m = info.Pages;
+	l = m.length;
+	c = 0;
+	while(c < l) {
+		let src = m[c];
 		await grabAndParseXML(src)
 			.then( parsedPages => parsePages(Array.from($a("Page"), parsedPages)) )
 			.catch(function(err) {
 				logErrorText(err.statusText);
 				console.log(err);
 			});
-	});
+		c++;
+	}
 	modifyLoadingScreen($t("[loading first page]"));
 	start = data.get("firstPage");
 	if(start === undefined) {
@@ -405,7 +410,7 @@ async function parseResourceNode(modNode) {
 }
 
 async function parseModule(t, src) {
-	var ok = null;
+	var ok = null,
 		type = $RPG[t];
 	if(type === undefined) {
 		logErrorText("MODULE: invalid module type \"" + t + "\"");
