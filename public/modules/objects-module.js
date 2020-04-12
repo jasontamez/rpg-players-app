@@ -22,15 +22,36 @@ export class PlayerObject {
 	makeCharacter(ruleset) {
 		// make an ID
 		var id = "ID",
-			rs = this.rulesets.get(ruleset) || new Map(),
-			char;
-		char = new CharacterObject(this, ruleset, id);
-		rs.set(id, char);
-		this.rulesets.set(ruleset, rs);
+			char = new CharacterObject(this, ruleset, id);
+		this.saveCharacter(ruleset, id, char);
 		return char;
 	}
 	getCharacter(ruleset, id) {
-		return this.rulesets.get(ruleset).get(id);
+		var rs = this.rulesets.get(ruleset);
+		if(id === undefined) {
+			return rs;
+		}
+		return rs.get(id);
+	}
+	loadCharacter(ruleset, id) {
+		var cur = $RPG.current,
+			char, newChar;
+		if(cur && (char = cur.character) && char.id === id && char.ruleset === ruleset) {
+			return logError("Attempting to load current character.");
+		} else if ((newChar = this.getCharacter(ruleset, id)) === undefined) {
+			return logError("Cannot find character \"" + id + "\" in ruleset \"" + ruleset + "\"");
+		} else if (char) {
+			// Save the old character
+			$RPG.objects.saver.Character(char, this);
+		}
+		char = JSON.parse(newChar);
+		newChar = $RPG.objects.parser[char.parser](char);
+		cur.character = newChar;
+	}
+	saveCharacter(ruleset, id, char) {
+		var rs = this.rulesets.get(ruleset) || new Map();
+		rs.set(id, char);
+		return this.rulesets.set(ruleset, rs);
 	}
 	toJSON(key) {
 		var rs = this.rulesets,
@@ -41,7 +62,7 @@ export class PlayerObject {
 		return {
 			id: this.id,
 			rulesets: rulesets,
-			parser: "PlayerObject"
+			parser: "Player"
 		};
 	}
 	//getById
@@ -52,14 +73,17 @@ export class PlayerObject {
 //   o.set("property", value)
 //   o.get("property") => value
 export class CharacterObject {
+	// new CharacterObject(stringPlayerID, stringRuleset, stringCharacterID)
 	constructor(player, ruleset, characterID) {
 		this.player = player;
 		this.id = characterID;
 		this.ruleset = ruleset;
 		this.data = new Map();
+		this.groups = new Map();
 		this.stats = new Map();
 		this.multistats = new Map();
 		this.pools = new Map();
+		this.formulae = new Map();
 		this.bonuses = new Map();
 		this.references = new Map();
 		this.crossreferences = new Map();
@@ -72,6 +96,12 @@ export class CharacterObject {
 	}
 	has(dataName) {
 		return this.data.has(dataName);
+	}
+	addGroup(id, group) {
+		return this.groups.set(id, group);
+	}
+	getGroup(id) {
+		return this.groups.get(id);
 	}
 	addStat(id, stat) {
 		return this.stats.set(id, stat);
@@ -102,6 +132,12 @@ export class CharacterObject {
 	}
 	getCrossReference(id) {
 		return this.crossreferences.get(id);
+	}
+	addFormula(id, formula) {
+		return this.formulae.set(id, formula);
+	}
+	getFormula(id) {
+		return this.formulae.get(id);
 	}
 	// noteBonus(anyID, stringUndoBonusFunctionName, ...any number of arguments)
 	noteBonus() {
@@ -137,17 +173,30 @@ export class CharacterObject {
 			player: this.player.id,
 			id: this.id,
 			ruleset: this.ruleset,
-			data: Array.from(this.data),
-			stats = Array.from(this.stats.keys()),
-			multistats = Array.from(this.multistats.keys()),
-			pools = Array.from(this.pools.keys()),
-			bonuses = Array.from(this.bonuses),
-			references = Array.from(this.references.keys()),
-			crossreferences = Array.from(this.crossreferences.keys()),
+			data: this.data,
+			groups: this.groups,
+			stats: this.stats,
+			multistats: this.multistats,
+			pools: this.pools,
+			formulae: this.formulae,
+			references: this.references,
+			crossreferences: this.crossreferences,
+			bonuses: Array.from(this.bonuses),
+			parser: "Character"
 		};
 	}
 	//getById?
 }
+CharacterObject.JSONIncompatibles = [
+	"data",
+	"groups",
+	"stats",
+	"multistats",
+	"pools",
+	"formulae",
+	"references",
+	"crossreferences"
+];
 
 ////////////////////////////
 /////// STAT OBJECTS ///////
@@ -184,7 +233,7 @@ export class GroupObject extends ObjectWithAttributes {
 		this.id = id;
 	}
 	toJSON(key) {
-		var o = super(key);
+		var o = super.toJSON(key);
 		o.id = this.id;
 		o.parser = "Group";
 		return o;
@@ -201,7 +250,7 @@ export class StatObject extends GroupObject {
 		this.defaultContext = id;
 	}
 	toJSON(key) {
-		var o = super(key);
+		var o = super.toJSON(key);
 		o.defaultContext = this.defaultContext;
 		o.groups = this.groups;
 		o.parser = "StatObject";
@@ -237,7 +286,7 @@ export class ReferenceObject extends SpecialGrabber {
 		$RPG.current.character.addReference(prop, this);
 	}
 	toJSON(key) {
-		var o = super(key);
+		var o = super.toJSON(key);
 		o.prop = this.prop;
 		o.parser = "Reference";
 		return o;
@@ -264,7 +313,7 @@ export class CrossReference extends ReferenceObject {
 		$RPG.current.character.addCrossReference(id + " => " + prop, this);
 	}
 	toJSON(key) {
-		var o = super(key);
+		var o = super.toJSON(key);
 		o.id = this.id;
 		o.parser = "CrossReference";
 		return o;
@@ -299,7 +348,7 @@ export class EquationObject extends SpecialGrabber {
 		super(atts);
 	}
 	toJSON(key) {
-		var o = super(key);
+		var o = super.toJSON(key);
 		o.parser = "Equation";
 		return o;
 	}
@@ -391,13 +440,94 @@ export class EquationObject extends SpecialGrabber {
 }
 
 
-////////////////////////////
-/////// STAT PARSERS ///////
-////////////////////////////
+///////////////////////////
+///////// PARSERS /////////
+///////////////////////////
 
 // These are used by JSON.parse to reconstruct objects.
 
-// Things will get tricky when we have to reconstruct arrays of other objects...
+// Note: parse in this order:
+//   * Groups
+//   * MultiStats
+//   * Stats
+//   * Pools
+//   * References
+//   * CrossReferences
+//   * Equations
+//   * If
+//   * Do/While
+//   * Formulae
+//   * Characters
+//   * Players
+
+function saveCharacter(character, player) {
+	var id = character.id,
+		rs = character.ruleset;
+	$RPG.objects.data.character.JSONIncompatibles.forEach(function(prop) {
+		var hold = [];
+		// go through each element of the map
+		character[prop].forEach(function(arr, id) {
+			// save to an array
+			hold.push([id, JSON.stringify(arr)]);
+		});
+		// save back to character object
+		character[prop] = hold;
+	});
+	// save back to player
+	player.saveCharacter(rs, id, JSON.stringify(character));
+}
+function savePlayer() {
+
+}
+function restoreCharacter(c, player) {
+	var id = c.id,
+		rs = c.ruleset,
+		char = new CharacterObject(player, c.rs, c.id);
+	char.bonuses = new Map(char.bonuses);
+	$RPG.objects.data.character.JSONIncompatibles.forEach(function(prop) {
+		var hold = new Map();
+		c[prop].forEach(function(arr) {
+			var key = arr[0],
+				o = arr[1];
+			if(o) {
+				let parser;
+				if(o instanceof Array) {
+					let deep = [];
+					o.forEach(function(o2) {
+						if(parser = o2.parser) {
+							o2 = $RPG.objects.parser[parser](o2);
+						}
+						deep.push(o2);
+					});
+				} else {
+					if(parser = o.parser) {
+						o = $RPG.objects.parser[parser](o);
+					}
+				}
+			}
+			hold.set(key, o);
+		});
+		char[prop] = hold;
+	});
+	player.saveCharacter(rs, id, char);
+}
+function restorePlayer(key, prop, flagged) {
+	if(key === "rulesets") {
+		let rs = new Map();
+		prop.forEach(function(item) {
+			var [ruleset, arr] = item,
+				chars = new Map();
+			arr.forEach();
+		});
+		return new Map(prop);
+	} else if (key === "parser") {
+		return undefined;
+	} else if (key === "" && !flagged) {
+		let o = $RPG.objects.stats.ObjectWithAttributes;
+		return new o(prop.atts);
+	}
+	return prop;
+}
 
 function restoreAttributes(key, prop, flagged) {
 	if(key === "atts") {
@@ -417,6 +547,8 @@ function restoreGroup(key, prop, flagged) {
 	}
 	return prop;
 }
+//function restoreMultiStat(key, prop, flagged) {
+//}
 function restoreStat(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
@@ -449,6 +581,12 @@ function restoreEquation(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
+//function restoreIf(key, prop, flagged) 
+//}
+//function restoreDo(key, prop, flagged) {
+//}
+//function restoreFormula(key, prop, flagged) {
+//}
 
 
 $RPG.ADD("objects", {
@@ -465,7 +603,13 @@ $RPG.ADD("objects", {
 		CrossReference: CrossReference,
 		Equation: EquationObject
 	},
+	saver: {
+		Character: saveCharacter,
+		Player: savePlayer
+	},
 	parser: {
+		Player: restorePlayer,
+		Character: restoreCharacter,
 		ObjectWithAttributes: restoreAttributes,
 		Group: restoreGroup,
 		StatObject: restoreStat,
