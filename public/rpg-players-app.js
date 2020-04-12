@@ -2,7 +2,8 @@ var $RPG = {
 	UNDO: new Map(),
 	LOG_UNDO: function() {
 		if($RPG.current !== undefined) {
-			let ruleset = this.current.ruleset.name,
+//			let ruleset = this.current.ruleset.name,
+			let ruleset = this.current.character.ruleset,
 				undo = this.UNDO.get(ruleset) || [],
 				args = Array.from(arguments);
 			undo.unshift(args);
