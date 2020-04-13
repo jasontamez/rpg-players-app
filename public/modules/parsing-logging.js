@@ -6,9 +6,14 @@ export function logErrorNode(node, msg) {
 	console.trace();
 }
 
-export function logErrorText(msg) {
+export function logErrorTextOld(msg) {
 	console.log(msg);
 	console.trace();
+}
+
+export function logErrorText(msg, error) {
+	console.log(msg);
+	console.log(error.stack);
 }
 
 // Returns the attributes of NODE as an {object}

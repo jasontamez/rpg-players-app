@@ -1,8 +1,6 @@
 import { $a, $i, $t, $listen, $ea as $e } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError, logErrorText } from "./modules/parsing-logging.js";
 import "./modules/objects-module.js";
-import { parseFormulae, parseStats } from "./modules/stats-module01.js";
-import { parsePages, loadPageNamed } from "./modules/pages-module01.js";
 const xmlDir = "./rulesets/",
 	modDir = "./modules/",
 	BODY = document.body,
@@ -96,11 +94,13 @@ function tryDisplayInfo(event) {
 		function(success, info) {
 			if(success) {
 				loadAndAssembleInfo(info);
+				setTimeout(() => okToDeload = true, 250);
 			} else {
 				alert(msg);
 				$i("rules").disabled = false;
 				button.textContent = "Load Ruleset";
 				button.disabled = false;
+				setTimeout(() => okToDeload = true, 250);
 			}
 		}
 	);
@@ -188,129 +188,47 @@ async function loadAndAssembleInfo(info) {
 		await parseModule(type, src);
 		c++;
 	}
-	// load formulae
-	modifyLoadingScreen($t("[parsing formulae]"));
-	parseFormulae(info.Formulae || []);
-	// load stats
-	modifyLoadingScreen($t("[parsing stats]"));
-	parseStats(info.Groups, info.Stats, info.MultiStats, info.Pools);
-	// load data
-	modifyLoadingScreen($t("[parsing data]"));
-	test = info.Data || [];
-	info.Data.forEach(function(n) {
-		var [id, value] = n;
-		data.set(id, value);
-	});
-	// load bundles
-	modifyLoadingScreen($t("[parsing bundles]"));
-	test = info.Bundles || [];
-	info.Bundles.forEach(function(n) {
-		parseBundle(n);
-	});
-	// load pages
-	modifyLoadingScreen($t("[parsing pages]"));
-	m = info.Pages;
-	l = m.length;
-	c = 0;
-	while(c < l) {
-		let src = m[c];
-		await grabAndParseXML(src)
-			.then( parsedPages => parsePages(Array.from($a("Page"), parsedPages)) )
-			.catch(function(err) {
-				logErrorText(err.statusText);
-				console.log(err);
-			});
-		c++;
-	}
-	modifyLoadingScreen($t("[loading first page]"));
-	start = data.get("firstPage");
-	if(start === undefined) {
-		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
-		return;
-	}
-	loadPageNamed(start, false);
-	modifyLoadingScreen($t("[Done!]"));
-	//console.log("End");
-	// Remove "loading" screen
-	removeLoadingScreen();
-}
-async function loadAndAssembleInfo_OLD(cls) {
-	var doc = AJAXstorage.get(cls),
-		body = doc.documentElement,
-//		ul = $e("ul"),
-		modules = Array.from($a("Modules Module", body)),
-		resources = Array.from($a("Resources Resource", body)),
-		c = 0,
-		l = modules.length,
-		r = resources.length,
-		nodes,
-		start;
-	modifyLoadingScreen($t("[parsing resources]"));
-	while(c < r) {
-		let node = resources[c];
-		await parseResourceNode(node);
-		c++;
-	}
-	c = 0;
-	modifyLoadingScreen($t("[parsing modules]"));
-	while(c < l) {
-		let node = modules[c];
-		await parseModuleNode(node);
-		c++;
-	}
-	//console.log("Modules Parsed");
-	//console.log(doc);
-	//console.log(body);
-	//console.log("Begin");
-	modifyLoadingScreen($t("[parsing formulae]"));
-	parseFormulae(Array.from($a("Formulae Formula", body)));
-	//console.log("Formulas done");
-	modifyLoadingScreen($t("[parsing stats]"));
-	parseStats(Array.from($a("Stats", body)));
-	//console.log("Stats done");
-	//recurseNodes(body, ul);
-	//main.append(ul);
-	modifyLoadingScreen($t("[parsing data]"));
-	Array.from($a("Data Datum", body)).forEach(function(n) {
-		var id = n.getAttribute("id"),
-			value = n.getAttribute("value");
-		if(id === undefined || value === undefined) {
-			return logError(n, "DATUM: missing required \"id\" and/or \"value\" parameters");
-		}
-		data.set(id, value);
-	});
-	modifyLoadingScreen($t("[parsing bundles]"));
-	Array.from($a("Bundles Bundle", body)).forEach(function(n) {
-		parseBundle(n);
-	});
-	nodes = Array.from($a("Bundles Category", body));
-	while(nodes.length > 0) {
-		let node = nodes.shift(),
-			atts = parseAttributesToObject(node),
-			category = atts.name,
-			src = atts.src;
-		if(category === undefined) {
-			return logError(node, "BUNDLE CATEGORY: missing required \"name\" parameter");
-		} else if (src === undefined) {
-			node.querySelectorAll("Bundle").forEach( n => parseBundle(n, category) );
-		} else {
-			await grabAndParseXML(src)
-				.then( bundleDoc => Array.from($a("Bundle", bundleDoc)).forEach( n => parseBundle(n, category) ) )
-				.catch(function(err) {
-					logError(node, err.statusText);
-					console.log(err);
-				});
-		}
-	}
-	modifyLoadingScreen($t("[parsing pages]"));
-	parsePages(Array.from($a("Pages Page", body)));
-	modifyLoadingScreen($t("[loading first page]"));
-	start = data.get("firstPage");
-	if(start === undefined) {
-		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
-		return;
-	}
-	loadPageNamed(start, false);
+//	// load formulae
+//	modifyLoadingScreen($t("[parsing formulae]"));
+//	parseFormulae(info.Formulae || []);
+//	// load stats
+//	modifyLoadingScreen($t("[parsing stats]"));
+//	parseStats(info.Groups, info.Stats, info.MultiStats, info.Pools);
+//	// load data
+//	modifyLoadingScreen($t("[parsing data]"));
+//	test = info.Data || [];
+//	info.Data.forEach(function(n) {
+//		var [id, value] = n;
+//		data.set(id, value);
+//	});
+//	// load bundles
+//	modifyLoadingScreen($t("[parsing bundles]"));
+//	test = info.Bundles || [];
+//	info.Bundles.forEach(function(n) {
+//		parseBundle(n);
+//	});
+//	// load pages
+//	modifyLoadingScreen($t("[parsing pages]"));
+//	m = info.Pages;
+//	l = m.length;
+//	c = 0;
+//	while(c < l) {
+//		let src = m[c];
+//		await grabAndParseXML(src)
+//			.then( parsedPages => parsePages(Array.from($a("Page"), parsedPages)) )
+//			.catch(function(err) {
+//				logErrorText(err.statusText);
+//				console.log(err);
+//			});
+//		c++;
+//	}
+//	modifyLoadingScreen($t("[loading first page]"));
+//	start = data.get("firstPage");
+//	if(start === undefined) {
+//		modifyLoadingScreen($t("[ERROR: missing 'firstPage' datum in RuleSet " + cls + "]"));
+//		return;
+//	}
+//	loadPageNamed(start, false);
 	modifyLoadingScreen($t("[Done!]"));
 	//console.log("End");
 	// Remove "loading" screen
@@ -336,7 +254,7 @@ async function parseResource(type, resource) {
 			atts = [];
 			break;
 		default:
-			logErrorText("RESOURCE: \"" + type + "\" not found");
+			logErrorText("RESOURCE: \"" + type + "\" not found", new Error());
 			return null;
 	}
 	atts.forEach(function(pair) {
@@ -345,7 +263,7 @@ async function parseResource(type, resource) {
 		if(p.length > 0) {
 			let v = p.shift();
 			if(v === undefined) {
-				logErrorText("RESOURCE: Could not set parameter \"" + att + "\"");
+				logErrorText("RESOURCE: Could not set parameter \"" + att + "\"", new Error());
 				return null;
 			}
 			a[att] = v;
@@ -355,126 +273,23 @@ async function parseResource(type, resource) {
 	});
 	where.appendChild($e(element, a));
 }
-async function parseResourceNode(modNode) {
-	var atts = parseAttributesToObject(modNode),
-		t = atts.type,
-		resources = {
-			stylesheet: {
-				element: "link",
-				location: document.head,
-				attributes: [
-					["rel", "stylesheet"],
-					["type", "text/css"],
-					["href", "/rulesets/" + atts.src]
-				]
-			},
-			script: {
-				element: "script",
-				location: document.body,
-				attributes: [
-					["type"],
-					["src", "/rulesets/" + atts.src]
-				]
-			}
-		},
-		type = resources[t],
-		src = atts.src,
-		msg = false,
-		a = {};
-	if(t === undefined) {
-		msg = "RESOURCE: missing required parameter \"type\"";
-	} else if (src === undefined) {
-		msg = "RESOURCE: missing required parameter \"src\"";
-	} else if (type === undefined) {
-		msg = "RESOURCE: invalid resource type \"" + t + "\"";
-	}
-	if(msg) {
-		logError(modNode, msg);
-		return null;
-	}
-	type.attributes.forEach(function(pair) {
-		var p = pair.slice(),
-			att = p.shift();
-		if(p.length > 0) {
-			let v = p.shift();
-			if(v === undefined) {
-				logError(modNode, "RESOURCE: Could not set parameter \"" + att + "\"");
-				return null;
-			}
-			a[att] = v;
-		} else if(atts[att] !== undefined) {
-			a[att] = atts[att];
-		}
-	});
-	type.location.appendChild($e(type.element, a));
-}
 
 async function parseModule(t, src) {
 	var ok = null,
 		type = $RPG[t];
 	if(type === undefined) {
-		logErrorText("MODULE: invalid module type \"" + t + "\"");
+		logErrorText2("MODULE: invalid module type \"" + t + "\"", new Error());
 		return null;
 	}
 	await import(modDir + src)
 		.then(function(info) {
 			ok = true;
 		}).catch(function(error) {
-			logErrorText(error.message);
+			logErrorText(error.message, new Error());
 			console.log(error);
 			console.log(modDir + src);
 		});
 	return ok;
-}
-async function parseModuleNode(modNode) {
-	var atts = parseAttributesToObject(modNode),
-		t = atts.type,
-		type = $RPG[t],
-		src = atts.src,
-		msg = false;
-	if(t === undefined) {
-		msg = "MODULE: missing required parameter \"type\"";
-	} else if (src === undefined) {
-		msg = "MODULE: missing required parameter \"src\"";
-	} else if (type === undefined) {
-		msg = "MODULE: invalid module type \"" + t + "\"";
-	}
-	if(msg) {
-		logError(modNode, msg);
-		return null;
-	}
-	await import(modDir + src)
-		.then(function(info) {
-			var exports = info.exports;
-			if(exports !== undefined) {
-				exports.forEach(function(imported) {
-					var value = imported.pop(),
-						prop = imported.pop(),
-						o = type;
-					while(imported.length > 0) {
-						let p = imported.shift();
-						if(o[p] === undefined) {
-							o[p] = {};
-						}
-						o = o[p];
-					}
-					o[prop] = value;
-				});
-			} else {
-				let e = atts.exports || "";
-				exports = e.split(",");
-				if(exports.length === 0) {
-					exports = Object.getOwnPropertyNames(info);
-				}
-				exports.forEach(function(prop) {
-					type[prop] = info[prop];
-				});
-			}
-		}).catch(function(error) {
-			logError(modNode, error.message);
-			console.log(error);
-			console.log(modDir + src);
-		});
 }
 
 
