@@ -17,7 +17,6 @@
 		{
 			"name": "convert_modifier_to_string",
 			"formula": "If",
-			"inType": "Int",
 			"outType": "Str",
 			"start": [null, "modifier"],
 			"compare": [
@@ -34,7 +33,6 @@
 		{
 			"name": "convert_modified_value_to_string",
 			"formula": "If",
-			"inType": "Int",
 			"outType": "Str",
 			"start": [null, "modifiedValue"],
 			"compare": [
@@ -51,8 +49,6 @@
 		{
 			"name": "if_class_skill_then_plus_one",
 			"formula": "If",
-			"inType": "Pool",
-			"outType": "Int",
 			"start": [null, "source"],
 			"compare": [
 				"AND",
@@ -65,8 +61,6 @@
 "////////////////////////////////COMMENT": "move to Bundle",
 			"name": "if_class_skill_and_memory_racial_trait_then_plus_one",
 			"formula": "If",
-			"inType": "Pool",
-			"outType": "Int",
 			"start": [null, "source"],
 			"compare": [
 				"AND",
@@ -79,8 +73,6 @@
 		{
 			"name": "x",
 			"formula": "If",
-			"inType": "Pool",
-			"outType": "Int",
 			"start": [null, "source"],
 			"compare": [
 				"AND",
@@ -753,7 +745,6 @@
 			"startingValue": 10,
 			"statBonus": [
 				"If",
-				["inOut", "Int", "Int"],
 				["Start", ["size", null]],
 				["Compare", [
 					"AND",
