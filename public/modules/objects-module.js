@@ -437,6 +437,195 @@ export class EquationObject extends SpecialGrabber {
 	}
 }
 
+export function findValue(value, type, context) {
+	// Values may come in different forms
+	//   null = use context.get("value")
+	//   string/number/boolean = use as-is
+	//   array is one of three formats:
+	//     [null, string] = use context.get(string)
+	//     [string] = find a Stat 'string' and .get("value")
+	//     [string, string2] = find a Stat 'string' and .get(string2)
+	if(value === null) {
+		value = context;
+		if(value === undefined) {
+			logError("Invalid or missing context provided for a null value", new Error());
+			value = 0;
+		} else {
+			value = context.get("value");
+		}
+	} else if(value instanceof Array) {
+		// [stat, ?property]
+		let a = value.slice(),
+			s = a.shift(),
+			s = $RPG.current.character.getObject(a.shift());
+		if(s === null) {
+			s = context;
+		}
+		if(s === undefined) {
+			logError("Invalid object: \"" + value[0] + "\"", new Error());
+			value = 0;
+		} else {
+			s = $RPG.current.character.getObject(a.shift());
+			if (a.length) {
+				value = s.get(s);
+			} else {
+				value = s.get("value");
+			}
+		}
+	}
+	if(type) {
+		value = $RPG.objects.converter[type](value);
+	}
+	return value;
+}
+
+// Stat that contains an if/then/else construction
+export class IfObject extends SpecialGrabber {
+	// new IfObject(attributesMap)
+	// attributesMap must includes these keys:
+	//   inType => string matching a property on $RPG.objects.converter
+	//   outType => string matching a property on $RPG.objects.converter
+	//   value => any Value
+	//   comparator => string property of $RPG.objects.comparator
+	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
+	//   then => any Value
+	//   else => any Value
+	// A Value is either:
+	//   a number
+	//   a string
+	//   null, representing the calling object.get("value")
+	//   an array in the format [object, ?property]:
+	//     object: string equalling the ID of a Stat object, or null to represent the calling object
+	//     property: string representing property (if omitted, defaults to "value")
+	// use IfObject.makeIfThenElse(array in a Map-like format)
+	//   to (mildly) test that instructions are valid
+	constructor(atts) {
+		super(atts);
+	}
+	static makeIfThenElse(arr) {
+		var RO = $RPG.objects,
+			ROC = RO.converter;
+			inType = ROC.Any,
+			outType = inType,
+			value = 0,
+			comparator, comparisons, then, otherwise;
+		arr.forEach(function(pair) {
+			var [op, v] = pair,
+			switch(op) {
+				case "inType":
+					inType = ROC[v];
+					if(inType === undefined) {
+						logError("IF: invalid inType \"" + v + "\"", new Error());
+						inType = ROC.Any;
+					}
+					break;
+				case "outType":
+					outType = ROC[v];
+					if(outType === undefined) {
+						logError("IF: invalid outType \"" + v + "\"", new Error());
+						outType = ROC.Any;
+					}
+					break;
+				case "Start":
+					value = v;
+					break;
+				case "Compare":
+					let a = v.slice(),
+						ROP = RO.comparator,
+						c = ROP[a.shift()];
+					if(c === undefined) {
+						logError("IF: invalid comparator \"" + v[0] + "\"", new Error());
+						comparator = "AND";
+					} else if (c instanceof Array) {
+						comparator = "AND";
+						a.unshift(c);
+					} else {
+						comparator = c;
+					}
+					comparisons = a;
+					break;
+				case "Then":
+					then = v;
+					break;
+				case "Else":
+					otherwise = v;
+				default:
+					logError("IF: invalid parameter \"" + op + "\"", new Error());
+			}
+		});
+		if(comparisons == undefined) {
+			logError("IF: missing required Compare parameter", new Error());
+			return undefined;
+		} else if (then === undefined) {
+			logError("IF: missing required Then parameter", new Error());
+			return undefined;
+		} else if (otherwise === undefined) {
+			logError("IF: missing required Else parameter", new Error());
+			return undefined;
+		}
+		return new If(new Map([
+			["inType", inType],
+			["outType", outType],
+			["start", value],
+			["comparator", comparator],
+			["comparisons", comparisons],
+			["then", then],
+			["else", otherwise]
+		]));
+	}
+	grabValue(context) {
+		var value = this.get("value"),
+			inT = this.get("inType"),
+			ROS = $RPG.object.stats,
+			IF = ROS.If,
+			comparisons = this.get("comparisons").slice(),
+			results = [],
+			FIND = ROS.func.findValue;
+		// Get the value we start with
+		value = FIND(value, inT, context);
+		// Run comparisons
+		while(comparisons.length) {
+			let [func, test] = comparisons.shift();
+			results.push(IF[func][value, FIND(test, inT, context)]);
+		}
+		// Run results through comparator to get a final value
+		value = $RPG.comparator[this.get("comparator")](results);
+		// Return results if value is true (then) or false (else)
+		return FIND(this.get(value ? "then" : "else"), this.get("outType"), context);
+	}
+	static GreaterThan(value, test) {
+		return value > test;
+	}
+	static NotGreaterThan(value, test) {
+		return value <= test;
+	}
+	static LessThan(value, test) {
+		return value < test;
+	}
+	static NotLessThan(value, test) {
+		return value >= test;
+	}
+	static EqualTo(value, test) {
+		return value === test;
+	}
+	static NotEqualTo(value, test) {
+		return value !== test;
+	}
+	static Contains(value, test) {
+		return String(value).includes(String(test));
+	}
+	static DoesNotContain(value, test) {
+		return !String(value).includes(String(test));
+	}
+	static Has(value, test) {
+		return value.some( item => item === test );
+	}
+	static DoesNotHave(value, test) {
+		return value.every( item => item !== test );
+	}
+}
+
+
 
 ///////////////////////////
 ///////// PARSERS /////////
@@ -599,7 +788,25 @@ $RPG.ADD("objects", {
 		Grabber: SpecialGrabber,
 		Reference: ReferenceObject,
 		CrossReference: CrossReference,
-		Equation: EquationObject
+		Equation: EquationObject,
+		If: IfObject,
+		func: {
+			findValue: findValue,
+		},
+	},
+	converter: {
+		Any: function(x) { return x; },
+		Int: function(x) {
+			var y = Math.round(Number(x));
+			return y === y ? y : 0;
+		},
+		Str: function(x) { return String(x); },
+		TF: function(x) { return x ? true : false; }
+	},
+	comparator: {
+		AND: function(arr) { return arr.every(v => v); },
+		OR: function(arr) { return arr.some(v => v); },
+		XOR: function(arr) { return arr.filter(v => v).length === 1; }
 	},
 	saver: {
 		Character: saveCharacter,
