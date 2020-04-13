@@ -35,15 +35,15 @@ export class PlayerObject {
 		var cur = $RPG.current,
 			char, newChar;
 		if(cur && (char = cur.character) && char.id === id && char.ruleset === ruleset) {
-			return logError("Attempting to load current character.");
+			return logError("Attempting to load current character.", new Error());
 		} else if ((newChar = this.getCharacter(ruleset, id)) === undefined) {
-			return logError("Cannot find character \"" + id + "\" in ruleset \"" + ruleset + "\"");
+			return logError("Cannot find character \"" + id + "\" in ruleset \"" + ruleset + "\"", new Error());
 		} else if (char) {
 			// Save the old character
 			$RPG.objects.saver.Character(char, this);
 		}
 		char = JSON.parse(newChar);
-		newChar = $RPG.objects.parser[char.parser](char);
+		newChar = $RPG.objects.parser[char.parser](char, this);
 		cur.character = newChar;
 	}
 	saveCharacter(ruleset, id, char) {
@@ -152,13 +152,13 @@ export class CharacterObject {
 	undoBonuses(id) {
 		var bonuses = this.bonuses.get(id);
 		if(bonuses === undefined) {
-			return logErrorText("Unable to find any bonuses labelled \"" + id + "\"");
+			return logErrorText("Unable to find any bonuses labelled \"" + id + "\"", new Error());
 		}
 		bonuses.forEach(function(arr) {
 			var n = arr.shift(),
 				undo = $RPG.data.undoBonusMethods[n];
 			if(undo === undefined) {
-				logError(n, "Cannot find undo operation \"" + n + "\"");
+				logError(n, "Cannot find undo operation \"" + n + "\"", new Error());
 				return;
 			}
 			return undo(...arr);
@@ -245,11 +245,11 @@ export class StatObject extends GroupObject {
 	constructor(id, atts, groups = []) {
 		super(id, atts, groups);
 		this.groups = groups;
-		this.defaultContext = id;
+		this.defaultContext = this;
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
-		o.defaultContext = this.defaultContext;
+		o.defaultContext = this.defaultContext.id;
 		o.groups = this.groups;
 		o.parser = "StatObject";
 		return o;
@@ -320,7 +320,7 @@ export class CrossReference extends ReferenceObject {
 		var reference = $RPG.current.character.getTBD(this.reference),
 			a = Array.from(arguments);
 		if(reference === undefined) {
-			logError("ERROR: unable to find \"" + this.reference + "\" when fetching CrossReference");
+			logError("ERROR: unable to find \"" + this.reference + "\" when fetching CrossReference", new Error());
 			return "";
 		}
 		return reference.get(this.property, ...a);
@@ -359,10 +359,10 @@ export class EquationObject extends SpecialGrabber {
 			reference = $RPG.current.character.getTBD(context);
 		}
 		if(!reference) {
-			logError("ERROR: Cannot find a Stat named \"" + context + "\"");
+			logError("ERROR: Cannot find a Stat named \"" + context + "\"", new Error());
 			return undefined;
 		} else if (!i || !(i instanceof Array)) {
-			logError("ERROR: Invalid instructions on EquationObject");
+			logError("ERROR: Invalid instructions on EquationObject", new Error());
 			return undefined;
 		}
 		instructions = i.slice();
