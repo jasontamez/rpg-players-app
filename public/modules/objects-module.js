@@ -465,6 +465,8 @@ function copyArray(arr) {
 	}
 	return res;
 }
+
+// Object that contains an if/then/else construction
 export class IfObject extends SpecialGrabber {
 	// new IfObject(attributesMap)
 	// attributesMap must includes these keys:
@@ -490,25 +492,25 @@ export class IfObject extends SpecialGrabber {
 	static makeIfThenElse(arr) {
 		var RO = $RPG.objects,
 			ROC = RO.converter;
-			inType = ROC.Any,
-			outType = inType,
+			inType = "Any",
+			outType = "Any",
 			value = 0,
 			comparator, comparisons, then, otherwise;
 		arr.forEach(function(pair) {
 			var [op, v] = pair,
 			switch(op) {
 				case "inType":
-					inType = ROC[v];
-					if(inType === undefined) {
+					inType = v;
+					if(ROC[v] === undefined) {
 						logError("IF: invalid inType \"" + v + "\"", new Error());
-						inType = ROC.Any;
+						inType = "Any";
 					}
 					break;
 				case "outType":
-					outType = ROC[v];
-					if(outType === undefined) {
+					outType = v;
+					if(ROC[v] === undefined) {
 						logError("IF: invalid outType \"" + v + "\"", new Error());
-						outType = ROC.Any;
+						outType = "Any";
 					}
 					break;
 				case "Start":
@@ -539,6 +541,7 @@ export class IfObject extends SpecialGrabber {
 					break;
 				case "Else":
 					otherwise = v;
+					break;
 				default:
 					logError("IF: invalid parameter \"" + op + "\"", new Error());
 			}
@@ -563,8 +566,8 @@ export class IfObject extends SpecialGrabber {
 			["else", otherwise]
 		]));
 	}
-	grabValue(context) {
-		var value = this.get("value"),
+	getValue(context) {
+		var value = this.get("start"),
 			inT = this.get("inType"),
 			ROS = $RPG.object.stats,
 			IF = ROS.If,
