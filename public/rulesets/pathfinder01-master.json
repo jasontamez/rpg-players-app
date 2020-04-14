@@ -574,8 +574,9 @@
 					"AND",
 					["GreaterThan", 5]
 				]],
-				["Input", "Int", null],
-				["Output", "Str", null, "modifier_text"],
+				["outType", "Str"],
+				["Input", null],
+				["Output", [null, "modifier_text"]],
 				["ModifyInput", [
 					["Add", -5]
 				]],
