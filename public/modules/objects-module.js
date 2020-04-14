@@ -351,43 +351,14 @@ export class EquationObject extends SpecialGrabber {
 		return o;
 	}
 	getValue(context) {
-		var i = this.get("instructions"),
-			reference = context,
+		var instructions = copyArray(this.get("instructions")),
 			total = 0,
-			instructions;
-		if(reference && !(reference instanceof ($RPG.objects.stats.StatObject))) {
-			reference = $RPG.current.character.getTBD(context);
-		}
-		if(!reference) {
-			logError("ERROR: Cannot find a Stat named \"" + context + "\"", new Error());
-			return undefined;
-		} else if (!i || !(i instanceof Array)) {
-			logError("ERROR: Invalid instructions on EquationObject", new Error());
-			return undefined;
-		}
-		instructions = i.slice();
+			ROS = $RPG.object.stats,
+			FIND = ROS.func.findValue;
 		while(instructions.length > 0) {
-			let line = instructions.shift().slice(),
-				method = line.shift(),
-				value = line.shift();
-			if(value instanceof Array) {
-				let ref = value.slice(),
-					stat = ref.shift(),
-					prop;
-				if(stat === null) {
-					stat = reference;
+			let value = instructions.shift();
+			total = EquationObject[method](total, FIND(value, "Any", context));
 				}
-				if(ref.length > 0) {
-					prop = ref.shift();
-				} else {
-					prop = "value";
-				}
-				value = stat.get(prop);
-			} else if (value === null) {
-				value = reference.get("value");
-			}
-			total = EquationObject[method](total, value);
-		}
 		return total;
 		// incomplete
 	}
@@ -420,7 +391,7 @@ export class EquationObject extends SpecialGrabber {
 	}
 	static makeEquation(instrc, otherAtts = new Map()) {
 		var i = [],
-			instructions = instrc.slice(),
+			instructions = copyArray(instrc),
 			e;
 		while(instructions.length > 0) {
 			let test = i.shift(),
@@ -455,7 +426,7 @@ export function findValue(value, type, context) {
 		}
 	} else if(value instanceof Array) {
 		// [stat, ?property]
-		let a = value.slice(),
+		let a = copyArray(value),
 			s = a.shift(),
 			s = $RPG.current.character.getObject(a.shift());
 		if(s === null) {
@@ -479,7 +450,21 @@ export function findValue(value, type, context) {
 	return value;
 }
 
-// Stat that contains an if/then/else construction
+// copyArray(array) => deep copy of that array
+// The input array is copied, and each nested array within it is copied, too
+function copyArray(arr) {
+	var res = [],
+		a = arr.slice();
+	while(a.length > 0) {
+		let one = a.shift();
+		if(one instanceof Array) {
+			res.push(copyArray(one));
+		} else {
+			res.push(one);
+		}
+	}
+	return res;
+}
 export class IfObject extends SpecialGrabber {
 	// new IfObject(attributesMap)
 	// attributesMap must includes these keys:
@@ -527,18 +512,23 @@ export class IfObject extends SpecialGrabber {
 					}
 					break;
 				case "Start":
+					if(v instanceof Array) {
+						value = copyArray(v);
+					} else {
 					value = v;
+					}
 					break;
 				case "Compare":
-					let a = v.slice(),
+					let a = copyArray(v),
 						ROP = RO.comparator,
-						c = ROP[a.shift()];
-					if(c === undefined) {
-						logError("IF: invalid comparator \"" + v[0] + "\"", new Error());
+						b = a.shift(),
+						c = ROP[b];
+					if (v instanceof Array) {
 						comparator = "AND";
-					} else if (c instanceof Array) {
+						a.unshift(v);
+					} else if(c === undefined) {
+						logError("IF: invalid comparator \"" + b + "\"", new Error());
 						comparator = "AND";
-						a.unshift(c);
 					} else {
 						comparator = c;
 					}
@@ -578,7 +568,7 @@ export class IfObject extends SpecialGrabber {
 			inT = this.get("inType"),
 			ROS = $RPG.object.stats,
 			IF = ROS.If,
-			comparisons = this.get("comparisons").slice(),
+			comparisons = copyArray(this.get("comparisons")),
 			results = [],
 			FIND = ROS.func.findValue;
 		// Get the value we start with
