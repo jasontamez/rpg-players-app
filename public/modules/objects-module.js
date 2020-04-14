@@ -618,6 +618,297 @@ export class IfObject extends SpecialGrabber {
 	}
 }
 
+// Object that contains an do/while loop construction
+//   An "input" is modified by instructions
+//   Each time the "input" is modified and passes a check, an "output" is modified, too
+//   The "input" is modified again and the check is attempted again, looping as needed
+//   Once the check fails, the "output" is returned
+export class DoObject extends SpecialGrabber {
+	// new DoObject(attributesMap)
+	// attributesMap must includes these keys:
+	//   inType => string matching a property on $RPG.objects.converter
+	//   outType => string matching a property on $RPG.objects.converter
+	//   input => any Value
+	//   output => any Value
+	//   modIn => an array of Equation instructions arrays
+	//    - the array may include plain strings:
+	//      - "AddOutput", "AppendOutput" (value + output)
+	//      - "PrependOutput" (output + value)
+	//   modOut => an array of Equation instructions arrays
+	//    - the array may include plain strings:
+	//       - "AddInput", "AppendInput" (value + input)
+	//       - "PrependInput" (input + value)
+	//   comparator => string property of $RPG.objects.comparator
+	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
+	// A Value is either:
+	//   a number
+	//   a string
+	//   null, representing the calling object.get("value")
+	//   an array in the format [object, ?property]:
+	//     object: string equalling the ID of a Stat object, or null to represent the calling object
+	//     property: string representing property (if omitted, defaults to "value")
+	//
+	// use DoObject.makeDoWhile(array in a Map-like format)
+	//   to (mildly) test that instructions are valid
+	constructor(atts) {
+		super(atts);
+	}
+	static makeDoWhile(arr) {
+		var RO = $RPG.objects,
+			ROC = RO.converter;
+			inType = "Any",
+			outType = "Any",
+			input, output, modIn, modOut, comparator, comparisons;
+		copyArray(arr).forEach(function(info) {
+			let op = info.shift(),
+				v = info.shift();
+			switch(op) {
+				case "While":
+					let ROP = RO.comparator,
+						first = v.shift(),
+						c = ROP[first];
+					if (first instanceof Array) {
+						comparator = "AND";
+						v.unshift(first);
+					} else if(c === undefined) {
+						logError("DO: WHILE: invalid comparator \"" + first + "\"", new Error());
+						comparator = "AND";
+					} else {
+						comparator = c;
+					}
+					comparisons = first;
+					break;
+				case "inType":
+					inType = v;
+					if(ROC[v] === undefined) {
+						logError("IF: invalid inType \"" + v + "\"", new Error());
+						inType = "Any";
+					}
+					break;
+				case "outType":
+					outType = v;
+					if(ROC[v] === undefined) {
+						logError("IF: invalid outType \"" + v + "\"", new Error());
+						outType = "Any";
+					}
+					break;
+				case "Input":
+					input = v;
+					break;
+				case "Output":
+					output = v;
+					break;
+				case "ModIn":
+					modIn = v;
+					break;
+				case "ModOut":
+					modOut = v;
+					break;
+				default:
+					logError("DO: invalid parameter \"" + op + "\"", new Error());
+			}
+		});
+		if(modIn === undefined) {
+			logError(node, "DO: Missing required ModifyInput parameter")
+			return undefined;
+		} else if(modOut === undefined) {
+			logError(node, "DO: Missing required ModifyOutput parameter")
+			return undefined;
+		} else if(comparisons === undefined) {
+			logError(node, "DO: Missing required While parameter")
+			return undefined;
+		} else if(input === undefined) {
+			logError(node, "DO: Missing required Input parameter")
+			return undefined;
+		} else if(output === undefined) {
+			logError(node, "DO: Missing required Output parameter")
+			return undefined;
+		}
+		// Create Do tag
+		tag = new Do(new Map([
+			["inType", inType],
+			["outType", outType],
+			["input", input],
+			["output", output],
+			["modIn", modIn],
+			["modOut", modOut],
+			["comparator", comparator],
+			["comparisons", comparisons]
+		]));
+		return tag;
+	}
+	getValue(context) {
+		var input = this.get("input"),
+			output = this.get("output"),
+			inT = this.get("inType"),
+			outT = this.get("outType"),
+			modIn = this.get("modIn"),
+			modOut = this.get("modOut"),
+			ROS = $RPG.object.stats,
+			IF = ROS.If,
+			WHILE = ROS.Do,
+			comparator = $RPG.comparator[this.get("comparator")],
+			comparisons = copyArray(this.get("comparisons")),
+			results = [],
+			FIND = ROS.func.findValue,
+			TryWhile = DoObject.tryWhile,
+			DoMod = DoObject.doMod,
+			check;
+		// Get the values we start with
+		input = FIND(input, inT, context);
+		output = FIND(output, outT, context);
+		// Check if input matches the conditions
+		check = TryWhile(input, IF, comparator, comparisons, FIND, inT, context);
+		while(check) {
+			// Modify input
+			input = DoMod(input, modIn, FIND, inT, context, output);
+			// Check if input still matches the conditions
+			if(check = TryWhile(input, IF, comparator, comparisons, FIND, inT, context)) {
+				// Modify output
+				output = DoMod(output, modOut, FIND, outT, context, input);
+			}
+		}
+		return output;
+	}
+	static tryWhile(input, IF, comparator, comparisons, FIND, inT, context) {
+		var results = [];
+		comparisons.forEach(function(pair) {
+			let [func, test] = pair;
+			results.push(IF[func][input, FIND(test, inT, context)]);
+		});
+		return comparator(tests);
+	}
+	static doMod(value, mods, FIND, type, context, othervalue) {
+		mods.forEach(function(mod) {
+			if((typeof mod) === "string") {
+				let conv = $RPG.converter[type];
+				switch(mod) {
+					case "AddInput":
+					case "AddOutput":
+					case "AppendInput":
+					case "AppendOutput":
+						value = conv(value + othervalue);
+						break;
+					case "PrependInput":
+					case "PrependOutput":
+						value = conv(otherValue + value);
+						break;
+					default:
+						// error?
+				}
+			} else {
+				value = EquationObject[method](value, FIND(mod, type, context));
+			}
+		});
+		return value;
+	}
+//	"Do",
+//	["While", [
+//		"AND",
+//		["GreaterThan", 5]
+//	]],
+//	["Input", "Int", null],
+//	["Output", "Str", null, "modifier_text"],
+//	["ModifyInput", [
+//		["Add", -5]
+//	]],
+//	["ModifyOutput", [
+//		["Add", "/+"],
+//		"AddInput"
+//	]]
+	grabValue(context) {
+		var inconv = this.inType.converter,
+			input = this.input,
+			output = this.output,
+			modIn = this.modifyInput,
+			modOut = this.modifyOutput,
+			whiile = this.whiile,
+			operation = this.operation,
+			mi = [],
+			mo = [],
+			check;
+		// Get initial input and output
+		if(input instanceof SpecialGrabber) {
+			input = inconv(input.grabValue(context));
+		}
+		if(output instanceof SpecialGrabber) {
+			output = this.outType.converter(output.grabValue(context));
+		}
+		modIn.forEach(function(mod) {
+			var [func, value] = mod;
+			if(value instanceof SpecialGrabber) {
+				value = value.grabValue(context);
+			}
+			mi.push([func, value]);
+		});
+		modIn = mi;
+		modOut.forEach(function(mod) {
+			var [func, value] = mod;
+			if(value instanceof SpecialGrabber) {
+				value = value.grabValue(context);
+			}
+			mo.push([func, value]);
+		});
+		modOut = mo;
+		check = Do.doWhile(input, inconv, whiile, operation, context);
+		while(check) {
+			modIn.forEach(function(mod) {
+				var [func, value] = mod;
+				input = func(input, value);
+			});
+			check = Do.doWhile(input, inconv, whiile, operation, context);
+			if(check) {
+				modOut.forEach(function(mod) {
+					var [func, value] = mod;
+					output = func(output, value, input);
+				});
+			}
+		}
+		return output;
+	}
+	static doWhile(input, inconv, whiile, operation, context) {
+		var results = [], retVal = false;
+		whiile.forEach(function(condition) {
+			var [nombre, flag, value] = condition;
+			if(flag) {
+				value = inconv(value.grabValue(context));
+			}
+			results.push(If[nombre](input, value));
+		});
+		switch (operation) {
+			case "AND":
+				retVal = results.every(v => v);
+				break;
+			case "OR":
+				retVal = results.some(v => v);
+				break;
+			case "XOR":
+				retVal = results.filter(v => v).length === 1;
+		}
+		return retVal;
+	}
+	static ModOutWithIn(value, action, input) {
+		switch (action) {
+			case "add":
+			case "append":
+				return value + input;
+			case "prepend":
+				return input + value;
+			case "multiply":
+				return value * input;
+			case "divideWith":
+				return value / input;
+			case "remainderWith":
+				return value % input;
+			case "divide":
+				return input / value;
+			case "remainder":
+				return input % value;
+		}
+		return value;
+	}
+}
+
 
 
 ///////////////////////////
@@ -783,6 +1074,7 @@ $RPG.ADD("objects", {
 		CrossReference: CrossReference,
 		Equation: EquationObject,
 		If: IfObject,
+		Do: DoObject,
 		func: {
 			findValue: findValue,
 		},
