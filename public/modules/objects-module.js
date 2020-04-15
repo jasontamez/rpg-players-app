@@ -81,7 +81,6 @@ export class CharacterObject {
 		this.stats = new Map();
 		this.multistats = new Map();
 		this.pools = new Map();
-		this.formulae = new Map();
 		this.bonuses = new Map();
 		this.references = new Map();
 		this.crossreferences = new Map();
@@ -131,11 +130,8 @@ export class CharacterObject {
 	getCrossReference(id) {
 		return this.crossreferences.get(id);
 	}
-	addFormula(id, formula) {
-		return this.formulae.set(id, formula);
-	}
-	getFormula(id) {
-		return this.formulae.get(id);
+	getObject(id) {
+		// TBD
 	}
 	// noteBonus(anyID, stringUndoBonusFunctionName, ...any number of arguments)
 	noteBonus() {
@@ -176,7 +172,6 @@ export class CharacterObject {
 			stats: this.stats,
 			multistats: this.multistats,
 			pools: this.pools,
-			formulae: this.formulae,
 			references: this.references,
 			crossreferences: this.crossreferences,
 			bonuses: Array.from(this.bonuses),
@@ -191,7 +186,6 @@ CharacterObject.JSONIncompatibles = [
 	"stats",
 	"multistats",
 	"pools",
-	"formulae",
 	"references",
 	"crossreferences"
 ];
@@ -358,7 +352,7 @@ export class EquationObject extends SpecialGrabber {
 		while(instructions.length > 0) {
 			let value = instructions.shift();
 			total = EquationObject[method](total, FIND(value, "Any", context));
-				}
+		}
 		return total;
 		// incomplete
 	}
@@ -517,7 +511,7 @@ export class IfObject extends SpecialGrabber {
 					if(v instanceof Array) {
 						value = copyArray(v);
 					} else {
-					value = v;
+						value = v;
 					}
 					break;
 				case "Compare":

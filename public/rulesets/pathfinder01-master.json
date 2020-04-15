@@ -15,36 +15,7 @@
 	],
 	"Formulae": [
 		{
-			"name": "convert_modifier_to_string",
-			"formula": "If",
-			"outType": "Str",
-			"start": [null, "modifier"],
-			"compare": [
-				"AND",
-				["GreaterThan", -1]
-			],
-			"then": [
-				"Equation",
-				["Add", "+"],
-				["Add", [null, "modifier"]]
-			],
-			"else": [null, "modifier"]
-		},
-		{
-			"name": "convert_modified_value_to_string",
-			"formula": "If",
-			"outType": "Str",
-			"start": [null, "modifiedValue"],
-			"compare": [
-				"AND",
-				["GreaterThan", -1]
-			],
-			"then": [
-				"Equation",
-				["Add", "+"],
-				["Add", [null, "modifiedValue"]]
-			],
-			"else": [null, "modifiedValue"]
+			"COMMENT": "transform formulae into groups with If/whatever properties...////////////////////.............///////"
 		},
 		{
 			"name": "if_class_skill_then_plus_one",
@@ -66,17 +37,6 @@
 				"AND",
 				["Has", "class"],
 				["Has", "racial trait: memory"]
-			],
-			"then": 1,
-			"else": 0
-		},
-		{
-			"name": "x",
-			"formula": "If",
-			"start": [null, "source"],
-			"compare": [
-				"AND",
-				["Has", "class"]
 			],
 			"then": 1,
 			"else": 0
@@ -118,9 +78,21 @@
 					["Floor"],
 					["AtMost", 0]
 				]],
+				["modifierPlus", [
+					"Equation",
+					["Add", "+"],
+					["Add", [null, "modifier"]]
+				]],
 				["modifier_text", [
-					"Formula",
-					"convert_modifier_to_string"
+					"If",
+					["outType", "Str"],
+					["Start", [null, "modifier"]],
+					["Compare", [
+						"AND",
+						["GreaterThan, -1"]
+					]],
+					["Then", [null, "modifierPlus"]],
+					["Else", [null, "modifier"]]
 				]],
 				["type", "IntBonusable"],
 				["startingValue", 10],
@@ -173,9 +145,42 @@
 					["Add", [null, "score_mod"]],
 					["AtLeast", -99]
 				]],
+				["modifierPlus", [
+					"Equation",
+					["Add", "+"],
+					["Add", [null, "modifier"]]
+				]],
 				["modifier_text", [
-					"Formula",
-					"convert_modifier_to_string"
+					"If",
+					["outType", "Str"],
+					["Start", [null, "modifier"]],
+					["Compare", [
+						"AND",
+						["GreaterThan, -1"]
+					]],
+					["Then", [null, "modifierPlus"]],
+					["Else", [null, "modifier"]]
+				]]
+			]
+		},
+		{
+			"name": "string modifier",
+			"attributes": [
+				["modifierPlus", [
+					"Equation",
+					["Add", "+"],
+					["Add", [null, "modifiedValue"]]
+				]],
+				["modifier_text", [
+					"If",
+					["outType", "Str"],
+					["Start", [null, "modifiedValue"]],
+					["Compare", [
+						"AND",
+						["GreaterThan", -1]
+					]],
+					["Then", [null, "modifierPlus"]],
+					["Else", [null, "modifiedValue"]]
 				]]
 			]
 		},
@@ -536,10 +541,7 @@
 			"type": "IntBonusable",
 			"startingValue": 0,
 			"minValue": -99,
-			"modifier_text": [
-				"Formula",
-				"convert_modified_value_to_string"
-			]
+			"groups": "string modifier"
 		},
 		{
 			"id": "Feats",
@@ -564,10 +566,7 @@
 			"title": "Base Attack Bonus",
 			"type": "IntBonusable",
 			"startingValue": 0,
-			"modifier_text": [
-				"Formula",
-				"convert_modified_value_to_string"
-			],
+			"groups": "string modifier",
 			"full_attack_text": [
 				"Do",
 				["While", [
