@@ -921,7 +921,6 @@ export class DoObject extends SpecialGrabber {
 //   * Equations
 //   * If
 //   * Do/While
-//   * Formulae
 //   * Characters
 //   * Players
 

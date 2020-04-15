@@ -1,7 +1,6 @@
 {
 	"COMMENTS": [
-		"We should presume 'null' is 'this' and 'value'",
-		"Formulae have no TYPE, just inType and outType"
+		"We should presume 'null' is 'this' and 'value'"
 	],
 	"name": "pf01",
 	"title": "Pathfinder",

@@ -188,9 +188,6 @@ async function loadAndAssembleInfo(info) {
 		await parseModule(type, src);
 		c++;
 	}
-//	// load formulae
-//	modifyLoadingScreen($t("[parsing formulae]"));
-//	parseFormulae(info.Formulae || []);
 //	// load stats
 //	modifyLoadingScreen($t("[parsing stats]"));
 //	parseStats(info.Groups, info.Stats, info.MultiStats, info.Pools);
