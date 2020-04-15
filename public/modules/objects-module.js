@@ -1,6 +1,7 @@
 // Import parsing and logging
 import { logErrorText as logError } from "./parsing-logging.js";
 
+var MathObject, LogicObject;
 
 ////////////////////////////
 /////// DATA OBJECTS ///////
@@ -190,6 +191,132 @@ CharacterObject.JSONIncompatibles = [
 	"crossreferences"
 ];
 
+MathObject = {
+	// STRING FUNCTIONS
+	// total + n
+	Append: function (total, n) {
+		return total + n;
+	},
+	// n + total
+	Prepend: function (total, n) {
+		return n + total;
+	},
+	//
+	// NUMBER FUNCTIONS
+	// total + n
+	Add: function (total, n) {
+		return total + n;
+	},
+	// total - n
+	//   If possible, use Add(total, -n) instead
+	Subtract: function(total, n) {
+		return total - n;
+	},
+	// total * n
+	Multiply: function (total, n) {
+		return total * n;
+	},
+	// total / n
+	Divide: function (total, n) {
+		return total / n;
+	},
+	// n / total
+	DivideThis: function (total, n) {
+		return n / total;
+	},
+	// remainder of (total / n)
+	Remainder: function (total, n) {
+		return total % n;
+	},
+	// remainder of (n / total)
+	RemainderOfThis: function (total, n) {
+		return n % total;
+	},
+	// round total to nearest integer
+	//   1.2 = 1
+	//   1.5 = 2
+	Round: function (total, n) {
+		return Math.round(total);
+	},
+	// round total to next higher integer
+	//   1.4 = 2
+	//  -1.4 = -1
+	Ceiling: function (total, n) {
+		return Math.ceil(total);
+	},
+	// round total to next lower integer
+	//   1.7 = 1
+	//  -1.7 = -2
+	Floor: function (total, n) {
+		return Math.floor(total);
+	},
+	// return the lower value: total or n
+	AtMost: function (total, n) {
+		return Math.min(total, n);
+	},
+	// return the higher value: total or n
+	AtLeast: function (total, n) {
+		return Math.max(total, n);
+	}
+}
+
+LogicObject = {
+	// NUMBER FUNCTIONS
+	// value > test
+	GreaterThan: function (value, test) {
+		return value > test;
+	},
+	// value <= test
+	NotGreaterThan: function (value, test) {
+		return value <= test;
+	},
+	// value < test
+	LessThan: function (value, test) {
+		return value < test;
+	},
+	// value >= test
+	NotLessThan: function (value, test) {
+		return value >= test;
+	},
+	// NUMBER and STRING FUNCTIONS
+	// value === test
+	EqualTo: function (value, test) {
+		return value === test;
+	},
+	// value !== test
+	NotEqualTo: function (value, test) {
+		return value !== test;
+	},
+	// STRING FUNCTIONS
+	// returns true if string 'test' can be found inside string 'value'
+	Contains: function (value, test) {
+		return String(value).includes(String(test));
+	},
+	// returns true if string 'test' cannot be found inside string 'value'
+	DoesNotContain: function (value, test) {
+		return !String(value).includes(String(test));
+	},
+	// ARRAY (pool) FUNCTIONS
+	// returns true if an element of 'value' is strictly equal to 'test'
+	Has: function (value, test) {
+		return value.some( item => item === test );
+	},
+	// returns true if no elements of 'value' strictly equal 'test'
+	DoesNotHave: function (value, test) {
+		return value.every( item => item !== test );
+	},
+	// COMPARATOR	
+	//   Functions that evaluate arrays of boolean values
+	//     AND => all values are true
+	//      OR => at least one value is true
+	//     XOR => ONLY one value is true
+	comparator: {
+		AND: function(arr) { return arr.every(v => v); },
+		OR: function(arr) { return arr.some(v => v); },
+		XOR: function(arr) { return arr.filter(v => v).length === 1; }
+	},
+};
+
 ////////////////////////////
 /////// STAT OBJECTS ///////
 ////////////////////////////
@@ -210,7 +337,7 @@ export class ObjectWithAttributes {
 		};
 	}
 	get(key) {
-		return this.atts(key);
+		return this.atts.get(key);
 	}
 	set(key, value) {
 		return this.atts.set(key, value);
@@ -235,6 +362,44 @@ export class GroupObject extends ObjectWithAttributes {
 // Defines a class for Stat objects
 // - Stats inherit properties from their .groups
 export class StatObject extends GroupObject {
+	// new StatObject(idString, attributesMap, ?groupsArray)
+	constructor(id, atts, groups = []) {
+		super(id, atts);
+		if((typeof e) === "string") {
+			this.groups = [groups];
+		} else {
+			this.groups = groups;
+		}
+		this.defaultContext = this;
+	}
+	get(prop, context = this.defaultContext) {
+		var value = super.get(prop);
+		if(value === undefined) {
+			// Check groups until we find a match (if any)
+			this.groups.some(function(g) {
+				var group = CHAR.getGroup(g);
+				if(group) {
+					value = group.get(prop);
+				}
+				return value;
+			});
+		}
+		if(value instanceof SpecialGrabber) {
+			value = value.getValue(context);
+		}
+		return value;
+	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.defaultContext = this.defaultContext.id;
+		o.groups = this.groups;
+		o.parser = "StatObject";
+		return o;
+	}
+}
+
+// Defines a class for MultiStat objects
+export class MultiStatObject extends GroupObject {
 	// new StatObject(idString, attributesMap, ?groupsArray)
 	constructor(id, atts, groups = []) {
 		super(id, atts, groups);
@@ -347,50 +512,25 @@ export class EquationObject extends SpecialGrabber {
 	getValue(context) {
 		var instructions = copyArray(this.get("instructions")),
 			total = 0,
-			ROS = $RPG.object.stats,
+			ROS = $RPG.objects.stats,
+			MATH = $RPG.objects.data.MathObject,
 			FIND = ROS.func.findValue;
 		while(instructions.length > 0) {
 			let value = instructions.shift();
-			total = EquationObject[method](total, FIND(value, "Any", context));
+			total = MATH[method](total, FIND(value, "Any", context));
 		}
 		return total;
 		// incomplete
 	}
-	static Add(total, n) {
-		return total + n;
-	}
-	static Multiply(total, n) {
-		return total * n;
-	}
-	static Divide(total, n) {
-		return total / n;
-	}
-	static Remainder(total, n) {
-		return total % n;
-	}
-	static Round(total, n) {
-		return Math.round(total);
-	}
-	static Ceiling(total, n) {
-		return Math.ceil(total);
-	}
-	static Floor(total, n) {
-		return Math.floor(total);
-	}
-	static AtMost(total, n) {
-		return Math.min(total, n);
-	}
-	static AtLeast(total, n) {
-		return Math.max(total, n);
-	}
 	static makeEquation(instrc, otherAtts = new Map()) {
 		var i = [],
+			MATH = $RPG.objects.data.MathObject,
 			instructions = copyArray(instrc),
 			e;
 		while(instructions.length > 0) {
 			let test = i.shift(),
 				t = test[0];
-			if(this.hasOwnProperty(t) && t !== "makeEquation") {
+			if(MATH.hasOwnProperty(t)) {
 				i.push(test);
 			} else {
 				return null;
@@ -467,7 +607,7 @@ export class IfObject extends SpecialGrabber {
 	//   inType => string matching a property on $RPG.objects.converter
 	//   outType => string matching a property on $RPG.objects.converter
 	//   value => any Value
-	//   comparator => string property of $RPG.objects.comparator
+	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
 	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
 	//   then => any Value
 	//   else => any Value
@@ -496,7 +636,7 @@ export class IfObject extends SpecialGrabber {
 			value = 0,
 			comparator, comparisons, then, otherwise;
 		arr.forEach(function(pair) {
-			var [op, v] = pair,
+			var [op, v] = pair;
 			switch(op) {
 				case "inType":
 					inType = v;
@@ -521,7 +661,7 @@ export class IfObject extends SpecialGrabber {
 					break;
 				case "Compare":
 					let a = copyArray(v),
-						ROP = RO.comparator,
+						ROP = RO.data.LogicObject.comparator,
 						b = a.shift(),
 						c = ROP[b];
 					if (v instanceof Array) {
@@ -568,52 +708,21 @@ export class IfObject extends SpecialGrabber {
 	getValue(context) {
 		var value = this.get("start"),
 			inT = this.get("inType"),
-			ROS = $RPG.object.stats,
-			IF = ROS.If,
+			LOGIC = $RPG.objects.data.LogicObject,
 			comparisons = copyArray(this.get("comparisons")),
 			results = [],
-			FIND = ROS.func.findValue;
+			FIND = $RPG.objects.stats.func.findValue;
 		// Get the value we start with
 		value = FIND(value, inT, context);
 		// Run comparisons
 		while(comparisons.length) {
 			let [func, test] = comparisons.shift();
-			results.push(IF[func][value, FIND(test, inT, context)]);
+			results.push(LOGIC[func][value, FIND(test, inT, context)]);
 		}
 		// Run results through comparator to get a final value
 		value = $RPG.comparator[this.get("comparator")](results);
 		// Return results if value is true (then) or false (else)
 		return FIND(this.get(value ? "then" : "else"), this.get("outType"), context);
-	}
-	static GreaterThan(value, test) {
-		return value > test;
-	}
-	static NotGreaterThan(value, test) {
-		return value <= test;
-	}
-	static LessThan(value, test) {
-		return value < test;
-	}
-	static NotLessThan(value, test) {
-		return value >= test;
-	}
-	static EqualTo(value, test) {
-		return value === test;
-	}
-	static NotEqualTo(value, test) {
-		return value !== test;
-	}
-	static Contains(value, test) {
-		return String(value).includes(String(test));
-	}
-	static DoesNotContain(value, test) {
-		return !String(value).includes(String(test));
-	}
-	static Has(value, test) {
-		return value.some( item => item === test );
-	}
-	static DoesNotHave(value, test) {
-		return value.every( item => item !== test );
 	}
 }
 
@@ -637,7 +746,7 @@ export class DoObject extends SpecialGrabber {
 	//    - the array may include plain strings:
 	//       - "AddInput", "AppendInput" (value + input)
 	//       - "PrependInput" (input + value)
-	//   comparator => string property of $RPG.objects.comparator
+	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
 	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
 	// A Value is either:
 	//   a number
@@ -668,7 +777,7 @@ export class DoObject extends SpecialGrabber {
 				v = info.shift();
 			switch(op) {
 				case "While":
-					let ROP = RO.comparator,
+					let ROP = RO.data.LogicObject.comparator,
 						first = v.shift(),
 						c = ROP[first];
 					if (first instanceof Array) {
@@ -748,13 +857,11 @@ export class DoObject extends SpecialGrabber {
 			outT = this.get("outType"),
 			modIn = this.get("modIn"),
 			modOut = this.get("modOut"),
-			ROS = $RPG.object.stats,
-			IF = ROS.If,
-			WHILE = ROS.Do,
-			comparator = $RPG.comparator[this.get("comparator")],
+			ROD = $RPG.objects.data,
+			LOGIC = ROD.LogicObject,
+			comparator = ROD.LogicObject.comparator[this.get("comparator")],
 			comparisons = copyArray(this.get("comparisons")),
-			results = [],
-			FIND = ROS.func.findValue,
+			FIND = $RPG.objects.stats.func.findValue,
 			TryWhile = DoObject.tryWhile,
 			DoMod = DoObject.doMod,
 			check;
@@ -762,153 +869,51 @@ export class DoObject extends SpecialGrabber {
 		input = FIND(input, inT, context);
 		output = FIND(output, outT, context);
 		// Check if input matches the conditions
-		check = TryWhile(input, IF, comparator, comparisons, FIND, inT, context);
+		check = TryWhile(input, LOGIC, comparator, comparisons, FIND, inT, context);
 		while(check) {
 			// Modify input
 			input = DoMod(input, modIn, FIND, inT, context, output);
 			// Check if input still matches the conditions
-			if(check = TryWhile(input, IF, comparator, comparisons, FIND, inT, context)) {
+			if(check = TryWhile(input, LOGIC, comparator, comparisons, FIND, inT, context)) {
 				// Modify output
 				output = DoMod(output, modOut, FIND, outT, context, input);
 			}
 		}
 		return output;
 	}
-	static tryWhile(input, IF, comparator, comparisons, FIND, inT, context) {
+	static tryWhile(input, LOGIC, comparator, comparisons, FIND, inT, context) {
 		var results = [];
 		comparisons.forEach(function(pair) {
 			let [func, test] = pair;
-			results.push(IF[func][input, FIND(test, inT, context)]);
+			results.push(LOGIC[func][input, FIND(test, inT, context)]);
 		});
 		return comparator(tests);
 	}
 	static doMod(value, mods, FIND, type, context, othervalue) {
+		const MATH = $RPG.objects.data.MathObject;
 		mods.forEach(function(mod) {
 			if((typeof mod) === "string") {
 				let conv = $RPG.converter[type];
 				switch(mod) {
 					case "AddInput":
 					case "AddOutput":
+						value = conv(MATH.Add(value, otherValue));
+						break;
 					case "AppendInput":
 					case "AppendOutput":
-						value = conv(value + othervalue);
+						value = conv(MATH.Append(value, othervalue));
 						break;
 					case "PrependInput":
 					case "PrependOutput":
-						value = conv(otherValue + value);
+						value = conv(MATH.Prepend(value, othervalue));
 						break;
 					default:
 						// error?
 				}
 			} else {
-				value = EquationObject[method](value, FIND(mod, type, context));
+				value = MATH[method](value, FIND(mod, type, context));
 			}
 		});
-		return value;
-	}
-//	"Do",
-//	["While", [
-//		"AND",
-//		["GreaterThan", 5]
-//	]],
-//	["Input", "Int", null],
-//	["Output", "Str", null, "modifier_text"],
-//	["ModifyInput", [
-//		["Add", -5]
-//	]],
-//	["ModifyOutput", [
-//		["Add", "/+"],
-//		"AddInput"
-//	]]
-	grabValue(context) {
-		var inconv = this.inType.converter,
-			input = this.input,
-			output = this.output,
-			modIn = this.modifyInput,
-			modOut = this.modifyOutput,
-			whiile = this.whiile,
-			operation = this.operation,
-			mi = [],
-			mo = [],
-			check;
-		// Get initial input and output
-		if(input instanceof SpecialGrabber) {
-			input = inconv(input.grabValue(context));
-		}
-		if(output instanceof SpecialGrabber) {
-			output = this.outType.converter(output.grabValue(context));
-		}
-		modIn.forEach(function(mod) {
-			var [func, value] = mod;
-			if(value instanceof SpecialGrabber) {
-				value = value.grabValue(context);
-			}
-			mi.push([func, value]);
-		});
-		modIn = mi;
-		modOut.forEach(function(mod) {
-			var [func, value] = mod;
-			if(value instanceof SpecialGrabber) {
-				value = value.grabValue(context);
-			}
-			mo.push([func, value]);
-		});
-		modOut = mo;
-		check = Do.doWhile(input, inconv, whiile, operation, context);
-		while(check) {
-			modIn.forEach(function(mod) {
-				var [func, value] = mod;
-				input = func(input, value);
-			});
-			check = Do.doWhile(input, inconv, whiile, operation, context);
-			if(check) {
-				modOut.forEach(function(mod) {
-					var [func, value] = mod;
-					output = func(output, value, input);
-				});
-			}
-		}
-		return output;
-	}
-	static doWhile(input, inconv, whiile, operation, context) {
-		var results = [], retVal = false;
-		whiile.forEach(function(condition) {
-			var [nombre, flag, value] = condition;
-			if(flag) {
-				value = inconv(value.grabValue(context));
-			}
-			results.push(If[nombre](input, value));
-		});
-		switch (operation) {
-			case "AND":
-				retVal = results.every(v => v);
-				break;
-			case "OR":
-				retVal = results.some(v => v);
-				break;
-			case "XOR":
-				retVal = results.filter(v => v).length === 1;
-		}
-		return retVal;
-	}
-	static ModOutWithIn(value, action, input) {
-		switch (action) {
-			case "add":
-			case "append":
-				return value + input;
-			case "prepend":
-				return input + value;
-			case "multiply":
-				return value * input;
-			case "divideWith":
-				return value / input;
-			case "remainderWith":
-				return value % input;
-			case "divide":
-				return input / value;
-			case "remainder":
-				return input % value;
-		}
 		return value;
 	}
 }
@@ -1058,7 +1063,7 @@ function restoreEquation(key, prop, flagged) {
 function restoreIf(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let e = $RO.stats.Equation;
+		let e = $RO.stats.If;
 		return new e(prop.atts);
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
@@ -1066,7 +1071,7 @@ function restoreIf(key, prop, flagged) {
 function restoreDo(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let e = $RO.stats.Equation;
+		let e = $RO.stats.Do;
 		return new e(prop.atts);
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
@@ -1076,7 +1081,9 @@ function restoreDo(key, prop, flagged) {
 $RPG.ADD("objects", {
 	data: {
 		player: PlayerObject,
-		character: CharacterObject
+		character: CharacterObject,
+		MathObject: MathObject,
+		LogicObject: LogicObject
 	},
 	stats: {
 		ObjectWithAttributes: ObjectWithAttributes,
@@ -1100,11 +1107,6 @@ $RPG.ADD("objects", {
 		},
 		Str: function(x) { return String(x); },
 		TF: function(x) { return x ? true : false; }
-	},
-	comparator: {
-		AND: function(arr) { return arr.every(v => v); },
-		OR: function(arr) { return arr.some(v => v); },
-		XOR: function(arr) { return arr.filter(v => v).length === 1; }
 	},
 	saver: {
 		Character: saveCharacter,
