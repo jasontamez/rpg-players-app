@@ -483,6 +483,11 @@ export class IfObject extends SpecialGrabber {
 	constructor(atts) {
 		super(atts);
 	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.parser = "If";
+		return o;
+	}
 	static makeIfThenElse(arr) {
 		var RO = $RPG.objects,
 			ROC = RO.converter;
@@ -646,6 +651,11 @@ export class DoObject extends SpecialGrabber {
 	//   to (mildly) test that instructions are valid
 	constructor(atts) {
 		super(atts);
+	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.parser = "Do";
+		return o;
 	}
 	static makeDoWhile(arr) {
 		var RO = $RPG.objects,
@@ -1045,12 +1055,22 @@ function restoreEquation(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
-//function restoreIf(key, prop, flagged) 
-//}
-//function restoreDo(key, prop, flagged) {
-//}
-//function restoreFormula(key, prop, flagged) {
-//}
+function restoreIf(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let e = $RO.stats.Equation;
+		return new e(prop.atts);
+	}
+	return $RO.parser.ObjectWithAttributes(key, prop, true);
+}
+function restoreDo(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let e = $RO.stats.Equation;
+		return new e(prop.atts);
+	}
+	return $RO.parser.ObjectWithAttributes(key, prop, true);
+}
 
 
 $RPG.ADD("objects", {
@@ -1098,6 +1118,8 @@ $RPG.ADD("objects", {
 		StatObject: restoreStat,
 		Reference: restoreReference,
 		CrossReference: restoreCrossReference,
-		Equation: restoreEquation
+		Equation: restoreEquation,
+		If: restoreIf,
+		Do: restoreDo
 	}
 });
