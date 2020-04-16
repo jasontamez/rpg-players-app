@@ -1,7 +1,8 @@
 // Import parsing and logging
 import { logErrorText as logError } from "./parsing-logging.js";
 
-var MathObject, LogicObject;
+var deferredContexts = [],
+	MathObject, LogicObject;
 
 ////////////////////////////
 /////// DATA OBJECTS ///////
@@ -46,6 +47,11 @@ export class PlayerObject {
 		char = JSON.parse(newChar);
 		newChar = $RPG.objects.parser[char.parser](char, this);
 		cur.character = newChar;
+		// Fix all default contexts
+		while(deferredContexts.length > 0) {
+			let stat = deferredContexts.shift();
+			stat.defaultContext = newChar.getStat(stat);
+		}
 	}
 	saveCharacter(ruleset, id, char) {
 		var rs = this.rulesets.get(ruleset) || new Map();
@@ -974,6 +980,7 @@ function restoreCharacter(c, player) {
 	var id = c.id,
 		rs = c.ruleset,
 		char = new CharacterObject(player, c.rs, c.id);
+	// Restore Maps from Arrays
 	char.bonuses = new Map(char.bonuses);
 	$RPG.objects.data.character.JSONIncompatibles.forEach(function(prop) {
 		var hold = new Map();
@@ -1043,8 +1050,12 @@ function restoreGroup(key, prop, flagged) {
 function restoreStat(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let s = $RO.stats.StatObject;
-		return new s(prop.name, prop.atts);
+		let s = $RO.stats.StatObject,
+			stat = new s(prop.name, prop.atts);
+		// Leave .defaultContext as a string for now, but save the stat.
+		deferredContexts.push(stat);
+		// It will be fixed in Player.loadCharacter.
+		return stat;
 	}
 	return $RO.parser.Group(key, prop, true);
 }
