@@ -195,21 +195,33 @@ MathObject = {
 	// STRING FUNCTIONS
 	// total + n
 	Append: function (total, n) {
+		if(total === null) {
+			return n;
+		}
 		return total + n;
 	},
 	// n + total
 	Prepend: function (total, n) {
+		if(total === null) {
+			return n;
+		}
 		return n + total;
 	},
 	//
 	// NUMBER FUNCTIONS
 	// total + n
 	Add: function (total, n) {
+		if(total === null) {
+			return n;
+		}
 		return total + n;
 	},
 	// total - n
 	//   If possible, use Add(total, -n) instead
 	Subtract: function(total, n) {
+		if(total === null) {
+			return 0 - n;
+		}
 		return total - n;
 	},
 	// total * n
@@ -511,13 +523,13 @@ export class EquationObject extends SpecialGrabber {
 	}
 	getValue(context) {
 		var instructions = copyArray(this.get("instructions")),
-			total = 0,
-			ROS = $RPG.objects.stats,
-			MATH = $RPG.objects.data.MathObject,
-			FIND = ROS.func.findValue;
+			total = null,
+			RO = $RPG.objects,
+			MATH = RO.data.MathObject,
+			FIND = RO.stats.func.findValue;
 		while(instructions.length > 0) {
-			let value = instructions.shift();
-			total = MATH[method](total, FIND(value, "Any", context));
+			let value = FIND(instructions.shift(), "Any", context);
+			total = MATH[method](total, value);
 		}
 		return total;
 		// incomplete
