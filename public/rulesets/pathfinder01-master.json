@@ -211,10 +211,8 @@
 	"MultiStats": [
 		{
 			"id": "craft_skills",
-			"idPre": "Craft (",
-			"idPost": ")",
-			"titlePre": "Craft (",
-			"titlePost": ")",
+			"idWrap": ["Craft (", ")"],
+			"titleWrap": ["Craft (", ")"],
 			"placeholder": "jewelry, weapons, etc",
 			"title": "Craft",
 			"type": "PfSkill",
@@ -223,10 +221,8 @@
 		},
 		{
 			"id": "profession_skills",
-			"idPre": "Profession (",
-			"idPost": ")",
-			"titlePre": "Profession (",
-			"titlePost": ")",
+			"idWrap": ["Profession (", ")"],
+			"titleWrap": ["Profession (", ")"],
 			"placeholder": "barrister, sailor, etc",
 			"title": "Profession",
 			"type": "PfSkill",
@@ -235,10 +231,8 @@
 		},
 		{
 			"id": "perform_skills",
-			"idPre": "Perform (",
-			"idPost": ")",
-			"titlePre": "Perform (",
-			"titlePost": ")",
+			"idWrap": ["Perform (", ")"],
+			"titleWrap": ["Perform (", ")"],
 			"placeholder": "dance, oratory, etc",
 			"title": "Perform",
 			"type": "PfSkill",

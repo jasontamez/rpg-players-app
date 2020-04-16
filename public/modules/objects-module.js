@@ -417,12 +417,69 @@ export class StatObject extends GroupObject {
 }
 
 // Defines a class for MultiStat objects
-export class MultiStatObject extends GroupObject {
-	// new StatObject(idString, attributesMap, ?groupsArray)
+export class MultiStatObject extends StatObject {
+	// new MultiStatObject(idString, attributesMap, ?groupsArray)
+	// attributesMap must include:
+	//   idWrap => [string, ?string]
+	// attributesMap may include:
+	//   titleWrap => [string, ?string]
+	//   descriptionWrap => [string, ?string]
 	constructor(id, atts, groups = []) {
+		if(atts.get("idWrap") === undefined) {
+			throw new IllegalArgumentException("MultiStat \"" + id + "\" is missing \"idWrap\" parameter");
+		}
 		super(id, atts, groups);
-		this.groups = groups;
-		this.defaultContext = this;
+		this.inheritors = [];
+	}
+	makeStat(id, templateAtts, extraGroups = []) {
+		var a = new Map(),
+			MS = $RPG.objects.stats.MultiStat,
+			opt = MS.optionalWraps,
+			atts = this.atts,
+			groups = this.groups,
+			wrap = new Set(MS.mandatoryWraps.concat(opt)),
+			unwrapped = new Set(),
+			stat;
+		// Start with attributes of this MultiStat
+		atts.forEach(function(value, att) {
+			if(wrap.has(att)) {
+				// Note that we have a possible wrap
+				unwrapped.add(att);
+			} else {
+				// Save the non-wrapped attributes
+				a.set(att, value);
+			}
+		});
+		// Go through the attributes provided
+		templateAtts.forEach(function(att, value) {
+			if(wrap.has(att + "Wrap")) {
+				let wrapAtt = atts.get(att + "Wrap");
+				// wrap the value
+				value = wrapAtt.shift() + value;
+				if(wrapAtt.length > 0) {
+					value = value + wrapAtt.shift();
+				}
+				// delete the MultiStat's value for this
+				unwrapped.delete(att);
+			}
+			// save value
+			a.set(att, value);
+		});
+		// Make the new ID
+		if(!id) {
+			id = "substat #" + String(this.inheritors.length + 1);
+		}
+		wrap = atts.get("idWrap");
+		id = wrap.shift() + id;
+		if(wrap.length > 0) {
+			id = id + wrap.shift();
+		}
+		// Consolidate groups
+		groups = new Set(groups.concat(extraGroups));
+		// Make the new stat
+		stat = new MS(id, a, Array.from(groups));
+		this.inheritors.push(stat);
+		return stat;
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
@@ -432,6 +489,8 @@ export class MultiStatObject extends GroupObject {
 		return o;
 	}
 }
+MultiStatObject.mandatoryWraps = ["idWrap"];
+MultiStatObject.optionalWraps = ["titleWrap", "descriptionWrap"];
 
 // This class is designed to be a parent only to other parent classes
 // - It lacks a .toJSON method and corresponding $RPG.objects.parser function
@@ -1112,6 +1171,7 @@ $RPG.ADD("objects", {
 		ObjectWithAttributes: ObjectWithAttributes,
 		Group: GroupObject,
 		Stat: StatObject,
+		MultiStat: MultiStatObject,
 		Grabber: SpecialGrabber,
 		Reference: ReferenceObject,
 		CrossReference: CrossReference,
