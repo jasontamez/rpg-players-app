@@ -1,7 +1,10 @@
 // Import parsing and logging
 import { logErrorText as logError, copyArray } from "./parsing-logging.js";
 
-var deferredContexts = [],
+var deferred = {
+		contexts: [],
+		multis: []
+	},
 	MathObject, LogicObject;
 
 ////////////////////////////
@@ -35,7 +38,7 @@ export class PlayerObject {
 	}
 	loadCharacter(ruleset, id) {
 		var cur = $RPG.current,
-			char, newChar;
+			char, newChar, contexts, multis;
 		if(cur && (char = cur.character) && char.id === id && char.ruleset === ruleset) {
 			return logError("Attempting to load current character.", new Error());
 		} else if ((newChar = this.getCharacter(ruleset, id)) === undefined) {
@@ -48,9 +51,17 @@ export class PlayerObject {
 		newChar = $RPG.objects.parser[char.parser](char, this);
 		cur.character = newChar;
 		// Fix all default contexts
-		while(deferredContexts.length > 0) {
-			let stat = deferredContexts.shift();
+		contexts = deferred.contexts;
+		while(contexts.length > 0) {
+			let stat = contexts.shift();
 			stat.defaultContext = newChar.getStat(stat);
+		}
+		// Fix all multistats
+		multis = deferred.multis;
+		while(multis.length > 0) {
+			let stat = multis.shift(),
+				inh = stat.inheritors;
+			stat.inheritors = inh.map(m => newChar.getStat(m));
 		}
 	}
 	saveCharacter(ruleset, id, char) {
@@ -432,58 +443,56 @@ export class MultiStatObject extends StatObject {
 		this.inheritors = [];
 	}
 	makeStat(id, templateAtts, extraGroups = []) {
-		var a = new Map(),
-			MS = $RPG.objects.stats.MultiStat,
-			opt = MS.optionalWraps,
-			atts = this.atts,
+		var atts = new Map(),
+			inheritable = this.get("inheritableAtts"),
+			idWrap = wraps.get("id"),
 			groups = this.groups,
-			wrap = new Set(MS.mandatoryWraps.concat(opt)),
-			unwrapped = new Set(),
+			wraps = new Map(this.get("wraps")),
 			stat;
-		// Start with attributes of this MultiStat
-		atts.forEach(function(value, att) {
-			if(wrap.has(att)) {
-				// Note that we have a possible wrap
-				unwrapped.add(att);
-			} else {
-				// Save the non-wrapped attributes
-				a.set(att, value);
-			}
-		});
+		// Remove id-wrap
+		wraps.delete("id");
+		// Check for any other inheritable attributes
+		if(inheritable.length > 0) {
+			// Add each one to the atts map
+			// (They can be overridden by the templateAtts)
+			inheritable.forEach(function(pair) {
+				let [att, value] = pair;
+				atts.set(att, value);
+			});
+		}
 		// Go through the attributes provided
 		templateAtts.forEach(function(att, value) {
-			if(wrap.has(att + "Wrap")) {
-				let wrapAtt = atts.get(att + "Wrap");
+			if(wraps.has(att)) {
+				let wrapAtt = wrap.get(att);
 				// wrap the value
 				value = wrapAtt.shift() + value;
 				if(wrapAtt.length > 0) {
 					value = value + wrapAtt.shift();
 				}
-				// delete the MultiStat's value for this
-				unwrapped.delete(att);
 			}
 			// save value
-			a.set(att, value);
+			atts.set(att, value);
 		});
 		// Make the new ID
 		if(!id) {
 			id = "substat #" + String(this.inheritors.length + 1);
 		}
-		wrap = atts.get("idWrap");
-		id = wrap.shift() + id;
-		if(wrap.length > 0) {
-			id = id + wrap.shift();
+		id = idWrap.shift() + id;
+		if(idWrap.length > 0) {
+			id = id + idWrap.shift();
 		}
 		// Consolidate groups
-		groups = new Set(groups.concat(extraGroups));
+		groups = Array.from(new Set(extraGroups.concat(groups)));
 		// Make the new stat
-		stat = new MS(id, a, Array.from(groups));
+		stat = new MS(id, a, groups);
+		// Save it
 		this.inheritors.push(stat);
 		return stat;
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
 		o.defaultContext = this.defaultContext.id;
+		o.inheritors = this.inheritors.map(stat => stat.id);
 		o.parser = "MultiStat";
 		return o;
 	}
@@ -989,8 +998,8 @@ export class DoObject extends SpecialGrabber {
 
 // Note: parse in this order:
 //   * Groups
-//   * MultiStats
 //   * Stats
+//   * MultiStats
 //   * Pools
 //   * References
 //   * CrossReferences
@@ -1091,10 +1100,14 @@ function restoreGroup(key, prop, flagged) {
 function restoreMultiStat(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let m = $RO.stats.MultiStat;
-		return new m(prop.id, prop.atts, prop.groups);
+		let m = $RO.stats.MultiStat,
+			stat = new m(prop.id, prop.atts, prop.groups);
+		// Leave .inheritors as strings for now, but save the multistat.
+		deferred.multis.push(stat);
+		// It will be fixed in Player.loadCharacter.
+		return stat;
 	}
-	return $RO.parser.MultiStat(key, prop, true);
+	return $RO.parser.Stat(key, prop, true);
 }
 function restoreStat(key, prop, flagged) {
 	var $RO = $RPG.objects;
@@ -1102,7 +1115,7 @@ function restoreStat(key, prop, flagged) {
 		let s = $RO.stats.StatObject,
 			stat = new s(prop.name, prop.atts, prop.groups);
 		// Leave .defaultContext as a string for now, but save the stat.
-		deferredContexts.push(stat);
+		deferred.contexts.push(stat);
 		// It will be fixed in Player.loadCharacter.
 		return stat;
 	}

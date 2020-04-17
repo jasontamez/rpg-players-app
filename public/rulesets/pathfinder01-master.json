@@ -212,36 +212,48 @@
 		{
 			"id": "craft_skills",
 			"attributes": [
-				["idWrap", ["Craft (", ")"]],
-				["titleWrap", ["Craft (", ")"]],
 				["placeholder", "jewelry, weapons, etc"],
 				["title", "Craft"],
-				["type", "PfSkill"],
-				["background", true]
+				["inheritableAtts", [
+					["type", "PfSkill"],
+					["background", true]
+				]],
+				["wraps", [
+					["id", ["Craft (", ")"]],
+					["title", ["Craft (", ")"]]
+				]]
 			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "profession_skills",
 			"attributes": [
-				["idWrap", ["Profession (", ")"]],
-				["titleWrap", ["Profession (", ")"]],
 				["placeholder", "barrister, sailor, etc"],
 				["title", "Profession"],
-				["type", "PfSkill"],
-				["background", true]
+				["inheritableAtts", [
+					["type", "PfSkill"],
+					["background", true]
+				]],
+				["wraps", [
+					["id", ["Profession (", ")"]],
+					["title", ["Profession (", ")"]]
+				]]
 			],
 			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "perform_skills",
 			"attributes": [
-				["idWrap", ["Perform (", ")"]],
-				["titleWrap", ["Perform (", ")"]],
 				["placeholder", "dance, oratory, etc"],
 				["title", "Perform"],
-				["type", "PfSkill"],
-				["background", true]
+				["inheritableAtts", [
+					["type", "PfSkill"],
+					["background", true]
+				]],
+				["wraps", [
+					["id", ["Perform (", ")"]],
+					["title", ["Perform (", ")"]]
+				]]
 			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		}
