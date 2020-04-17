@@ -211,406 +211,530 @@
 	"MultiStats": [
 		{
 			"id": "craft_skills",
-			"idWrap": ["Craft (", ")"],
-			"titleWrap": ["Craft (", ")"],
-			"placeholder": "jewelry, weapons, etc",
-			"title": "Craft",
-			"type": "PfSkill",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["idWrap", ["Craft (", ")"]],
+				["titleWrap", ["Craft (", ")"]],
+				["placeholder", "jewelry, weapons, etc"],
+				["title", "Craft"],
+				["type", "PfSkill"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "profession_skills",
-			"idWrap": ["Profession (", ")"],
-			"titleWrap": ["Profession (", ")"],
-			"placeholder": "barrister, sailor, etc",
-			"title": "Profession",
-			"type": "PfSkill",
-			"groups": ["skill", "pure modifier", "wisdom-based"],
-			"background": true
+			"attributes": [
+				["idWrap", ["Profession (", ")"]],
+				["titleWrap", ["Profession (", ")"]],
+				["placeholder", "barrister, sailor, etc"],
+				["title", "Profession"],
+				["type", "PfSkill"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "perform_skills",
-			"idWrap": ["Perform (", ")"],
-			"titleWrap": ["Perform (", ")"],
-			"placeholder": "dance, oratory, etc",
-			"title": "Perform",
-			"type": "PfSkill",
-			"groups": ["skill", "pure modifier", "charisma-based"],
-			"background": true
+			"attributes": [
+				["idWrap", ["Perform (", ")"]],
+				["titleWrap", ["Perform (", ")"]],
+				["placeholder", "dance, oratory, etc"],
+				["title", "Perform"],
+				["type", "PfSkill"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "charisma-based"]
 		}
 	],
 	"Stats": [
 		{
 			"id": "STR",
-			"title": "Strength",
+			"attributes": [
+				["title", "Strength"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "DEX",
-			"title": "Dexterity",
+			"attributes": [
+				["title", "Dexterity"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "CON",
-			"title": "Constitution",
+			"attributes": [
+				["title", "Constitution"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "INT",
-			"title": "Intelligence",
+			"attributes": [
+				["title", "Intelligence"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "WIS",
-			"title": "Wisdom",
+			"attributes": [
+				["title", "Wisdom"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "CHA",
-			"title": "Charisma",
+			"attributes": [
+				["title", "Charisma"]
+			],
 			"groups": "basic stats"
 		},
 		{
 			"id": "Climb",
-			"title": "Climb",
+			"attributes": [
+				["title", "Climb"]
+			],
 			"groups": ["skill", "pure modifier", "strength-based"]
 		},
 		{
 			"id": "Swim",
-			"title": "Swim",
+			"attributes": [
+				["title", "Swim"]
+			],
 			"groups": ["skill", "pure modifier", "strength-based"]
 		},
 		{
 			"id": "Acrobatics",
-			"title": "Acrobatics",
+			"attributes": [
+				["title", "Acrobatics"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "Disable Device",
-			"title": "Disable Device",
+			"attributes": [
+				["title", "Disable Device"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "Escape Artist",
-			"title": "Escape Artist",
+			"attributes": [
+				["title", "Escape Artist"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "Fly",
-			"title": "Fly",
+			"attributes": [
+				["title", "Fly"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"],
 			"Bonus": ["size", "flySkillModifier"]
 		},
 		{
 			"id": "Ride",
-			"title": "Ride",
+			"attributes": [
+				["title", "Ride"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "Sleight of Hand",
-			"title": "Sleight of Hand",
-			"groups": ["skill", "pure modifier", "dexterity-based"],
-			"background": true
+			"attributes": [
+				["title", "Sleight of Hand"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "Stealth",
-			"title": "Stealth",
+			"attributes": [
+				["title", "Stealth"]
+			],
 			"groups": ["skill", "pure modifier", "dexterity-based"],
 			"Bonus": ["size", "stealthSkillModifier"]
 		},
 		{
 			"id": "Appraise",
-			"title": "Appraise",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["title", "Appraise"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (arcana)",
-			"title": "Knowledge (arcana)",
+			"attributes": [
+				["title", "Knowledge (arcana)"]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (dungeoneering)",
-			"title": "Knowledge (dungeoneering)",
+			"attributes": [
+				["title", "Knowledge (dungeoneering)"]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (engineering)",
-			"title": "Knowledge (engineering)",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["title", "Knowledge (engineering)"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (geography)",
-			"title": "Knowledge (geography)",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["title", "Knowledge (geography)"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (history)",
-			"title": "Knowledge (history)",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["title", "Knowledge (history)"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (local)",
-			"title": "Knowledge (local)",
+			"attributes": [
+				["title", "Knowledge (local)"],
+				["background", true]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (nature)",
-			"title": "Knowledge (nature)",
+			"attributes": [
+				["title", "Knowledge (nature)"],
+				["background", true]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (nobility)",
-			"title": "Knowledge (nobility)",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true
+			"attributes": [
+				["title", "Knowledge (nobility)"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (planes)",
-			"title": "Knowledge (planes)",
+			"attributes": [
+				["title", "Knowledge (planes)"]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Knowledge (religion)",
-			"title": "Knowledge (religion)",
+			"attributes": [
+				["title", "Knowledge (religion)"]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Linguistics",
-			"title": "Linguistics",
-			"groups": ["skill", "pure modifier", "intelligence-based"],
-			"background": true,
-			"half_negative": [
-				"Equation",
-				["Add", null],
-				["Divide", 2],
-				["Floor"],
-				["AtLeast", 0]
-			]
+			"attributes": [
+				["title", "Linguistics"],
+				["half_negative", [
+					"Equation",
+					["Add", null],
+					["Divide", 2],
+					["Floor"],
+					["AtLeast", 0]
+				]],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Spellcraft",
-			"title": "Spellcraft",
+			"attributes": [
+				["title", "Spellcraft"]
+			],
 			"groups": ["skill", "pure modifier", "intelligence-based"]
 		},
 		{
 			"id": "Heal",
-			"title": "Heal",
+			"attributes": [
+				["title", "Heal"]
+			],
 			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "Perception",
-			"title": "Perception",
+			"attributes": [
+				["title", "Perception"]
+			],
 			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "Sense Motive",
-			"title": "Sense Motive",
+			"attributes": [
+				["title", "Sense Motive"]
+			],
 			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "Survival",
-			"title": "Survival",
+			"attributes": [
+				["title", "Survival"]
+			],
 			"groups": ["skill", "pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "Bluff",
-			"title": "Bluff",
+			"attributes": [
+				["title", "Bluff"]
+			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "Diplomacy",
-			"title": "Diplomacy",
+			"attributes": [
+				["title", "Diplomacy"]
+			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "Disguise",
-			"title": "Disguise",
+			"attributes": [
+				["title", "Disguise"]
+			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "Handle Animal",
-			"title": "Handle Animal",
-			"groups": ["skill", "pure modifier", "charisma-based"],
-			"background": true
+			"attributes": [
+				["title", "Handle Animal"],
+				["background", true]
+			],
+			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "Intimidate",
-			"title": "Intimidate",
+			"attributes": [
+				["title", "Intimidate"]
+			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "Use Magic Device",
-			"title": "Use Magic Device",
+			"attributes": [
+				["title", "Use Magic Device"]
+			],
 			"groups": ["skill", "pure modifier", "charisma-based"]
 		},
 		{
 			"id": "FortSave",
-			"title": "Fortitude",
+			"attributes": [
+				["title", "Fortitude"]
+			],
 			"groups": ["pure modifier", "constitution-based"]
 		},
 		{
 			"id": "ReflSave",
-			"title": "Reflex",
+			"attributes": [
+				["title", "Reflex"]
+			],
 			"groups": ["pure modifier", "dexterity-based"]
 		},
 		{
 			"id": "WillSave",
-			"title": "Will",
+			"attributes": [
+				["title", "Will"]
+			],
 			"groups": ["pure modifier", "wisdom-based"]
 		},
 		{
 			"id": "landSpeed",
-			"title": "Speed",
+			"attributes": [
+				["title", "Speed"]
+			],
 			"groups": "speed stats"
 		},
 		{
 			"id": "flySpeed",
-			"title": "Fly Speed",
+			"attributes": [
+				["title", "Fly Speed"]
+			],
 			"groups": "speed stats"
 		},
 		{
 			"id": "climbSpeed",
-			"title": "Climb Speed",
+			"attributes": [
+				["title", "Climb Speed"]
+			],
 			"groups": "speed stats"
 		},
 		{
 			"id": "swimSpeed",
-			"title": "Swim Speed",
+			"attributes": [
+				["title", "Swim Speed"]
+			],
 			"groups": "speed stats"
 		},
 		{
 			"id": "burrowSpeed",
-			"title": "Burrow Speed",
+			"attributes": [
+				["title", "Burrow Speed"]
+			],
 			"groups": "speed stats"
 		},
 		{
 			"id": "Level",
-			"title": "Level",
-			"type": "Int",
-			"startingValue": 1,
-			"minValue": 1,
-			"goodSave": [
-				"Equation",
-				["Add", null],
-				["Divide", 2],
-				["Add", 2],
-				["Floor"]
-			],
-			"badSave": [
-				"Equation",
-				["Add", null],
-				["Divide", 3],
-				["Floor"]
-			],
-			"halfLevel": [
-				"Equation",
-				["Add", null],
-				["Divide", 2],
-				["Floor"]
-			],
-			"threeQuarters": [
-				"Equation",
-				["Add", null],
-				["Multiply", 3],
-				["Divide", 4],
-				["Floor"]
-			],
-			"oddLevels": [
-				"Equation",
-				["Add", 1],
-				["Add", null],
-				["Divide", 2],
-				["Floor"]
-			]
-		},
-		{
-			"id": "Init",
-			"title": "Initiative",
-			"type": "IntBonusable",
-			"startingValue": 0,
-			"minValue": -99,
-			"groups": "string modifier"
-		},
-		{
-			"id": "Feats",
-			"title": "Feats",
-			"type": "IntBonusable",
-			"minValue": 0,
-			"startingValue": 0
-		},
-		{
-			"id": "SkillPoints",
-			"title": "Skill Points",
-			"type": "IntBonusable",
-			"minValue": 0
-		},
-		{
-			"id": "HeroPointsPerLevel",
-			"type": "IntBonusable",
-			"startingValue": 1
-		},
-		{
-			"id": "BAB",
-			"title": "Base Attack Bonus",
-			"type": "IntBonusable",
-			"startingValue": 0,
-			"groups": "string modifier",
-			"full_attack_text": [
-				"Do",
-				["While", [
-					"AND",
-					["GreaterThan", 5]
+			"attributes": [
+				["title", "Level"],
+				["startingValue", 1],
+				["minValue", 1],
+				["type", "Int"],
+				["goodSave", [
+					"Equation",
+					["Add", null],
+					["Divide", 2],
+					["Add", 2],
+					["Floor"]
 				]],
-				["outType", "Str"],
-				["Input", null],
-				["Output", [null, "modifier_text"]],
-				["ModifyInput", [
-					["Add", -5]
+				["badSave", [
+					"Equation",
+					["Add", null],
+					["Divide", 3],
+					["Floor"]
 				]],
-				["ModifyOutput", [
-					["Add", "/+"],
-					"AddInput"
+				["halfLevel", [
+					"Equation",
+					["Add", null],
+					["Divide", 2],
+					["Floor"]
+				]],
+				["threeQuarters", [
+					"Equation",
+					["Add", null],
+					["Multiply", 3],
+					["Divide", 4],
+					["Floor"]
+				]],
+				["oddLevels", [
+					"Equation",
+					["Add", 1],
+					["Add", null],
+					["Divide", 2],
+					["Floor"]
 				]]
 			]
 		},
 		{
+			"id": "Init",
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["minValue", -99],
+				["title", "Initiative"]
+			],
+			"groups": "string modifier"
+		},
+		{
+			"id": "Feats",
+			"attributes": [
+				["type", "IntBonusable"],
+				["minValue", 0],
+				["title", "Feats"],
+				["startingValue", 0]
+			]
+		},
+		{
+			"id": "SkillPoints",
+			"attributes": [
+				["type", "IntBonusable"],
+				["minValue", 0],
+				["title", "Skill Points"]
+			]
+		},
+		{
+			"id": "HeroPointsPerLevel",
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 1]
+			]
+		},
+		{
+			"id": "BAB",
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Base Attack Bonus"],
+				["full_attack_text", [
+					"Do",
+					["While", [
+						"AND",
+						["GreaterThan", 5]
+					]],
+					["outType", "Str"],
+					["Input", null],
+					["Output", [null, "modifier_text"]],
+					["ModifyInput", [
+						["Add", -5]
+					]],
+					["ModifyOutput", [
+						["Add", "/+"],
+						"AddInput"
+					]]
+				]]
+			],
+			"groups": "string modifier"
+		},
+		{
 			"id": "darkvision",
-			"title": "Darkvision",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Darkvision"]
+			]
 		},
 		{
 			"id": "lowLightVision",
-			"title": "Low-Light Vision",
-			"type": "TF",
-			"startingValue": 0
+			"attributes": [
+				["type", "TF"],
+				["startingValue", 0],
+				["title", "Low-Light Vision"]
+			]
 		},
 		{
 			"id": "size",
-			"type": "PfSize",
-			"title": "Size",
-			"startingValue": 4
+			"attributes": [
+				["type", "PfSize"],
+				["title", "Size"],
+				["startingValue", 4]
+			]
 		},
 		{
 			"id": "creatureType",
-			"type": "Str",
-			"startingValue": "humanoid"
+			"attributes": [
+				["type", "Str"],
+				["startingValue", "humanoid"]
+			]
 		},
 		{
 			"id": "characterName",
-			"type": "Str",
-			"startingValue": "Sam"
+			"attributes": [
+				["type", "Str"],
+				["startingValue", "Sam"]
+			]
 		},
 		{
 			"id": "languagesKnown",
-			"type": "IntBonusable",
-			"title": "Languages Known",
-			"startingValue": 1,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 1],
+				["title", "Languages Known"]
+			],
 			"Bonuses": [
 				[
 					["INT", "modifierNonNegative"],
@@ -620,33 +744,45 @@
 		},
 		{
 			"id": "naturalArmor",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "dodgeBonus",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "delectionBonus",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "armorBonus",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "shieldBonus",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "hardACBonuses",
-			"type": "IntBonusable",
-			"startingValue": 0,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			],
 			"Bonuses": [
 				{
 					"type": "natural armor",
@@ -664,8 +800,10 @@
 		},
 		{
 			"id": "universalACBonuses",
-			"type": "IntBonusable",
-			"startingValue": 0,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			],
 			"Bonuses": [
 				{
 					"type": "deflection",
@@ -675,9 +813,11 @@
 		},
 		{
 			"id": "AC",
-			"type": "IntBonusable",
-			"title": "AC",
-			"startingValue": 10,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 10],
+				["title", "AC"]
+			],
 			"Bonuses": [
 				{
 					"type": "dodge",
@@ -696,9 +836,11 @@
 		},
 		{
 			"id": "TAC",
-			"type": "IntBonusable",
-			"title": "Touch AC",
-			"startingValue": 10,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 10],
+				["title", "Touch AC"]
+			],
 			"Bonuses": [
 				{
 					"type": "dodge",
@@ -716,9 +858,11 @@
 		},
 		{
 			"id": "FFAC",
-			"type": "IntBonusable",
-			"title": "Flat-Footed AC",
-			"startingValue": 10,
+			"attributes": [
+				["type", "IntBonusable"],
+				["title", "Flat-Footed AC"],
+				["startingValue", 10]
+			],
 			"Bonuses": [
 				{
 					"type": "size",
@@ -733,18 +877,20 @@
 		},
 		{
 			"id": "CMB",
-			"title": "CMB",
-			"type": "IntBonusable",
-			"startingValue": 10,
-			"statBonus": [
-				"If",
-				["Start", ["size", null]],
-				["Compare", [
-					"AND",
-					["LessThan", 3]
-				]],
-				["Then", ["DEX", "modifier"]],
-				["Else", ["STR", "modifier"]]
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 10],
+				["title", "CMB"],
+				["statBonus", [
+					"If",
+					["Start", ["size", null]],
+					["Compare", [
+						"AND",
+						["LessThan", 3]
+					]],
+					["Then", ["DEX", "modifier"]],
+					["Else", ["STR", "modifier"]]
+				]]
 			],
 			"Bonuses": [
 				{
@@ -759,9 +905,11 @@
 		},
 		{
 			"id": "CMD",
-			"title": "CMD",
-			"type": "IntBonusable",
-			"startingValue": 10,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 10],
+				["title", "CMD"]
+			],
 			"Bonuses": [
 				{
 					"type": "size",
@@ -781,9 +929,11 @@
 		},
 		{
 			"id": "CMDFF",
-			"title": "Flat-Footed CMD",
-			"type": "IntBonusable",
-			"startingValue": 10,
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 10],
+				["title", "Flat-Footed CMD"]
+			],
 			"Bonuses": [
 				{
 					"type": "size",
@@ -799,201 +949,253 @@
 		},
 		{
 			"id": "SR",
-			"title": "Spell Resistance",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["title", "Spell Resistance"],
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "AcidResist",
-			"title": "Acid Resistance",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Acid Resistance"]
+			]
 		},
 		{
 			"id": "ColdResist",
-			"title": "Cold Resistance",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Cold Resistance"]
+			]
 		},
 		{
 			"id": "ElecResist",
-			"title": "Electricity Resistance",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Electricity Resistance"]
+			]
 		},
 		{
 			"id": "FireResist",
-			"title": "Fire Resistance",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0],
+				["title", "Fire Resistance"]
+			]
 		},
 		{
 			"id": "favoredClasses",
-			"type": "IntBonusable",
-			"startingValue": 1
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 1]
+			]
 		},
 		{
 			"id": "spellLikeAbilities",
-			"type": "PfSpells",
-			"title": "Spell-Like Abilities"
+			"attributes": [
+				["type", "PfSpells"],
+				["title", "Spell-Like Abilities"]
+			]
 		},
 		{
 			"id": "spellsKnown",
-			"type": "PfSpells",
-			"title": "Spells Known"
+			"attributes": [
+				["type", "PfSpells"],
+				["title", "Spells Known"]
+			]
 		},
 		{
 			"id": "concentrationCheckBase",
-			"type": "IntBonusable",
-			"startingValue": 0
+			"attributes": [
+				["type", "IntBonusable"],
+				["startingValue", 0]
+			]
 		},
 		{
 			"id": "race",
-			"title": "Race",
-			"type": "Str",
-			"startingValue": ""
+			"attributes": [
+				["type", "Str"],
+				["startingValue", ""],
+				["title", "Race"]
+			]
 		},
 		{
 			"id": "class",
-			"title": "Class",
-			"type": "Str",
-			"startingValue": ""
+			"attributes": [
+				["type", "Str"],
+				["startingValue", ""],
+				["title", "Class"]
+			]
 		}
 	],
 	"Pools": [
 		{
 			"id": "languages",
-			"title": "Languages",
-			"maxSelectable": ["Int", "languagesKnown"],
-			"startingPool": [
-				"Common",
-				"Elven",
-				"Dwarven",
-				"Gnomish",
-				"Halfling",
-				"Celestial",
-				"Infernal",
-				"Abyssal",
-				"Draconic",
-				"Sylvan",
-				"Aquan",
-				"Terran",
-				"Ignan",
-				"Auran",
-				"Undercommon",
-				"Gnoll",
-				"Goblin",
-				"Giant",
-				"Orc",
-				"Aboleth",
-				"Aklo",
-				"Boggard",
-				"Cyclops",
-				"Dark Folk",
-				"D'ziriak",
-				"Drow Sign Language",
-				"Grippli",
-				"Necril",
-				"Protean",
-				"Sphinx",
-				"Tengu",
-				"Treant",
-				"Vegepygmy",
-				"Read Lips",
-				"Azlanti"
+			"attributes": [
+				["maxSelectable", ["languagesKnown", "modifiedValue"]],
+				["title", "Languages"],
+				["startingPool", [
+					"Common",
+					"Elven",
+					"Dwarven",
+					"Gnomish",
+					"Halfling",
+					"Celestial",
+					"Infernal",
+					"Abyssal",
+					"Draconic",
+					"Sylvan",
+					"Aquan",
+					"Terran",
+					"Ignan",
+					"Auran",
+					"Undercommon",
+					"Gnoll",
+					"Goblin",
+					"Giant",
+					"Orc",
+					"Aboleth",
+					"Aklo",
+					"Boggard",
+					"Cyclops",
+					"Dark Folk",
+					"D'ziriak",
+					"Drow Sign Language",
+					"Grippli",
+					"Necril",
+					"Protean",
+					"Sphinx",
+					"Tengu",
+					"Treant",
+					"Vegepygmy",
+					"Read Lips",
+					"Azlanti"
+				]]
 			]
 		},
 		{
 			"id": "DR",
-			"title": "Damage Resistance"
+			"attributes": [
+				["title", "Damage Resistance"]
+			]
 		},
 		{
 			"id": "bonusLanguages",
-			"title": "Bonus Language Choices"
+			"attributes": [
+				["title", "Bonus Language Choices"]
+			]
 		},
 		{
 			"id": "creatureSubtypes",
-			"title": "Creature Subtypes"
+			"attributes": [
+				["title", "Creature Subtypes"]
+			]
 		},
 		{
 			"id": "armorProficiencies",
-			"title": "Armor Proficiencies"
+			"attributes": [
+				["title", "Armor Proficiencies"]
+			]
 		},
 		{
 			"id": "weaponProficiencies",
-			"title": "Weapon Proficiencies"
+			"attributes": [
+				["title", "Weapon Proficiencies"]
+			]
 		},
 		{
 			"id": "weaponMartial"
 		},
 		{
 			"id": "favoredClassChoices",
-			"title": "Favored Class Choices",
-			"maxSelectable": ["favoredClasses", "modifiedValue"],
-			"startingPool": [
-				"bard",
-				"barbarian",
-				"cleric",
-				"druid",
-				"fighter",
-				"monk",
-				"paladin",
-				"ranger",
-				"rogue",
-				"unchRogue",
-				"sorcerer",
-				"wizard",
-				"alchemist",
-				"cavalier",
-				"gunslinger",
-				"inquisitor",
-				"magus",
-				"oracle",
-				"summoner",
-				"witch",
-				"samurai",
-				"hunter",
-				"warpriest",
-				"bloodrager",
-				"shaman",
-				"skald",
-				"slayer",
-				"swashbuckler",
-				"shifter",
-				"investigator"
+			"attributes": [
+				["maxSelectable", ["favoredClasses", "modifiedValue"]],
+				["title", "Favored Class Choices"],
+				["startingPool", [
+					"bard",
+					"barbarian",
+					"cleric",
+					"druid",
+					"fighter",
+					"monk",
+					"paladin",
+					"ranger",
+					"rogue",
+					"unchRogue",
+					"sorcerer",
+					"wizard",
+					"alchemist",
+					"cavalier",
+					"gunslinger",
+					"inquisitor",
+					"magus",
+					"oracle",
+					"summoner",
+					"witch",
+					"samurai",
+					"hunter",
+					"warpriest",
+					"bloodrager",
+					"shaman",
+					"skald",
+					"slayer",
+					"swashbuckler",
+					"shifter",
+					"investigator"
+				]]
 			]
 		},
 		{
 			"id": "HIDDEN VARIABLES",
-			"itemsType": "Typeless"
+			"attributes": [
+				["itemsType", "Typeless"]
+			]
 		},
 		{
 			"id": "skillEffects",
-			"title": "Skill Effects"
+			"attributes": [
+				["title", "Skill Effects"]
+			]
 		},
 		{
 			"id": "saveEffects",
-			"title": "Saving Throw Effects"
+			"attributes": [
+				["title", "Saving Throw Effects"]
+			]
 		},
 		{
 			"id": "combatEffects",
-			"title": "Combat Effects"
+			"attributes": [
+				["title", "Combat Effects"]
+			]
 		},
 		{
 			"id": "spellcastingEffects",
-			"title": "Spellcasting Effects"
+			"attributes": [
+				["title", "Spellcasting Effects"]
+			]
 		},
 		{
 			"id": "speedEffects",
-			"title": "Movement Effects"
+			"attributes": [
+				["title", "Movement Effects"]
+			]
 		},
 		{
 			"id": "senseEffects",
-			"title": "Sense Effects"
+			"attributes": [
+				["title", "Sense Effects"]
+			]
 		},
 		{
 			"id": "miscEffects",
-			"title": "Skill Effects"
+			"attributes": [
+				["title", "Skill Effects"]
+			]
 		}
 	],
 	"Bundles": [
