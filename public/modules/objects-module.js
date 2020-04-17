@@ -484,8 +484,7 @@ export class MultiStatObject extends StatObject {
 	toJSON(key) {
 		var o = super.toJSON(key);
 		o.defaultContext = this.defaultContext.id;
-		o.groups = this.groups;
-		o.parser = "StatObject";
+		o.parser = "MultiStat";
 		return o;
 	}
 }
@@ -1104,13 +1103,19 @@ function restoreGroup(key, prop, flagged) {
 	}
 	return prop;
 }
-//function restoreMultiStat(key, prop, flagged) {
-//}
+function restoreMultiStat(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let m = $RO.stats.MultiStat;
+		return new m(prop.id, prop.atts, prop.groups);
+	}
+	return $RO.parser.MultiStat(key, prop, true);
+}
 function restoreStat(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let s = $RO.stats.StatObject,
-			stat = new s(prop.name, prop.atts);
+			stat = new s(prop.name, prop.atts, prop.groups);
 		// Leave .defaultContext as a string for now, but save the stat.
 		deferredContexts.push(stat);
 		// It will be fixed in Player.loadCharacter.
@@ -1201,6 +1206,7 @@ $RPG.ADD("objects", {
 		ObjectWithAttributes: restoreAttributes,
 		Group: restoreGroup,
 		StatObject: restoreStat,
+		MultiStat: restoreMultiStat,
 		Reference: restoreReference,
 		CrossReference: restoreCrossReference,
 		Equation: restoreEquation,
