@@ -1,5 +1,5 @@
 // Import parsing and logging
-import { logErrorText as logError } from "./parsing-logging.js";
+import { logErrorText as logError, copyArray } from "./parsing-logging.js";
 
 var deferredContexts = [],
 	MathObject, LogicObject;
@@ -660,21 +660,6 @@ export function findValue(value, type, context) {
 	return value;
 }
 
-// copyArray(array) => deep copy of that array
-// The input array is copied, and each nested array within it is copied, too
-function copyArray(arr) {
-	var res = [],
-		a = arr.slice();
-	while(a.length > 0) {
-		let one = a.shift();
-		if(one instanceof Array) {
-			res.push(copyArray(one));
-		} else {
-			res.push(one);
-		}
-	}
-	return res;
-}
 
 // Object that contains an if/then/else construction
 export class IfObject extends SpecialGrabber {

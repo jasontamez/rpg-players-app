@@ -1,7 +1,7 @@
 // Import query selectors
 import { $q, $a } from "./dollar-sign-module.js";
 // Import parsing and logging
-import { parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
+import { copyArray, parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
 
 // temp variable to log all objects created
 export var record = [];

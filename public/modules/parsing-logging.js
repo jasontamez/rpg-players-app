@@ -16,6 +16,22 @@ export function logErrorText(msg, error) {
 	console.log(error.stack);
 }
 
+// copyArray(array) => deep copy of that array
+// The input array is copied, and each nested array within it is copied, too
+export function copyArray(arr) {
+	var res = [],
+		a = arr.slice();
+	while(a.length > 0) {
+		let one = a.shift();
+		if(one instanceof Array) {
+			res.push(copyArray(one));
+		} else {
+			res.push(one);
+		}
+	}
+	return res;
+}
+
 // Returns the attributes of NODE as an {object}
 export function parseAttributesToObject(node) {
 	var a = node.attributes, c = 0, atts = {};
