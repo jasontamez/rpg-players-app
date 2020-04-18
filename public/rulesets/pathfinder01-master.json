@@ -93,7 +93,6 @@
 					["Then", [null, "modifierPlus"]],
 					["Else", [null, "modifier"]]
 				]],
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["minValue", 0],
 				["maxValue", 99]
@@ -192,7 +191,6 @@
 		{
 			"name": "saving throws",
 			"attributes": [
-				["type", "IntBonusable"],
 				["minValue", -99],
 				["maxValue", 99],
 				["startingValue", 0]
@@ -201,7 +199,6 @@
 		{
 			"name": "speed stats",
 			"attributes": [
-				["type", "IntBonusable"],
 				["stepValue", 5],
 				["startingValue", 0],
 				["minValue", 0]
@@ -606,7 +603,6 @@
 				["title", "Level"],
 				["startingValue", 1],
 				["minValue", 1],
-				["type", "Int"],
 				["goodSave", [
 					"Equation",
 					["Add", null],
@@ -645,7 +641,6 @@
 		{
 			"id": "Init",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["minValue", -99],
 				["title", "Initiative"]
@@ -655,7 +650,6 @@
 		{
 			"id": "Feats",
 			"attributes": [
-				["type", "IntBonusable"],
 				["minValue", 0],
 				["title", "Feats"],
 				["startingValue", 0]
@@ -664,7 +658,6 @@
 		{
 			"id": "SkillPoints",
 			"attributes": [
-				["type", "IntBonusable"],
 				["minValue", 0],
 				["title", "Skill Points"]
 			]
@@ -672,14 +665,12 @@
 		{
 			"id": "HeroPointsPerLevel",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 1]
 			]
 		},
 		{
 			"id": "BAB",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Base Attack Bonus"],
 				["full_attack_text", [
@@ -705,7 +696,6 @@
 		{
 			"id": "darkvision",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Darkvision"]
 			]
@@ -743,7 +733,6 @@
 		{
 			"id": "languagesKnown",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 1],
 				["title", "Languages Known"]
 			],
@@ -757,42 +746,36 @@
 		{
 			"id": "naturalArmor",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "dodgeBonus",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "delectionBonus",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "armorBonus",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "shieldBonus",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "hardACBonuses",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			],
 			"Bonuses": [
@@ -813,7 +796,6 @@
 		{
 			"id": "universalACBonuses",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			],
 			"Bonuses": [
@@ -826,7 +808,6 @@
 		{
 			"id": "AC",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["title", "AC"]
 			],
@@ -849,7 +830,6 @@
 		{
 			"id": "TAC",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["title", "Touch AC"]
 			],
@@ -871,7 +851,6 @@
 		{
 			"id": "FFAC",
 			"attributes": [
-				["type", "IntBonusable"],
 				["title", "Flat-Footed AC"],
 				["startingValue", 10]
 			],
@@ -890,7 +869,6 @@
 		{
 			"id": "CMB",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["title", "CMB"],
 				["statBonus", [
@@ -918,7 +896,6 @@
 		{
 			"id": "CMD",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["title", "CMD"]
 			],
@@ -942,7 +919,6 @@
 		{
 			"id": "CMDFF",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 10],
 				["title", "Flat-Footed CMD"]
 			],
@@ -963,14 +939,12 @@
 			"id": "SR",
 			"attributes": [
 				["title", "Spell Resistance"],
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},
 		{
 			"id": "AcidResist",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Acid Resistance"]
 			]
@@ -978,7 +952,6 @@
 		{
 			"id": "ColdResist",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Cold Resistance"]
 			]
@@ -986,7 +959,6 @@
 		{
 			"id": "ElecResist",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Electricity Resistance"]
 			]
@@ -994,7 +966,6 @@
 		{
 			"id": "FireResist",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0],
 				["title", "Fire Resistance"]
 			]
@@ -1002,7 +973,6 @@
 		{
 			"id": "favoredClasses",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 1]
 			]
 		},
@@ -1023,7 +993,6 @@
 		{
 			"id": "concentrationCheckBase",
 			"attributes": [
-				["type", "IntBonusable"],
 				["startingValue", 0]
 			]
 		},

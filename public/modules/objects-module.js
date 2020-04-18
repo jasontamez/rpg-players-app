@@ -400,6 +400,9 @@ export class StatObject extends GroupObject {
 			this.groups = groups;
 		}
 		this.defaultContext = this;
+		this.setupType();
+		this.setupValue();
+		this.set("value", this.get("value") || this.get("startingValue"));
 	}
 	get(prop, context = this.defaultContext) {
 		var value = super.get(prop);
@@ -418,6 +421,25 @@ export class StatObject extends GroupObject {
 		}
 		return value;
 	}
+	setupType() {
+		var type = this.get("type"),
+			typeFunc = $RPG.objects.Stat.types[type];
+		if(typeFunc === undefined) {
+			type = "default";
+		}
+		this.type = type;
+	}
+	setupValue() {
+		var value = this.get("value");
+		if(value === undefined) {
+			value = this.get("startingValue");
+		}
+		this.set("value", $RPG.objects.Stat.types[this.type](value, this));
+	}
+	value(context = this.defaultContext) {
+		var value = this.get("value");
+		return $RPG.objects.Stat.types[this.type](value, this);
+	}
 	toJSON(key) {
 		var o = super.toJSON(key);
 		o.defaultContext = this.defaultContext.id;
@@ -426,6 +448,45 @@ export class StatObject extends GroupObject {
 		return o;
 	}
 }
+StatObject.types = {
+	Num: function(v, stat) {
+		var min = stat.get("minValue") || -Infinity,
+			max = stat.get("maxValue") || Infinity;
+		if(v === undefined) {
+			v = stat.get("startingValue");
+		}
+		v = Number(v) || 0;
+		return Math.max(Math.min(max, v), min);
+	},
+	Int: function(v, stat) {
+		var min = stat.get("minValue") || -Infinity,
+			max = stat.get("maxValue") || Infinity,
+			step = stat.get("stepValue") || 1;
+		if(v === undefined) {
+			v = stat.get("startingValue");
+		}
+		v = Number(v) || 0;
+		v = Math.round(v);
+		v = Math.max(Math.min(max, v), min);
+		if((v % step) > 0) {
+			v = Math.floor(v / step);
+		}
+		return v;
+	},
+	Str: function(v, stat) {
+		if(v === undefined) {
+			v = stat.get("startingValue");
+		}
+		return String(v);
+	},
+	TF: function(v, stat) {
+		if(v === undefined) {
+			v = stat.get("startingValue");
+		}
+		return Boolean(v);
+	},
+	default: this.types.Int
+};
 
 // Defines a class for MultiStat objects
 export class MultiStatObject extends StatObject {
