@@ -350,7 +350,7 @@ LogicObject = {
 /////// STAT OBJECTS ///////
 ////////////////////////////
 
-// Each object must define a .toJSON method that 
+// Each object must define a .toJSON method
 
 // Basic object, parent of all that follow
 export class ObjectWithAttributes {
@@ -400,9 +400,8 @@ export class StatObject extends GroupObject {
 			this.groups = groups;
 		}
 		this.defaultContext = this;
-		this.setupType();
+		this.updateType();
 		this.setupValue();
-		this.set("value", this.get("value") || this.get("startingValue"));
 	}
 	get(prop, context = this.defaultContext) {
 		var value = super.get(prop);
@@ -413,7 +412,7 @@ export class StatObject extends GroupObject {
 				if(group) {
 					value = group.get(prop);
 				}
-				return value;
+				return value !== undefined;
 			});
 		}
 		if(value instanceof SpecialGrabber) {
@@ -421,10 +420,9 @@ export class StatObject extends GroupObject {
 		}
 		return value;
 	}
-	setupType() {
-		var type = this.get("type"),
-			typeFunc = $RPG.objects.Stat.types[type];
-		if(typeFunc === undefined) {
+	updateType() {
+		var type = this.get("type");
+		if(type === undefined || $RPG.objects.Stat.types[type] === undefined) {
 			type = "default";
 		}
 		this.type = type;
@@ -437,8 +435,21 @@ export class StatObject extends GroupObject {
 		this.set("value", $RPG.objects.Stat.types[this.type](value, this));
 	}
 	value(context = this.defaultContext) {
-		var value = this.get("value");
-		return $RPG.objects.Stat.types[this.type](value, this);
+		var v = this.get("value"),
+			ROS = $RPG.objects.stats,
+			value = ROS.func.findValue(v, "Any", context);
+		return ROS.Stat.types[this.type](value, this);
+	}
+	addGroup(group, first = false) {
+		if(typeof group !== "string") {
+			return false;
+		} else if(first) {
+			this.groups.unshift(group);
+		} else {
+			this.groups.push(group);
+		}
+		this.updateType();
+		return this.groups;
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
