@@ -84,6 +84,25 @@ export class PlayerObject {
 	//getById
 }
 
+// Define a class for Ruleset objects
+//  o = new RulesetObject(TBD)
+export class RulesetObject {
+	constructor(player, rulesetID) {
+		this.player = player;
+		this.id = rulesetID;
+		this.pages = new Map();
+		this.characters = new Map();
+	}
+	toJSON(key) {
+		return {
+			id: this.id,
+			player: this.player.id,
+			characters: Array.from(this.characters).map(pair => pair[0]),
+			parser: "Ruleset"
+		};
+	}
+}
+
 // Define a class for character objects
 //   o = new CharacterObject(objectPlayer, stringRuleset)
 //   o.set("property", value)
@@ -207,6 +226,17 @@ CharacterObject.JSONIncompatibles = [
 	"references",
 	"crossreferences"
 ];
+
+// Define a class for Page objects
+//  o = new PageObject(TBD)
+export class PageObject {
+	constructor(node, id, atts) {
+		this.id = id;
+		this.node = node;
+		this.atts = atts;
+		this.html = [];
+	}
+}
 
 MathObject = {
 	// STRING FUNCTIONS
@@ -1238,7 +1268,9 @@ function restoreDo(key, prop, flagged) {
 $RPG.ADD("objects", {
 	data: {
 		player: PlayerObject,
+		ruleset: RulesetObject,
 		character: CharacterObject,
+		page: PageObject,
 		MathObject: MathObject,
 		LogicObject: LogicObject
 	},
