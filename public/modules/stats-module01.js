@@ -757,8 +757,7 @@ Pool.prototype.type = Pool;
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
 
-export function parseStats(groups, stats, multiStats, pools) {
-	// Parse nodes
+export function parseStats(groups, multiStats, stats, pools) {
 	groups.forEach( group => parseGroup(group) );
 	//nodelist.forEach( node => parseStatNodes(node, undefined) );
 }

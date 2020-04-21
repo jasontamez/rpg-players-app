@@ -190,7 +190,7 @@ async function loadAndAssembleInfo(info) {
 	}
 //	// load stats
 //	modifyLoadingScreen($t("[parsing stats]"));
-//	parseStats(info.Groups, info.Stats, info.MultiStats, info.Pools);
+//	parseStats(info.Groups, info.MultiStats, info.Stats, info.Pools);
 //	// load data
 //	modifyLoadingScreen($t("[parsing data]"));
 //	test = info.Data || [];
