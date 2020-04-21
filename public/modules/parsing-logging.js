@@ -18,9 +18,9 @@ export function logErrorText(msg, error) {
 
 // copyArray(array) => deep copy of that array
 // The input array is copied, and each nested array within it is copied, too
-export function copyArray(arr) {
+export function copyArray(arr, sliceStart, sliceEnd) {
 	var res = [],
-		a = arr.slice();
+		a = arr.slice(sliceStart, sliceEnd);
 	while(a.length > 0) {
 		let one = a.shift();
 		if(one instanceof Array) {
