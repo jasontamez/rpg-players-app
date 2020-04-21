@@ -758,7 +758,14 @@ Pool.prototype.type = Pool;
 //parent, parentTag, node, id, atts, env, StatNodes
 
 export function parseStats(groups, multiStats, stats, pools) {
+	// Parse groups
 	groups.forEach( group => parseGroup(group) );
+	// Parse multistats
+	multiStats.forEach( ms => parseMultiStat(ms) );
+	// Parse stats
+	stats.forEach( stat => parseStat(stat) );
+	// Parse pools
+	pools.forEach( pool => parsePool(pool) );
 	//nodelist.forEach( node => parseStatNodes(node, undefined) );
 }
 
@@ -780,25 +787,43 @@ export function parseGroup(group) {
 	});
 }
 
+export function parseMultiStat(ms) {
+
+}
+
+export function parseStat(stat) {
+
+}
+
+export function parsePool(pool) {
+
+}
+
 export function parsePropertyValue(value, converter) {
 	if(value === null || value === undefined) {
 		return value;
 	} else if (value.constructor === Array) {
 		// Create copy of array
-		let v = value.slice(),
-			// Isolate the first item
-			interpreter = $RPG.stats.infoHandler[v.shift()];
-		// If it matches a handler, run it. Otherwise return undefined.
+		let interpreter = $RPG.stats.infoHandler[value[0]];
+		// If it matches a handler, run it. Otherwise return a copy of the array.
 		if(interpreter === undefined) {
-			return undefined;
+			return copyArray(value);
 		}
-		value = interpreter(v);
+		value = interpreter(copyArray(value, 1));
 	}
 	// Run converter if needed
 	return converter === undefined ? value : converter(value);
 }
 
 function parseEquation() {
+
+}
+
+function parseIf() {
+
+}
+
+function parseDo() {
 
 }
 
@@ -835,7 +860,7 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 
 // not sure if I need siblings... or all ancestors...
 
-export function parseStat(node, parentNode, parentTag) {
+export function parseStat_OLD(node, parentNode, parentTag) {
 	var atts = parseIdAndAttributesToArray(node),
 		id = atts.shift(), tag, type;
 	if(atts.slice().every(function(pair) {
@@ -857,7 +882,7 @@ export function parseStat(node, parentNode, parentTag) {
 	parseStatNodes(node, tag);
 }
 
-export function parseMultiStat(node, parentNode, parentTag) {
+export function parseMultiStat_OLD(node, parentNode, parentTag) {
 	var atts = parseIdAndAttributesToArray(node),
 		id = atts.shift(),
 		checkAtts = atts.slice(),
@@ -892,7 +917,7 @@ export function parseEquation_OLD(node, parentNode, parentTag) {
 }
 
 
-export function parseIf(node, parentNode, parentTag) {
+export function parseIf_OLD(node, parentNode, parentTag) {
 	var ifthen = If.constructIfThenElse(parentTag, node);
 	parentTag.set("value", ifthen);
 }
@@ -900,7 +925,7 @@ export function parseIf(node, parentNode, parentTag) {
 //parseStatNodes(currentNode, currentTag, ancestry, ancestorAtts)
 
 
-export function parseDo(node, parentNode, parentTag) {
+export function parseDo_OLD(node, parentNode, parentTag) {
 	var doWhile = Do.constructDo(parentTag, node);
 	parentTag.set("value", doWhile);
 }
@@ -1025,7 +1050,7 @@ export function parseNotation(node, parentNode, parentTag) {
 //<BonusChoice>
 
 
-export function parsePool(node, parentNode, parentTag) {
+export function parsePool_OLD(node, parentNode, parentTag) {
  	var atts = parseAttributesToObject(node),
 		type = atts.type,
 		id = atts.id,
@@ -1168,15 +1193,12 @@ $RPG.ADD("stats", {
 	preprocessTags: {},
 	infoHandler: {
 		Equation: parseEquation,
-		Formula: parseFormulaValue
-	},
-	StatTagHandlers: {
-		Group: parseGroup,
-		Stat: parseStat,
-		MultiStat: parseMultiStat,
-		Equation: parseEquation,
 		If: parseIf,
 		Do: parseDo,
+	},
+	StatTagHandlers: {
+		Stat: parseStat,
+		MultiStat: parseMultiStat,
 		Bonus: parseBonus,
 		Notation: parseNotation,
 		Pool: parsePool,
