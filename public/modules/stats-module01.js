@@ -757,27 +757,28 @@ Pool.prototype.type = Pool;
 // nodeType 1 -> tag, 3 -> text, 2 -> attribute, 8 -> comment, 9 -> document
 //parent, parentTag, node, id, atts, env, StatNodes
 
-export function parseStats(groups, multiStats, stats, pools) {
+export function parseStats(groups, multiStats, stats, pools, Char) {
 	// Parse groups
-	groups.forEach( group => parseGroup(group) );
+	groups.forEach( group => parseGroup(group, Char) );
 	// Parse multistats
-	multiStats.forEach( ms => parseMultiStat(ms) );
+	multiStats.forEach( ms => parseMultiStat(ms, Char) );
 	// Parse stats
-	stats.forEach( stat => parseStat(stat) );
+	stats.forEach( stat => parseStat(stat, Char) );
 	// Parse pools
-	pools.forEach( pool => parsePool(pool) );
+	pools.forEach( pool => parsePool(pool, Char) );
 	//nodelist.forEach( node => parseStatNodes(node, undefined) );
 }
 
-export function parseGroup(group) {
+export function parseGroup(group, Char) {
 	var n = group.name,
 		a = group.attributes,
-		atts = new Map();
+		atts = new Map(),
+		tag;
 	if(n === undefined) {
-		logErrorText("GROUP missing \"name\" property");
+		logErrorText("GROUP missing \"name\" property", new Error());
 		return null;
 	} else if(a === undefined) {
-		logErrorText("GROUP missing \"attributes\" property");
+		logErrorText("GROUP missing \"attributes\" property", new Error());
 		return null;
 	}
 	a.forEach(function(prop, value) {
@@ -785,17 +786,45 @@ export function parseGroup(group) {
 		var v = parsePropertyValue(value);
 		v !== undefined && atts.set(prop, v);
 	});
+	tag = new $RPG.objects.stats.Group(n, atts);
+	tag !== undefined && Char.addGroup(n, Char);
 }
 
-export function parseMultiStat(ms) {
+export function parseMultiStat(ms, Char) {
+	var id = ms.id,
+		a = ms.attributes || [],
+		groups = ms.groups || [],
+		MS = $RPG.objects.stats.MultiStat,
+		mandatory = copyArray(MS.mandatoryWraps)
+		atts = new Map(),
+		tag;
+	if(n === undefined) {
+		logErrorText("MULTISTAT missing \"id\" property", new Error());
+		return null;
+	}
+	if(!(a instanceof Array)) {
+		logErrorText("MULTISTAT \"attributes\" property must be an Array", new Error());
+		return null;
+	}
+	a.forEach(function(pair) {
+		atts.set(pair[0], pair[1]);
+	});
+	while(mandatory.length > 0) {
+		wrap = mandatory.shift();
+		if(atts.get(wrap) === undefined) {
+			logError("MultiStat \"" + id + "\" is missing mandatory \"" + wrap + "\" parameter", new Error());
+			return null;
+		}
+	}
+	tag = new MS(id, atts, groups);
+	tag !== undefined && Char.addMultiStat(id, tag);
+}
+
+export function parseStat(stat, Char) {
 
 }
 
-export function parseStat(stat) {
-
-}
-
-export function parsePool(pool) {
+export function parsePool(pool, Char) {
 
 }
 
