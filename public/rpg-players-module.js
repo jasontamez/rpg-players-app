@@ -106,62 +106,6 @@ function tryDisplayInfo(event) {
 	);
 }
 
-// When the button is pressed...
-function tryDisplayInfo_OLD(event, x = 0) {
-	var asyncF,
-		cls = $i("rules").value;
-	const button = $i("loadInfo");
-
-	// what class are we using?
-	// Check to see if we've selected an actual class
-	if(cls === "x") {
-		// Nope. Just stop everything.
-		return alert("Please select a ruleset before attempting to Load Info.");
-	}
-
-	// Check if we have data
-	if(x >= 10) {
-		// We've waited 5 seconds
-		// Set the class drop-down to null
-		$i("rules").value = "x";
-		// Restore the button
-		button.textContent = "Load Info";
-		button.disabled = false;
-		// Send an alert
-		return alert("Ruleset information was not loaded. Please select your ruleset again, then attempt to Load Info.");
-	} else if(!AJAXstorage.has(cls)) {
-		if(x === 0) {
-			button.textContent = "...Loading...";
-			button.disabled = true;
-		}
-		// Suspend for half a second to wait for it
-		setTimeout(tryDisplayInfo.bind(null, event, x + 1), 500);
-		return;
-	}
-
-	// Show "loading" screen
-	showLoadingScreen();
-
-	asyncF = new Promise(function(resolve, reject) {
-		// disable class/race choice and indicate we can recalculate at will
-		$i("rules").disabled = true;
-		//button.textContent = "Recalculate!";
-		//button.disabled = false;
-		// Run the meat of the program, giving it a pause to wait for the transition to play
-		setTimeout(loadAndAssembleInfo.bind(null, cls), 100);
-		resolve();
-	});
-	asyncF.then(function() {
-		// Anything?
-	}).catch(function(error) {
-		console.log(error.name + " :: " + error.message + " :: " + error.fileName + "\n" + error.stack);
-		alert(error.name + " :: " + error.message + " :: " + error.fileName + "\n\nPlease inform the webmaster. Or, reload the page and try again.");
-	}).finally(function() {
-		setTimeout(() => okToDeload = true, 250);
-	});
-}
-
-
 async function loadAndAssembleInfo(info) {
 	var modules = info.Modules,
 		m = modules.length,
