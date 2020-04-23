@@ -544,7 +544,9 @@ StatObject.types = {
 		}
 		return Boolean(test);
 	},
-	default: this.types.Int
+	default: function(v, stat) {
+		return this.Int(v, stat);
+	}
 };
 
 // Defines a class for MultiStat objects
