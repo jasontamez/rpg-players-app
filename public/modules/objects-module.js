@@ -521,10 +521,28 @@ StatObject.types = {
 		return String(v);
 	},
 	TF: function(v, stat) {
+		var test;
 		if(v === undefined) {
 			v = stat.get("startingValue");
 		}
-		return Boolean(v);
+		test = Number(v);
+		if(Number.isNaN(test)) {
+			switch (String(v).toLowerCase()) {
+				case "false":
+				case "fals":
+				case "fal":
+				case "fa":
+				case "f":
+					return false;
+				case "true":
+				case "tru":
+				case "tr":
+				case "t":
+					return true;
+			}
+			return Boolean(v);
+		}
+		return Boolean(test);
 	},
 	default: this.types.Int
 };
