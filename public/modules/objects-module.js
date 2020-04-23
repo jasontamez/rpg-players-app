@@ -1310,7 +1310,7 @@ $RPG.ADD("objects", {
 	converter: {
 		Any: function(x) { return x; },
 		Int: function(x) {
-			var y = Math.round(Number(x));
+			var y = Math.floor(Number(x));
 			return y === y ? y : 0;
 		},
 		Str: function(x) { return String(x); },
