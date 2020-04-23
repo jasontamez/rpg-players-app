@@ -437,7 +437,24 @@ export function parseMultiStat(ms, Char) {
 }
 
 export function parseStat(stat, Char) {
-
+	var id = stat.id,
+		a = stat.attributes || [],
+		groups = stat.groups || [],
+		atts = new Map(),
+		tag;
+	if(id === undefined) {
+		logErrorText("STAT missing \"id\" property", new Error());
+		return null;
+	}
+	if(!(a instanceof Array)) {
+		logErrorText("STAT \"attributes\" property must be an Array", new Error());
+		return null;
+	}
+	a.forEach(function(pair) {
+		atts.set(pair[0], pair[1]);
+	});
+	tag = new ($RPG.objects.stats.Stat)(id, atts, groups);
+	tag !== undefined && Char.addStat(id, tag);
 }
 
 export function parsePool(pool, Char) {
