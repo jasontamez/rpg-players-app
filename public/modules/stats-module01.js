@@ -798,7 +798,7 @@ export function parseMultiStat(ms, Char) {
 		mandatory = copyArray(MS.mandatoryWraps)
 		atts = new Map(),
 		tag;
-	if(n === undefined) {
+	if(id === undefined) {
 		logErrorText("MULTISTAT missing \"id\" property", new Error());
 		return null;
 	}
