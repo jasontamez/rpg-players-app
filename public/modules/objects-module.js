@@ -543,11 +543,9 @@ StatObject.types = {
 			return Boolean(v);
 		}
 		return Boolean(test);
-	},
-	default: function(v, stat) {
-		return this.Int(v, stat);
 	}
 };
+StatObject.types.default = StatObject.types.Int;
 
 // Defines a class for MultiStat objects
 export class MultiStatObject extends StatObject {
