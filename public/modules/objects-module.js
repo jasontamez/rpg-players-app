@@ -485,6 +485,7 @@ export class StatObject extends GroupObject {
 		var o = super.toJSON(key);
 		o.defaultContext = this.defaultContext.id;
 		o.groups = this.groups;
+		o.type = this.type;
 		o.parser = "StatObject";
 		return o;
 	}
