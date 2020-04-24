@@ -1234,7 +1234,9 @@ function restoreStat(key, prop, flagged) {
 			stat = new s(prop.name, prop.atts, prop.groups);
 		// Leave .defaultContext as a string for now, but save the stat.
 		deferred.contexts.push(stat);
+		stat.defaultContext = prop.defaultContext;
 		// It will be fixed in Player.loadCharacter.
+		stat.type = prop.type;
 		return stat;
 	}
 	return $RO.parser.Group(key, prop, true);
