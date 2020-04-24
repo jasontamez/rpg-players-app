@@ -618,6 +618,93 @@ export class MultiStatObject extends StatObject {
 MultiStatObject.mandatoryWraps = ["idWrap"];
 MultiStatObject.optionalWraps = ["titleWrap", "descriptionWrap"];
 
+export class Pool extends StatObject {
+	// new Pool(idString, attributesMap, ?groupsArray)
+	constructor(id, atts, groups = []) {
+		var autoSelect;
+		super(id, atts, groups);
+		// super will call setupValue, which will set up this.pool
+		// set up autoSelect into a true/false boolean, always
+		autoSelect = this.get("autoSelect");
+		this.set("autoSelect", $RPG.objects.stats.Stat.types.TF(autoSelect));
+	}
+	updateType() {
+		var type = this.get("type");
+		if(type === undefined || $RPG.objects.stats.Stat.types[type] === undefined) {
+			type = "default";
+		}
+		this.type = type;
+	}
+	setupValue() {
+		// Only run this once.
+		if(this.pool === undefined) {
+			let c = 0,
+				start  = this.get("startingPool") || [],
+				autoSelect = this.get("autoSelect"),
+				max = this.get("maxSelectable") || Infinty,
+				pool = new Map();
+			start = copyArray(start);
+			while(c < max && start.length > 0) {
+				let item = start.shift();
+				pool.set(item, autoSelect);
+				c++;
+			}
+			this.pool = pool;
+		}
+	}
+	value(context = this.defaultContext) {
+		return this.selection(context);
+	}
+	selection(context = this.defaultContext) {
+		var sel = [],
+			ROS = $RPG.objects.stats,
+			findValue = ROS.func.findValue,
+			type = ROS.Stat.types[this.type];
+		this.pool.forEach(function(selected, value) {
+			if(selected) {
+				let v = findValue(value, "Any", context);
+				sel.push(type(v, this));
+			}
+		});
+		return sel;
+	}
+	items(context = this.defaultContext) {
+		var sel = [],
+			ROS = $RPG.objects.stats,
+			findValue = ROS.func.findValue,
+			type = ROS.Stat.types[this.type];
+		this.pool.forEach(function(selected, value) {
+			let v = findValue(value, "Any", context);
+			sel.push(type(v, this));
+		});
+		return sel;
+	}
+	getPool(context = this.defaultContext) {
+		var sel = [],
+			ROS = $RPG.objects.stats,
+			findValue = ROS.func.findValue,
+			type = ROS.Stat.types[this.type];
+		this.pool.forEach(function(selected, value) {
+			let v = findValue(value, "Any", context);
+			sel.push([type(v, this), selected]);
+		});
+		return sel;
+	}
+	addItem(item, selected = this.get("autoSelect")) {
+		// Can also be used to select/deselect an item
+		this.pool.set(item, selected);
+	}
+	removeItem(item) {
+		this.pool.delete(item);
+	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.pool = Array.from(this.pool);
+		o.parser = "Pool";
+		return o;
+	}
+}
+
 // This class is designed to be a parent only to other parent classes
 // - It lacks a .toJSON method and corresponding $RPG.objects.parser function
 // Children of this should implement a .getValue method
@@ -1242,6 +1329,18 @@ function restoreStat(key, prop, flagged) {
 	}
 	return $RO.parser.Group(key, prop, true);
 }
+function restorePool(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let p = $RO.stats.Pool,
+			pool = new p(prop.name, prop.atts, prop.groups);
+		pool.pool = prop.pool;
+		return pool;
+	} else if (key === "pool") {
+		return new Map(prop);
+	}
+	return $RO.parser.Stat(key, prop, true);
+}
 function restoreReference(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
@@ -1298,6 +1397,7 @@ $RPG.ADD("objects", {
 		Group: GroupObject,
 		Stat: StatObject,
 		MultiStat: MultiStatObject,
+		Pool: Pool,
 		Grabber: SpecialGrabber,
 		Reference: ReferenceObject,
 		CrossReference: CrossReference,
@@ -1328,6 +1428,7 @@ $RPG.ADD("objects", {
 		Group: restoreGroup,
 		StatObject: restoreStat,
 		MultiStat: restoreMultiStat,
+		Pool: restorePool,
 		Reference: restoreReference,
 		CrossReference: restoreCrossReference,
 		Equation: restoreEquation,
