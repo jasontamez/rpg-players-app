@@ -557,9 +557,6 @@ export class MultiStatObject extends StatObject {
 	//   titleWrap => [string, ?string]
 	//   descriptionWrap => [string, ?string]
 	constructor(id, atts, groups = []) {
-		if(atts.get("idWrap") === undefined) {
-			throw new Error("MultiStat \"" + id + "\" is missing \"idWrap\" parameter");
-		}
 		super(id, atts, groups);
 		this.inheritors = [];
 	}
