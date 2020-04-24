@@ -1415,7 +1415,26 @@ $RPG.ADD("objects", {
 			return y === y ? y : 0;
 		},
 		Str: function(x) { return String(x); },
-		TF: function(x) { return x ? true : false; }
+		TF: function(x) {
+			var test = Number(x);
+			if(Number.isNaN(test)) {
+				switch (String(x).toLowerCase()) {
+					case "false":
+					case "fals":
+					case "fal":
+					case "fa":
+					case "f":
+						return false;
+					case "true":
+					case "tru":
+					case "tr":
+					case "t":
+						return true;
+				}
+				return Boolean(v);
+			}
+			return Boolean(test);
+		}
 	},
 	saver: {
 		Character: saveCharacter,
