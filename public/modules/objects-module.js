@@ -1222,6 +1222,7 @@ function restoreMultiStat(key, prop, flagged) {
 			stat = new m(prop.id, prop.atts, prop.groups);
 		// Leave .inheritors as strings for now, but save the multistat.
 		deferred.multis.push(stat);
+		stat.inheritors = prop.inheritors;
 		// It will be fixed in Player.loadCharacter.
 		return stat;
 	}
