@@ -652,9 +652,11 @@ export class Pool extends StatObject {
 			this.pool = pool;
 		}
 	}
+	// value => Array of selected items
 	value(context = this.defaultContext) {
 		return this.selection(context);
 	}
+	// selection => Array of selected items
 	selection(context = this.defaultContext) {
 		var sel = [],
 			ROS = $RPG.objects.stats,
@@ -668,6 +670,7 @@ export class Pool extends StatObject {
 		});
 		return sel;
 	}
+	// items => Array of all items
 	items(context = this.defaultContext) {
 		var sel = [],
 			ROS = $RPG.objects.stats,
@@ -679,6 +682,7 @@ export class Pool extends StatObject {
 		});
 		return sel;
 	}
+	// getPool => Array of Arrays in the format [item, selectedBoolean]
 	getPool(context = this.defaultContext) {
 		var sel = [],
 			ROS = $RPG.objects.stats,

@@ -458,7 +458,24 @@ export function parseStat(stat, Char) {
 }
 
 export function parsePool(pool, Char) {
-
+	var id = pool.id,
+		a = pool.attributes || [],
+		groups = pool.groups || [],
+		atts = new Map(),
+		tag;
+	if(id === undefined) {
+		logErrorText("POOL missing \"id\" property", new Error());
+		return null;
+	}
+	if(!(a instanceof Array)) {
+		logErrorText("POOL \"attributes\" property must be an Array", new Error());
+		return null;
+	}
+	a.forEach(function(pair) {
+		atts.set(pair[0], pair[1]);
+	});
+	tag = new ($RPG.objects.stats.Pool)(id, atts, groups);
+	tag !== undefined && Char.addPool(id, tag);
 }
 
 export function parsePropertyValue(value, converter) {

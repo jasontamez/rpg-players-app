@@ -14,7 +14,7 @@ var okToDeload = false,
 	socket = window["$IO"];
 
 // Set up global variable
-$RPG.ADD("pages", "data", data);
+$RPG.ADD("data", data);
 $RPG.ADD("bundles", "raw", BUNDLES);
 $RPG.ADD("pages", "MAIN", MAIN);
 $RPG.ADD("pages", "OVERLAY", $i("overlay"));
@@ -132,16 +132,16 @@ async function loadAndAssembleInfo(info) {
 		await parseModule(type, src);
 		c++;
 	}
-//	// load stats
-//	modifyLoadingScreen($t("[parsing stats]"));
-//	parseStats(info.Groups, info.MultiStats, info.Stats, info.Pools, Char);
-//	// load data
-//	modifyLoadingScreen($t("[parsing data]"));
-//	test = info.Data || [];
-//	info.Data.forEach(function(n) {
-//		var [id, value] = n;
-//		data.set(id, value);
-//	});
+	// load stats
+	modifyLoadingScreen($t("[parsing stats]"));
+	parseStats(info.Groups, info.MultiStats, info.Stats, info.Pools, Char);
+	// load data
+	modifyLoadingScreen($t("[parsing data]"));
+	test = info.Data || [];
+	test.forEach(function(n) {
+		var [id, value] = n;
+		data.set(id, value);
+	});
 //	// load bundles
 //	modifyLoadingScreen($t("[parsing bundles]"));
 //	test = info.Bundles || [];
