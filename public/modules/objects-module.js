@@ -424,7 +424,7 @@ export class StatObject extends GroupObject {
 	// new StatObject(idString, attributesMap, ?groupsArray)
 	constructor(id, atts, groups = []) {
 		super(id, atts);
-		if((typeof e) === "string") {
+		if((typeof groups) === "string") {
 			this.groups = [groups];
 		} else {
 			this.groups = groups;
@@ -436,6 +436,7 @@ export class StatObject extends GroupObject {
 	get(prop, context = this.defaultContext) {
 		var value = super.get(prop);
 		if(value === undefined) {
+			let CHAR = $RPG.current.character;
 			// Check groups until we find a match (if any)
 			this.groups.some(function(g) {
 				var group = CHAR.getGroup(g);
@@ -452,7 +453,7 @@ export class StatObject extends GroupObject {
 	}
 	updateType() {
 		var type = this.get("type");
-		if(type === undefined || $RPG.objects.Stat.types[type] === undefined) {
+		if(type === undefined || $RPG.objects.stats.Stat.types[type] === undefined) {
 			type = "default";
 		}
 		this.type = type;
@@ -462,7 +463,7 @@ export class StatObject extends GroupObject {
 		if(value === undefined) {
 			value = this.get("startingValue");
 		}
-		this.set("value", $RPG.objects.Stat.types[this.type](value, this));
+		this.set("value", $RPG.objects.stats.Stat.types[this.type](value, this));
 	}
 	value(context = this.defaultContext) {
 		var v = this.get("value"),
@@ -615,8 +616,8 @@ export class MultiStatObject extends StatObject {
 		return o;
 	}
 }
-MultiStatObject.mandatoryWraps = ["idWrap"];
-MultiStatObject.optionalWraps = ["titleWrap", "descriptionWrap"];
+MultiStatObject.mandatoryWraps = ["id"];
+MultiStatObject.optionalWraps = ["title", "description"];
 
 export class Pool extends StatObject {
 	// new Pool(idString, attributesMap, ?groupsArray)
@@ -626,7 +627,7 @@ export class Pool extends StatObject {
 		// super will call setupValue, which will set up this.pool
 		// set up autoSelect into a true/false boolean, always
 		autoSelect = this.get("autoSelect");
-		this.set("autoSelect", $RPG.objects.stats.Stat.types.TF(autoSelect));
+		this.set("autoSelect", $RPG.objects.converter.TF(autoSelect));
 	}
 	updateType() {
 		var type = this.get("type");
@@ -641,7 +642,7 @@ export class Pool extends StatObject {
 			let c = 0,
 				start  = this.get("startingPool") || [],
 				autoSelect = this.get("autoSelect"),
-				max = this.get("maxSelectable") || Infinty,
+				max = this.get("maxSelectable") || Infinity,
 				pool = new Map();
 			start = copyArray(start);
 			while(c < max && start.length > 0) {
@@ -855,20 +856,22 @@ export function findValue(value, type, context) {
 	} else if(value instanceof Array) {
 		// [stat, ?property]
 		let a = copyArray(value),
-			s = a.shift(),
-			s = $RPG.current.character.getObject(a.shift());
+			s = a.shift();
 		if(s === null) {
 			s = context;
+		} else {
+			// findValue only works with Stats, at the moment
+			s = $RPG.current.character.getStat(s);
 		}
 		if(s === undefined) {
 			logError("Invalid object: \"" + value[0] + "\"", new Error());
 			value = 0;
 		} else {
-			s = $RPG.current.character.getObject(a.shift());
-			if (a.length) {
-				value = s.get(s);
+			let p = a.length ? a.shift() : null;
+			if (p !== null) {
+				value = s.get(p, context);
 			} else {
-				value = s.get("value");
+				value = s.value(context);
 			}
 		}
 	}
@@ -1435,7 +1438,7 @@ $RPG.ADD("objects", {
 					case "t":
 						return true;
 				}
-				return Boolean(v);
+				return Boolean(x);
 			}
 			return Boolean(test);
 		}

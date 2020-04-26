@@ -1,5 +1,6 @@
 import { $a, $i, $t, $listen, $ea as $e } from "./modules/dollar-sign-module.js";
 import { parseAttributesToObject, parseObjectToArray, logErrorNode as logError, logErrorText } from "./modules/parsing-logging.js";
+import { parseStats } from "./modules/stats-module01.js";
 import "./modules/objects-module.js";
 const xmlDir = "./rulesets/",
 	modDir = "./modules/",
@@ -216,10 +217,12 @@ async function parseResource(type, resource) {
 }
 
 async function parseModule(t, src) {
+	return;
+	// Ignore for now.
 	var ok = null,
 		type = $RPG[t];
 	if(type === undefined) {
-		logErrorText2("MODULE: invalid module type \"" + t + "\"", new Error());
+		logErrorText("MODULE: invalid module type \"" + t + "\"", new Error());
 		return null;
 	}
 	await import(modDir + src)

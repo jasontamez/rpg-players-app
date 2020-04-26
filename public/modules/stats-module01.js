@@ -37,7 +37,7 @@ var $RPG = window["$RPG"];
 //   Bonuses are calculated based on type as in .getModifiedValue above
 export class IntBonusable /* extends Int */ {
 	constructor(id, padre, atts) {
-		super(id, padre, atts);
+		//super(id, padre, atts);
 		this.bonuses = new Map();
 		this.bonuses.set("", new Map());
 	}
@@ -189,7 +189,7 @@ export class IntBonusable /* extends Int */ {
 		}
 	}
 }
-IntBonusable.converter = Int.converter;
+//IntBonusable.converter = Int.converter;
 IntBonusable.prototype.type = IntBonusable;
 IntBonusable.prototype.multistackable = ["", "dodge"];
 
@@ -212,7 +212,7 @@ IntBonusable.prototype.multistackable = ["", "dodge"];
 export class Pool /* extends BasicStat */ {
 	constructor(id, padre, type, atts) {
 		var i, vs;
-		super(id, padre, atts);
+		//super(id, padre, atts);
 		i = this.atts;
 		if(i.has("minSelection")) {
 			this.set("minSelection", i.get("minSelection"));
@@ -411,7 +411,7 @@ export function parseMultiStat(ms, Char) {
 		a = ms.attributes || [],
 		groups = ms.groups || [],
 		MS = $RPG.objects.stats.MultiStat,
-		mandatory = copyArray(MS.mandatoryWraps)
+		mandatory = copyArray(MS.mandatoryWraps),
 		atts = new Map(),
 		tag;
 	if(id === undefined) {
@@ -422,14 +422,30 @@ export function parseMultiStat(ms, Char) {
 		logErrorText("MULTISTAT \"attributes\" property must be an Array", new Error());
 		return null;
 	}
+	// Create attribute map
 	a.forEach(function(pair) {
 		atts.set(pair[0], pair[1]);
 	});
-	while(mandatory.length > 0) {
-		wrap = mandatory.shift();
-		if(atts.get(wrap) === undefined) {
-			logError("MultiStat \"" + id + "\" is missing mandatory \"" + wrap + "\" parameter", new Error());
+	// Check if there are mandatory "wraps"
+	if(mandatory.length > 0) {
+		let wraps = atts.get("wraps"),
+			found = {};
+		// See if the multistat defines a correctly-formed wraps array
+		if(wraps === undefined || wraps.constructor !== Array) {
+			logError("MultiStat \"" + id + "\" is missing a \"wraps\" Array", new Error());
 			return null;
+		}
+		// Turn the wraps into a simple object
+		wraps.forEach(function(w) {
+			found[w[0]] = true;
+		});
+		// Check each mandatory wrap against the object
+		while(mandatory.length > 0) {
+			let wrap = mandatory.shift();
+			if(!found[wrap]) {
+				logError("MultiStat \"" + id + "\" is missing mandatory \"" + wrap + "\" parameter", new Error());
+				return null;
+			}
 		}
 	}
 	tag = new MS(id, atts, groups);
@@ -725,49 +741,49 @@ function parsePoolItem(node, parentNode, parentTag) {
 
 
 $RPG.ADD("stats", {
-	type: {
-		Typeless: BasicStat,
-		Num: Num,
-		Int: Int,
-		Str: Str,
-		IntBonusable: IntBonusable,
-		Pool: Pool,
-		TF: TF
-	},
-	// A function to handle Type attributes
-	getTypeObject: function(type, fallback) {
-		var c = $RPG.stats.type[type];
-		// Is this a valid type?
-		if(c !== undefined) {
-			// If so, return it
-			return c;
-		}
-		// Otherwise, return Str or other specified default
-		return fallback || $RPG.stats.defaultTypeObject;
-	},
-	defaultTypeObject: Str,
-	formula: Formula,
-	preprocessTags: {},
-	infoHandler: {
-		Equation: parseEquation,
-		If: parseIf,
-		Do: parseDo,
-	},
-	StatTagHandlers: {
-		Stat: parseStat,
-		MultiStat: parseMultiStat,
-		Bonus: parseBonus,
-		Notation: parseNotation,
-		Pool: parsePool,
-		Item: parsePoolItem
-	},
-	TagHandlers: {
-		Attribute: parseAttribute,
-		BasicIdObject: parseGroup
-	},
-	comparators: {
-		If: If
-	}
+//	type: {
+//		Typeless: BasicStat,
+//		Num: Num,
+//		Int: Int,
+//		Str: Str,
+//		IntBonusable: IntBonusable,
+//		Pool: Pool,
+//		TF: TF
+//	},
+//	// A function to handle Type attributes
+//	getTypeObject: function(type, fallback) {
+//		var c = $RPG.stats.type[type];
+//		// Is this a valid type?
+//		if(c !== undefined) {
+//			// If so, return it
+//			return c;
+//		}
+//		// Otherwise, return Str or other specified default
+//		return fallback || $RPG.stats.defaultTypeObject;
+//	},
+//	defaultTypeObject: Str,
+//	formula: Formula,
+//	preprocessTags: {},
+//	infoHandler: {
+//		Equation: parseEquation,
+//		If: parseIf,
+//		Do: parseDo,
+//	},
+//	StatTagHandlers: {
+//		Stat: parseStat,
+//		MultiStat: parseMultiStat,
+//		Bonus: parseBonus,
+//		Notation: parseNotation,
+//		Pool: parsePool,
+//		Item: parsePoolItem
+//	},
+//	TagHandlers: {
+//		Attribute: parseAttribute,
+//		BasicIdObject: parseGroup
+//	},
+//	comparators: {
+//		If: If
+//	}
 });
 
 
