@@ -1,0 +1,416 @@
+{
+	"default-tag": "div",
+	"pages": [
+		{
+			"id": "BEGIN",
+			"title": "Character Creation",
+			"description": ["Fill in your character's name, basic stats and race, then click Continue"],
+			"html": [
+				{
+					"classes": ["flex-vertical", "statContainer"],
+					"content": [
+						{
+							"tag": "ol",
+							"content": [
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												"Name: ",
+												{
+													"tag": "INPUT",
+													"stat": "characterName"
+												}
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "STR"
+												},
+												" Strength"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "DEX"
+												},
+												" Dexterity"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "CON"
+												},
+												" Constitution"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "INT"
+												},
+												" Intelligence"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "WIS"
+												},
+												" Wisdom"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												{
+													"tag": "INPUT",
+													"stat": "CHA"
+												},
+												" Charisma"
+											]
+										}
+									]
+								},
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												"Choose a race: ",
+												{
+													"tag": "CHOOSE",
+													"category": "race",
+													"save-to": "race"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"tag": "BUTTON",
+							"type": "calcNav",
+							"next-page": "RACIAL TRAITS",
+							"calc-name": "basicsAndRace",
+							"content": ["Continue"]
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "RACIAL TRAITS",
+			"title": [
+				"Racial Traits - ",
+				{
+					"tag": "VALUE",
+					"stat": "characterName"
+				}
+			],
+			"description": [
+				"Every race has a set of standard bonuses and abilities. There are also alternate bonuses and abilities that you can select, instead.",
+				"Click or tap on an alternate ability to learn what it provides, and which standard abilities it replaces. Click on the red + to add it. It will pop up with the standard abilities. If you change your mind, click on the red X to remove it."
+			],
+			"preloader": "PfArchetype",
+			"filter": "PfArchetypePicker",
+			"pf01-archetype-id": "racialTraits",
+			"pf01-archetype-calc-name": "racialTraits",
+			"html": [
+				{
+					"classes": ["flex-vertical"],
+					"content": [
+						{
+							"tag": "INPUT-HIDDEN",
+							"id": "racialTraits",
+							"classes": ["Archetype"],
+							"pool": "racialTraits",
+							"self-saving": true
+						},
+						{
+							"tag": "header",
+							"content": [ "Racial Traits" ]
+						},
+						{
+							"classes": [ "standardAbilities", "selectableContent"],
+							"content": [
+								{
+									"tag": "BUNDLE",
+									"category": "race",
+									"show": "Standard",
+									"add-to-pool-selected": "racialTraits",
+									"repeat": [
+										{
+											"classes": ["standard"],
+											"filter": "PfNamespace",
+											"content": [
+												{
+													"classes": ["title"],
+													"content": [
+														{
+															"tag": "span",
+															"classes": ["id"],
+															"content": [ { "tag": "BUNDLE-ITEM-ID" } ]
+														}
+													]
+												},
+												{
+													"classes": ["explanation"],
+													"content": [
+														{
+															"content": [ { "tag": "BUNDLE-ITEM", "prop": "explanation" } ]
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"tag": "BUTTON",
+							"type": "resetNavigation",
+							"reset-name": "racialTraits",
+							"next-page": "BEGIN",
+							"content": [ "Pick a Different Race" ]
+						},
+						" ",
+						{
+							"tag": "BUTTON",
+							"type": "calcBundle",
+							"which": "racialTraits",
+							"calc-page": "RACIAL TRAITS CHOICES",
+							"no-calc": "CLASSES",
+							"calc-name": "racialTraits",
+							"content": [ "Continue" ]
+						}
+					]
+				},
+				{
+					"classes": ["flex-vertical"],
+					"content": [
+						{
+							"tag": "header",
+							"content": [ "Alternates" ]
+						},
+						{
+							"classes": ["alternateAbilities", "selectableContent"],
+							"content": [
+								{
+									"tag": "BUNDLE",
+									"category": "race",
+									"show": "Alternative",
+									"add-to-pool": "racialTraits",
+									"repeat": [
+										{
+											"filter": "PfNamespace",
+											"content": [
+												{
+													"classes": ["title"],
+													"content": [
+														{
+															"tag": "span",
+															"classes": ["addMe", "btn"],
+															"content": ["+"]
+														},
+														{
+															"tag": "span",
+															"classes": ["delMe", "btn"],
+															"content": ["x"]
+														},
+														{
+															"tag": "span",
+															"classes": ["id"],
+															"content": [ { "tag": "BUNDLE-ITEM-ID" } ]
+														}
+													]
+												},
+												{
+													"classes": ["description"],
+													"content": [
+														{
+															"content": [ { "tag": "BUNDLE-ITEM", "prop": "description" } ]
+														}
+													]
+												},
+												{
+													"classes": ["explanation"],
+													"content": [
+														{
+															"content": [ { "tag": "BUNDLE-ITEM", "prop": "explanation" } ]
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"tag": "p",
+							"content": [
+								"Click on an alternate racial trait to see its benefits.",
+								{ "tag": "br" },
+								"Use the \"+\" button to add it to your character. If you change your mind, use the \"x\" button to remove it."
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "RACIAL TRAITS CHOICES",
+			"overlay": true,
+			"preloader": "bundleChoices",
+			"filter": "bundleChoices",
+			"html": [
+				{ "tag": "hr" },
+				{
+					"classes": [ "buttons" ],
+					"content": [
+						{
+							"tag": "BUTTON",
+							"type": "closeOverlay",
+							"to-close": ".racialTraitsChooser",
+							"content": [ "Go Back" ]
+						},
+						" ",
+						{
+							"tag": "BUTTON",
+							"type": "calcNavFromOverlay",
+							"next-page": "CLASSES",
+							"calc-name": "racialTraits",
+							"content": [ "Continue" ]
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "CLASSES",
+			"title": "Class Selection",
+			"description": [],
+			"html": [
+				{
+					"classes": ["flex-vertical"],
+					"content": [
+						{
+							"tag": "header",
+							"content": ["Class Selection"]
+						},
+						{
+							"tag": "ol",
+							"start": "4",
+							"content": [
+								{
+									"tag": "li",
+									"content": [
+										{
+											"tag": "label",
+											"content": [
+												"Choose a class",
+												{
+													"tag": "CHOOSE",
+													"category": "class",
+													"save-to": "class"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"tag": "BUTTON",
+							"type": "resetNavigation",
+							"next-page": "RACIAL TRAITS",
+							"reset-name": "racialTraits",
+							"content": [ "Go Back" ]
+						},
+						" ",
+						{
+							"tag": "BUTTON",
+							"type": "calcNav",
+							"next-page": "ARCHETYPES",
+							"calc-name": "class",
+							"content": [ "Continue" ]
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "ARCHETYPES",
+			"title": "Archetypes",
+			"description": [],
+			"html": []
+		},
+		{
+			"id": "page6",
+			"title": "",
+			"description": [],
+			"html": []
+		},
+		{
+			"id": "page7",
+			"title": "",
+			"description": [],
+			"html": []
+		},
+		{
+			"id": "page8",
+			"title": "",
+			"description": [],
+			"html": []
+		}
+	]
+}
