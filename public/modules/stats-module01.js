@@ -1,7 +1,7 @@
 // Import query selectors
 import { $q, $a } from "./dollar-sign-module.js";
 // Import parsing and logging
-import { copyArray, parseObjectToArray, parseAttributesToObject, parseIdAndAttributesToArray, logErrorNode as logError, logErrorText } from "./parsing-logging.js";
+import { copyArray, parseObjectToArray, parseAttributesToObject, logErrorNode, logErrorText as logError } from "./parsing-logging.js";
 
 // temp variable to log all objects created
 export var record = [];
@@ -391,10 +391,10 @@ export function parseGroup(group, Char) {
 		atts = new Map(),
 		tag;
 	if(n === undefined) {
-		logErrorText("GROUP missing \"name\" property", new Error());
+		logError("GROUP missing \"name\" property", new Error());
 		return null;
 	} else if(a === undefined) {
-		logErrorText("GROUP missing \"attributes\" property", new Error());
+		logError("GROUP missing \"attributes\" property", new Error());
 		return null;
 	}
 	a.forEach(function(prop, value) {
@@ -415,11 +415,11 @@ export function parseMultiStat(ms, Char) {
 		atts = new Map(),
 		tag;
 	if(id === undefined) {
-		logErrorText("MULTISTAT missing \"id\" property", new Error());
+		logError("MULTISTAT missing \"id\" property", new Error());
 		return null;
 	}
 	if(!(a instanceof Array)) {
-		logErrorText("MULTISTAT \"attributes\" property must be an Array", new Error());
+		logError("MULTISTAT \"attributes\" property must be an Array", new Error());
 		return null;
 	}
 	// Create attribute map
@@ -459,11 +459,11 @@ export function parseStat(stat, Char) {
 		atts = new Map(),
 		tag;
 	if(id === undefined) {
-		logErrorText("STAT missing \"id\" property", new Error());
+		logError("STAT missing \"id\" property", new Error());
 		return null;
 	}
 	if(!(a instanceof Array)) {
-		logErrorText("STAT \"attributes\" property must be an Array", new Error());
+		logError("STAT \"attributes\" property must be an Array", new Error());
 		return null;
 	}
 	a.forEach(function(pair) {
@@ -480,11 +480,11 @@ export function parsePool(pool, Char) {
 		atts = new Map(),
 		tag;
 	if(id === undefined) {
-		logErrorText("POOL missing \"id\" property", new Error());
+		logError("POOL missing \"id\" property", new Error());
 		return null;
 	}
 	if(!(a instanceof Array)) {
-		logErrorText("POOL \"attributes\" property must be an Array", new Error());
+		logError("POOL \"attributes\" property must be an Array", new Error());
 		return null;
 	}
 	a.forEach(function(pair) {
@@ -547,7 +547,7 @@ export function parseStatNodes(currentNode, currentTag, nodes = [...currentNode.
 			$RS.TagHandlers[nombre](node, currentNode, currentTag);
 		} else {
 			// This is an unknown tag
-			logError(node, "Unknown tag enountered: " + nombre);
+			logErrorNode(node, "Unknown tag enountered: " + nombre);
 		}
 	}
 	return currentTag;
@@ -584,7 +584,7 @@ export function parseAttribute(node, parentNode, parentTag) {
 		formula = atts.formula,
 		att = atts.attribute;
 	if(nombre === undefined) {
-		return logError(node, "ATTRIBUTE: missing required \"name\" parameter");
+		return logErrorNode(node, "ATTRIBUTE: missing required \"name\" parameter");
 	} else {
 		delete atts.name;
 	}
@@ -609,7 +609,7 @@ export function parseAttribute(node, parentNode, parentTag) {
 		// Clone info from formula
 		let target = Formula.getName(formula), clone;
 		if(target === undefined) {
-			return logError(node, "ATTRIBUTE: formula \"" + formula + "\" does not exist");
+			return logErrorNode(node, "ATTRIBUTE: formula \"" + formula + "\" does not exist");
 			// Returning here prevents the tag from being saved into memory
 		}
 		clone = target.node.cloneNode(true);
@@ -633,13 +633,13 @@ export function parseBonus(node, parentNode, parentTag) {
 	var atts, fromID, att, nombre, formula;
 	if(!(parentTag instanceof IntBonusable)) {
 		console.log(parentTag);
-		return logError(node, "BONUS used within a non-Bonus-accepting type");
+		return logErrorNode(node, "BONUS used within a non-Bonus-accepting type");
 	}
 	atts = parseAttributesToObject(node);
 	formula = atts.formula;
 	fromID = atts.fromId;
 	if(fromID === undefined && formula === undefined) {
-		return logError(node, "BONUS: missing required \"fromId\" or \"formula\" parameter");
+		return logErrorNode(node, "BONUS: missing required \"fromId\" or \"formula\" parameter");
 	}
  	att = atts.attribute;
 	if(att === undefined) {
@@ -658,7 +658,7 @@ export function parseBonus(node, parentNode, parentTag) {
 		//addBonus(nombre, type, bonus, notation = undefined)
 		let f = Formula.getName(formula);
 		if(f === undefined) {
-			return logError(node, "BONUS: formula \"" + formula + "\" is not defined");
+			return logErrorNode(node, "BONUS: formula \"" + formula + "\" is not defined");
 		}
 		return parentTag.addBonus(nombre, atts.type, f, atts.note); //redo Formula
 	}
@@ -670,7 +670,7 @@ export function parseBonus(node, parentNode, parentTag) {
 export function parseNotation(node, parentNode, parentTag) {
 	var atts, fromID, att, note, formula;
 	if(!(parentTag instanceof BasicStat)) {
-		return logError(node, "NOTATION used within a non-Stat type");
+		return logErrorNode(node, "NOTATION used within a non-Stat type");
 	}
 	atts = parseAttributesToObject(node);
 	note = atts.value;
@@ -679,7 +679,7 @@ export function parseNotation(node, parentNode, parentTag) {
 		note = node.textContent.trim();
 	}
 	if(!note) {
-		return logError(node, "NOTATION missing \"value\" parameter or inner text content");
+		return logErrorNode(node, "NOTATION missing \"value\" parameter or inner text content");
 	}
 	$RPG.current.character.noteBonus("parseStats", "Notation", parentTag, note);
 	parentTag.addNotation(note);
@@ -695,7 +695,7 @@ export function parsePool_OLD(node, parentNode, parentTag) {
 		id = atts.id,
 		tag;
 	if(id === undefined) {
-		return logError(node, "POOL: missing required \"id\" property");
+		return logErrorNode(node, "POOL: missing required \"id\" property");
 	}
 	if(type === undefined) {
 		if(parentTag === undefined) {
@@ -716,12 +716,12 @@ export function parsePool_OLD(node, parentNode, parentTag) {
 function parsePoolItem(node, parentNode, parentTag) {
 	var atts, value, title, selected;
 	if(!(parentTag instanceof Pool)) {
-		return logError(node, "ITEM can only be used directly inside a POOL");
+		return logErrorNode(node, "ITEM can only be used directly inside a POOL");
 	}
 	atts = parseAttributesToObject(node);
 	value = atts.value;
 	if(value === undefined) {
-		return logError(node, "ITEM: missing required \"value\" parameter");
+		return logErrorNode(node, "ITEM: missing required \"value\" parameter");
 	}
 	title = atts.title;
 	if(title === undefined) {
