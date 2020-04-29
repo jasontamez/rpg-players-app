@@ -1180,20 +1180,33 @@
 		}
 	],
 	"Bundles": [
-		["race", "pf/pf01-races.xml"],
-		["class", "pf/pf01-classes.xml"],
-		["feat", [
-			"pf/pf01-feats-a-b.xml",
-			"pf/pf01-feats-c-de.xml",
-			"pf/pf01-feats-di-e.xml",
-			"pf/pf01-feats-f-h.xml",
-			"pf/pf01-feats-i-l.xml",
-			"pf/pf01-feats-m.xml",
-			"pf/pf01-feats-n-rh.xml",
-			"pf/pf01-feats-ri-sp.xml",
-			"pf/pf01-feats-sq-t.xml",
-			"pf/pf01-feats-u-z.xml"
-		]]
+		{
+			"category": "races",
+			"presorted-by-type": true,
+			"types": ["Standard", "Alternative"],
+			"src": "pf/pf01-races.xml"
+		},
+		{
+			"category": "classes",
+			"multiple-types": true,
+			"src": "pf/pf01-classes.xml"
+		},
+		{
+			"category": "feats",
+			"multiple-types": true,
+			"src": [
+				"pf/pf01-feats-a-b.xml",
+				"pf/pf01-feats-c-de.xml",
+				"pf/pf01-feats-di-e.xml",
+				"pf/pf01-feats-f-h.xml",
+				"pf/pf01-feats-i-l.xml",
+				"pf/pf01-feats-m.xml",
+				"pf/pf01-feats-n-rh.xml",
+				"pf/pf01-feats-ri-sp.xml",
+				"pf/pf01-feats-sq-t.xml",
+				"pf/pf01-feats-u-z.xml"
+			]
+		}
 	],
 	"Pages": [
 		"pf/pf01-pages.xml"
