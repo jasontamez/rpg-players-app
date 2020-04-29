@@ -5,7 +5,7 @@
 		"Standard": [
 			{
 				"id": "Bonus Feat",
-				"explanation": "You gain a bous feat",
+				"explanation": "You gain a bonus feat",
 				"namespaces": ["HumanBonusFeat"],
 				"Bonuses": [["Feats", 1]]
 			},
