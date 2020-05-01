@@ -15,7 +15,7 @@ var deferred = {
 
 // Define a class for player objects
 //   TBD
-export class PlayerObject {
+class PlayerObject {
 	constructor(playerID) {
 		// TBD
 		this.rulesets = new Map;
@@ -101,13 +101,13 @@ export class RulesetObject {
 			parser: "Ruleset"
 		};
 	}
-}
+	}
 
 // Define a class for character objects
 //   o = new CharacterObject(objectPlayer, stringRuleset)
 //   o.set("property", value)
 //   o.get("property") => value
-export class CharacterObject {
+class CharacterObject {
 	// new CharacterObject(stringPlayerID, stringRuleset, stringCharacterID)
 	constructor(player, ruleset, characterID) {
 		this.player = player;
@@ -387,7 +387,7 @@ LogicObject = {
 // Each object must define a .toJSON method
 
 // Basic object, parent of all that follow
-export class ObjectWithAttributes {
+class ObjectWithAttributes {
 	// new ObjectWithAttributes(attributesMap)
 	constructor(atts) {
 		this.atts = atts;
@@ -408,7 +408,7 @@ export class ObjectWithAttributes {
 }
 
 // Define a class for Groups
-export class GroupObject extends ObjectWithAttributes {
+class GroupObject extends ObjectWithAttributes {
 	// new GroupObject(idString, attributesMap)
 	constructor(id, atts) {
 		super(atts);
@@ -424,7 +424,7 @@ export class GroupObject extends ObjectWithAttributes {
 
 // Defines a class for Stat objects
 // - Stats inherit properties from their .groups
-export class StatObject extends GroupObject {
+class StatObject extends GroupObject {
 	// new StatObject(idString, attributesMap, ?groupsArray)
 	constructor(id, atts, groups = []) {
 		super(id, atts);
@@ -554,7 +554,7 @@ StatObject.types = {
 StatObject.types.default = StatObject.types.Int;
 
 // Defines a class for MultiStat objects
-export class MultiStatObject extends StatObject {
+class MultiStatObject extends StatObject {
 	// new MultiStatObject(idString, attributesMap, ?groupsArray)
 	// attributesMap must include:
 	//   idWrap => [string, ?string]
@@ -623,7 +623,7 @@ export class MultiStatObject extends StatObject {
 MultiStatObject.mandatoryWraps = ["id"];
 MultiStatObject.optionalWraps = ["title", "description"];
 
-export class Pool extends StatObject {
+class Pool extends StatObject {
 	// new Pool(idString, attributesMap, ?groupsArray)
 	constructor(id, atts, groups = []) {
 		var autoSelect;
@@ -717,7 +717,7 @@ export class Pool extends StatObject {
 // This class is designed to be a parent only to other parent classes
 // - It lacks a .toJSON method and corresponding $RPG.objects.parser function
 // Children of this should implement a .getValue method
-export class SpecialGrabber extends ObjectWithAttributes {
+class SpecialGrabber extends ObjectWithAttributes {
 	constructor(atts) {
 		super(atts);
 	}
@@ -733,7 +733,7 @@ export class SpecialGrabber extends ObjectWithAttributes {
 
 // A class for self-referencial values on a Stat
 // - i.e. "look at .otherProp on this Stat"
-export class ReferenceObject extends SpecialGrabber {
+class ReferenceObject extends SpecialGrabber {
 	// DO NOT USE new ReferenceObject()
 	// ReferenceObject.makeReference(propString, ?attributesMap)
 	constructor(prop, atts = new Map()) {
@@ -760,7 +760,7 @@ export class ReferenceObject extends SpecialGrabber {
 }
 
 // A class for values that are merely references to other Stats
-export class CrossReference extends ReferenceObject {
+class CrossReference extends ReferenceObject {
 	// DO NOT USE new CrossReference()
 	// CrossReference.makeReference(idString, propString, ?attributesMap)
 	constructor(id, prop, atts = new Map()) {
@@ -795,7 +795,7 @@ export class CrossReference extends ReferenceObject {
 }
 
 // 
-export class EquationObject extends SpecialGrabber {
+class EquationObject extends SpecialGrabber {
 	// new EquationObject(attributesMap)
 	// attributesMap must includes key "instructions" pointing to an Array
 	// use EquationObject.makeEquation(instructionsArray, otherAttributesMap)
@@ -841,11 +841,11 @@ export class EquationObject extends SpecialGrabber {
 	}
 }
 
-export function findValue(value, type, context) {
+function findValue(value, type, context) {
 	// Values may come in different forms
 	//   null = use context.get("value")
 	//   string/number/boolean = use as-is
-	//   array is one of three formats:
+	//   array is one of these formats:
 	//     [null, string] = use context.get(string)
 	//     [string] = find a Stat 'string' and .get("value")
 	//     [string, string2] = find a Stat 'string' and .get(string2)
@@ -887,14 +887,14 @@ export function findValue(value, type, context) {
 
 
 // Object that contains an if/then/else construction
-export class IfObject extends SpecialGrabber {
+class IfObject extends SpecialGrabber {
 	// new IfObject(attributesMap)
-	// attributesMap must includes these keys:
+	// attributesMap must include these keys:
 	//   inType => string matching a property on $RPG.objects.converter
 	//   outType => string matching a property on $RPG.objects.converter
 	//   value => any Value
 	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
-	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
+	//   comparisons => array in the format of [methodOnLogicObjectString, any Value]
 	//   then => any Value
 	//   else => any Value
 	// A Value is either:
@@ -1012,14 +1012,15 @@ export class IfObject extends SpecialGrabber {
 	}
 }
 
-// Object that contains an do/while loop construction
-//   An "input" is modified by instructions
-//   Each time the "input" is modified and passes a check, an "output" is modified, too
-//   The "input" is modified again and the check is attempted again, looping as needed
-//   Once the check fails, the "output" is returned
-export class DoObject extends SpecialGrabber {
+// Object that contains an do/while loop construction:
+//   1) Input is modified by given instructions
+//   2) Input is checked against given conditions - if it fails, the loop ends: go to step 5
+//   3) Output is modified by given instructions
+//   4) Loop back to step 1
+//   5) Return Output
+class DoObject extends SpecialGrabber {
 	// new DoObject(attributesMap)
-	// attributesMap must includes these keys:
+	// attributesMap must include these keys:
 	//   inType => string matching a property on $RPG.objects.converter
 	//   outType => string matching a property on $RPG.objects.converter
 	//   input => any Value
@@ -1321,9 +1322,9 @@ function restoreMultiStat(key, prop, flagged) {
 		// Leave .inheritors as strings for now, but save the multistat.
 		deferred.multis.push(stat);
 		stat.inheritors = prop.inheritors;
-		// It will be fixed in Player.loadCharacter.
-		return stat;
-	}
+	// It will be fixed in Player.loadCharacter.
+	return stat;
+}
 	return $RO.parser.Stat(key, prop, true);
 }
 function restoreStat(key, prop, flagged) {
