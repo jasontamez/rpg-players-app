@@ -9,24 +9,18 @@ const xmlDir = "./rulesets/",
 var okToDeload = false,
 	data = new Map(),
 	BUNDLES = new Map(),
-	AJAXstorage = new Map(),
+//	AJAXstorage = new Map(),
 	$RPG = window["$RPG"],
 	PlayerObject = $RPG.objects.data.player,
-	socket = window["$IO"];
+	RulesetObject = $RPG.objects.data.ruleset,
+	socket = window["$IO"],
+	PO, Char;
 
 // Set up global variable
 $RPG.ADD("data", data);
 $RPG.ADD("bundles", "raw", BUNDLES);
 $RPG.ADD("pages", "MAIN", MAIN);
 $RPG.ADD("pages", "OVERLAY", $i("overlay"));
-
-// Character/player creation
-var PO = new PlayerObject("id"),
-	Char = PO.makeCharacter("pf01");
-$RPG.ADD("current", {
-	player: PO,
-	character: Char
-});
 
 // Show the loading screen
 function showLoadingScreen() {
@@ -113,11 +107,18 @@ async function loadAndAssembleInfo(info) {
 		resources = info.Resources,
 		r = resources.length,
 		c = 0,
-		test;
+		ruleset, test;
 	// Show "loading" screen
 	showLoadingScreen();
-	// Set info to $RPG.current.ruleset
-	$RPG.ADD("current", "ruleset", info);
+	// Character/player/ruleset creation
+	PO = new PlayerObject("id");
+	ruleset = new RulesetObject(PO, info.name, info);
+	Char = PO.makeCharacter(ruleset);
+	$RPG.ADD("current", {
+		player: PO,
+		character: Char,
+		ruleset: ruleset
+	});
 	// load resources
 	modifyLoadingScreen($t("[parsing resources]"));
 	while(c < r) {

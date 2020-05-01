@@ -86,22 +86,22 @@ class PlayerObject {
 
 // Define a class for Ruleset objects
 //  o = new RulesetObject(TBD)
-export class RulesetObject {
-	constructor(player, rulesetID) {
+class RulesetObject {
+	constructor(player, rulesetID, JSONinfo) {
 		this.player = player;
 		this.id = rulesetID;
+		this.info = JSONinfo;
 		this.pages = new Map();
-		this.characters = new Map();
+		$RPG.objects.data.ruleset.addId(rulesetID, this);
 	}
-	toJSON(key) {
-		return {
-			id: this.id,
-			player: this.player.id,
-			characters: Array.from(this.characters).map(pair => pair[0]),
-			parser: "Ruleset"
-		};
+	static addId(id, ruleset) {
+		this.IDs.set(id, ruleset);
 	}
+	static getById(id) {
+		return this.IDs.get(id);
 	}
+}
+RulesetObject.IDs = new Map();
 
 // Define a class for character objects
 //   o = new CharacterObject(objectPlayer, stringRuleset)
@@ -203,7 +203,7 @@ class CharacterObject {
 		return {
 			player: this.player.id,
 			id: this.id,
-			ruleset: this.ruleset,
+			ruleset: this.ruleset.id,
 			data: this.data,
 			groups: this.groups,
 			stats: this.stats,
