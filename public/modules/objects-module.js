@@ -1026,16 +1026,17 @@ class DoObject extends SpecialGrabber {
 	//   outType => string matching a property on $RPG.objects.converter
 	//   input => any Value
 	//   output => any Value
-	//   modIn => an array of Equation instructions arrays
-	//    - the array may include plain strings:
-	//      - "AddOutput", "AppendOutput" (value + output)
-	//      - "PrependOutput" (output + value)
-	//   modOut => an array of Equation instructions arrays
-	//    - the array may include plain strings:
-	//       - "AddInput", "AppendInput" (value + input)
-	//       - "PrependInput" (input + value)
+	//   modifyInput => an array of Equation instructions arrays
+	//     - the array may include these plain strings:
+	//       - "AddOutput", "AppendOutput" (input = input + output)
+	//       - "PrependOutput" (input = output + input)
+	//   modifyOutput => an array of Equation instructions arrays
+	//     - the array may include these plain strings:
+	//       - "AddInput", "AppendInput" (output = output + input)
+	//       - "PrependInput" (output = input + output)
 	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
-	//   comparisons => array in the format of [verbOnIfObjectString, any Value]
+	//   comparisons => array of arrays in the format of [MethodString, any Value]
+	//     - MethodString is a method on $RPG.objects.data.LogicObject
 	// A Value is either:
 	//   a number
 	//   a string
@@ -1044,7 +1045,7 @@ class DoObject extends SpecialGrabber {
 	//     object: string equalling the ID of a Stat object, or null to represent the calling object
 	//     property: string representing property (if omitted, defaults to "value")
 	//
-	// use DoObject.makeDoWhile(array in a Map-like format)
+	// use DoObject.construct(array in a Map-like format)
 	//   to (mildly) test that instructions are valid
 	constructor(atts) {
 		super(atts);
@@ -1054,32 +1055,44 @@ class DoObject extends SpecialGrabber {
 		o.parser = "Do";
 		return o;
 	}
-	static makeDoWhile(arr) {
+	static construct(arr) {
 		var RO = $RPG.objects,
 			ROC = RO.converter;
 			inType = "Any",
 			outType = "Any",
+			instructions = copyArray(arr),
 			input, output, modIn, modOut, comparator, comparisons;
-		copyArray(arr).forEach(function(info) {
-			let op = info.shift(),
+		while(instructions.length > 0) {
+			let info = instructions.shift(),
+				op = info.shift(),
 				v = info.shift();
 			switch(op) {
 				case "While":
+					// ["While", ?COMPARATOR, [LogicOperatorString, Value], ...]
+					// If "COMPARATOR" is not provided, it defaults to "AND"
+					// COMPARATORs are found as properties of LogicObject.comparator
 					let ROP = RO.data.LogicObject.comparator,
 						first = v.shift(),
 						c = ROP[first];
 					if (first instanceof Array) {
+						// No comparator provided. Default to AND.
 						comparator = "AND";
 						v.unshift(first);
 					} else if(c === undefined) {
+						// Invalid comparator provided.
 						logError("DO: WHILE: invalid comparator \"" + first + "\"", new Error());
 						comparator = "AND";
 					} else {
-						comparator = c;
+						// Valid comparator provided.
+						comparator = first;
 					}
-					comparisons = first;
+					// Everything else becomes the comparisons
+					comparisons = v;
 					break;
 				case "inType":
+					// ["inType", TypeString]
+					// Type is a property of $RPG.objects.converter
+					// If not provided, this defaults to "Any"
 					inType = v;
 					if(ROC[v] === undefined) {
 						logError("IF: invalid inType \"" + v + "\"", new Error());
@@ -1087,6 +1100,9 @@ class DoObject extends SpecialGrabber {
 					}
 					break;
 				case "outType":
+					// ["outType", TypeString]
+					// Type is a property of $RPG.objects.converter
+					// If not provided, this defaults to "Any"
 					outType = v;
 					if(ROC[v] === undefined) {
 						logError("IF: invalid outType \"" + v + "\"", new Error());
@@ -1094,21 +1110,32 @@ class DoObject extends SpecialGrabber {
 					}
 					break;
 				case "Input":
+					// ["Input", Value]
+					// The initial value we start with
 					input = v;
 					break;
 				case "Output":
+					// ["Output", Value]
+					// The initial output value we start with
 					output = v;
 					break;
-				case "ModIn":
+				case "ModifyInput":
+					// ["ModifyInput", ...]
+					// Equation-style instructions on how to modify the Input
+					//   each time the "While" conditions are fulfilled
 					modIn = v;
 					break;
-				case "ModOut":
+				case "ModifyOutput":
+					// ["ModifyOutnput", ...]
+					// Equation-style instructions on how to modify the Output
+					//   each time the "While" conditions are fulfilled
 					modOut = v;
 					break;
 				default:
 					logError("DO: invalid parameter \"" + op + "\"", new Error());
+					return undefined;
 			}
-		});
+		}
 		if(modIn === undefined) {
 			logError(node, "DO: Missing required ModifyInput parameter")
 			return undefined;
@@ -1205,8 +1232,6 @@ class DoObject extends SpecialGrabber {
 		return value;
 	}
 }
-
-
 
 ///////////////////////////
 ///////// PARSERS /////////
