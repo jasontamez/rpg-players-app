@@ -1271,6 +1271,31 @@ function saveCharacter(character, player) {
 function savePlayer() {
 
 }
+
+// Searches an array and all nested arrays for objects with a .parser property
+//   that has a corresponding restoreFunction on $RPG.objects.parser
+// Can be destructive to input arrays
+function restoreFromJSON(arr) {
+	var output = [],
+		ROP = $RPG.objects.parser;
+	while(arr.length > 0) {
+		let test = arr.shift(),
+			parser = test.parser;
+		if(parser !== undefined) {
+			parser = ROP[parser];
+			if(parser) {
+				output.push(parser(test));
+				continue;
+			}
+		}
+		if (test instanceof Array) {
+			output.push(restoreFromJSON(test));
+		} else {
+			output.push(test);
+		}
+	}
+}
+
 function restoreCharacter(c, player) {
 	var id = c.id,
 		rs = c.ruleset,
@@ -1304,7 +1329,10 @@ function restoreCharacter(c, player) {
 	});
 	player.saveCharacter(rs, id, char);
 }
-function restorePlayer(key, prop, flagged) {
+function restorePlayer(o) {
+	// TBD
+}
+function restorePlayer_OLD_reviver_method(key, prop, flagged) {
 	if(key === "rulesets") {
 		let rs = new Map();
 		prop.forEach(function(item) {
@@ -1322,7 +1350,16 @@ function restorePlayer(key, prop, flagged) {
 	return prop;
 }
 
-function restoreAttributes(key, prop, flagged) {
+function restoreAttributes(o, flagged) {
+	var atts = o.atts;
+	atts = restoreFromJSON(atts);
+	if(flagged) {
+		o.atts = new Map(atts);
+		return o;
+	}
+	return new $RPG.objects.stats.ObjectWithAttributes(new Map(atts));
+}
+function restoreAttributes_OLD_reviver_method(key, prop, flagged) {
 	if(key === "atts") {
 		return new Map(prop);
 	} else if (key === "parser") {
@@ -1333,27 +1370,35 @@ function restoreAttributes(key, prop, flagged) {
 	}
 	return prop;
 }
-function restoreGroup(key, prop, flagged) {
+function restoreGroup(o, flagged) {
+	o = $RPG.objects.parser.ObjectWithAttributes(o, true);
+	if(flagged) {
+		return o;
+	}
+	return new $RPG.objects.stats.GroupObject(o.name, o.atts);
+}
+function restoreGroup_OLD_reviver_method(key, prop, flagged) {
 	if (key === "" && !flagged) {
 		let g = $RPG.objects.stats.GroupObject;
 		return new g(prop.name, prop.atts);
 	}
 	return prop;
 }
-function restoreMultiStat(key, prop, flagged) {
-	var $RO = $RPG.objects;
-	if(key === "" && !flagged) {
-		let m = $RO.stats.MultiStat,
-			stat = new m(prop.id, prop.atts, prop.groups);
-		// Leave .inheritors as strings for now, but save the multistat.
-		deferred.multis.push(stat);
-		stat.inheritors = prop.inheritors;
+function restoreStat(o, flagged) {
+	var stat;
+	o = $RPG.objects.parser.Group(o, true);
+	if(flagged) {
+		return o;
+	}
+	stat = new $RPG.objects.stats.Stat(o.name, o.atts, o.groups);
+	stat.type = o.type;
+	// Leave .defaultContext as a string for now, but save the stat.
 	// It will be fixed in Player.loadCharacter.
+	deferred.contexts.push(stat);
+	stat.defaultContext = o.defaultContext;
 	return stat;
 }
-	return $RO.parser.Stat(key, prop, true);
-}
-function restoreStat(key, prop, flagged) {
+function restoreStat_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let s = $RO.stats.StatObject,
@@ -1367,11 +1412,50 @@ function restoreStat(key, prop, flagged) {
 	}
 	return $RO.parser.Group(key, prop, true);
 }
-function restorePool(key, prop, flagged) {
+function restoreMultiStat(o, flagged) {
+	var ms;
+	o = $RPG.objects.parser.StatObject(o, true);
+	if(flagged) {
+		return o;
+	}
+	ms = new $RPG.objects.stats.MultiStat(o.id, o.atts, o.groups);
+	ms.type = o.type;
+	// Leave .inheritors as strings for now, but save the multistat.
+	// It will be fixed in Player.loadCharacter.
+	deferred.multis.push(ms);
+	ms.inheritors = o.inheritors;
+	return ms;
+}
+function restoreMultiStat_OLD_reviver_method(key, prop, flagged) {
+	var $RO = $RPG.objects;
+	if(key === "" && !flagged) {
+		let m = $RO.stats.MultiStat,
+			stat = new m(prop.id, prop.atts, prop.groups);
+		// Leave .inheritors as strings for now, but save the multistat.
+		deferred.multis.push(stat);
+		stat.inheritors = prop.inheritors;
+		// It will be fixed in Player.loadCharacter.
+		return stat;
+	}
+	return $RO.parser.Stat(key, prop, true);
+}
+function restorePool(o, flagged) {
+	var pool;
+	o = $RPG.objects.parser.StatObject(o, true);
+	pool = restoreFromJSON(o.pool);
+	o.pool = new Map(pool);
+	if(flagged) {
+		return o;
+	}
+	pool = new $RPG.objects.stats.Pool(o.id, o.atts, o.groups);
+	pool.pool = o.pool;
+	return pool;
+}
+function restorePool_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let p = $RO.stats.Pool,
-			pool = new p(prop.name, prop.atts, prop.groups);
+			pool = new p(prop.id, prop.atts, prop.groups);
 		pool.pool = prop.pool;
 		return pool;
 	} else if (key === "pool") {
@@ -1379,7 +1463,10 @@ function restorePool(key, prop, flagged) {
 	}
 	return $RO.parser.Stat(key, prop, true);
 }
-function restoreReference(key, prop, flagged) {
+function restoreReference(o) {
+
+}
+function restoreReference_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let ro = $RO.stats.ReferenceObject;
@@ -1387,7 +1474,10 @@ function restoreReference(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
-function restoreCrossReference(key, prop, flagged) {
+function restoreCrossReference(o) {
+
+}
+function restoreCrossReference_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let cr = $RO.stats.CrossReference;
@@ -1395,7 +1485,14 @@ function restoreCrossReference(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
-function restoreEquation(key, prop, flagged) {
+function restoreEquation(o, flagged) {
+	o = $RPG.objects.parser.ObjectWithAttributes(o, true);
+	if(flagged) {
+		return o;
+	}
+	return new $RPG.objects.special.Equation(o.atts);
+}
+function restoreEquation_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let e = $RO.stats.Equation;
@@ -1403,7 +1500,14 @@ function restoreEquation(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
-function restoreIf(key, prop, flagged) {
+function restoreIf(o, flagged) {
+	o = $RPG.objects.parser.ObjectWithAttributes(o, true);
+	if(flagged) {
+		return o;
+	}
+	return new $RPG.objects.special.If(o.atts);
+}
+function restoreIf_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let e = $RO.stats.If;
@@ -1411,7 +1515,14 @@ function restoreIf(key, prop, flagged) {
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
 }
-function restoreDo(key, prop, flagged) {
+function restoreDo(o, flagged) {
+	o = $RPG.objects.parser.ObjectWithAttributes(o, true);
+	if(flagged) {
+		return o;
+	}
+	return new $RPG.objects.special.Do(o.atts);
+}
+function restoreDo_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let e = $RO.stats.Do;
@@ -1485,6 +1596,7 @@ $RPG.ADD("objects", {
 		Player: savePlayer
 	},
 	parser: {
+		doRestore: restoreFromJSON,
 		Player: restorePlayer,
 		Character: restoreCharacter,
 		ObjectWithAttributes: restoreAttributes,
