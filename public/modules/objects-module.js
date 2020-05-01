@@ -1439,20 +1439,26 @@ $RPG.ADD("objects", {
 		Grabber: SpecialGrabber,
 		Reference: ReferenceObject,
 		CrossReference: CrossReference,
-		Equation: EquationObject,
-		If: IfObject,
-		Do: DoObject,
 		func: {
 			findValue: findValue,
 		},
 	},
+	special: {
+		Equation: EquationObject,
+		If: IfObject,
+		Do: DoObject
+	},
 	converter: {
-		Any: function(x) { return x; },
+		// Any/all values are possible
+		Any: (x => x),
+		// Integer
 		Int: function(x) {
 			var y = Math.floor(Number(x));
 			return y === y ? y : 0;
 		},
-		Str: function(x) { return String(x); },
+		// String
+		Str: (x => String(x)),
+		// True or False
 		TF: function(x) {
 			var test = Number(x);
 			if(Number.isNaN(test)) {
