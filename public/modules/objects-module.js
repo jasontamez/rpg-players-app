@@ -229,12 +229,16 @@ CharacterObject.JSONIncompatibles = [
 
 // Define a class for Page objects
 //  o = new PageObject(TBD)
-export class PageObject {
-	constructor(node, id, atts) {
+class PageObject {
+	constructor(ruleset, id, atts, html = []) {
+		let a = new Map();
+		this.ruleset = ruleset;
 		this.id = id;
-		this.node = node;
-		this.atts = atts;
-		this.html = [];
+		atts.forEach(function(prop) {
+			a.set(prop[0], prop[1]);
+		});
+		this.atts = a;
+		this.html = html;
 	}
 }
 

@@ -3,26 +3,8 @@ import { parseAttributesToObject, parseObjectToArray, checkObjProps, logErrorNod
 import { Int, Str, IntBonusable, Num, TF, Pool } from "./stats-module01.js";
 import { parseBundledInfo } from "./bundles-module01.js";
 
-// Define a class for XML tags
-export class BasicPageObject {
-	constructor(node, id, atts) {
-		let a = new Map();
-		this.node = node;
-		atts.forEach(function(prop) {
-			a.set(prop[0], prop[1]);
-		});
-		this.atts = a;
-		this.html = [];
-		BasicPageObject.allIDs.set(id, this);
-	}
-	static getById(id) {
-		return BasicPageObject.allIDs.get(id);
-	}
-}
-BasicPageObject.allIDs = new Map();
-
-
 var $RPG = window["$RPG"];
+var BasicPageObject = $RPG.objects.data.page;
 
 
 // Parse an array of <Page> objects
