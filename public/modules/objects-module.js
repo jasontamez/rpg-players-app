@@ -815,17 +815,18 @@ class EquationObject extends SpecialGrabber {
 			MATH = RO.data.MathObject,
 			FIND = RO.stats.func.findValue;
 		while(instructions.length > 0) {
-			let value = FIND(instructions.shift(), "Any", context);
+			let instruction = instructions.shift(),
+				method = instruction.shift(),
+				value = FIND(instruction.shift(), "Any", context);
 			total = MATH[method](total, value);
 		}
 		return total;
-		// incomplete
 	}
-	static makeEquation(instrc, otherAtts = new Map()) {
+	static construct(arr) {
 		var i = [],
 			MATH = $RPG.objects.data.MathObject,
-			instructions = copyArray(instrc),
-			e;
+			instructions = copyArray(arr),
+			e, map;
 		while(instructions.length > 0) {
 			let test = i.shift(),
 				t = test[0];
@@ -836,8 +837,8 @@ class EquationObject extends SpecialGrabber {
 			}
 		}
 		e = $RPG.objects.stats.Equation;
-		otherAtts.set("instructions", i);
-		return new e(otherAtts);
+		map = new Map([["instructions", i]]);
+		return new e(map);
 	}
 }
 
@@ -904,7 +905,7 @@ class IfObject extends SpecialGrabber {
 	//   an array in the format [object, ?property]:
 	//     object: string equalling the ID of a Stat object, or null to represent the calling object
 	//     property: string representing property (if omitted, defaults to "value")
-	// use IfObject.makeIfThenElse(array in a Map-like format)
+	// use IfObject.construct(array in a Map-like format)
 	//   to (mildly) test that instructions are valid
 	constructor(atts) {
 		super(atts);
@@ -914,7 +915,7 @@ class IfObject extends SpecialGrabber {
 		o.parser = "If";
 		return o;
 	}
-	static makeIfThenElse(arr) {
+	static construct(arr) {
 		var RO = $RPG.objects,
 			ROC = RO.converter;
 			inType = "Any",
