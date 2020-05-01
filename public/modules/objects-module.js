@@ -388,8 +388,27 @@ LogicObject = {
 
 // Basic object, parent of all that follow
 class ObjectWithAttributes {
-	// new ObjectWithAttributes(attributesMap)
-	constructor(atts) {
+	// new ObjectWithAttributes(attributesMap, noParseBoolean)
+	// If noParse is not provided or is false, the attributes Map will be scanned for
+	//   any Array structures that could be used by a method of $RPG.objects.special
+	constructor(atts, noParse) {
+		if(!noParse) {
+			// Scan for special values, like "Equation", "If" and "Do"
+			let ROS = $RPG.objects.special;
+			atts.forEach(function(value, key) {
+				if(value instanceof Array) {
+					let specialMethod = ROS[value[0]];
+					if(specialMethod) {
+						// Found a special value
+						let newValue = specialMethod(value.slice(1));
+						if(newValue !== null) {
+							// Change this value IF AND ONLY IF we get a successful result
+							atts.set(key, newValue);
+						}
+					}
+				}
+			});
+		}
 		this.atts = atts;
 	}
 	// handle Map() for JSON
@@ -838,8 +857,8 @@ class EquationObject extends SpecialGrabber {
 		}
 		if(i.size === 0) {
 			logError("EQUATION: No instructions provided", new Error());
-				return null;
-			}
+			return null;
+		}
 		e = $RPG.objects.stats.Equation;
 		map = new Map([["instructions", i]]);
 		return new e(map);
