@@ -549,7 +549,7 @@ export function loadBundleItem(appTo, item, id, object) {
 	if(filter !== undefined) {
 		let f = $RPG.pages.bundleItemFilters[filter];
 		if(f === undefined) {
-			logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist");
+			logErrorText("BUNDLE ITEM: filter \"" + filter + "\" does not exist", new Error());
 		} else {
 			return f(appTo, item, object, id);
 		}
@@ -792,7 +792,7 @@ export function loadPage(page) {
 		title = title.replace(/%[^%]+%/g, function(stringMatched) {
 			var stat = CHAR.getStat(stringMatched.slice(1, -1));
 			if(stat === undefined) {
-				logErrorText("Page title contains reference to non-Stat \"" + stringMatched + "\"");
+				logErrorText("Page title contains reference to non-Stat \"" + stringMatched + "\"", new Error());
 				return stringMatched;
 			}
 			return stat.get("value");
@@ -824,7 +824,7 @@ export function loadPage(page) {
 export function loadPageNamed(pageName) {
 	var page = BasicPageObject.getById(pageName);
 	if(page === undefined) {
-		return logErrorText("There is no page with the id \"" + pageName + "\"");
+		return logErrorText("There is no page with the id \"" + pageName + "\"", new Error());
 	}
 	loadPage(page);
 }
