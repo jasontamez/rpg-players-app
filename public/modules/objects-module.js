@@ -833,9 +833,13 @@ class EquationObject extends SpecialGrabber {
 			if(MATH.hasOwnProperty(t)) {
 				i.push(test);
 			} else {
-				return null;
+				logError("EQUATION: Invalid Equation parameter \"" + t + "\"", new Error());
 			}
 		}
+		if(i.size === 0) {
+			logError("EQUATION: No instructions provided", new Error());
+				return null;
+			}
 		e = $RPG.objects.stats.Equation;
 		map = new Map([["instructions", i]]);
 		return new e(map);
@@ -974,13 +978,13 @@ class IfObject extends SpecialGrabber {
 		});
 		if(comparisons == undefined) {
 			logError("IF: missing required Compare parameter", new Error());
-			return undefined;
+			return null;
 		} else if (then === undefined) {
 			logError("IF: missing required Then parameter", new Error());
-			return undefined;
+			return null;
 		} else if (otherwise === undefined) {
 			logError("IF: missing required Else parameter", new Error());
-			return undefined;
+			return null;
 		}
 		return new If(new Map([
 			["inType", inType],
@@ -1133,24 +1137,23 @@ class DoObject extends SpecialGrabber {
 					break;
 				default:
 					logError("DO: invalid parameter \"" + op + "\"", new Error());
-					return undefined;
 			}
 		}
 		if(modIn === undefined) {
 			logError(node, "DO: Missing required ModifyInput parameter")
-			return undefined;
+			return null;
 		} else if(modOut === undefined) {
 			logError(node, "DO: Missing required ModifyOutput parameter")
-			return undefined;
+			return null;
 		} else if(comparisons === undefined) {
 			logError(node, "DO: Missing required While parameter")
-			return undefined;
+			return null;
 		} else if(input === undefined) {
 			logError(node, "DO: Missing required Input parameter")
-			return undefined;
+			return null;
 		} else if(output === undefined) {
 			logError(node, "DO: Missing required Output parameter")
-			return undefined;
+			return null;
 		}
 		// Create Do tag
 		tag = new Do(new Map([
