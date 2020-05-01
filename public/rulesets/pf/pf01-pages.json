@@ -18,7 +18,8 @@
 										{
 											"tag": "label",
 											"content": [
-												"Name: ",
+												"Name:",
+												" ",
 												{
 													"tag": "INPUT",
 													"stat": "characterName"
@@ -37,7 +38,8 @@
 													"tag": "INPUT",
 													"stat": "STR"
 												},
-												" Strength"
+												" ",
+												"Strength"
 											]
 										}
 									]
@@ -52,7 +54,8 @@
 													"tag": "INPUT",
 													"stat": "DEX"
 												},
-												" Dexterity"
+												" ",
+												"Dexterity"
 											]
 										}
 									]
@@ -67,7 +70,8 @@
 													"tag": "INPUT",
 													"stat": "CON"
 												},
-												" Constitution"
+												" ",
+												"Constitution"
 											]
 										}
 									]
@@ -82,7 +86,8 @@
 													"tag": "INPUT",
 													"stat": "INT"
 												},
-												" Intelligence"
+												" ",
+												"Intelligence"
 											]
 										}
 									]
@@ -97,7 +102,8 @@
 													"tag": "INPUT",
 													"stat": "WIS"
 												},
-												" Wisdom"
+												" ",
+												"Wisdom"
 											]
 										}
 									]
@@ -112,7 +118,8 @@
 													"tag": "INPUT",
 													"stat": "CHA"
 												},
-												" Charisma"
+												" ",
+												"Charisma"
 											]
 										}
 									]
@@ -123,7 +130,8 @@
 										{
 											"tag": "label",
 											"content": [
-												"Choose a race: ",
+												"Choose a race:",
+												" ",
 												{
 													"tag": "CHOOSE",
 													"category": "race",
@@ -149,15 +157,16 @@
 		{
 			"id": "RACIAL TRAITS",
 			"title": [
-				"Racial Traits - ",
+				"Racial Traits -",
+				" ",
 				{
 					"tag": "VALUE",
 					"stat": "characterName"
 				}
 			],
 			"description": [
-				"Every race has a set of standard bonuses and abilities. There are also alternate bonuses and abilities that you can select, instead.",
-				"Click or tap on an alternate ability to learn what it provides, and which standard abilities it replaces. Click on the red + to add it. It will pop up with the standard abilities. If you change your mind, click on the red X to remove it."
+				{ "content": [ "Every race has a set of standard bonuses and abilities. There are also alternate bonuses and abilities that you can select, instead." ] },
+				{ "content": [ "Click or tap on an alternate ability to learn what it provides, and which standard abilities it replaces. Click on the red + to add it. It will pop up with the standard abilities. If you change your mind, click on the red X to remove it." ] }
 			],
 			"preloader": "PfArchetype",
 			"filter": "PfArchetypePicker",
