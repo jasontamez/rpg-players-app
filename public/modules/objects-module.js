@@ -861,7 +861,7 @@ class EquationObject extends SpecialGrabber {
 			logError("EQUATION: No instructions provided", new Error());
 			return null;
 		}
-		e = $RPG.objects.stats.Equation;
+		e = $RPG.objects.special["*Equation"];
 		map = new Map([["instructions", i]]);
 		return new e(map);
 	}
@@ -1508,12 +1508,12 @@ function restoreEquation(o, flagged) {
 	if(flagged) {
 		return o;
 	}
-	return new $RPG.objects.special.Equation(o.atts);
+	return new $RPG.objects.special["*Equation"](o.atts);
 }
 function restoreEquation_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let e = $RO.stats.Equation;
+		let e = $RO.special["*Equation"];
 		return new e(prop.atts);
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
@@ -1523,12 +1523,12 @@ function restoreIf(o, flagged) {
 	if(flagged) {
 		return o;
 	}
-	return new $RPG.objects.special.If(o.atts);
+	return new $RPG.objects.special["*If"](o.atts);
 }
 function restoreIf_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let e = $RO.stats.If;
+		let e = $RO.special["*If"];
 		return new e(prop.atts);
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
@@ -1538,12 +1538,12 @@ function restoreDo(o, flagged) {
 	if(flagged) {
 		return o;
 	}
-	return new $RPG.objects.special.Do(o.atts);
+	return new $RPG.objects.special["*Do"](o.atts);
 }
 function restoreDo_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
-		let e = $RO.stats.Do;
+		let e = $RO.special["*Do"];
 		return new e(prop.atts);
 	}
 	return $RO.parser.ObjectWithAttributes(key, prop, true);
@@ -1573,9 +1573,9 @@ $RPG.ADD("objects", {
 		},
 	},
 	special: {
-		Equation: EquationObject,
-		If: IfObject,
-		Do: DoObject
+		"*Equation": EquationObject,
+		"*If": IfObject,
+		"*Do": DoObject
 	},
 	converter: {
 		// Any/all values are possible

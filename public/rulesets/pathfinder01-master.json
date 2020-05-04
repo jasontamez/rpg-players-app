@@ -18,7 +18,7 @@
 		},
 		{
 			"name": "if_class_skill_then_plus_one",
-			"formula": "If",
+			"formula": "*If",
 			"start": [null, "source"],
 			"compare": [
 				"AND",
@@ -30,7 +30,7 @@
 		{
 "////////////////////////////////COMMENT": "move to Bundle",
 			"name": "if_class_skill_and_memory_racial_trait_then_plus_one",
-			"formula": "If",
+			"formula": "*If",
 			"start": [null, "source"],
 			"compare": [
 				"AND",
@@ -46,7 +46,7 @@
 			"name": "basic stats",
 			"attributes": [
 				["modifier", [
-					"Equation",
+					"*Equation",
 					["Add", -10],
 					["Add", [null, "modifiedValue"]],
 					["Divide", 2],
@@ -54,7 +54,7 @@
 					["AtLeast", -99]
 				]],
 				["modifierNonNegative", [
-					"Equation",
+					"*Equation",
 					["Add", -10],
 					["Add", [null, "modifiedValue"]],
 					["Divide", 2],
@@ -62,7 +62,7 @@
 					["AtLeast", 0]
 				]],
 				["modifierPositive", [
-					"Equation",
+					"*Equation",
 					["Add", -10],
 					["Add", [null, "modifiedValue"]],
 					["Divide", 2],
@@ -70,7 +70,7 @@
 					["AtLeast", 1]
 				]],
 				["modifierNonPositive", [
-					"Equation",
+					"*Equation",
 					["Add", -10],
 					["Add", [null, "modifiedValue"]],
 					["Divide", 2],
@@ -78,12 +78,12 @@
 					["AtMost", 0]
 				]],
 				["modifierPlus", [
-					"Equation",
+					"*Equation",
 					["Add", "+"],
 					["Add", [null, "modifier"]]
 				]],
 				["modifier_text", [
-					"If",
+					"*If",
 					["outType", "Str"],
 					["Start", [null, "modifier"]],
 					["Compare", [
@@ -138,18 +138,18 @@
 			"name": "pure modifier",
 			"attributes": [
 				["modifier", [
-					"Equation",
+					"*Equation",
 					["Add", [null, "modifiedValue"]],
 					["Add", [null, "score_mod"]],
 					["AtLeast", -99]
 				]],
 				["modifierPlus", [
-					"Equation",
+					"*Equation",
 					["Add", "+"],
 					["Add", [null, "modifier"]]
 				]],
 				["modifier_text", [
-					"If",
+					"*If",
 					["outType", "Str"],
 					["Start", [null, "modifier"]],
 					["Compare", [
@@ -165,12 +165,12 @@
 			"name": "string modifier",
 			"attributes": [
 				["modifierPlus", [
-					"Equation",
+					"*Equation",
 					["Add", "+"],
 					["Add", [null, "modifiedValue"]]
 				]],
 				["modifier_text", [
-					"If",
+					"*If",
 					["outType", "Str"],
 					["Start", [null, "modifiedValue"]],
 					["Compare", [
@@ -453,7 +453,7 @@
 			"attributes": [
 				["title", "Linguistics"],
 				["half_negative", [
-					"Equation",
+					"*Equation",
 					["Add", null],
 					["Divide", 2],
 					["Floor"],
@@ -604,33 +604,33 @@
 				["startingValue", 1],
 				["minValue", 1],
 				["goodSave", [
-					"Equation",
+					"*Equation",
 					["Add", null],
 					["Divide", 2],
 					["Add", 2],
 					["Floor"]
 				]],
 				["badSave", [
-					"Equation",
+					"*Equation",
 					["Add", null],
 					["Divide", 3],
 					["Floor"]
 				]],
 				["halfLevel", [
-					"Equation",
+					"*Equation",
 					["Add", null],
 					["Divide", 2],
 					["Floor"]
 				]],
 				["threeQuarters", [
-					"Equation",
+					"*Equation",
 					["Add", null],
 					["Multiply", 3],
 					["Divide", 4],
 					["Floor"]
 				]],
 				["oddLevels", [
-					"Equation",
+					"*Equation",
 					["Add", 1],
 					["Add", null],
 					["Divide", 2],
@@ -674,7 +674,7 @@
 				["startingValue", 0],
 				["title", "Base Attack Bonus"],
 				["full_attack_text", [
-					"Do",
+					"*Do",
 					["While", [
 						"AND",
 						["GreaterThan", 5]
@@ -872,7 +872,7 @@
 				["startingValue", 10],
 				["title", "CMB"],
 				["statBonus", [
-					"If",
+					"*If",
 					["Start", ["size", null]],
 					["Compare", [
 						"AND",

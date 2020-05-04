@@ -87,9 +87,12 @@ One of the following:
     * indicates the stat's "value" property should be used
 5. [null, string]
     * indicates the property "string" of the stat
-6. [string]
+6. [string, ...]
+    * indicates a special function, such as *Equation or *If, that must be used to parse the rest of the given data
+    * Note that 'string' is always prefixed by an asterisk (*) - stats/pools/etc should avoid this prefix
+7. [string]
     * indicates the "value" property of the Stat with the id matching the string
-7. [string2, string2]
+8. [string2, string2]
     * indicates the property string2 of the Stat with the id matching string1
 
 ### Bundles
