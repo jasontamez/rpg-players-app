@@ -2,7 +2,7 @@
 import { logErrorText as logError, copyArray } from "./parsing-logging.js";
 
 var deferred = {
-		contexts: [],
+	//	contexts: [],
 		multis: []
 	},
 	MathObject, LogicObject;
@@ -38,7 +38,8 @@ class PlayerObject {
 	}
 	loadCharacter(ruleset, id) {
 		var cur = $RPG.current,
-			char, newChar, contexts, multis;
+			//char, newChar, contexts, multis;
+			char, newChar, multis;
 		if(cur && (char = cur.character) && char.id === id && char.ruleset === ruleset) {
 			return logError("Attempting to load current character.", new Error());
 		} else if ((newChar = this.getCharacter(ruleset, id)) === undefined) {
@@ -51,11 +52,11 @@ class PlayerObject {
 		newChar = $RPG.objects.parser[char.parser](char, this);
 		cur.character = newChar;
 		// Fix all default contexts
-		contexts = deferred.contexts;
-		while(contexts.length > 0) {
-			let stat = contexts.shift();
-			stat.defaultContext = newChar.getStat(stat);
-		}
+		//contexts = deferred.contexts;
+		//while(contexts.length > 0) {
+		//	let stat = contexts.shift();
+		//	stat.defaultContext = newChar.getStat(stat);
+		//}
 		// Fix all multistats
 		multis = deferred.multis;
 		while(multis.length > 0) {
@@ -452,11 +453,10 @@ class StatObject extends GroupObject {
 		} else {
 			this.groups = groups;
 		}
-		this.defaultContext = this;
 		this.updateType();
 		this.setupValue();
 	}
-	get(prop, context = this.defaultContext) {
+	get(prop) {
 		var value = super.get(prop);
 		if(value === undefined) {
 			let CHAR = $RPG.current.character;
@@ -469,9 +469,9 @@ class StatObject extends GroupObject {
 				return value !== undefined;
 			});
 		}
-		if(value instanceof SpecialGrabber) {
-			value = value.getValue(context);
-		}
+		//if(value instanceof SpecialGrabber) {
+		//	value = value.getValue(this);
+		//}
 		return value;
 	}
 	updateType() {
@@ -488,10 +488,10 @@ class StatObject extends GroupObject {
 		}
 		this.set("value", $RPG.objects.stats.Stat.types[this.type](value, this));
 	}
-	value(context = this.defaultContext) {
+	value() {
 		var v = this.get("value"),
 			ROS = $RPG.objects.stats,
-			value = ROS.func.findValue(v, "Any", context);
+			value = ROS.func.findValue(v, false, this);
 		return ROS.Stat.types[this.type](value, this);
 	}
 	addGroup(group, first = false) {
@@ -507,7 +507,6 @@ class StatObject extends GroupObject {
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
-		o.defaultContext = this.defaultContext.id;
 		o.groups = this.groups;
 		o.type = this.type;
 		o.parser = "StatObject";
@@ -633,7 +632,6 @@ class MultiStatObject extends StatObject {
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
-		o.defaultContext = this.defaultContext.id;
 		o.inheritors = this.inheritors.map(stat => stat.id);
 		o.parser = "MultiStat";
 		return o;
@@ -677,43 +675,43 @@ class Pool extends StatObject {
 		}
 	}
 	// value => Array of selected items
-	value(context = this.defaultContext) {
-		return this.selection(context);
+	value() {
+		return this.selection();
 	}
 	// selection => Array of selected items
-	selection(context = this.defaultContext) {
+	selection() {
 		var sel = [],
 			ROS = $RPG.objects.stats,
 			findValue = ROS.func.findValue,
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
 			if(selected) {
-				let v = findValue(value, "Any", context);
+				let v = findValue(value, false, this);
 				sel.push(type(v, this));
 			}
 		});
 		return sel;
 	}
 	// items => Array of all items
-	items(context = this.defaultContext) {
+	items() {
 		var sel = [],
 			ROS = $RPG.objects.stats,
 			findValue = ROS.func.findValue,
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
-			let v = findValue(value, "Any", context);
+			let v = findValue(value, false, this);
 			sel.push(type(v, this));
 		});
 		return sel;
 	}
 	// getPool => Array of Arrays in the format [item, selectedBoolean]
-	getPool(context = this.defaultContext) {
+	getPool() {
 		var sel = [],
 			ROS = $RPG.objects.stats,
 			findValue = ROS.func.findValue,
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
-			let v = findValue(value, "Any", context);
+			let v = findValue(value, false, this);
 			sel.push([type(v, this), selected]);
 		});
 		return sel;
@@ -767,7 +765,11 @@ class ReferenceObject extends SpecialGrabber {
 		return o;
 	}
 	getValue(context) {
-		return context.get(this.prop, context);
+		var p = this.prop;
+		if(p === "value") {
+			return context.value();
+		}
+		return context.get(this.prop);
 	}
 	static makeReference(prop, atts = new Map()) {
 		var CHAR = $RPG.current.character;
@@ -789,7 +791,7 @@ class CrossReference extends ReferenceObject {
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
-		o.id = this.id;
+		o.reference = this.reference.id;
 		o.parser = "CrossReference";
 		return o;
 	}
@@ -836,7 +838,7 @@ class EquationObject extends SpecialGrabber {
 		while(instructions.length > 0) {
 			let instruction = instructions.shift(),
 				method = instruction.shift(),
-				value = FIND(instruction.shift(), "Any", context);
+				value = FIND(instruction.shift(), false, context);
 			total = MATH[method](total, value);
 		}
 		return total;
@@ -867,19 +869,19 @@ class EquationObject extends SpecialGrabber {
 
 function findValue(value, type, context) {
 	// Values may come in different forms
-	//   null = use context.get("value")
+	//   null = use context.value()
 	//   string/number/boolean = use as-is
 	//   array is one of these formats:
 	//     [null, string] = use context.get(string)
-	//     [string] = find a Stat 'string' and .get("value")
-	//     [string, string2] = find a Stat 'string' and .get(string2)
+	//     [string] = find a Stat 'string' and return its .value()
+	//     [string, string2] = find a Stat 'string' and return its .get(string2)
 	if(value === null) {
 		value = context;
 		if(value === undefined) {
 			logError("Invalid or missing context provided for a null value", new Error());
 			value = 0;
 		} else {
-			value = context.get("value");
+			value = context.value();
 		}
 	} else if(value instanceof Array) {
 		// [stat, ?property]
@@ -897,11 +899,13 @@ function findValue(value, type, context) {
 		} else {
 			let p = a.length ? a.shift() : null;
 			if (p !== null) {
-				value = s.get(p, context);
+				value = s.get(p);
 			} else {
-				value = s.value(context);
+				value = s.value();
 			}
 		}
+	} else if(value instanceof $RPG.objects.stats.Grabber) {
+		value = value.getValue(context);
 	}
 	if(type) {
 		value = $RPG.objects.converter[type](value);
@@ -1414,10 +1418,6 @@ function restoreStat(o, flagged) {
 	}
 	stat = new $RPG.objects.stats.Stat(o.name, o.atts, o.groups);
 	stat.type = o.type;
-	// Leave .defaultContext as a string for now, but save the stat.
-	// It will be fixed in Player.loadCharacter.
-	deferred.contexts.push(stat);
-	stat.defaultContext = o.defaultContext;
 	return stat;
 }
 function restoreStat_OLD_reviver_method(key, prop, flagged) {
@@ -1425,10 +1425,6 @@ function restoreStat_OLD_reviver_method(key, prop, flagged) {
 	if(key === "" && !flagged) {
 		let s = $RO.stats.StatObject,
 			stat = new s(prop.name, prop.atts, prop.groups);
-		// Leave .defaultContext as a string for now, but save the stat.
-		deferred.contexts.push(stat);
-		stat.defaultContext = prop.defaultContext;
-		// It will be fixed in Player.loadCharacter.
 		stat.type = prop.type;
 		return stat;
 	}
