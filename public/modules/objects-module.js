@@ -475,22 +475,44 @@ class CrossReference extends ReferenceObject {
 
 // Basic object, parent of all that follow
 class ObjectWithAttributes {
-	// new ObjectWithAttributes(attributesMap, noParseBoolean)
+	// new ObjectWithAttributes(attributesMap, ?noParseBoolean)
 	// If noParse is not provided or is false, the attributes Map will be scanned for
-	//   any Array structures that could be used by a method of $RPG.objects.special
+	//   any Array structures that could be used by a method of $RPG.objects.special,
+	//   as well as the following special formats:
+	//     [null] = use this.value()
+	//     [null, string] = use this.get(string)
+	//     [string] = find a Stat 'string' and return its .value()
+	//     [string, string2] = find a Stat 'string' and return its .get(string2)
 	constructor(atts, noParse) {
 		if(!noParse) {
-			// Scan for special values, like "Equation", "If" and "Do"
-			let ROS = $RPG.objects.special;
+			let RO = $RPG.objects,
+				ROS = RO.stats;
+			// Scan attributes for special values, like "*Equation", "*If" and "*Do"
 			atts.forEach(function(value, key) {
 				if(value instanceof Array) {
-					let specialMethod = ROS[value[0]];
-					if(specialMethod) {
-						// Found a special value
-						let newValue = specialMethod(value.slice(1));
-						if(newValue !== null) {
-							// Change this value IF AND ONLY IF we get a successful result
-							atts.set(key, newValue);
+					let v = copyArray(value),
+						test = v.shift();
+					if(test === null) {
+						// make a self-reference object
+						// [].shift() => undefined
+						atts.set(key, ROS.Reference.makeReference(value.shift()))
+					} else {
+						let specialMethod = RO.special[test];
+						if(specialMethod) {
+							// Found a special value
+							let newValue = specialMethod(value.slice(1));
+							if(newValue !== null) {
+								// Change this value IF AND ONLY IF we get a successful result
+								atts.set(key, newValue);
+							}
+						} else {
+							// Should be a string that matches a Stat
+							let stat = $RPG.current.character.getStat(test);
+							if(stat !== undefined) {
+								// Stat found
+								// Make a cross-reference object
+								atts.set(key, ROS.CrossReference.makeReference(value.shift()));
+							}
 						}
 					}
 				}
