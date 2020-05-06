@@ -454,7 +454,7 @@
 				["title", "Linguistics"],
 				["half_negative", [
 					"*Equation",
-					["Add", null],
+					["Add", [null]],
 					["Divide", 2],
 					["Floor"],
 					["AtLeast", 0]
@@ -605,26 +605,26 @@
 				["minValue", 1],
 				["goodSave", [
 					"*Equation",
-					["Add", null],
+					["Add", [null]],
 					["Divide", 2],
 					["Add", 2],
 					["Floor"]
 				]],
 				["badSave", [
 					"*Equation",
-					["Add", null],
+					["Add", [null]],
 					["Divide", 3],
 					["Floor"]
 				]],
 				["halfLevel", [
 					"*Equation",
-					["Add", null],
+					["Add", [null]],
 					["Divide", 2],
 					["Floor"]
 				]],
 				["threeQuarters", [
 					"*Equation",
-					["Add", null],
+					["Add", [null]],
 					["Multiply", 3],
 					["Divide", 4],
 					["Floor"]
@@ -632,7 +632,7 @@
 				["oddLevels", [
 					"*Equation",
 					["Add", 1],
-					["Add", null],
+					["Add", [null]],
 					["Divide", 2],
 					["Floor"]
 				]]
@@ -680,7 +680,7 @@
 						["GreaterThan", 5]
 					]],
 					["outType", "Str"],
-					["Input", null],
+					["Input", [null]],
 					["Output", [null, "modifier_text"]],
 					["ModifyInput", [
 						["Add", -5]
@@ -873,7 +873,7 @@
 				["title", "CMB"],
 				["statBonus", [
 					"*If",
-					["Start", ["size", null]],
+					["Start", ["size"]],
 					["Compare", [
 						"AND",
 						["LessThan", 3]
