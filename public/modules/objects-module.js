@@ -396,8 +396,7 @@ class SpecialGrabber {
 	}
 	toJSON(key) {
 		return {
-			value: this.value,
-			parser: "Grabber"
+			value: this.value
 		};
 	}
 	getValue() {
@@ -414,9 +413,12 @@ class ReferenceObject extends SpecialGrabber {
 		super(prop);
 	}
 	toJSON(key) {
-		var o = super.toJSON(key);
-		o.parser = "Reference";
-		return o;
+		var o = super.toJSON(key),
+			v = o.value;
+		if(v === undefined) {
+			return [null];
+		}
+		return [null, v];
 	}
 	getValue(context) {
 		var p = super.getValue();
@@ -428,7 +430,6 @@ class ReferenceObject extends SpecialGrabber {
 	static makeReference(prop) {
 		var CHAR = $RPG.current.character,
 			ref;
-		
 		if(CHAR.references.has(prop)) {
 			return CHAR.getReference(prop);
 		}
@@ -447,10 +448,9 @@ class CrossReference extends ReferenceObject {
 		this.reference = stat;
 	}
 	toJSON(key) {
-		var o = super.toJSON(key);
-		o.reference = this.reference.id;
-		o.parser = "CrossReference";
-		return o;
+		var arr = super.toJSON(key);
+		arr[0] = this.reference.id;
+		return arr;
 	}
 	getValue() {
 		var reference = this.reference;
