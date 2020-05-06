@@ -387,6 +387,92 @@ LogicObject = {
 
 // Each object must define a .toJSON method
 
+// This class is designed to be a parent only to other parent classes
+// - It lacks a .toJSON method and corresponding $RPG.objects.parser function
+// Children of this should implement a .getValue method
+class SpecialGrabber {
+	constructor(value) {
+		this.value = value;
+	}
+	toJSON(key) {
+		return {
+			value: this.value,
+			parser: "Grabber"
+		};
+	}
+	getValue() {
+		return this.value;
+	}
+}
+
+// A class for self-referencial values on a Stat
+// - i.e. "look at .otherProp on this Stat"
+class ReferenceObject extends SpecialGrabber {
+	// DO NOT USE new ReferenceObject()
+	// ReferenceObject.makeReference(propString, ?attributesMap)
+	constructor(prop) {
+		super(prop);
+	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.parser = "Reference";
+		return o;
+	}
+	getValue(context) {
+		var p = super.getValue();
+		if(p) {
+			return context.get(p);
+		}
+		return context.value();
+	}
+	static makeReference(prop) {
+		var CHAR = $RPG.current.character,
+			ref;
+		
+		if(CHAR.references.has(prop)) {
+			return CHAR.getReference(prop);
+		}
+		ref = new ReferenceObject(prop);
+		CHAR.addReference(prop, ref);
+		return ref;
+	}
+}
+
+// A class for values that are merely references to other Stats
+class CrossReference extends ReferenceObject {
+	// DO NOT USE new CrossReference()
+	// CrossReference.makeReference(idString, propString, ?attributesMap)
+	constructor(stat, prop) {
+		super(prop);
+		this.reference = stat;
+	}
+	toJSON(key) {
+		var o = super.toJSON(key);
+		o.reference = this.reference.id;
+		o.parser = "CrossReference";
+		return o;
+	}
+	getValue() {
+		var reference = this.reference;
+		if(!(reference instanceof $RPG.objects.stats.Stat)) {
+			logError("ERROR: invalid or missing Stat when fetching CrossReference", new Error());
+			return undefined;
+		}
+		return super.getValue(reference);
+	}
+	static makeReference(id, prop) {
+		var CHAR = $RPG.current.character,
+			stat = CHAR.getObject(id),
+			ref;
+		id = id + " => " + prop;
+		if(CHAR.crossreferences.has(id)) {
+			return CHAR.getCrossReference(id);
+		}
+		ref = new CrossReference(stat, prop);
+		CHAR.addCrossReference(id, ref);
+	}
+}
+
 // Basic object, parent of all that follow
 class ObjectWithAttributes {
 	// new ObjectWithAttributes(attributesMap, noParseBoolean)
@@ -728,92 +814,6 @@ class Pool extends StatObject {
 		o.pool = Array.from(this.pool);
 		o.parser = "Pool";
 		return o;
-	}
-}
-
-// This class is designed to be a parent only to other parent classes
-// - It lacks a .toJSON method and corresponding $RPG.objects.parser function
-// Children of this should implement a .getValue method
-class SpecialGrabber {
-	constructor(value) {
-		this.value = value;
-	}
-	toJSON(key) {
-		return {
-			value: this.value,
-			parser: "Grabber"
-		};
-		}
-	getValue() {
-		return this.value;
-	}
-}
-
-// A class for self-referencial values on a Stat
-// - i.e. "look at .otherProp on this Stat"
-class ReferenceObject extends SpecialGrabber {
-	// DO NOT USE new ReferenceObject()
-	// ReferenceObject.makeReference(propString, ?attributesMap)
-	constructor(prop) {
-		super(prop);
-	}
-	toJSON(key) {
-		var o = super.toJSON(key);
-		o.parser = "Reference";
-		return o;
-	}
-	getValue(context) {
-		var p = super.getValue();
-		if(p) {
-			return context.get(p);
-		}
-			return context.value();
-		}
-	static makeReference(prop) {
-		var CHAR = $RPG.current.character,
-			ref;
-		
-		if(CHAR.references.has(prop)) {
-			return CHAR.getReference(prop);
-		}
-		ref = new ReferenceObject(prop);
-		CHAR.addReference(prop, ref);
-		return ref;
-	}
-}
-
-// A class for values that are merely references to other Stats
-class CrossReference extends ReferenceObject {
-	// DO NOT USE new CrossReference()
-	// CrossReference.makeReference(idString, propString, ?attributesMap)
-	constructor(stat, prop) {
-		super(prop);
-		this.reference = stat;
-	}
-	toJSON(key) {
-		var o = super.toJSON(key);
-		o.reference = this.reference.id;
-		o.parser = "CrossReference";
-		return o;
-	}
-	getValue() {
-		var reference = this.reference;
-		if(!(reference instanceof $RPG.objects.stats.Stat)) {
-			logError("ERROR: invalid or missing Stat when fetching CrossReference", new Error());
-			return undefined;
-		}
-		return super.getValue(reference);
-	}
-	static makeReference(id, prop) {
-		var CHAR = $RPG.current.character,
-			stat = CHAR.getObject(id),
-			ref;
-		id = id + " => " + prop;
-		if(CHAR.crossreferences.has(id)) {
-			return CHAR.getCrossReference(id);
-		}
-		ref = new CrossReference(stat, prop);
-		CHAR.addCrossReference(id, ref);
 	}
 }
 
