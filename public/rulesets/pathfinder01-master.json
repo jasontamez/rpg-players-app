@@ -88,7 +88,7 @@
 					["Start", [null, "modifier"]],
 					["Compare", [
 						"AND",
-						["GreaterThan, -1"]
+						["GreaterThan", -1]
 					]],
 					["Then", [null, "modifierPlus"]],
 					["Else", [null, "modifier"]]
@@ -154,7 +154,7 @@
 					["Start", [null, "modifier"]],
 					["Compare", [
 						"AND",
-						["GreaterThan, -1"]
+						["GreaterThan", -1]
 					]],
 					["Then", [null, "modifierPlus"]],
 					["Else", [null, "modifier"]]
