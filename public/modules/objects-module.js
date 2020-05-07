@@ -408,7 +408,7 @@ class SpecialGrabber {
 // - i.e. "look at .otherProp on this Stat"
 class ReferenceObject extends SpecialGrabber {
 	// DO NOT USE new ReferenceObject()
-	// ReferenceObject.makeReference(propString, ?attributesMap)
+	// ReferenceObject.makeReference(propString)
 	constructor(prop) {
 		super(prop);
 	}
@@ -442,7 +442,7 @@ class ReferenceObject extends SpecialGrabber {
 // A class for values that are merely references to other Stats
 class CrossReference extends ReferenceObject {
 	// DO NOT USE new CrossReference()
-	// CrossReference.makeReference(idString, propString, ?attributesMap)
+	// CrossReference.makeReference(idString, propString)
 	constructor(stat, prop) {
 		super(prop);
 		this.reference = stat;
@@ -453,6 +453,7 @@ class CrossReference extends ReferenceObject {
 		return arr;
 	}
 	getValue() {
+		// context argument is to be ignored
 		var reference = this.reference;
 		if(!(reference instanceof $RPG.objects.stats.Stat)) {
 			logError("ERROR: invalid or missing Stat when fetching CrossReference", new Error());
@@ -485,40 +486,15 @@ class ObjectWithAttributes {
 	//     [string, string2] = find a Stat 'string' and return its .get(string2)
 	constructor(atts, noParse) {
 		if(!noParse) {
-			let RO = $RPG.objects,
-				ROS = RO.stats;
-			// Scan attributes for special values, like "*Equation", "*If" and "*Do"
+			let	newAtts = new Map(),
+				parseForSpecialValue = $RPG.objects.stats.func.parseValue;
 			atts.forEach(function(value, key) {
-				if(value instanceof Array) {
-					let v = copyArray(value),
-						test = v.shift();
-					if(test === null) {
-						// make a self-reference object
-						// [].shift() => undefined
-						atts.set(key, ROS.Reference.makeReference(value.shift()))
-					} else {
-						let specialMethod = RO.special[test];
-						if(specialMethod) {
-							// Found a special value
-							let newValue = specialMethod(value.slice(1));
-							if(newValue !== null) {
-								// Change this value IF AND ONLY IF we get a successful result
-								atts.set(key, newValue);
-							}
-						} else {
-							// Should be a string that matches a Stat
-							let stat = $RPG.current.character.getStat(test);
-							if(stat !== undefined) {
-								// Stat found
-								// Make a cross-reference object
-								atts.set(key, ROS.CrossReference.makeReference(value.shift()));
-							}
-						}
-					}
-				}
+				newAtts.set(key, parseForSpecialValue(value));
 			});
+			this.atts = newAtts;
+		} else {
+			this.atts = atts;
 		}
-		this.atts = atts;
 	}
 	// handle Map() for JSON
 	toJSON(key) {
@@ -535,6 +511,40 @@ class ObjectWithAttributes {
 	}
 }
 
+// Function to scan an Array in the format [x, possibleSpecialValue]
+function parseForSpecialValue(value) {
+	const RO = $RPG.objects,
+		ROS = RO.stats;
+	// Scan for special values, like "*Equation", "*If" and "*Do"
+	if(value instanceof Array) {
+		let v = copyArray(value),
+			test = v.shift();
+		if(test === null) {
+			// make a self-reference object
+			// [].shift() => undefined
+			value = ROS.Reference.makeReference(value.shift());
+		} else {
+			let specialMethod = RO.special[test];
+			if(specialMethod) {
+				// Found a special value
+				let newValue = specialMethod(value.slice(1));
+				if(newValue !== null) {
+					// Change this value IF AND ONLY IF we get a successful result
+					value = newValue;
+				}
+			} else {
+				// Should be a string that matches a Stat
+				let stat = $RPG.current.character.getStat(test);
+				if(stat !== undefined) {
+					// Stat found
+					// Make a cross-reference object
+					value = ROS.CrossReference.makeReference(value.shift());
+				}
+			}
+		}
+	}
+	return value;
+}
 // Define a class for Groups
 class GroupObject extends ObjectWithAttributes {
 	// new GroupObject(idString, attributesMap)
@@ -599,7 +609,7 @@ class StatObject extends GroupObject {
 	value() {
 		var v = this.get("value"),
 			ROS = $RPG.objects.stats,
-			value = ROS.func.findValue(v, false, this);
+			value = ROS.func.findValue(v, this);
 		return ROS.Stat.types[this.type](value, this);
 	}
 	addGroup(group, first = false) {
@@ -794,7 +804,7 @@ class Pool extends StatObject {
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
 			if(selected) {
-				let v = findValue(value, false, this);
+				let v = findValue(value, this);
 				sel.push(type(v, this));
 			}
 		});
@@ -807,7 +817,7 @@ class Pool extends StatObject {
 			findValue = ROS.func.findValue,
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
-			let v = findValue(value, false, this);
+			let v = findValue(value, this);
 			sel.push(type(v, this));
 		});
 		return sel;
@@ -819,7 +829,7 @@ class Pool extends StatObject {
 			findValue = ROS.func.findValue,
 			type = ROS.Stat.types[this.type];
 		this.pool.forEach(function(selected, value) {
-			let v = findValue(value, false, this);
+			let v = findValue(value, this);
 			sel.push([type(v, this), selected]);
 		});
 		return sel;
@@ -849,9 +859,8 @@ class EquationObject extends SpecialGrabber {
 		super(atts);
 	}
 	toJSON(key) {
-		var o = super.toJSON(key);
-		o.parser = "Equation";
-		return o;
+		var arr = this.get("instructions");
+		return [this.constructor.name, ...arr];
 	}
 	getValue(context) {
 		var instructions = copyArray(this.get("instructions")),
@@ -862,7 +871,7 @@ class EquationObject extends SpecialGrabber {
 		while(instructions.length > 0) {
 			let instruction = instructions.shift(),
 				method = instruction.shift(),
-				value = FIND(instruction.shift(), false, context);
+				value = FIND(instruction.shift(), context);
 			total = MATH[method](total, value);
 		}
 		return total;
@@ -870,13 +879,14 @@ class EquationObject extends SpecialGrabber {
 	static construct(arr) {
 		var i = [],
 			MATH = $RPG.objects.data.MathObject,
+			parseForSpecialValue = $RPG.objects.stats.func.parseValue,
 			instructions = copyArray(arr),
 			e, map;
 		while(instructions.length > 0) {
 			let test = i.shift(),
 				t = test[0];
 			if(MATH.hasOwnProperty(t)) {
-				i.push(test);
+				i.push(parseForSpecialValue(test));
 			} else {
 				logError("EQUATION: Invalid Equation parameter \"" + t + "\"", new Error());
 			}
@@ -890,49 +900,22 @@ class EquationObject extends SpecialGrabber {
 		return new e(map);
 	}
 }
+EquationObject.name = "*Equation";
 
-function findValue(value, type, context) {
-	// Values may come in different forms
-	//   null = use context.value()
-	//   string/number/boolean = use as-is
-	//   array is one of these formats:
-	//     [null, string] = use context.get(string)
-	//     [string] = find a Stat 'string' and return its .value()
-	//     [string, string2] = find a Stat 'string' and return its .get(string2)
-	if(value === null) {
-		value = context;
-		if(value === undefined) {
-			logError("Invalid or missing context provided for a null value", new Error());
-			value = 0;
-		} else {
-			value = context.value();
-		}
-	} else if(value instanceof Array) {
-		// [stat, ?property]
-		let a = copyArray(value),
-			s = a.shift();
-		if(s === null) {
-			s = context;
-		} else {
-			// findValue only works with Stats, at the moment
-			s = $RPG.current.character.getStat(s);
-		}
-		if(s === undefined) {
-			logError("Invalid object: \"" + value[0] + "\"", new Error());
-			value = 0;
-		} else {
-			let p = a.length ? a.shift() : null;
-			if (p !== null) {
-				value = s.get(p);
-			} else {
-				value = s.value();
-			}
-		}
-	} else if(value instanceof $RPG.objects.stats.Grabber) {
+// findValue(valueAny, contextStatObject, ?typeString)
+function findValue(value, context, type) {
+	// If we're a SpecialGrabber object, call its .getValue method with the current context
+	if(value instanceof $RPG.objects.stats.Grabber) {
 		value = value.getValue(context);
 	}
+	// If a type is specified, cast the value to that type
 	if(type) {
-		value = $RPG.objects.converter[type](value);
+		let converter = $RPG.objects.converter[type];
+		if(converter) {
+			value = converter(value);
+		} else {
+			logError("Invalid type \"" + type + "\" send to findValue", new Error());
+		}
 	}
 	return value;
 }
@@ -942,11 +925,12 @@ function findValue(value, type, context) {
 class IfObject extends SpecialGrabber {
 	// new IfObject(attributesMap)
 	// attributesMap must include these keys:
-	//   inType => string matching a property on $RPG.objects.converter
-	//   outType => string matching a property on $RPG.objects.converter
+	//   inType => string matching a method on $RPG.objects.converter
+	//   outType => string matching a method on $RPG.objects.converter
 	//   value => any Value
-	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
-	//   comparisons => array in the format of [methodOnLogicObjectString, any Value]
+	//   comparator => string matching a method on $RPG.objects.data.LogicObject.comparator
+	//   comparisons => array in the format of [string, any Value], where the string matches a
+	//                    method on $RPG.objects.data.LogicObject
 	//   then => any Value
 	//   else => any Value
 	// A Value is either:
@@ -962,13 +946,13 @@ class IfObject extends SpecialGrabber {
 		super(atts);
 	}
 	toJSON(key) {
-		var o = super.toJSON(key);
-		o.parser = "If";
-		return o;
+		var arr = Array.from(this.atts);
+		return [this.constructor.name, ...arr];
 	}
 	static construct(arr) {
 		var RO = $RPG.objects,
-			ROC = RO.converter;
+			ROC = RO.converter,
+			parseForSpecialValue = RO.stats.func.parseValue,
 			inType = "Any",
 			outType = "Any",
 			value = 0,
@@ -977,14 +961,14 @@ class IfObject extends SpecialGrabber {
 			var [op, v] = pair;
 			switch(op) {
 				case "inType":
-					inType = v;
+					inType = parseForSpecialValue(v);
 					if(ROC[v] === undefined) {
 						logError("IF: invalid inType \"" + v + "\"", new Error());
 						inType = "Any";
 					}
 					break;
 				case "outType":
-					outType = v;
+					outType = parseForSpecialValue(v);
 					if(ROC[v] === undefined) {
 						logError("IF: invalid outType \"" + v + "\"", new Error());
 						outType = "Any";
@@ -996,12 +980,14 @@ class IfObject extends SpecialGrabber {
 					} else {
 						value = v;
 					}
+					value = parseForSpecialValue(value);
 					break;
 				case "Compare":
 					let a = copyArray(v),
 						ROP = RO.data.LogicObject.comparator,
 						b = a.shift(),
-						c = ROP[b];
+						c = ROP[b],
+						parsed = [];
 					if (v instanceof Array) {
 						comparator = "AND";
 						a.unshift(v);
@@ -1011,13 +997,18 @@ class IfObject extends SpecialGrabber {
 					} else {
 						comparator = c;
 					}
-					comparisons = a;
+					while(a.length > 0) {
+						let pair = a.shift(),
+							key = pair.shift();
+						parsed.push([key, parseForSpecialValue(pair.shift())]);
+					}
+					comparisons = parsed;
 					break;
 				case "Then":
-					then = v;
+					then = parseForSpecialValue(v);
 					break;
 				case "Else":
-					otherwise = v;
+					otherwise = parseForSpecialValue(v);
 					break;
 				default:
 					logError("IF: invalid parameter \"" + op + "\"", new Error());
@@ -1051,18 +1042,19 @@ class IfObject extends SpecialGrabber {
 			results = [],
 			FIND = $RPG.objects.stats.func.findValue;
 		// Get the value we start with
-		value = FIND(value, inT, context);
+		value = FIND(value, context, inT);
 		// Run comparisons
 		while(comparisons.length) {
 			let [func, test] = comparisons.shift();
-			results.push(LOGIC[func][value, FIND(test, inT, context)]);
+			results.push(LOGIC[func][value, FIND(test, context, inT)]);
 		}
 		// Run results through comparator to get a final value
 		value = $RPG.comparator[this.get("comparator")](results);
 		// Return results if value is true (then) or false (else)
-		return FIND(this.get(value ? "then" : "else"), this.get("outType"), context);
+		return FIND(this.get(value ? "then" : "else"), context, this.get("outType"));
 	}
 }
+IfObject.name = "*If";
 
 // Object that contains an do/while loop construction:
 //   1) Input is modified by given instructions
@@ -1102,12 +1094,12 @@ class DoObject extends SpecialGrabber {
 		super(atts);
 	}
 	toJSON(key) {
-		var o = super.toJSON(key);
-		o.parser = "Do";
-		return o;
+		var arr = Array.from(this.atts);
+		return [this.constructor.name, ...arr];
 	}
 	static construct(arr) {
 		var RO = $RPG.objects,
+			parseForSpecialValue = RO.stats.func.parseValue,
 			ROC = RO.converter;
 			inType = "Any",
 			outType = "Any",
@@ -1124,7 +1116,8 @@ class DoObject extends SpecialGrabber {
 					// COMPARATORs are found as properties of LogicObject.comparator
 					let ROP = RO.data.LogicObject.comparator,
 						first = v.shift(),
-						c = ROP[first];
+						c = ROP[first],
+						parsed = [];
 					if (first instanceof Array) {
 						// No comparator provided. Default to AND.
 						comparator = "AND";
@@ -1138,13 +1131,18 @@ class DoObject extends SpecialGrabber {
 						comparator = first;
 					}
 					// Everything else becomes the comparisons
-					comparisons = v;
+					while(v.length > 0) {
+						let pair = v.shift(),
+							key = pair.shift();
+						parsed.push([key, parseForSpecialValue(pair.shift())])
+					}
+					comparisons = parsed;
 					break;
 				case "inType":
 					// ["inType", TypeString]
 					// Type is a property of $RPG.objects.converter
 					// If not provided, this defaults to "Any"
-					inType = v;
+					inType = parseForSpecialValue(v);
 					if(ROC[v] === undefined) {
 						logError("IF: invalid inType \"" + v + "\"", new Error());
 						inType = "Any";
@@ -1154,7 +1152,7 @@ class DoObject extends SpecialGrabber {
 					// ["outType", TypeString]
 					// Type is a property of $RPG.objects.converter
 					// If not provided, this defaults to "Any"
-					outType = v;
+					outType = parseForSpecialValue(v);
 					if(ROC[v] === undefined) {
 						logError("IF: invalid outType \"" + v + "\"", new Error());
 						outType = "Any";
@@ -1163,24 +1161,46 @@ class DoObject extends SpecialGrabber {
 				case "Input":
 					// ["Input", Value]
 					// The initial value we start with
-					input = v;
+					input = parseForSpecialValue(v);
 					break;
 				case "Output":
 					// ["Output", Value]
 					// The initial output value we start with
-					output = v;
+					output = parseForSpecialValue(v);
 					break;
 				case "ModifyInput":
 					// ["ModifyInput", ...]
 					// Equation-style instructions on how to modify the Input
 					//   each time the "While" conditions are fulfilled
-					modIn = v;
+					let parsed = [];
+					while(v.length > 0) {
+						let pair = v.shift();
+						if((typeof pair) === "string") {
+							// AppendInput, etc
+							parsed.push(pair);
+						} else {
+							let key = pair.shift();
+							parsed.push([key, parseForSpecialValue(pair.shift())]);
+						}
+					}
+					modIn = parsed;
 					break;
 				case "ModifyOutput":
 					// ["ModifyOutnput", ...]
 					// Equation-style instructions on how to modify the Output
 					//   each time the "While" conditions are fulfilled
-					modOut = v;
+					let parsed = [];
+					while(v.length > 0) {
+						let pair = v.shift();
+						if((typeof pair) === "string") {
+							// AppendInput, etc
+							parsed.push(pair);
+						} else {
+							let key = pair.shift();
+							parsed.push([key, parseForSpecialValue(pair.shift())]);
+						}
+					}
+					modOut = parsed;
 					break;
 				default:
 					logError("DO: invalid parameter \"" + op + "\"", new Error());
@@ -1231,8 +1251,8 @@ class DoObject extends SpecialGrabber {
 			DoMod = DoObject.doMod,
 			check;
 		// Get the values we start with
-		input = FIND(input, inT, context);
-		output = FIND(output, outT, context);
+		input = FIND(input, context, inT);
+		output = FIND(output, context, outT);
 		// Check if input matches the conditions
 		check = TryWhile(input, LOGIC, comparator, comparisons, FIND, inT, context);
 		while(check) {
@@ -1250,7 +1270,7 @@ class DoObject extends SpecialGrabber {
 		var results = [];
 		comparisons.forEach(function(pair) {
 			let [func, test] = pair;
-			results.push(LOGIC[func][input, FIND(test, inT, context)]);
+			results.push(LOGIC[func][input, FIND(test, context, inT)]);
 		});
 		return comparator(tests);
 	}
@@ -1276,12 +1296,13 @@ class DoObject extends SpecialGrabber {
 						// error?
 				}
 			} else {
-				value = MATH[method](value, FIND(mod, type, context));
+				value = MATH[method](value, FIND(mod, context, type));
 			}
 		});
 		return value;
 	}
 }
+DoObject.name = "*Do";
 
 ///////////////////////////
 ///////// PARSERS /////////
@@ -1594,6 +1615,7 @@ $RPG.ADD("objects", {
 		CrossReference: CrossReference,
 		func: {
 			findValue: findValue,
+			parseValue: parseForSpecialValue
 		},
 	},
 	special: {
@@ -1602,7 +1624,7 @@ $RPG.ADD("objects", {
 		"*Do": DoObject
 	},
 	converter: {
-		// Any/all values are possible
+		// Any/all values are possible - it's better to not specify a type than to use this
 		Any: (x => x),
 		// Integer
 		Int: function(x) {
@@ -1611,10 +1633,11 @@ $RPG.ADD("objects", {
 		},
 		// String
 		Str: (x => String(x)),
-		// True or False
+		// True or False (aka Boolean)
 		TF: function(x) {
 			var test = Number(x);
 			if(Number.isNaN(test)) {
+				// If value isn't numeric, test against some true/false strings
 				switch (String(x).toLowerCase()) {
 					case "false":
 					case "fals":
@@ -1628,8 +1651,10 @@ $RPG.ADD("objects", {
 					case "t":
 						return true;
 				}
+				// If none found, just use Boolean
 				return Boolean(x);
 			}
+			// Numeric value: transform to Boolean
 			return Boolean(test);
 		}
 	},
