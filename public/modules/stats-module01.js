@@ -386,12 +386,12 @@ export function parseStats(groups, multiStats, stats, pools, Char) {
 }
 
 export function parseGroup(group, Char) {
-	var n = group.name,
+	var n = group.id,
 		a = group.attributes,
 		atts = new Map(),
 		tag;
 	if(n === undefined) {
-		logError("GROUP missing \"name\" property", new Error());
+		logError("GROUP missing \"id\" property", new Error());
 		return null;
 	} else if(a === undefined) {
 		logError("GROUP missing \"attributes\" property", new Error());

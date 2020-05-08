@@ -1447,12 +1447,12 @@ function restoreGroup(o, flagged) {
 	if(flagged) {
 		return o;
 	}
-	return new $RPG.objects.stats.GroupObject(o.name, o.atts);
+	return new $RPG.objects.stats.GroupObject(o.id, o.atts);
 }
 function restoreGroup_OLD_reviver_method(key, prop, flagged) {
 	if (key === "" && !flagged) {
 		let g = $RPG.objects.stats.GroupObject;
-		return new g(prop.name, prop.atts);
+		return new g(prop.id, prop.atts);
 	}
 	return prop;
 }
@@ -1462,7 +1462,7 @@ function restoreStat(o, flagged) {
 	if(flagged) {
 		return o;
 	}
-	stat = new $RPG.objects.stats.Stat(o.name, o.atts, o.groups);
+	stat = new $RPG.objects.stats.Stat(o.id, o.atts, o.groups);
 	stat.type = o.type;
 	return stat;
 }
@@ -1470,7 +1470,7 @@ function restoreStat_OLD_reviver_method(key, prop, flagged) {
 	var $RO = $RPG.objects;
 	if(key === "" && !flagged) {
 		let s = $RO.stats.StatObject,
-			stat = new s(prop.name, prop.atts, prop.groups);
+			stat = new s(prop.id, prop.atts, prop.groups);
 		stat.type = prop.type;
 		return stat;
 	}

@@ -43,7 +43,7 @@
 	],
 	"Groups": [
 		{
-			"name": "basic stats",
+			"id": "basic stats",
 			"attributes": [
 				["modifier", [
 					"*Equation",
@@ -99,43 +99,43 @@
 			]
 		},
 		{
-			"name": "strength-based",
+			"id": "strength-based",
 			"attributes": [
 				["score_mod", ["STR", "modifier"]]
 			]
 		},
 		{
-			"name": "constitution-based",
+			"id": "constitution-based",
 			"attributes": [
 				["score_mod", ["CON", "modifier"]]
 			]
 		},
 		{
-			"name": "dexterity-based",
+			"id": "dexterity-based",
 			"attributes": [
 				["score_mod", ["DEX", "modifier"]]
 			]
 		},
 		{
-			"name": "intelligence-based",
+			"id": "intelligence-based",
 			"attributes": [
 				["score_mod", ["INT", "modifier"]]
 			]
 		},
 		{
-			"name": "wisdom-based",
+			"id": "wisdom-based",
 			"attributes": [
 				["score_mod", ["WIS", "modifier"]]
 			]
 		},
 		{
-			"name": "charisma-based",
+			"id": "charisma-based",
 			"attributes": [
 				["score_mod", ["CHA", "modifier"]]
 			]
 		},
 		{
-			"name": "pure modifier",
+			"id": "pure modifier",
 			"attributes": [
 				["modifier", [
 					"*Equation",
@@ -162,7 +162,7 @@
 			]
 		},
 		{
-			"name": "string modifier",
+			"id": "string modifier",
 			"attributes": [
 				["modifierPlus", [
 					"*Equation",
@@ -183,13 +183,13 @@
 			]
 		},
 		{
-			"name": "skill",
+			"id": "skill",
 			"attributes": [
 				["type", "PfSkill"]
 			]
 		},
 		{
-			"name": "saving throws",
+			"id": "saving throws",
 			"attributes": [
 				["minValue", -99],
 				["maxValue", 99],
@@ -197,7 +197,7 @@
 			]
 		},
 		{
-			"name": "speed stats",
+			"id": "speed stats",
 			"attributes": [
 				["stepValue", 5],
 				["startingValue", 0],
