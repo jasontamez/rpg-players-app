@@ -510,9 +510,9 @@ class ObjectWithAttributes {
 //     - transforms into a ReferenceObject returning .value
 //   [null, attributeString]
 //     - transforms into a ReferenceObject returning .get(attributeString)
-//   [*specialObjectString, <any>]
+//   [*specialObjectString, ...<any>]
 //     - looks for a method $RPG.objects.special[*specialObjectString]
-//       - if found, transforms it into the return value of method(<any>)
+//       - if found, transforms it into the return value of method([...<any>])
 //       - if not found, is left as the original Array
 //     - These methods should begin with "*"
 //   [statIdString]
