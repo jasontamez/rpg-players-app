@@ -109,3 +109,8 @@ var $RPG = {
 
 window["$RPG"] = $RPG;
 window["$IO"] = io();
+
+// Make JSON.stringify work easier with Maps
+Map.prototype.toJSON = function(key) {
+	return Array.from(this);
+}

@@ -101,6 +101,10 @@ class RulesetObject {
 	static getById(id) {
 		return this.IDs.get(id);
 	}
+	// a ruleset is never saved, because it contains only the basics from the master JSON
+	toJSON(key) {
+		return this.id;
+	}
 }
 RulesetObject.IDs = new Map();
 
@@ -212,21 +216,12 @@ class CharacterObject {
 			pools: this.pools,
 			references: this.references,
 			crossreferences: this.crossreferences,
-			bonuses: Array.from(this.bonuses),
+			bonuses: this.bonuses,
 			parser: "Character"
 		};
 	}
-	//getById?
 }
-CharacterObject.JSONIncompatibles = [
-	"data",
-	"groups",
-	"stats",
-	"multistats",
-	"pools",
-	"references",
-	"crossreferences"
-];
+
 
 // Define a class for Page objects
 //  o = new PageObject(TBD)
@@ -496,10 +491,9 @@ class ObjectWithAttributes {
 			this.atts = atts;
 		}
 	}
-	// handle Map() for JSON
 	toJSON(key) {
 		return {
-			atts: Array.from(this.atts),
+			atts: this.atts,
 			parser: "ObjectWithAttributes"
 		};
 	}
@@ -843,7 +837,7 @@ class Pool extends StatObject {
 	}
 	toJSON(key) {
 		var o = super.toJSON(key);
-		o.pool = Array.from(this.pool);
+		o.pool = this.pool;
 		o.parser = "Pool";
 		return o;
 	}
