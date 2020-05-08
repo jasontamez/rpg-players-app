@@ -472,13 +472,7 @@ class CrossReference extends ReferenceObject {
 // Basic object, parent of all that follow
 class ObjectWithAttributes {
 	// new ObjectWithAttributes(attributesMap, ?noParseBoolean)
-	// If noParse is not provided or is false, the attributes Map will be scanned for
-	//   any Array structures that could be used by a method of $RPG.objects.special,
-	//   as well as the following special formats:
-	//     [null] = use this.value()
-	//     [null, string] = use this.get(string)
-	//     [string] = find a Stat 'string' and return its .value()
-	//     [string, string2] = find a Stat 'string' and return its .get(string2)
+	// If noParse is not provided or is false, the attributes Map will be scanned for special Values
 	constructor(atts, noParse) {
 		if(!noParse) {
 			let	newAtts = new Map(),
@@ -505,23 +499,48 @@ class ObjectWithAttributes {
 	}
 }
 
-// Function to scan an Array in the format [x, possibleSpecialValue]
+// Function to scan a Value and possibly transform it into a special object
+// These Values are left as-is:
+//   any Number
+//   any String
+//   true or false (Boolean)
+//   undefined
+// These Values (all of which are Arrays) are transformed into a different object:
+//   [null]
+//     - transforms into a ReferenceObject returning .value
+//   [null, attributeString]
+//     - transforms into a ReferenceObject returning .get(attributeString)
+//   [*specialObjectString, <any>]
+//     - looks for a method $RPG.objects.special[*specialObjectString]
+//       - if found, transforms it into the return value of method(<any>)
+//       - if not found, is left as the original Array
+//     - These methods should begin with "*"
+//   [statIdString]
+//     - looks for a Stat whose .id === statIdString
+//       - if found, transforms into a CrossReference returning Stat.value
+//       - if not found, is left as the original Array
+//     - Stats should not be given ids that begin with "*"
+//   [statIdString, attributeString]
+//     - looks for a Stat whose .id === statIdString
+//       - if found, transforms into a CrossReference returning Stat.get(attributeString)
+//       - if not found, is left as the original Array
+//     - Stats should not be given ids that begin with "*"
 function parseForSpecialValue(value) {
 	const RO = $RPG.objects,
 		ROS = RO.stats;
-	// Scan for special values, like "*Equation", "*If" and "*Do"
+	// Check for Array-based Values
 	if(value instanceof Array) {
 		let v = copyArray(value),
 			test = v.shift();
 		if(test === null) {
 			// make a self-reference object
-			// [].shift() => undefined
-			value = ROS.Reference.makeReference(value.shift());
+			// NOTE: [].shift() => undefined
+			value = ROS.Reference.makeReference(v.shift());
 		} else {
 			let specialMethod = RO.special[test];
 			if(specialMethod) {
 				// Found a special value
-				let newValue = specialMethod(value.slice(1));
+				let newValue = specialMethod(v);
 				if(newValue !== null) {
 					// Change this value IF AND ONLY IF we get a successful result
 					value = newValue;
@@ -532,13 +551,15 @@ function parseForSpecialValue(value) {
 				if(stat !== undefined) {
 					// Stat found
 					// Make a cross-reference object
-					value = ROS.CrossReference.makeReference(value.shift());
+					value = ROS.CrossReference.makeReference(v.shift());
 				}
 			}
 		}
 	}
 	return value;
 }
+
+
 // Define a class for Groups
 class GroupObject extends ObjectWithAttributes {
 	// new GroupObject(idString, attributesMap)
@@ -927,13 +948,6 @@ class IfObject extends SpecialGrabber {
 	//                    method on $RPG.objects.data.LogicObject
 	//   then => any Value
 	//   else => any Value
-	// A Value is either:
-	//   a number
-	//   a string
-	//   null, representing the calling object.get("value")
-	//   an array in the format [object, ?property]:
-	//     object: string equalling the ID of a Stat object, or null to represent the calling object
-	//     property: string representing property (if omitted, defaults to "value")
 	// use IfObject.construct(array in a Map-like format)
 	//   to (mildly) test that instructions are valid
 	constructor(atts) {
@@ -1074,13 +1088,6 @@ class DoObject extends SpecialGrabber {
 	//   comparator => string matching a property on $RPG.objects.data.LogicObject.comparator
 	//   comparisons => array of arrays in the format of [MethodString, any Value]
 	//     - MethodString is a method on $RPG.objects.data.LogicObject
-	// A Value is either:
-	//   a number
-	//   a string
-	//   null, representing the calling object.get("value")
-	//   an array in the format [object, ?property]:
-	//     object: string equalling the ID of a Stat object, or null to represent the calling object
-	//     property: string representing property (if omitted, defaults to "value")
 	//
 	// use DoObject.construct(array in a Map-like format)
 	//   to (mildly) test that instructions are valid
