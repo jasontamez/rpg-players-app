@@ -11,9 +11,12 @@ export function logErrorTextOld(msg) {
 	console.trace();
 }
 
-export function logErrorText(msg, error) {
+export function logErrorText(msg, error, value) {
 	console.log(msg);
 	console.log(error.stack);
+	if(value !== undefined) {
+		console.log(value);
+	}
 }
 
 // copyArray(array) => deep copy of that array
