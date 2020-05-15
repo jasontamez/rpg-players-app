@@ -41,9 +41,11 @@ class PlayerObject {
 			//char, newChar, contexts, multis;
 			char, newChar, multis;
 		if(cur && (char = cur.character) && char.id === id && char.ruleset === ruleset) {
-			return logError("Attempting to load current character.", new Error());
+			logError("Attempting to load current character", new Error());
+			return null;
 		} else if ((newChar = this.getCharacter(ruleset, id)) === undefined) {
-			return logError("Cannot find character \"" + id + "\" in ruleset \"" + ruleset + "\"", new Error());
+			logError("Cannot find character \"" + id + "\" in ruleset \"" + ruleset + "\"", new Error());
+			return null;
 		} else if (char) {
 			// Save the old character
 			$RPG.objects.saver.Character(char, this);
@@ -109,11 +111,11 @@ class RulesetObject {
 RulesetObject.IDs = new Map();
 
 // Define a class for character objects
-//   o = new CharacterObject(objectPlayer, stringRuleset)
+//   o = new CharacterObject(playerObject, rulesetObject)
 //   o.set("property", value)
 //   o.get("property") => value
 class CharacterObject {
-	// new CharacterObject(stringPlayerID, stringRuleset, stringCharacterID)
+	// new CharacterObject(playerObject, rulesetObject, characterIdString)
 	constructor(player, ruleset, characterID) {
 		this.player = player;
 		this.id = characterID;
@@ -190,7 +192,8 @@ class CharacterObject {
 	undoBonuses(id) {
 		var bonuses = this.bonuses.get(id);
 		if(bonuses === undefined) {
-			return logErrorText("Unable to find any bonuses labelled \"" + id + "\"", new Error());
+			logError("Unable to find any bonuses labelled \"" + id + "\"", new Error());
+			return null;
 		}
 		bonuses.forEach(function(arr) {
 			var n = arr.shift(),
@@ -220,7 +223,7 @@ class CharacterObject {
 			parser: "Character"
 		};
 	}
-}
+		}
 
 
 // Define a class for Page objects
@@ -537,10 +540,10 @@ function parseForSpecialValue(value) {
 			// NOTE: [].shift() => undefined
 			value = ROS.Reference.makeReference(v.shift());
 		} else {
-			let specialMethod = RO.special[test];
-			if(specialMethod) {
+			let specialObject = RO.special[test];
+			if(specialObject) {
 				// Found a special value
-				let newValue = specialMethod(v);
+				let newValue = specialObject.construct(v);
 				if(newValue !== null) {
 					// Change this value IF AND ONLY IF we get a successful result
 					value = newValue;
@@ -875,7 +878,7 @@ class EquationObject extends SpecialGrabber {
 	}
 	toJSON(key) {
 		var arr = this.get("instructions");
-		return [this.constructor.name, ...arr];
+		return [this.constructor.specialName, ...arr];
 	}
 	getValue(context) {
 		var instructions = copyArray(this.get("instructions")),
@@ -898,12 +901,12 @@ class EquationObject extends SpecialGrabber {
 			instructions = copyArray(arr),
 			e, map;
 		while(instructions.length > 0) {
-			let test = i.shift(),
+			let test = instructions.shift(),
 				t = test[0];
 			if(MATH.hasOwnProperty(t)) {
 				i.push(parseForSpecialValue(test));
 			} else {
-				logError("EQUATION: Invalid Equation parameter \"" + t + "\"", new Error());
+				logError("EQUATION: Invalid Equation parameter \"" + t + "\" (ignored)", new Error());
 			}
 		}
 		if(i.size === 0) {
@@ -915,7 +918,7 @@ class EquationObject extends SpecialGrabber {
 		return new e(map);
 	}
 }
-EquationObject.name = "*Equation";
+EquationObject.specialName = "*Equation";
 
 // findValue(valueAny, contextStatObject, ?typeString)
 function findValue(value, context, type) {
@@ -929,7 +932,7 @@ function findValue(value, context, type) {
 		if(converter) {
 			value = converter(value);
 		} else {
-			logError("Invalid type \"" + type + "\" send to findValue", new Error());
+			logError("Invalid type \"" + type + "\" sent to findValue", new Error());
 		}
 	}
 	return value;
@@ -955,7 +958,7 @@ class IfObject extends SpecialGrabber {
 	}
 	toJSON(key) {
 		var arr = Array.from(this.atts);
-		return [this.constructor.name, ...arr];
+		return [this.constructor.specialName, ...arr];
 	}
 	static construct(arr) {
 		var RO = $RPG.objects,
@@ -964,7 +967,7 @@ class IfObject extends SpecialGrabber {
 			inType = "Any",
 			outType = "Any",
 			value = 0,
-			comparator, comparisons, then, otherwise;
+			comparator, comparisons, then, otherwise, i;
 		arr.forEach(function(pair) {
 			var [op, v] = pair;
 			switch(op) {
@@ -983,12 +986,7 @@ class IfObject extends SpecialGrabber {
 					}
 					break;
 				case "Start":
-					if(v instanceof Array) {
-						value = copyArray(v);
-					} else {
-						value = v;
-					}
-					value = parseForSpecialValue(value);
+					value = parseForSpecialValue(v);
 					break;
 				case "Compare":
 					let a = copyArray(v),
@@ -1019,20 +1017,21 @@ class IfObject extends SpecialGrabber {
 					otherwise = parseForSpecialValue(v);
 					break;
 				default:
-					logError("IF: invalid parameter \"" + op + "\"", new Error());
+					logError("IF: invalid parameter \"" + op + "\" (ignored)", new Error());
 			}
 		});
 		if(comparisons == undefined) {
-			logError("IF: missing required Compare parameter", new Error());
+			logError("IF: missing required Compare parameter", new Error(), arr);
 			return null;
 		} else if (then === undefined) {
-			logError("IF: missing required Then parameter", new Error());
+			logError("IF: missing required Then parameter", new Error(), arr);
 			return null;
 		} else if (otherwise === undefined) {
-			logError("IF: missing required Else parameter", new Error());
+			logError("IF: missing required Else parameter", new Error(), arr);
 			return null;
 		}
-		return new If(new Map([
+		i = RO.special["*If"];
+		return new i(new Map([
 			["inType", inType],
 			["outType", outType],
 			["start", value],
@@ -1062,7 +1061,7 @@ class IfObject extends SpecialGrabber {
 		return FIND(this.get(value ? "then" : "else"), context, this.get("outType"));
 	}
 }
-IfObject.name = "*If";
+IfObject.specialName = "*If";
 
 // Object that contains an do/while loop construction:
 //   1) Input is modified by given instructions
@@ -1096,29 +1095,30 @@ class DoObject extends SpecialGrabber {
 	}
 	toJSON(key) {
 		var arr = Array.from(this.atts);
-		return [this.constructor.name, ...arr];
+		return [this.constructor.specialName, ...arr];
 	}
 	static construct(arr) {
 		var RO = $RPG.objects,
 			parseForSpecialValue = RO.stats.func.parseValue,
-			ROC = RO.converter;
+			ROC = RO.converter,
 			inType = "Any",
 			outType = "Any",
 			instructions = copyArray(arr),
-			input, output, modIn, modOut, comparator, comparisons;
+			input, output, modIn, modOut, comparator, comparisons, d;
 		while(instructions.length > 0) {
 			let info = instructions.shift(),
 				op = info.shift(),
-				v = info.shift();
+				v = info.shift(),
+				ROP, first, c, parsed;
 			switch(op) {
 				case "While":
 					// ["While", ?COMPARATOR, [LogicOperatorString, Value], ...]
 					// If "COMPARATOR" is not provided, it defaults to "AND"
 					// COMPARATORs are found as properties of LogicObject.comparator
-					let ROP = RO.data.LogicObject.comparator,
-						first = v.shift(),
-						c = ROP[first],
-						parsed = [];
+					ROP = RO.data.LogicObject.comparator;
+					first = v.shift();
+					c = ROP[first];
+					parsed = [];
 					if (first instanceof Array) {
 						// No comparator provided. Default to AND.
 						comparator = "AND";
@@ -1173,7 +1173,7 @@ class DoObject extends SpecialGrabber {
 					// ["ModifyInput", ...]
 					// Equation-style instructions on how to modify the Input
 					//   each time the "While" conditions are fulfilled
-					let parsed = [];
+					parsed = [];
 					while(v.length > 0) {
 						let pair = v.shift();
 						if((typeof pair) === "string") {
@@ -1190,7 +1190,7 @@ class DoObject extends SpecialGrabber {
 					// ["ModifyOutnput", ...]
 					// Equation-style instructions on how to modify the Output
 					//   each time the "While" conditions are fulfilled
-					let parsed = [];
+					parsed = [];
 					while(v.length > 0) {
 						let pair = v.shift();
 						if((typeof pair) === "string") {
@@ -1204,27 +1204,28 @@ class DoObject extends SpecialGrabber {
 					modOut = parsed;
 					break;
 				default:
-					logError("DO: invalid parameter \"" + op + "\"", new Error());
+					logError("DO: invalid parameter \"" + op + "\" (ignored)", new Error());
 			}
 		}
 		if(modIn === undefined) {
-			logError(node, "DO: Missing required ModifyInput parameter")
+			logError(node, "DO: Missing required ModifyInput parameter", arr)
 			return null;
 		} else if(modOut === undefined) {
-			logError(node, "DO: Missing required ModifyOutput parameter")
+			logError(node, "DO: Missing required ModifyOutput parameter", arr)
 			return null;
 		} else if(comparisons === undefined) {
-			logError(node, "DO: Missing required While parameter")
+			logError(node, "DO: Missing required While parameter", arr)
 			return null;
 		} else if(input === undefined) {
-			logError(node, "DO: Missing required Input parameter")
+			logError(node, "DO: Missing required Input parameter", arr)
 			return null;
 		} else if(output === undefined) {
-			logError(node, "DO: Missing required Output parameter")
+			logError(node, "DO: Missing required Output parameter", arr)
 			return null;
 		}
 		// Create Do tag
-		tag = new Do(new Map([
+		d = RO.special["*Do"];
+		return new d(new Map([
 			["inType", inType],
 			["outType", outType],
 			["input", input],
@@ -1234,7 +1235,6 @@ class DoObject extends SpecialGrabber {
 			["comparator", comparator],
 			["comparisons", comparisons]
 		]));
-		return tag;
 	}
 	getValue(context) {
 		var input = this.get("input"),
@@ -1303,7 +1303,7 @@ class DoObject extends SpecialGrabber {
 		return value;
 	}
 }
-DoObject.name = "*Do";
+DoObject.specialName = "*Do";
 
 ///////////////////////////
 ///////// PARSERS /////////
@@ -1326,19 +1326,10 @@ DoObject.name = "*Do";
 
 function saveCharacter(character, player) {
 	var id = character.id,
-		rs = character.ruleset;
-	$RPG.objects.data.character.JSONIncompatibles.forEach(function(prop) {
-		var hold = [];
-		// go through each element of the map
-		character[prop].forEach(function(arr, id) {
-			// save to an array
-			hold.push([id, JSON.stringify(arr)]);
-		});
-		// save back to character object
-		character[prop] = hold;
-	});
+		rs = character.ruleset,
+		char = JSON.stringify(character);
 	// save back to player
-	player.saveCharacter(rs, id, JSON.stringify(character));
+	player.saveCharacter(rs, id, char);
 }
 function savePlayer() {
 
@@ -1627,7 +1618,7 @@ $RPG.ADD("objects", {
 	converter: {
 		// Any/all values are possible - it's better to not specify a type than to use this
 		Any: (x => x),
-		// Integer
+		// Integer (0 if NaN)
 		Int: function(x) {
 			var y = Math.floor(Number(x));
 			return y === y ? y : 0;
