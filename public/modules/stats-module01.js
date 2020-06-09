@@ -396,14 +396,15 @@ export function parseGroup(group, Char) {
 	} else if(a === undefined) {
 		logError("GROUP missing \"attributes\" property", new Error());
 		return null;
+	} else if (!(a instanceof Array)) {
+		logError("GROUP \"attributes\" property must be an Array", new Error());
+		return null;
 	}
-	a.forEach(function(prop, value) {
-		// Need to set value to something else
-		var v = parsePropertyValue(value);
-		v !== undefined && atts.set(prop, v);
+	a.forEach(function(pair) {
+		atts.set(pair[0], pair[1]);
 	});
 	tag = new $RPG.objects.stats.Group(n, atts);
-	tag !== undefined && Char.addGroup(n, Char);
+	tag !== undefined && Char.addGroup(n, tag);
 }
 
 export function parseMultiStat(ms, Char) {
