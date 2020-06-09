@@ -989,32 +989,45 @@ class IfObject extends SpecialGrabber {
 					value = parseForSpecialValue(v);
 					break;
 				case "Compare":
-					let a = copyArray(v),
+					let compConditions = copyArray(v),
 						ROP = RO.data.LogicObject.comparator,
-						b = a.shift(),
-						c = ROP[b],
-						parsed = [];
-					if (v instanceof Array) {
-						comparator = "AND";
-						a.unshift(v);
-					} else if(c === undefined) {
-						logError("IF: invalid comparator \"" + b + "\"", new Error());
-						comparator = "AND";
-					} else {
-						comparator = c;
+						compString = compConditions.shift(),
+						parsed = [],
+						compMethod;
+					if (compString instanceof Array) {
+						// No compartor was provided. Assume AND, return this to the conditions.
+						compString = "AND";
+						compConditions.unshift(compString);
 					}
-					while(a.length > 0) {
-						let pair = a.shift(),
+					compMethod = ROP[compString];
+					if(compMethod === undefined) {
+						logError("IF: invalid comparator \"" + compString + "\"", new Error());
+						comparator = ROP.AND;
+					} else {
+						comparator = compMethod;
+					}
+					while(compConditions.length > 0) {
+						let pair = compConditions.shift(),
 							key = pair.shift();
 						parsed.push([key, parseForSpecialValue(pair.shift())]);
 					}
 					comparisons = parsed;
 					break;
 				case "Then":
-					then = parseForSpecialValue(v);
+					//then = parseForSpecialValue(v);
+					if(v instanceof Array) {
+						then = copyArray(v);
+					} else {
+						then = v;
+					}
 					break;
 				case "Else":
-					otherwise = parseForSpecialValue(v);
+					//otherwise = parseForSpecialValue(v);
+					if(v instanceof Array) {
+						otherwise = copyArray(v);
+					} else {
+						otherwise = v;
+					}
 					break;
 				default:
 					logError("IF: invalid parameter \"" + op + "\" (ignored)", new Error());
@@ -1047,7 +1060,8 @@ class IfObject extends SpecialGrabber {
 			LOGIC = $RPG.objects.data.LogicObject,
 			comparisons = copyArray(this.get("comparisons")),
 			results = [],
-			FIND = $RPG.objects.stats.func.findValue;
+			FIND = $RPG.objects.stats.func.findValue,
+			result;
 		// Get the value we start with
 		value = FIND(value, context, inT);
 		// Run comparisons
@@ -1057,8 +1071,10 @@ class IfObject extends SpecialGrabber {
 		}
 		// Run results through comparator to get a final value
 		value = $RPG.comparator[this.get("comparator")](results);
+		// Get results - parsed
+		results = parseForSpecialValue(this.get(value ? "then" : "else"));
 		// Return results if value is true (then) or false (else)
-		return FIND(this.get(value ? "then" : "else"), context, this.get("outType"));
+		return FIND(result, context, this.get("outType"));
 	}
 }
 IfObject.specialName = "*If";
