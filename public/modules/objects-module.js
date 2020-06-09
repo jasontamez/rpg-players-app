@@ -1639,6 +1639,11 @@ $RPG.ADD("objects", {
 			var y = Math.floor(Number(x));
 			return y === y ? y : 0;
 		},
+		// Number (0 if NaN)
+		Num: function(x) {
+			var y = Number(x);
+			return y === y ? y : 0;
+		},
 		// String
 		Str: (x => String(x)),
 		// True or False (aka Boolean)
